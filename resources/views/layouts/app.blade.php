@@ -56,96 +56,30 @@
     
     <!-- Google Translate API -->
     <script type="text/javascript">
-        var googleTranslateLoaded = false;
-        var googleTranslateRetries = 0;
-        var maxRetries = 20;
-        
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 pageLanguage: 'en',
-                includedLanguages: 'en,hi,te,ta,kn,ml,mr,gu,bn,pa,or,as',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+                includedLanguages: 'en,hi,te,ta,kn,ml,mr,gu,bn,pa,or,as'
             }, 'google_translate_element');
-            
-            googleTranslateLoaded = true;
-            console.log('Google Translate initialized');
-            
-            // Wait for combo to be ready
-            setTimeout(function() {
-                var combo = document.querySelector('.goog-te-combo');
-                console.log('Combo ready check:', combo !== null);
-                
-                var savedLang = localStorage.getItem('selectedLanguage');
-                if (savedLang && savedLang !== 'en') {
-                    console.log('Restoring saved language:', savedLang);
-                    changeLanguage(savedLang);
-                    var selector = document.querySelector('.language-selector select');
-                    if (selector) selector.value = savedLang;
-                }
-            }, 2000);
-        }
-        
-        function changeLanguage(lang) {
-            console.log('changeLanguage called with:', lang);
-            
-            if (lang === 'en') {
-                localStorage.setItem('selectedLanguage', 'en');
-                console.log('Switching to English, reloading page');
-                window.location.reload();
-                return;
-            }
-            
-            var selectField = document.querySelector('.goog-te-combo');
-            console.log('Google Translate combo found:', selectField !== null);
-            
-            if (selectField) {
-                console.log('Setting language to:', lang);
-                selectField.value = lang;
-                selectField.dispatchEvent(new Event('change'));
-                localStorage.setItem('selectedLanguage', lang);
-                googleTranslateRetries = 0;
-            } else {
-                googleTranslateRetries++;
-                console.log('Combo not found, retry', googleTranslateRetries, 'of', maxRetries);
-                
-                if (googleTranslateRetries < maxRetries) {
-                    setTimeout(function() {
-                        changeLanguage(lang);
-                    }, 500);
-                } else {
-                    console.error('Failed to find Google Translate combo after', maxRetries, 'retries');
-                    googleTranslateRetries = 0;
-                }
-            }
         }
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     
     <style>
-        /* Hide Google Translate banner and frame */
-        .goog-te-banner-frame.skiptranslate { 
+        /* Hide Google Translate banner */
+        .goog-te-banner-frame { 
             display: none !important; 
         }
         body { 
-            top: 0px !important; 
-        }
-        .goog-te-banner-frame {
-            display: none !important;
-        }
-        iframe.skiptranslate {
-            display: none !important;
-        }
-        body {
-            top: 0 !important;
+            top: 0 !important; 
         }
         
-        /* Custom Language Selector */
-        .language-selector {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
+        /* Style the Google Translate widget */
+        #google_translate_element {
+            display: inline-block;
         }
-        .language-selector select {
+        
+        #google_translate_element select {
             padding: 4px 8px;
             border: 1px solid #d1d5db;
             border-radius: 0.375rem;
@@ -153,36 +87,74 @@
             background-color: white;
             color: #4b5563;
             cursor: pointer;
-            min-width: 70px;
-        }
-        .language-selector select:hover {
-            border-color: #3b82f6;
-        }
-        .language-selector i {
-            font-size: 0.875rem;
-            color: #3b82f6;
         }
         
-        /* Position Google Translate widget off-screen but keep it rendered */
+        .goog-te-gadget {
+            font-family: inherit !important;
+            font-size: 0 !important;
+        }
+        
+        .goog-te-gadget .goog-te-combo {
+            margin: 0 !important;
+        }
+        
+        /* Hide "Powered by" text */
+        .goog-te-gadget span {
+            display: none !important;
+        }
+        
+        .goog-te-gadget > div {
+            display: inline !important;
+        }
+    </style>
+    
+    <style>
+        /* Hide Google Translate banner */
+        .goog-te-banner-frame { 
+            display: none !important; 
+        }
+        body { 
+            top: 0 !important; 
+        }
+        
+        /* Style the Google Translate widget */
         #google_translate_element {
-            position: fixed;
-            bottom: -200px;
-            left: -200px;
-            z-index: -9999;
-            opacity: 0;
-            pointer-events: none;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
+            display: inline-block;
+        }
+        
+        #google_translate_element select {
+            padding: 4px 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            background-color: white;
+            color: #4b5563;
+            cursor: pointer;
+        }
+        
+        .goog-te-gadget {
+            font-family: inherit !important;
+            font-size: 0 !important;
+        }
+        
+        .goog-te-gadget .goog-te-combo {
+            margin: 0 !important;
+        }
+        
+        /* Hide "Powered by" text */
+        .goog-te-gadget span {
+            display: none !important;
+        }
+        
+        .goog-te-gadget > div {
+            display: inline !important;
         }
     </style>
     
 
 </head>
 <body class="bg-gray-50">
-    <!-- Hidden Google Translate Element -->
-    <div id="google_translate_element"></div>
-    
+
     <!-- Header -->
     <header class="bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm sticky top-0 z-50 border-b border-blue-100">
         <nav class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-3 md:py-4">
@@ -192,24 +164,8 @@
                     <img src="{{ asset('images/jobone-logo.png') }}" alt="JobOne.in" class="h-10 md:h-16 w-auto object-contain">
                 </a>
                 
-                <!-- Language Selector (hidden on mobile) -->
-                <div class="language-selector hidden sm:flex">
-                    <i class="fas fa-globe text-blue-600"></i>
-                    <select onchange="changeLanguage(this.value)" class="text-xs">
-                        <option value="en">EN</option>
-                        <option value="hi">HI</option>
-                        <option value="te">TE</option>
-                        <option value="ta">TA</option>
-                        <option value="kn">KN</option>
-                        <option value="ml">ML</option>
-                        <option value="mr">MR</option>
-                        <option value="gu">GU</option>
-                        <option value="bn">BN</option>
-                        <option value="pa">PA</option>
-                        <option value="or">OR</option>
-                        <option value="as">AS</option>
-                    </select>
-                </div>
+                <!-- Google Translate Widget -->
+                <div id="google_translate_element" class="hidden sm:flex items-center"></div>
                 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-2">
