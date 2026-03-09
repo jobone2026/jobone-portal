@@ -286,7 +286,11 @@ install_dependencies() {
     npm install
     
     print_info "Building assets..."
-    npm run build
+    npm run build || {
+        print_warning "Build failed, trying to fix Alpine.js..."
+        npm install alpinejs
+        npm run build
+    }
     
     print_success "Dependencies installed"
 }
