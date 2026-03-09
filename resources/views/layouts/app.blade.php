@@ -58,20 +58,19 @@
     <script type="text/javascript">
         var googleTranslateLoaded = false;
         var googleTranslateRetries = 0;
-        var maxRetries = 15;
+        var maxRetries = 20;
         
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 pageLanguage: 'en',
                 includedLanguages: 'en,hi,te,ta,kn,ml,mr,gu,bn,pa,or,as',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
             }, 'google_translate_element');
             
             googleTranslateLoaded = true;
             console.log('Google Translate initialized');
             
-            // Wait longer for combo to be ready
+            // Wait for combo to be ready
             setTimeout(function() {
                 var combo = document.querySelector('.goog-te-combo');
                 console.log('Combo ready check:', combo !== null);
@@ -83,7 +82,7 @@
                     var selector = document.querySelector('.language-selector select');
                     if (selector) selector.value = savedLang;
                 }
-            }, 3000);
+            }, 2000);
         }
         
         function changeLanguage(lang) {
@@ -112,13 +111,9 @@
                 if (googleTranslateRetries < maxRetries) {
                     setTimeout(function() {
                         changeLanguage(lang);
-                    }, 1000);
+                    }, 500);
                 } else {
                     console.error('Failed to find Google Translate combo after', maxRetries, 'retries');
-                    console.log('Checking if Google Translate script loaded...');
-                    console.log('googleTranslateLoaded:', googleTranslateLoaded);
-                    console.log('Hidden element exists:', document.getElementById('google_translate_element') !== null);
-                    alert('Language switcher is still loading. Please wait a few seconds and try again.');
                     googleTranslateRetries = 0;
                 }
             }
@@ -154,21 +149,13 @@
             color: #3b82f6;
         }
         
-        /* Keep Google Translate widget functional but hidden */
+        /* Position Google Translate widget off-screen but keep it rendered */
         #google_translate_element {
             position: fixed;
-            top: -9999px;
-            left: -9999px;
-            width: 1px;
-            height: 1px;
-            opacity: 0.01;
-            pointer-events: none;
-        }
-        
-        /* Ensure the combo box is rendered */
-        #google_translate_element * {
-            display: block !important;
-            visibility: visible !important;
+            bottom: -100px;
+            left: 0;
+            z-index: -1;
+            opacity: 0;
         }
     </style>
     
