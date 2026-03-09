@@ -61,6 +61,21 @@
                 pageLanguage: 'en',
                 includedLanguages: 'en,hi,te,ta,kn,ml,mr,gu,bn,pa,or,as'
             }, 'google_translate_element');
+            
+            // Wait for Google Translate to load
+            setTimeout(function() {
+                var combo = document.querySelector('.goog-te-combo');
+                if (combo) {
+                    // Sync custom dropdown with Google Translate
+                    var customSelect = document.getElementById('custom_language_select');
+                    if (customSelect) {
+                        customSelect.addEventListener('change', function() {
+                            combo.value = this.value;
+                            combo.dispatchEvent(new Event('change'));
+                        });
+                    }
+                }
+            }, 1500);
         }
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
@@ -87,12 +102,17 @@
             display: none !important;
         }
         
-        /* Style the Google Translate widget */
+        /* Hide Google Translate widget completely */
         #google_translate_element {
-            display: inline-block;
+            position: fixed;
+            bottom: -200px;
+            left: -200px;
+            opacity: 0;
+            pointer-events: none;
         }
         
-        #google_translate_element select {
+        /* Custom language selector */
+        #custom_language_select {
             padding: 4px 8px;
             border: 1px solid #d1d5db;
             border-radius: 0.375rem;
@@ -100,24 +120,12 @@
             background-color: white;
             color: #4b5563;
             cursor: pointer;
+            min-width: 60px;
+            max-width: 80px;
         }
         
-        .goog-te-gadget {
-            font-family: inherit !important;
-            font-size: 0 !important;
-        }
-        
-        .goog-te-gadget .goog-te-combo {
-            margin: 0 !important;
-        }
-        
-        /* Hide "Powered by" text */
-        .goog-te-gadget span {
-            display: none !important;
-        }
-        
-        .goog-te-gadget > div {
-            display: inline !important;
+        #custom_language_select:hover {
+            border-color: #3b82f6;
         }
     </style>
     
@@ -134,8 +142,27 @@
                     <img src="{{ asset('images/jobone-logo.png') }}" alt="JobOne.in" class="h-10 md:h-16 w-auto object-contain">
                 </a>
                 
-                <!-- Google Translate Widget (hidden on mobile) -->
-                <div id="google_translate_element" class="hidden md:flex items-center"></div>
+                <!-- Custom Language Selector (hidden on mobile) -->
+                <div class="hidden md:flex items-center gap-1">
+                    <i class="fas fa-globe text-blue-600 text-sm"></i>
+                    <select id="custom_language_select" class="text-xs">
+                        <option value="">EN</option>
+                        <option value="hi">हिंदी</option>
+                        <option value="te">తెలుగు</option>
+                        <option value="ta">தமிழ்</option>
+                        <option value="kn">ಕನ್ನಡ</option>
+                        <option value="ml">മലയാളം</option>
+                        <option value="mr">मराठी</option>
+                        <option value="gu">ગુજરાતી</option>
+                        <option value="bn">বাংলা</option>
+                        <option value="pa">ਪੰਜਾਬੀ</option>
+                        <option value="or">ଓଡ଼ିଆ</option>
+                        <option value="as">অসমীয়া</option>
+                    </select>
+                </div>
+                
+                <!-- Hidden Google Translate Widget -->
+                <div id="google_translate_element"></div>
                 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-2">
