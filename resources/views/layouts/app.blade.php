@@ -74,47 +74,17 @@
             top: 0 !important; 
         }
         
-        /* Style the Google Translate widget */
-        #google_translate_element {
-            display: inline-block;
-        }
-        
-        #google_translate_element select {
-            padding: 4px 8px;
-            border: 1px solid #d1d5db;
-            border-radius: 0.375rem;
-            font-size: 0.75rem;
-            background-color: white;
-            color: #4b5563;
-            cursor: pointer;
-        }
-        
-        .goog-te-gadget {
-            font-family: inherit !important;
-            font-size: 0 !important;
-        }
-        
-        .goog-te-gadget .goog-te-combo {
-            margin: 0 !important;
-        }
-        
-        /* Hide "Powered by" text */
-        .goog-te-gadget span {
+        /* Hide the top frame completely */
+        body > .skiptranslate {
             display: none !important;
         }
         
-        .goog-te-gadget > div {
-            display: inline !important;
+        iframe.goog-te-banner-frame {
+            display: none !important;
         }
-    </style>
-    
-    <style>
-        /* Hide Google Translate banner */
-        .goog-te-banner-frame { 
-            display: none !important; 
-        }
-        body { 
-            top: 0 !important; 
+        
+        .goog-te-banner-frame.skiptranslate {
+            display: none !important;
         }
         
         /* Style the Google Translate widget */
