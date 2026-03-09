@@ -22,12 +22,12 @@ bash install-fixed.sh
 ## 📋 What You'll Be Asked
 
 1. **Domain name** → Enter your domain OR press Enter to use server IP
-2. **Database name** → Press Enter (default: govt_job_portal)
-3. **Database user** → Press Enter (default: jobone)
-4. **Admin email** → Enter your email
-5. **Admin password** → Enter strong password (min 8 chars)
-6. **SSL email** → Enter your email
-7. **Install SSL?** → Type `y` for domain, `n` for IP
+2. **Admin email** → Enter your email
+3. **Admin password** → Enter strong password (min 8 chars)
+4. **SSL email** → Enter your email
+5. **Install SSL?** → Type `y` for domain, `n` for IP
+
+**Note:** Database name and user are automatically set to `govt_job_portal` and `jobone`
 
 ---
 

@@ -94,8 +94,12 @@ collect_configuration() {
     print_info "Detected server IP: $SERVER_IP"
     
     prompt_input "Domain name (or press Enter to use IP)" DOMAIN_NAME "$SERVER_IP"
-    prompt_input "Database name" DB_NAME "govt_job_portal"
-    prompt_input "Database username" DB_USER "jobone"
+    
+    # Database configuration - use fixed values to avoid syntax errors
+    DB_NAME="govt_job_portal"
+    DB_USER="jobone"
+    print_info "Database name: ${DB_NAME}"
+    print_info "Database user: ${DB_USER}"
     
     # Auto-generate secure database password
     DB_PASSWORD=$(openssl rand -base64 32 | tr -d "=+/" | cut -c1-25)
