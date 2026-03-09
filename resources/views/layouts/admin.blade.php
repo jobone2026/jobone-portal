@@ -12,79 +12,89 @@
 <body class="bg-slate-100">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <aside class="w-64 bg-slate-900 text-white flex flex-col">
+        <aside class="w-64 bg-gradient-to-b from-slate-900 to-slate-800 text-white flex flex-col shadow-2xl">
             <!-- Logo -->
-            <div class="p-4 border-b border-slate-700">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-briefcase text-white text-sm"></i>
+            <div class="p-5 border-b border-slate-700/50">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-briefcase text-white text-lg"></i>
                     </div>
                     <div>
-                        <h1 class="text-base font-bold text-white">JobOne</h1>
-                        <p class="text-xs text-slate-400">Admin</p>
+                        <h1 class="text-lg font-bold text-white">JobOne.in</h1>
+                        <p class="text-xs text-blue-400 font-medium">Admin Panel</p>
                     </div>
                 </div>
             </div>
             
             <!-- Navigation -->
             <nav class="flex-1 overflow-y-auto py-4 px-3">
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg mb-1 {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800' }}">
-                    <i class="fas fa-chart-line w-5"></i>
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl mb-1 transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg' : 'text-slate-300 hover:bg-slate-800/50' }}">
+                    <i class="fas fa-chart-line text-lg w-5"></i>
                     <span class="text-sm font-medium">Dashboard</span>
                 </a>
                 
-                <div class="mt-6 mb-2 px-3 text-xs font-bold text-slate-500 uppercase">Content</div>
+                <div class="mt-6 mb-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Content</div>
                 
-                <a href="{{ route('admin.posts.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg mb-1 {{ request()->routeIs('admin.posts.*') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800' }}">
-                    <i class="fas fa-newspaper w-5"></i>
+                <a href="{{ route('admin.posts.index') }}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl mb-1 transition-all {{ request()->routeIs('admin.posts.*') ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg' : 'text-slate-300 hover:bg-slate-800/50' }}">
+                    <i class="fas fa-newspaper text-lg w-5"></i>
                     <span class="text-sm font-medium">Posts</span>
-                    <span class="ml-auto bg-slate-700 text-slate-300 text-xs px-2 py-0.5 rounded-full">{{ \App\Models\Post::count() }}</span>
+                    @if(\App\Models\Post::count() > 0)
+                    <span class="ml-auto bg-blue-500/20 text-blue-300 text-xs px-2 py-1 rounded-lg font-semibold">{{ \App\Models\Post::count() }}</span>
+                    @endif
                 </a>
                 
-                <a href="{{ route('admin.categories.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg mb-1 {{ request()->routeIs('admin.categories.*') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800' }}">
-                    <i class="fas fa-tags w-5"></i>
+                <a href="{{ route('admin.categories.index') }}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl mb-1 transition-all {{ request()->routeIs('admin.categories.*') ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg' : 'text-slate-300 hover:bg-slate-800/50' }}">
+                    <i class="fas fa-tags text-lg w-5"></i>
                     <span class="text-sm font-medium">Categories</span>
-                    <span class="ml-auto bg-slate-700 text-slate-300 text-xs px-2 py-0.5 rounded-full">{{ \App\Models\Category::count() }}</span>
+                    @if(\App\Models\Category::count() > 0)
+                    <span class="ml-auto bg-blue-500/20 text-blue-300 text-xs px-2 py-1 rounded-lg font-semibold">{{ \App\Models\Category::count() }}</span>
+                    @endif
                 </a>
                 
-                <a href="{{ route('admin.states.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg mb-1 {{ request()->routeIs('admin.states.*') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800' }}">
-                    <i class="fas fa-map-marker-alt w-5"></i>
+                <a href="{{ route('admin.states.index') }}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl mb-1 transition-all {{ request()->routeIs('admin.states.*') ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg' : 'text-slate-300 hover:bg-slate-800/50' }}">
+                    <i class="fas fa-map-marker-alt text-lg w-5"></i>
                     <span class="text-sm font-medium">States</span>
-                    <span class="ml-auto bg-slate-700 text-slate-300 text-xs px-2 py-0.5 rounded-full">{{ \App\Models\State::count() }}</span>
+                    @if(\App\Models\State::count() > 0)
+                    <span class="ml-auto bg-blue-500/20 text-blue-300 text-xs px-2 py-1 rounded-lg font-semibold">{{ \App\Models\State::count() }}</span>
+                    @endif
                 </a>
                 
-                <a href="{{ route('admin.authors.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg mb-1 {{ request()->routeIs('admin.authors.*') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800' }}">
-                    <i class="fas fa-users w-5"></i>
+                <a href="{{ route('admin.authors.index') }}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl mb-1 transition-all {{ request()->routeIs('admin.authors.*') ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg' : 'text-slate-300 hover:bg-slate-800/50' }}">
+                    <i class="fas fa-users text-lg w-5"></i>
                     <span class="text-sm font-medium">Authors</span>
-                    <span class="ml-auto bg-slate-700 text-slate-300 text-xs px-2 py-0.5 rounded-full">{{ \App\Models\Author::count() }}</span>
+                    @if(\App\Models\Author::count() > 0)
+                    <span class="ml-auto bg-blue-500/20 text-blue-300 text-xs px-2 py-1 rounded-lg font-semibold">{{ \App\Models\Author::count() }}</span>
+                    @endif
                 </a>
                 
-                <div class="mt-6 mb-2 px-3 text-xs font-bold text-slate-500 uppercase">Monetization</div>
+                <div class="mt-6 mb-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Monetization</div>
                 
-                <a href="{{ route('admin.ads.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg mb-1 {{ request()->routeIs('admin.ads.*') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800' }}">
-                    <i class="fas fa-ad w-5"></i>
+                <a href="{{ route('admin.ads.index') }}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl mb-1 transition-all {{ request()->routeIs('admin.ads.*') ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg' : 'text-slate-300 hover:bg-slate-800/50' }}">
+                    <i class="fas fa-ad text-lg w-5"></i>
                     <span class="text-sm font-medium">Ads</span>
-                    <span class="ml-auto bg-slate-700 text-slate-300 text-xs px-2 py-0.5 rounded-full">{{ \App\Models\Ad::count() }}</span>
+                    @if(\App\Models\Ad::count() > 0)
+                    <span class="ml-auto bg-blue-500/20 text-blue-300 text-xs px-2 py-1 rounded-lg font-semibold">{{ \App\Models\Ad::count() }}</span>
+                    @endif
                 </a>
                 
-                <div class="mt-6 mb-2 px-3 text-xs font-bold text-slate-500 uppercase">Settings</div>
+                <div class="mt-6 mb-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Settings</div>
                 
-                <a href="{{ route('admin.settings.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg mb-1 {{ request()->routeIs('admin.settings.*') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800' }}">
-                    <i class="fas fa-cog w-5"></i>
+                <a href="{{ route('admin.settings.index') }}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl mb-1 transition-all {{ request()->routeIs('admin.settings.*') ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg' : 'text-slate-300 hover:bg-slate-800/50' }}">
+                    <i class="fas fa-cog text-lg w-5"></i>
                     <span class="text-sm font-medium">Site Settings</span>
                 </a>
                 
-                <a href="{{ route('admin.backups.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg mb-1 {{ request()->routeIs('admin.backups.*') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800' }}">
-                    <i class="fas fa-database w-5"></i>
+                <a href="{{ route('admin.backups.index') }}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl mb-1 transition-all {{ request()->routeIs('admin.backups.*') ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg' : 'text-slate-300 hover:bg-slate-800/50' }}">
+                    <i class="fas fa-database text-lg w-5"></i>
                     <span class="text-sm font-medium">Backup & Restore</span>
                 </a>
             </nav>
             
             <!-- User Profile -->
-            <div class="p-3 border-t border-slate-700 bg-slate-800">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                        <i class="fas fa-user text-white text-xs"></i>
+            <div class="p-4 border-t border-slate-700/50 bg-slate-900/50">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                        <i class="fas fa-user text-white"></i>
                     </div>
                     <div class="flex-1 min-w-0">
                         <p class="text-sm font-bold text-white truncate">{{ auth('admin')->user()->name }}</p>
@@ -92,8 +102,8 @@
                     </div>
                     <form action="{{ route('admin.logout') }}" method="POST">
                         @csrf
-                        <button type="submit" class="text-slate-400 hover:text-red-400 transition-colors" title="Logout">
-                            <i class="fas fa-sign-out-alt"></i>
+                        <button type="submit" class="text-slate-400 hover:text-red-400 transition-colors p-2 hover:bg-slate-800 rounded-lg" title="Logout">
+                            <i class="fas fa-sign-out-alt text-lg"></i>
                         </button>
                     </form>
                 </div>
