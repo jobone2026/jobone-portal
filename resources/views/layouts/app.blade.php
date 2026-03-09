@@ -148,10 +148,10 @@
                 </a>
                 
                 <!-- Custom Language Selector (visible on all screens) -->
-                <div class="flex items-center gap-1">
+                <div class="flex items-center gap-1 notranslate">
                     <i class="fas fa-globe text-blue-600 text-sm"></i>
-                    <select id="custom_language_select" class="text-xs">
-                        <option value="">EN</option>
+                    <select id="custom_language_select" class="text-xs notranslate">
+                        <option value="">English</option>
                         <option value="hi">हिंदी</option>
                         <option value="te">తెలుగు</option>
                         <option value="ta">தமிழ்</option>
