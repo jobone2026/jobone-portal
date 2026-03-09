@@ -154,9 +154,22 @@
             color: #3b82f6;
         }
         
-        /* Hide Google Translate widget but keep it functional */
-        .goog-te-gadget { display: none !important; }
-        #google_translate_element { position: absolute; left: -9999px; }
+        /* Keep Google Translate widget functional but hidden */
+        #google_translate_element {
+            position: fixed;
+            top: -9999px;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            opacity: 0.01;
+            pointer-events: none;
+        }
+        
+        /* Ensure the combo box is rendered */
+        #google_translate_element * {
+            display: block !important;
+            visibility: visible !important;
+        }
     </style>
     
 
