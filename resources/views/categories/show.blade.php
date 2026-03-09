@@ -66,7 +66,7 @@
 
     <div class="mb-6">
         <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-2">
-            <i class="fas fa-folder"></i> {{ $category->name }} - NEW VIEW LOADED
+            <i class="fas fa-folder"></i> {{ $category->name }}
         </h1>
         <p class="text-gray-600 text-sm"><i class="fas fa-briefcase"></i> All posts in {{ $category->name }} category</p>
     </div>
