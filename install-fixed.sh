@@ -286,11 +286,24 @@ install_dependencies() {
     npm install
     
     print_info "Building assets..."
+    
+    # Fix esbuild permissions before building
+    if [ -f "node_modules/@esbuild/linux-x64/bin/esbuild" ]; then
+        chmod +x node_modules/@esbuild/linux-x64/bin/esbuild
+    fi
+    
     npm run build || {
         print_warning "Build failed, trying to fix Alpine.js..."
         npm install alpinejs
+        chmod +x node_modules/@esbuild/linux-x64/bin/esbuild 2>/dev/null || true
         npm run build
     }
+    
+    # Fix Vite manifest location (Laravel expects it at public/build/manifest.json)
+    if [ -f "public/build/.vite/manifest.json" ] && [ ! -f "public/build/manifest.json" ]; then
+        print_info "Copying Vite manifest to expected location..."
+        cp public/build/.vite/manifest.json public/build/manifest.json
+    fi
     
     print_success "Dependencies installed"
 }
@@ -350,10 +363,12 @@ set_permissions() {
     # Set writable directories
     sudo chmod -R 775 $APP_DIR/storage
     sudo chmod -R 775 $APP_DIR/bootstrap/cache
+    sudo chmod -R 775 $APP_DIR/public/build
     
     # Ensure www-data owns writable directories
     sudo chown -R www-data:www-data $APP_DIR/storage
     sudo chown -R www-data:www-data $APP_DIR/bootstrap/cache
+    sudo chown -R www-data:www-data $APP_DIR/public/build
     
     print_success "Permissions set correctly"
 }
