@@ -158,38 +158,42 @@
             @php
                 $shareUrl = route('posts.show', [$post->type, $post->slug]);
                 $shareTitle = $post->title;
-                $shareMessage = "🔔 *{$shareTitle}*\n\n";
+                
+                // Create a simple text message for WhatsApp
+                $whatsappMessage = "🔔 {$shareTitle}\n\n";
                 
                 if ($post->last_date) {
-                    $shareMessage .= "📅 Last Date: " . $post->last_date->format('d M Y') . "\n";
+                    $whatsappMessage .= "📅 Last Date: " . $post->last_date->format('d M Y') . "\n";
                 }
                 if ($post->total_posts) {
-                    $shareMessage .= "📊 Total Posts: {$post->total_posts}\n";
+                    $whatsappMessage .= "📊 Total Posts: {$post->total_posts}\n";
                 }
                 
-                $shareMessage .= "\n🔗 Apply Now: {$shareUrl}\n\n";
-                $shareMessage .= "📢 Join us for more updates:\n";
+                $whatsappMessage .= "\n🔗 Apply Now: {$shareUrl}\n\n";
+                $whatsappMessage .= "📢 Join us for more updates:\n";
                 
                 $settings = \App\Models\SiteSetting::whereIn('key', ['telegram_url', 'facebook_url', 'whatsapp_url'])->pluck('value', 'key');
                 
                 if (!empty($settings['telegram_url'])) {
-                    $shareMessage .= "📱 Telegram: {$settings['telegram_url']}\n";
+                    $whatsappMessage .= "📱 Telegram: {$settings['telegram_url']}\n";
                 }
                 if (!empty($settings['facebook_url'])) {
-                    $shareMessage .= "👍 Facebook: {$settings['facebook_url']}\n";
+                    $whatsappMessage .= "👍 Facebook: {$settings['facebook_url']}\n";
                 }
                 if (!empty($settings['whatsapp_url'])) {
-                    $shareMessage .= "💬 WhatsApp: {$settings['whatsapp_url']}\n";
+                    $whatsappMessage .= "💬 WhatsApp Group: {$settings['whatsapp_url']}\n";
                 }
                 
-                $encodedMessage = urlencode($shareMessage);
+                $whatsappMessage .= "\n✅ Visit: https://jobone.in";
+                
+                $encodedWhatsappMessage = urlencode($whatsappMessage);
                 $encodedUrl = urlencode($shareUrl);
                 $encodedTitle = urlencode($shareTitle);
             @endphp
             
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                 <!-- WhatsApp -->
-                <a href="https://wa.me/?text={{ $encodedMessage }}" 
+                <a href="https://wa.me/?text={{ $encodedWhatsappMessage }}" 
                    target="_blank" 
                    onclick="trackShare('WhatsApp', '{{ $shareUrl }}', '{{ $shareTitle }}')"
                    class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg transition transform hover:scale-105 shadow-md">
@@ -198,7 +202,7 @@
                 </a>
                 
                 <!-- Telegram -->
-                <a href="https://t.me/share/url?url={{ $encodedUrl }}&text={{ $encodedMessage }}" 
+                <a href="https://t.me/share/url?url={{ $encodedUrl }}&text={{ $encodedWhatsappMessage }}" 
                    target="_blank"
                    onclick="trackShare('Telegram', '{{ $shareUrl }}', '{{ $shareTitle }}')"
                    class="flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg transition transform hover:scale-105 shadow-md">
