@@ -57,6 +57,8 @@
     <!-- Google Translate API -->
     <script type="text/javascript">
         var googleTranslateLoaded = false;
+        var googleTranslateRetries = 0;
+        var maxRetries = 10;
         
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
@@ -67,48 +69,55 @@
             }, 'google_translate_element');
             
             googleTranslateLoaded = true;
+            console.log('Google Translate initialized');
             
             // Restore saved language after Google Translate loads
             setTimeout(function() {
                 var savedLang = localStorage.getItem('selectedLanguage');
                 if (savedLang && savedLang !== 'en') {
+                    console.log('Restoring saved language:', savedLang);
                     changeLanguage(savedLang);
                     var selector = document.querySelector('.language-selector select');
                     if (selector) selector.value = savedLang;
                 }
-            }, 1500);
+            }, 2000);
         }
         
         function changeLanguage(lang) {
+            console.log('changeLanguage called with:', lang);
+            
             if (lang === 'en') {
                 // For English, remove translation and reload
                 localStorage.setItem('selectedLanguage', 'en');
-                var iframe = document.querySelector('.goog-te-banner-frame');
-                if (iframe) {
-                    // Click the "Show original" button if translation is active
-                    window.location.reload();
-                } else {
-                    window.location.reload();
-                }
+                console.log('Switching to English, reloading page');
+                window.location.reload();
                 return;
             }
             
             // For other languages, use Google Translate
             var selectField = document.querySelector('.goog-te-combo');
+            console.log('Google Translate combo found:', selectField !== null);
+            
             if (selectField) {
+                console.log('Setting language to:', lang);
                 selectField.value = lang;
                 selectField.dispatchEvent(new Event('change'));
                 localStorage.setItem('selectedLanguage', lang);
-            } else if (googleTranslateLoaded) {
-                // Google Translate loaded but combo not ready, retry
-                setTimeout(function() {
-                    changeLanguage(lang);
-                }, 300);
+                googleTranslateRetries = 0;
             } else {
-                // Google Translate not loaded yet, wait longer
-                setTimeout(function() {
-                    changeLanguage(lang);
-                }, 1000);
+                googleTranslateRetries++;
+                console.log('Combo not found, retry', googleTranslateRetries, 'of', maxRetries);
+                
+                if (googleTranslateRetries < maxRetries) {
+                    // Retry with increasing delay
+                    setTimeout(function() {
+                        changeLanguage(lang);
+                    }, 500 * googleTranslateRetries);
+                } else {
+                    console.error('Failed to find Google Translate combo after', maxRetries, 'retries');
+                    alert('Language switcher is loading. Please try again in a moment.');
+                    googleTranslateRetries = 0;
+                }
             }
         }
     </script>
