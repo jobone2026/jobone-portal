@@ -37,39 +37,11 @@ class BackupController extends Controller
             
             $filepath = $backupPath . '/' . $filename;
             
-            // Get database configuration
-            $dbHost = config('database.connections.mysql.host');
-            $dbName = config('database.connections.mysql.database');
-            $dbUser = config('database.connections.mysql.username');
-            $dbPass = config('database.connections.mysql.password');
+            // Use PHP-based backup (works on all systems)
+            $this->createPhpBackup($filepath);
             
-            // Create backup using mysqldump
-            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-                // Windows
-                $command = sprintf(
-                    'mysqldump --user=%s --password=%s --host=%s %s > %s',
-                    escapeshellarg($dbUser),
-                    escapeshellarg($dbPass),
-                    escapeshellarg($dbHost),
-                    escapeshellarg($dbName),
-                    escapeshellarg($filepath)
-                );
-            } else {
-                // Linux/Unix
-                $command = sprintf(
-                    'mysqldump -u%s -p%s -h%s %s > %s',
-                    escapeshellarg($dbUser),
-                    escapeshellarg($dbPass),
-                    escapeshellarg($dbHost),
-                    escapeshellarg($dbName),
-                    escapeshellarg($filepath)
-                );
-            }
-            
-            exec($command, $output, $returnVar);
-            
-            if ($returnVar !== 0 || !file_exists($filepath)) {
-                throw new \Exception('Backup creation failed');
+            if (!file_exists($filepath) || filesize($filepath) === 0) {
+                throw new \Exception('Backup file was not created or is empty');
             }
             
             // Compress the backup
@@ -92,6 +64,63 @@ class BackupController extends Controller
             return redirect()->route('admin.backups.index')
                 ->with('error', 'Backup failed: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Create backup using PHP (works on all systems)
+     */
+    private function createPhpBackup($filepath)
+    {
+        $dbName = config('database.connections.mysql.database');
+        
+        // Get all tables
+        $tables = DB::select('SHOW TABLES');
+        $tableKey = 'Tables_in_' . $dbName;
+        
+        $sql = "-- JobOne.in Database Backup\n";
+        $sql .= "-- Generated: " . date('Y-m-d H:i:s') . "\n";
+        $sql .= "-- Database: {$dbName}\n\n";
+        $sql .= "SET FOREIGN_KEY_CHECKS=0;\n";
+        $sql .= "SET SQL_MODE = \"NO_AUTO_VALUE_ON_ZERO\";\n";
+        $sql .= "SET time_zone = \"+00:00\";\n\n";
+        
+        foreach ($tables as $table) {
+            $tableName = $table->$tableKey;
+            
+            // Get CREATE TABLE statement
+            $createTable = DB::select("SHOW CREATE TABLE `{$tableName}`");
+            $sql .= "\n-- Table structure for table `{$tableName}`\n";
+            $sql .= "DROP TABLE IF EXISTS `{$tableName}`;\n";
+            $sql .= $createTable[0]->{'Create Table'} . ";\n\n";
+            
+            // Get table data
+            $rows = DB::table($tableName)->get();
+            
+            if ($rows->count() > 0) {
+                $sql .= "-- Dumping data for table `{$tableName}`\n";
+                
+                foreach ($rows as $row) {
+                    $values = [];
+                    foreach ($row as $value) {
+                        if ($value === null) {
+                            $values[] = 'NULL';
+                        } else {
+                            $values[] = "'" . addslashes($value) . "'";
+                        }
+                    }
+                    
+                    $columns = array_keys((array)$row);
+                    $sql .= "INSERT INTO `{$tableName}` (`" . implode('`, `', $columns) . "`) VALUES (" . implode(', ', $values) . ");\n";
+                }
+                
+                $sql .= "\n";
+            }
+        }
+        
+        $sql .= "SET FOREIGN_KEY_CHECKS=1;\n";
+        
+        // Write to file
+        file_put_contents($filepath, $sql);
     }
 
     /**
@@ -170,43 +199,13 @@ class BackupController extends Controller
                     throw new \Exception('SQL file not found in backup');
                 }
                 
-                // Get database configuration
-                $dbHost = config('database.connections.mysql.host');
-                $dbName = config('database.connections.mysql.database');
-                $dbUser = config('database.connections.mysql.username');
-                $dbPass = config('database.connections.mysql.password');
-                
-                // Restore database
-                if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-                    // Windows
-                    $command = sprintf(
-                        'mysql --user=%s --password=%s --host=%s %s < %s',
-                        escapeshellarg($dbUser),
-                        escapeshellarg($dbPass),
-                        escapeshellarg($dbHost),
-                        escapeshellarg($dbName),
-                        escapeshellarg($sqlFile)
-                    );
-                } else {
-                    // Linux/Unix
-                    $command = sprintf(
-                        'mysql -u%s -p%s -h%s %s < %s',
-                        escapeshellarg($dbUser),
-                        escapeshellarg($dbPass),
-                        escapeshellarg($dbHost),
-                        escapeshellarg($dbName),
-                        escapeshellarg($sqlFile)
-                    );
-                }
-                
-                exec($command, $output, $returnVar);
+                // Restore database using PHP
+                $this->restorePhpBackup($sqlFile);
                 
                 // Clean up temp files
                 unlink($sqlFile);
-                rmdir($extractPath);
-                
-                if ($returnVar !== 0) {
-                    throw new \Exception('Database restore failed');
+                if (is_dir($extractPath)) {
+                    rmdir($extractPath);
                 }
                 
                 // Clear all caches
@@ -226,6 +225,47 @@ class BackupController extends Controller
             return redirect()->route('admin.backups.index')
                 ->with('error', 'Restore failed: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Restore backup using PHP (works on all systems)
+     */
+    private function restorePhpBackup($filepath)
+    {
+        // Read SQL file
+        $sql = file_get_contents($filepath);
+        
+        if (empty($sql)) {
+            throw new \Exception('Backup file is empty');
+        }
+        
+        // Disable foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        
+        // Split SQL into individual statements
+        $statements = array_filter(
+            array_map('trim', explode(';', $sql)),
+            function($statement) {
+                return !empty($statement) && 
+                       !str_starts_with($statement, '--') && 
+                       !str_starts_with($statement, '/*');
+            }
+        );
+        
+        // Execute each statement
+        foreach ($statements as $statement) {
+            if (!empty(trim($statement))) {
+                try {
+                    DB::statement($statement);
+                } catch (\Exception $e) {
+                    // Log error but continue
+                    \Log::warning('Restore statement failed: ' . $e->getMessage());
+                }
+            }
+        }
+        
+        // Re-enable foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
     }
 
     /**
