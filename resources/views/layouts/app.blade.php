@@ -63,6 +63,30 @@
                 layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
                 autoDisplay: false
             }, 'google_translate_element');
+            
+            // Wait for Google Translate to fully load
+            setTimeout(function() {
+                var savedLang = localStorage.getItem('selectedLanguage');
+                if (savedLang && savedLang !== 'en') {
+                    changeLanguage(savedLang);
+                    var selector = document.querySelector('.language-selector select');
+                    if (selector) selector.value = savedLang;
+                }
+            }, 1500);
+        }
+        
+        function changeLanguage(lang) {
+            var selectField = document.querySelector('.goog-te-combo');
+            if (selectField) {
+                selectField.value = lang;
+                selectField.dispatchEvent(new Event('change'));
+                localStorage.setItem('selectedLanguage', lang);
+            } else {
+                // Retry if not loaded yet
+                setTimeout(function() {
+                    changeLanguage(lang);
+                }, 500);
+            }
         }
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
@@ -101,36 +125,12 @@
     </style>
     
     <script>
-        function changeLanguage(lang) {
-            var selectField = document.querySelector('.goog-te-combo');
-            if (selectField) {
-                selectField.value = lang;
-                selectField.dispatchEvent(new Event('change'));
-            } else {
-                // If Google Translate hasn't loaded yet, wait and try again
-                setTimeout(function() {
-                    changeLanguage(lang);
-                }, 500);
-            }
-        }
-        
-        // Store selected language in localStorage
-        window.addEventListener('load', function() {
-            var savedLang = localStorage.getItem('selectedLanguage');
-            if (savedLang && savedLang !== 'en') {
-                setTimeout(function() {
-                    changeLanguage(savedLang);
-                    document.querySelector('.language-selector select').value = savedLang;
-                }, 1000);
-            }
-        });
-        
-        // Save language selection
+        // Ensure language selector works after page load
         document.addEventListener('DOMContentLoaded', function() {
             var langSelector = document.querySelector('.language-selector select');
             if (langSelector) {
                 langSelector.addEventListener('change', function() {
-                    localStorage.setItem('selectedLanguage', this.value);
+                    changeLanguage(this.value);
                 });
             }
         });
