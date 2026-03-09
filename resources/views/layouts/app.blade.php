@@ -156,17 +156,7 @@
         #google_translate_element { position: absolute; left: -9999px; }
     </style>
     
-    <script>
-        // Ensure language selector works after page load
-        document.addEventListener('DOMContentLoaded', function() {
-            var langSelector = document.querySelector('.language-selector select');
-            if (langSelector) {
-                langSelector.addEventListener('change', function() {
-                    changeLanguage(this.value);
-                });
-            }
-        });
-    </script>
+
 </head>
 <body class="bg-gray-50">
     <!-- Hidden Google Translate Element -->
@@ -411,21 +401,6 @@
     </footer>
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-    <script>
-        function changeLanguage(lang) {
-            if (lang === 'en') {
-                location.reload();
-            } else {
-                const element = document.querySelector('html');
-                const googleTranslateElement = document.querySelector('.goog-te-combo');
-                if (googleTranslateElement) {
-                    googleTranslateElement.value = lang;
-                    googleTranslateElement.dispatchEvent(new Event('change'));
-                }
-            }
-        }
-    </script>
 
     <!-- Mobile Bottom Navigation -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 z-40 shadow-lg">
