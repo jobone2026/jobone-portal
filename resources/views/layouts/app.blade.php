@@ -122,8 +122,22 @@
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     
     <style>
-        .goog-te-banner-frame.skiptranslate { display: none !important; }
-        body { top: 0px !important; }
+        /* Hide Google Translate banner and frame */
+        .goog-te-banner-frame.skiptranslate { 
+            display: none !important; 
+        }
+        body { 
+            top: 0px !important; 
+        }
+        .goog-te-banner-frame {
+            display: none !important;
+        }
+        iframe.skiptranslate {
+            display: none !important;
+        }
+        body {
+            top: 0 !important;
+        }
         
         /* Custom Language Selector */
         .language-selector {
