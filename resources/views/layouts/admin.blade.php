@@ -17,11 +17,11 @@
             <div class="p-4 border-b border-slate-700">
                 <div class="flex items-center gap-2">
                     <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-crown text-white text-sm"></i>
+                        <i class="fas fa-briefcase text-white text-sm"></i>
                     </div>
                     <div>
-                        <h1 class="text-base font-bold text-white">JobOne Admin</h1>
-                        <p class="text-xs text-slate-400">Management</p>
+                        <h1 class="text-base font-bold text-white">JobOne</h1>
+                        <p class="text-xs text-slate-400">Admin</p>
                     </div>
                 </div>
             </div>
