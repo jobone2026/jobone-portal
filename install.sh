@@ -17,7 +17,7 @@ NC='\033[0m' # No Color
 # Configuration
 APP_NAME="jobone"
 APP_DIR="/var/www/$APP_NAME"
-GITHUB_REPO="https://github.com/jobone2026/jobone.git"
+GITHUB_REPO="https://github.com/jobone2026/jobone-portal.git"
 PHP_VERSION="8.2"
 NODE_VERSION="20"
 

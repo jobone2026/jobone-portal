@@ -21,7 +21,7 @@ ssh ubuntu@your-server-ip
 
 ```bash
 # Download the installer
-wget https://raw.githubusercontent.com/jobone2026/jobone/main/install.sh
+wget https://raw.githubusercontent.com/jobone2026/jobone-portal/main/install.sh
 
 # Make it executable
 chmod +x install.sh
@@ -271,7 +271,7 @@ Use the admin panel:
 ## Support
 
 - **Email:** jobone2026@gmail.com
-- **GitHub:** https://github.com/jobone2026/jobone
+- **GitHub:** https://github.com/jobone2026/jobone-portal
 - **Documentation:** See all .md files in repository
 
 ## Cost Estimate (AWS)
