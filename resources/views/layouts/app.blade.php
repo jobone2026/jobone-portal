@@ -152,10 +152,14 @@
         /* Position Google Translate widget off-screen but keep it rendered */
         #google_translate_element {
             position: fixed;
-            bottom: -100px;
-            left: 0;
-            z-index: -1;
+            bottom: -200px;
+            left: -200px;
+            z-index: -9999;
             opacity: 0;
+            pointer-events: none;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
         }
     </style>
     
