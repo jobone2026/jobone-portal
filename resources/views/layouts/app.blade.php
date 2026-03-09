@@ -164,8 +164,8 @@
                     <img src="{{ asset('images/jobone-logo.png') }}" alt="JobOne.in" class="h-10 md:h-16 w-auto object-contain">
                 </a>
                 
-                <!-- Google Translate Widget -->
-                <div id="google_translate_element" class="hidden sm:flex items-center"></div>
+                <!-- Google Translate Widget (hidden on mobile) -->
+                <div id="google_translate_element" class="hidden md:flex items-center"></div>
                 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-2">
