@@ -70,8 +70,13 @@
                     var customSelect = document.getElementById('custom_language_select');
                     if (customSelect) {
                         customSelect.addEventListener('change', function() {
-                            combo.value = this.value;
-                            combo.dispatchEvent(new Event('change'));
+                            if (this.value === '') {
+                                // Reload for English
+                                window.location.reload();
+                            } else {
+                                combo.value = this.value;
+                                combo.dispatchEvent(new Event('change'));
+                            }
                         });
                     }
                 }
@@ -142,8 +147,8 @@
                     <img src="{{ asset('images/jobone-logo.png') }}" alt="JobOne.in" class="h-10 md:h-16 w-auto object-contain">
                 </a>
                 
-                <!-- Custom Language Selector (hidden on mobile) -->
-                <div class="hidden md:flex items-center gap-1">
+                <!-- Custom Language Selector (visible on all screens) -->
+                <div class="flex items-center gap-1">
                     <i class="fas fa-globe text-blue-600 text-sm"></i>
                     <select id="custom_language_select" class="text-xs">
                         <option value="">EN</option>
