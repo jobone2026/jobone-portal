@@ -18,7 +18,7 @@ return new class extends Migration
             $table->enum('type', ['job', 'admit_card', 'syllabus', 'result', 'answer_key', 'blog']);
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('state_id')->nullable();
-            $table->text('short_description')->nullable()->default('');
+            $table->text('short_description')->nullable();
             $table->longText('content');
             $table->unsignedInteger('total_posts')->nullable();
             $table->dateTime('last_date')->nullable();
