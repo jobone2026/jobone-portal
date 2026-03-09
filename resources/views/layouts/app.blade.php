@@ -56,6 +56,8 @@
     
     <!-- Google Translate API -->
     <script type="text/javascript">
+        var googleTranslateLoaded = false;
+        
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 pageLanguage: 'en',
@@ -64,7 +66,9 @@
                 autoDisplay: false
             }, 'google_translate_element');
             
-            // Wait for Google Translate to fully load
+            googleTranslateLoaded = true;
+            
+            // Restore saved language after Google Translate loads
             setTimeout(function() {
                 var savedLang = localStorage.getItem('selectedLanguage');
                 if (savedLang && savedLang !== 'en') {
@@ -76,16 +80,35 @@
         }
         
         function changeLanguage(lang) {
+            if (lang === 'en') {
+                // For English, remove translation and reload
+                localStorage.setItem('selectedLanguage', 'en');
+                var iframe = document.querySelector('.goog-te-banner-frame');
+                if (iframe) {
+                    // Click the "Show original" button if translation is active
+                    window.location.reload();
+                } else {
+                    window.location.reload();
+                }
+                return;
+            }
+            
+            // For other languages, use Google Translate
             var selectField = document.querySelector('.goog-te-combo');
             if (selectField) {
                 selectField.value = lang;
                 selectField.dispatchEvent(new Event('change'));
                 localStorage.setItem('selectedLanguage', lang);
-            } else {
-                // Retry if not loaded yet
+            } else if (googleTranslateLoaded) {
+                // Google Translate loaded but combo not ready, retry
                 setTimeout(function() {
                     changeLanguage(lang);
-                }, 500);
+                }, 300);
+            } else {
+                // Google Translate not loaded yet, wait longer
+                setTimeout(function() {
+                    changeLanguage(lang);
+                }, 1000);
             }
         }
     </script>
