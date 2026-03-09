@@ -35,12 +35,14 @@ bash install.sh
 The installer will ask you for:
 
 - **Domain name** (e.g., jobone.in)
-- **Database name** (default: govt_job_portal)
-- **Database username** (default: jobone)
-- **Database password** (create a strong password)
+- **Database name** (default: govt_job_portal) - auto-configured
+- **Database username** (default: jobone) - auto-configured
+- **Database password** - auto-generated securely
 - **Admin email** (for admin login)
 - **Admin password** (for admin login)
 - **SSL email** (for Let's Encrypt certificate)
+
+**Note:** Database credentials are automatically generated and saved in the `.env` file.
 
 ### 4. Wait for Installation
 

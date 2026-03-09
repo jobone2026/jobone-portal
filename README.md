@@ -56,8 +56,8 @@ A comprehensive Laravel-based platform for Indian government job seekers, provid
 
 1. **Clone Repository**
 ```bash
-git clone https://github.com/yourusername/govt-job-portal.git
-cd govt-job-portal
+git clone https://github.com/jobone2026/jobone-portal.git
+cd jobone-portal
 ```
 
 2. **Install Dependencies**

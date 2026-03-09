@@ -91,7 +91,11 @@ collect_configuration() {
     prompt_input "Domain name (e.g., jobone.in)" DOMAIN_NAME "jobone.in"
     prompt_input "Database name" DB_NAME "govt_job_portal"
     prompt_input "Database username" DB_USER "jobone"
-    prompt_password "Database password" DB_PASSWORD
+    
+    # Auto-generate secure database password
+    DB_PASSWORD=$(openssl rand -base64 32 | tr -d "=+/" | cut -c1-25)
+    print_info "Database password auto-generated (will be saved in .env)"
+    
     prompt_input "Admin email" ADMIN_EMAIL "admin@jobone.in"
     prompt_password "Admin password" ADMIN_PASSWORD
     prompt_input "Your email (for SSL certificate)" SSL_EMAIL "jobone2026@gmail.com"
@@ -155,12 +159,26 @@ install_mysql() {
 configure_mysql() {
     print_header "Configuring MySQL Database"
     
-    sudo mysql -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-    sudo mysql -e "CREATE USER IF NOT EXISTS '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';"
-    sudo mysql -e "GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'localhost';"
-    sudo mysql -e "FLUSH PRIVILEGES;"
+    # MySQL commands without password (fresh install allows root login without password)
+    sudo mysql -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;" 2>/dev/null || \
+    mysql -u root -p$(cat /tmp/.mysql_root_pass) -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+    
+    sudo mysql -e "CREATE USER IF NOT EXISTS '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';" 2>/dev/null || \
+    mysql -u root -p$(cat /tmp/.mysql_root_pass) -e "CREATE USER IF NOT EXISTS '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';"
+    
+    sudo mysql -e "GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'localhost';" 2>/dev/null || \
+    mysql -u root -p$(cat /tmp/.mysql_root_pass) -e "GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'localhost';"
+    
+    sudo mysql -e "FLUSH PRIVILEGES;" 2>/dev/null || \
+    mysql -u root -p$(cat /tmp/.mysql_root_pass) -e "FLUSH PRIVILEGES;"
+    
+    # Clean up temp file
+    rm -f /tmp/.mysql_root_pass
     
     print_success "MySQL database configured"
+    print_info "Database: ${DB_NAME}"
+    print_info "Username: ${DB_USER}"
+    print_info "Password: ${DB_PASSWORD} (saved in .env file)"
 }
 
 install_composer() {
@@ -444,6 +462,12 @@ print_summary() {
     echo -e "${BLUE}Admin URL:${NC}          https://${DOMAIN_NAME}/admin/login"
     echo -e "${BLUE}Admin Email:${NC}        ${ADMIN_EMAIL}"
     echo -e "${BLUE}Admin Password:${NC}     ${ADMIN_PASSWORD}"
+    echo
+    echo -e "${BLUE}Database Details:${NC}"
+    echo -e "  Database Name:     ${DB_NAME}"
+    echo -e "  Database User:     ${DB_USER}"
+    echo -e "  Database Password: ${DB_PASSWORD}"
+    echo -e "  ${YELLOW}(Saved in ${APP_DIR}/.env)${NC}"
     echo
     echo -e "${YELLOW}Important Next Steps:${NC}"
     echo -e "  1. Visit your website: https://${DOMAIN_NAME}"
