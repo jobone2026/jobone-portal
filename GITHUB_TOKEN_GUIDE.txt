@@ -1,0 +1,128 @@
+═══════════════════════════════════════════════════════════════════════════
+  🔑 GENERATE NEW GITHUB TOKEN (WITH CORRECT PERMISSIONS)
+═══════════════════════════════════════════════════════════════════════════
+
+Your previous token failed because it lacks the 'repo' scope.
+Follow these steps to create a new token with the correct permissions:
+
+═══════════════════════════════════════════════════════════════════════════
+  STEP-BY-STEP GUIDE
+═══════════════════════════════════════════════════════════════════════════
+
+1️⃣  LOGIN TO GITHUB
+   - Go to: https://github.com
+   - Login as: jobone2026
+
+2️⃣  GO TO TOKEN SETTINGS
+   - Click your profile picture (top right)
+   - Click "Settings"
+   - Scroll down to "Developer settings" (bottom left)
+   - Click "Personal access tokens"
+   - Click "Tokens (classic)"
+   - Click "Generate new token" → "Generate new token (classic)"
+
+3️⃣  CONFIGURE THE TOKEN
+   
+   Note: JobOne Deployment Token
+   
+   Expiration: Choose one:
+   - 90 days (recommended)
+   - No expiration (if you want it to work forever)
+   
+   Select scopes:
+   ✅ repo (CHECK THIS BOX!)
+      ├─ repo:status
+      ├─ repo_deployment
+      ├─ public_repo
+      └─ repo:invite
+   
+   ⚠️  IMPORTANT: Make sure the 'repo' checkbox is CHECKED!
+       This is the ONLY scope you need for pushing code.
+
+4️⃣  GENERATE AND COPY TOKEN
+   - Click "Generate token" (bottom of page)
+   - You'll see a green token starting with "ghp_"
+   - Click the copy icon to copy it
+   - ⚠️  SAVE IT SOMEWHERE - you won't see it again!
+
+5️⃣  USE THE TOKEN TO PUSH
+   
+   Open your terminal in this directory and run:
+   
+   # Update remote URL with your new token
+   git remote set-url origin https://YOUR_NEW_TOKEN@github.com/jobone2026/jobone.git
+   
+   # Push to GitHub
+   git push -u origin main
+   
+   Replace YOUR_NEW_TOKEN with the token you just copied.
+
+═══════════════════════════════════════════════════════════════════════════
+  EXAMPLE
+═══════════════════════════════════════════════════════════════════════════
+
+If your token is: ghp_1234567890abcdefghijklmnopqrstuvwxyz1234
+
+Run:
+git remote set-url origin https://ghp_1234567890abcdefghijklmnopqrstuvwxyz1234@github.com/jobone2026/jobone.git
+git push -u origin main
+
+═══════════════════════════════════════════════════════════════════════════
+  WHAT WILL BE PUSHED?
+═══════════════════════════════════════════════════════════════════════════
+
+✅ Complete Laravel application (225+ files)
+✅ SEO optimization with 250+ keywords
+✅ Admin panel with backup/restore
+✅ REST API with authentication
+✅ All documentation files
+✅ Deployment scripts
+✅ 5 commits with full history
+
+═══════════════════════════════════════════════════════════════════════════
+  VERIFY YOUR PUSH
+═══════════════════════════════════════════════════════════════════════════
+
+After successful push, visit:
+https://github.com/jobone2026/jobone
+
+You should see:
+✅ All your code files
+✅ 5 commits
+✅ README.md displayed on the homepage
+✅ Last commit: "Add push instructions and clean up view cache"
+
+═══════════════════════════════════════════════════════════════════════════
+  TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════════════
+
+❌ Error: "Permission denied"
+   → Your token doesn't have 'repo' scope
+   → Generate a NEW token with 'repo' checked
+
+❌ Error: "Repository not found"
+   → Make sure the repository exists at https://github.com/jobone2026/jobone
+   → Make sure you're logged in as jobone2026
+
+❌ Error: "Authentication failed"
+   → Your token might be expired or invalid
+   → Generate a new token
+
+═══════════════════════════════════════════════════════════════════════════
+  NEED HELP?
+═══════════════════════════════════════════════════════════════════════════
+
+If you're still having issues:
+
+1. Make sure you're logged into GitHub as 'jobone2026'
+2. Make sure the repository exists: https://github.com/jobone2026/jobone
+3. Make sure you checked the 'repo' scope when creating the token
+4. Make sure you copied the entire token (starts with ghp_)
+
+═══════════════════════════════════════════════════════════════════════════
+
+Good luck! 🚀
+
+Once pushed, you can proceed with AWS deployment using DEPLOYMENT.md
+
+═══════════════════════════════════════════════════════════════════════════
