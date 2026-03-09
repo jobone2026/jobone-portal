@@ -70,7 +70,6 @@
     <style>
         .goog-te-banner-frame.skiptranslate { display: none !important; }
         body { top: 0px !important; }
-        #google_translate_element { display: none; }
         
         /* Custom Language Selector */
         .language-selector {
@@ -79,14 +78,14 @@
             gap: 4px;
         }
         .language-selector select {
-            padding: 4px 6px;
+            padding: 4px 8px;
             border: 1px solid #d1d5db;
             border-radius: 0.375rem;
             font-size: 0.75rem;
             background-color: white;
             color: #4b5563;
             cursor: pointer;
-            min-width: 60px;
+            min-width: 70px;
         }
         .language-selector select:hover {
             border-color: #3b82f6;
@@ -95,9 +94,52 @@
             font-size: 0.875rem;
             color: #3b82f6;
         }
+        
+        /* Hide Google Translate widget but keep it functional */
+        .goog-te-gadget { display: none !important; }
+        #google_translate_element { position: absolute; left: -9999px; }
     </style>
+    
+    <script>
+        function changeLanguage(lang) {
+            var selectField = document.querySelector('.goog-te-combo');
+            if (selectField) {
+                selectField.value = lang;
+                selectField.dispatchEvent(new Event('change'));
+            } else {
+                // If Google Translate hasn't loaded yet, wait and try again
+                setTimeout(function() {
+                    changeLanguage(lang);
+                }, 500);
+            }
+        }
+        
+        // Store selected language in localStorage
+        window.addEventListener('load', function() {
+            var savedLang = localStorage.getItem('selectedLanguage');
+            if (savedLang && savedLang !== 'en') {
+                setTimeout(function() {
+                    changeLanguage(savedLang);
+                    document.querySelector('.language-selector select').value = savedLang;
+                }, 1000);
+            }
+        });
+        
+        // Save language selection
+        document.addEventListener('DOMContentLoaded', function() {
+            var langSelector = document.querySelector('.language-selector select');
+            if (langSelector) {
+                langSelector.addEventListener('change', function() {
+                    localStorage.setItem('selectedLanguage', this.value);
+                });
+            }
+        });
+    </script>
 </head>
 <body class="bg-gray-50">
+    <!-- Hidden Google Translate Element -->
+    <div id="google_translate_element"></div>
+    
     <!-- Header -->
     <header class="bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm sticky top-0 z-50 border-b border-blue-100">
         <nav class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-3 md:py-4">
