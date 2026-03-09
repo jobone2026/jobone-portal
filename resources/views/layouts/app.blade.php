@@ -58,7 +58,7 @@
     <script type="text/javascript">
         var googleTranslateLoaded = false;
         var googleTranslateRetries = 0;
-        var maxRetries = 10;
+        var maxRetries = 15;
         
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
@@ -71,8 +71,11 @@
             googleTranslateLoaded = true;
             console.log('Google Translate initialized');
             
-            // Restore saved language after Google Translate loads
+            // Wait longer for combo to be ready
             setTimeout(function() {
+                var combo = document.querySelector('.goog-te-combo');
+                console.log('Combo ready check:', combo !== null);
+                
                 var savedLang = localStorage.getItem('selectedLanguage');
                 if (savedLang && savedLang !== 'en') {
                     console.log('Restoring saved language:', savedLang);
@@ -80,21 +83,19 @@
                     var selector = document.querySelector('.language-selector select');
                     if (selector) selector.value = savedLang;
                 }
-            }, 2000);
+            }, 3000);
         }
         
         function changeLanguage(lang) {
             console.log('changeLanguage called with:', lang);
             
             if (lang === 'en') {
-                // For English, remove translation and reload
                 localStorage.setItem('selectedLanguage', 'en');
                 console.log('Switching to English, reloading page');
                 window.location.reload();
                 return;
             }
             
-            // For other languages, use Google Translate
             var selectField = document.querySelector('.goog-te-combo');
             console.log('Google Translate combo found:', selectField !== null);
             
@@ -109,13 +110,15 @@
                 console.log('Combo not found, retry', googleTranslateRetries, 'of', maxRetries);
                 
                 if (googleTranslateRetries < maxRetries) {
-                    // Retry with increasing delay
                     setTimeout(function() {
                         changeLanguage(lang);
-                    }, 500 * googleTranslateRetries);
+                    }, 1000);
                 } else {
                     console.error('Failed to find Google Translate combo after', maxRetries, 'retries');
-                    alert('Language switcher is loading. Please try again in a moment.');
+                    console.log('Checking if Google Translate script loaded...');
+                    console.log('googleTranslateLoaded:', googleTranslateLoaded);
+                    console.log('Hidden element exists:', document.getElementById('google_translate_element') !== null);
+                    alert('Language switcher is still loading. Please wait a few seconds and try again.');
                     googleTranslateRetries = 0;
                 }
             }
