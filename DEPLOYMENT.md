@@ -108,7 +108,7 @@ EXIT;
 
 ```bash
 cd /var/www
-sudo git clone https://github.com/yourusername/govt-job-portal.git jobone
+sudo git clone https://github.com/jobone2026/jobone.git jobone
 sudo chown -R $USER:www-data /var/www/jobone
 cd /var/www/jobone
 ```
