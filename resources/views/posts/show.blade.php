@@ -148,6 +148,87 @@
                 </ul>
             </div>
         @endif
+
+        <!-- Modern Share Section -->
+        <div class="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-xl p-6 mb-6 shadow-sm">
+            <h3 class="font-bold text-purple-900 mb-4 text-base flex items-center gap-2">
+                <i class="fas fa-share-alt"></i> Share This Post
+            </h3>
+            
+            @php
+                $shareUrl = route('posts.show', [$post->type, $post->slug]);
+                $shareTitle = $post->title;
+                $shareMessage = "🔔 *{$shareTitle}*\n\n";
+                
+                if ($post->last_date) {
+                    $shareMessage .= "📅 Last Date: " . $post->last_date->format('d M Y') . "\n";
+                }
+                if ($post->total_posts) {
+                    $shareMessage .= "📊 Total Posts: {$post->total_posts}\n";
+                }
+                
+                $shareMessage .= "\n🔗 Apply Now: {$shareUrl}\n\n";
+                $shareMessage .= "📢 Join us for more updates:\n";
+                
+                $settings = \App\Models\SiteSetting::whereIn('key', ['telegram_url', 'facebook_url', 'whatsapp_url'])->pluck('value', 'key');
+                
+                if (!empty($settings['telegram_url'])) {
+                    $shareMessage .= "📱 Telegram: {$settings['telegram_url']}\n";
+                }
+                if (!empty($settings['facebook_url'])) {
+                    $shareMessage .= "👍 Facebook: {$settings['facebook_url']}\n";
+                }
+                if (!empty($settings['whatsapp_url'])) {
+                    $shareMessage .= "💬 WhatsApp: {$settings['whatsapp_url']}\n";
+                }
+                
+                $encodedMessage = urlencode($shareMessage);
+                $encodedUrl = urlencode($shareUrl);
+                $encodedTitle = urlencode($shareTitle);
+            @endphp
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <!-- WhatsApp -->
+                <a href="https://wa.me/?text={{ $encodedMessage }}" 
+                   target="_blank" 
+                   onclick="trackShare('WhatsApp', '{{ $shareUrl }}', '{{ $shareTitle }}')"
+                   class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg transition transform hover:scale-105 shadow-md">
+                    <i class="fab fa-whatsapp text-xl"></i>
+                    <span class="font-semibold text-sm">WhatsApp</span>
+                </a>
+                
+                <!-- Telegram -->
+                <a href="https://t.me/share/url?url={{ $encodedUrl }}&text={{ $encodedMessage }}" 
+                   target="_blank"
+                   onclick="trackShare('Telegram', '{{ $shareUrl }}', '{{ $shareTitle }}')"
+                   class="flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg transition transform hover:scale-105 shadow-md">
+                    <i class="fab fa-telegram text-xl"></i>
+                    <span class="font-semibold text-sm">Telegram</span>
+                </a>
+                
+                <!-- Facebook -->
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ $encodedUrl }}" 
+                   target="_blank"
+                   onclick="trackShare('Facebook', '{{ $shareUrl }}', '{{ $shareTitle }}')"
+                   class="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg transition transform hover:scale-105 shadow-md">
+                    <i class="fab fa-facebook-f text-xl"></i>
+                    <span class="font-semibold text-sm">Facebook</span>
+                </a>
+                
+                <!-- Twitter/X -->
+                <a href="https://twitter.com/intent/tweet?url={{ $encodedUrl }}&text={{ $encodedTitle }}" 
+                   target="_blank"
+                   onclick="trackShare('Twitter', '{{ $shareUrl }}', '{{ $shareTitle }}')"
+                   class="flex items-center justify-center gap-2 bg-black hover:bg-gray-800 text-white px-4 py-3 rounded-lg transition transform hover:scale-105 shadow-md">
+                    <i class="fab fa-twitter text-xl"></i>
+                    <span class="font-semibold text-sm">Twitter</span>
+                </a>
+            </div>
+            
+            <p class="text-xs text-purple-700 mt-4 text-center">
+                <i class="fas fa-info-circle"></i> Share with your friends and help them stay updated!
+            </p>
+        </div>
     </article>
 
     <!-- Ad Slot - After Post -->
