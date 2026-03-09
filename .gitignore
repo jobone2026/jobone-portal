@@ -35,3 +35,6 @@ delete-sample-posts.php
 # Generated files
 /public/og-images
 /storage/app/og-images
+/storage/app/backups
+*.sql
+*.sql.gz

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\AuthorController;
+use App\Http\Controllers\Admin\BackupController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PostController;
@@ -72,5 +73,13 @@ Route::prefix('admin')->group(function () {
         // Settings management
         Route::get('/settings', [SettingController::class, 'index'])->name('admin.settings.index');
         Route::post('/settings', [SettingController::class, 'update'])->name('admin.settings.update');
+
+        // Backup management
+        Route::get('/backups', [BackupController::class, 'index'])->name('admin.backups.index');
+        Route::post('/backups/create', [BackupController::class, 'create'])->name('admin.backups.create');
+        Route::get('/backups/download/{filename}', [BackupController::class, 'download'])->name('admin.backups.download');
+        Route::delete('/backups/delete/{filename}', [BackupController::class, 'delete'])->name('admin.backups.delete');
+        Route::post('/backups/restore', [BackupController::class, 'restore'])->name('admin.backups.restore');
+        Route::post('/backups/upload', [BackupController::class, 'upload'])->name('admin.backups.upload');
     });
 });

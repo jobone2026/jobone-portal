@@ -73,6 +73,11 @@
                     <i class="fas fa-cog w-5"></i>
                     <span class="text-sm font-medium">Site Settings</span>
                 </a>
+                
+                <a href="{{ route('admin.backups.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg mb-1 {{ request()->routeIs('admin.backups.*') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800' }}">
+                    <i class="fas fa-database w-5"></i>
+                    <span class="text-sm font-medium">Backup & Restore</span>
+                </a>
             </nav>
             
             <!-- User Profile -->
