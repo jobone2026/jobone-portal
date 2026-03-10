@@ -66,6 +66,19 @@
             setTimeout(function() {
                 var combo = document.querySelector('.goog-te-combo');
                 if (combo) {
+                    // Restore saved language on page load
+                    var savedLang = localStorage.getItem('selectedLanguage');
+                    if (savedLang && savedLang !== 'en') {
+                        combo.value = savedLang;
+                        combo.dispatchEvent(new Event('change'));
+                        
+                        // Update dropdown to show selected language
+                        var customSelect = document.getElementById('custom_language_select');
+                        if (customSelect) {
+                            customSelect.value = savedLang;
+                        }
+                    }
+                    
                     // Sync custom dropdown with Google Translate
                     var customSelect = document.getElementById('custom_language_select');
                     if (customSelect) {
