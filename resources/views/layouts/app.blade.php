@@ -71,11 +71,22 @@
                     if (customSelect) {
                         customSelect.addEventListener('change', function() {
                             if (this.value === '') {
-                                // Reload for English
-                                window.location.reload();
+                                // For English, reset Google Translate
+                                combo.value = 'en';
+                                combo.dispatchEvent(new Event('change'));
+                                
+                                // Clear localStorage
+                                localStorage.removeItem('selectedLanguage');
+                                
+                                // Reload after a short delay to ensure translation is removed
+                                setTimeout(function() {
+                                    window.location.reload();
+                                }, 500);
                             } else {
+                                // For other languages
                                 combo.value = this.value;
                                 combo.dispatchEvent(new Event('change'));
+                                localStorage.setItem('selectedLanguage', this.value);
                             }
                         });
                     }
