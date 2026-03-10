@@ -254,3 +254,45 @@
         </div>
     @endif
 @endsection
+
+
+<script>
+// Handle external app opening for WebView
+function openExternalApp(app, data) {
+    // Check if running in WebView
+    var isWebView = /WebView|wv|\.0\.0\.0|Version\/[\d.]+(?!.*Safari)/.test(navigator.userAgent);
+    
+    if (isWebView) {
+        // For WebView, use native app schemes
+        var url = '';
+        switch(app) {
+            case 'whatsapp':
+                url = 'whatsapp://send?text=' + data;
+                break;
+            case 'telegram':
+                url = 'tg://msg?text=' + data;
+                break;
+            case 'facebook':
+                url = 'fb://page/';
+                break;
+            case 'twitter':
+                url = 'twitter://post?message=' + data;
+                break;
+        }
+        
+        if (url) {
+            // Try to open native app
+            window.location.href = url;
+            
+            // Fallback to web version after 1 second if app not installed
+            setTimeout(function() {
+                if (app === 'whatsapp') {
+                    window.location.href = 'https://wa.me/?text=' + data;
+                } else if (app === 'telegram') {
+                    window.location.href = 'https://t.me/share/url?text=' + data;
+                }
+            }, 1000);
+        }
+    }
+}
+</script>
