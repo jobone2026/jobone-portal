@@ -159,52 +159,27 @@
                 $shareUrl = route('posts.show', [$post->type, $post->slug]);
                 $shareTitle = $post->title;
                 
-                // Create a simple text message for WhatsApp
-                $whatsappMessage = "🔔 {$shareTitle}\n\n";
-                
-                if ($post->last_date) {
-                    $whatsappMessage .= "📅 Last Date: " . $post->last_date->format('d M Y') . "\n";
-                }
-                if ($post->total_posts) {
-                    $whatsappMessage .= "📊 Total Posts: {$post->total_posts}\n";
-                }
-                
-                $whatsappMessage .= "\n🔗 Apply Now: {$shareUrl}\n\n";
-                $whatsappMessage .= "📢 Join us for more updates:\n";
-                
-                $settings = \App\Models\SiteSetting::whereIn('key', ['telegram_url', 'facebook_url', 'whatsapp_url'])->pluck('value', 'key');
-                
-                if (!empty($settings['telegram_url'])) {
-                    $whatsappMessage .= "📱 Telegram: {$settings['telegram_url']}\n";
-                }
-                if (!empty($settings['facebook_url'])) {
-                    $whatsappMessage .= "👍 Facebook: {$settings['facebook_url']}\n";
-                }
-                if (!empty($settings['whatsapp_url'])) {
-                    $whatsappMessage .= "💬 WhatsApp Group: {$settings['whatsapp_url']}\n";
-                }
-                
-                $whatsappMessage .= "\n✅ Visit: https://jobone.in";
-                
-                $encodedWhatsappMessage = urlencode($whatsappMessage);
+                // Simple message for sharing
+                $simpleMessage = "{$shareTitle} - Apply: {$shareUrl}";
+                $encodedSimpleMessage = urlencode($simpleMessage);
                 $encodedUrl = urlencode($shareUrl);
                 $encodedTitle = urlencode($shareTitle);
             @endphp
             
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                 <!-- WhatsApp -->
-                <a href="https://wa.me/?text={{ $encodedWhatsappMessage }}" 
+                <a href="https://wa.me/?text={{ $encodedSimpleMessage }}" 
                    target="_blank" 
-                   onclick="trackShare('WhatsApp', '{{ $shareUrl }}', '{{ $shareTitle }}')"
+                   rel="noopener noreferrer"
                    class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg transition transform hover:scale-105 shadow-md">
                     <i class="fab fa-whatsapp text-xl"></i>
                     <span class="font-semibold text-sm">WhatsApp</span>
                 </a>
                 
                 <!-- Telegram -->
-                <a href="https://t.me/share/url?url={{ $encodedUrl }}&text={{ $encodedWhatsappMessage }}" 
+                <a href="https://t.me/share/url?url={{ $encodedUrl }}&text={{ $encodedTitle }}" 
                    target="_blank"
-                   onclick="trackShare('Telegram', '{{ $shareUrl }}', '{{ $shareTitle }}')"
+                   rel="noopener noreferrer"
                    class="flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg transition transform hover:scale-105 shadow-md">
                     <i class="fab fa-telegram text-xl"></i>
                     <span class="font-semibold text-sm">Telegram</span>
@@ -213,7 +188,7 @@
                 <!-- Facebook -->
                 <a href="https://www.facebook.com/sharer/sharer.php?u={{ $encodedUrl }}" 
                    target="_blank"
-                   onclick="trackShare('Facebook', '{{ $shareUrl }}', '{{ $shareTitle }}')"
+                   rel="noopener noreferrer"
                    class="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg transition transform hover:scale-105 shadow-md">
                     <i class="fab fa-facebook-f text-xl"></i>
                     <span class="font-semibold text-sm">Facebook</span>
@@ -222,7 +197,7 @@
                 <!-- Twitter/X -->
                 <a href="https://twitter.com/intent/tweet?url={{ $encodedUrl }}&text={{ $encodedTitle }}" 
                    target="_blank"
-                   onclick="trackShare('Twitter', '{{ $shareUrl }}', '{{ $shareTitle }}')"
+                   rel="noopener noreferrer"
                    class="flex items-center justify-center gap-2 bg-black hover:bg-gray-800 text-white px-4 py-3 rounded-lg transition transform hover:scale-105 shadow-md">
                     <i class="fab fa-twitter text-xl"></i>
                     <span class="font-semibold text-sm">Twitter</span>
