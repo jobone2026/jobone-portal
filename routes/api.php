@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AdminApiController;
+use App\Http\Controllers\Api\PostApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +17,11 @@ use App\Http\Controllers\Api\AdminApiController;
 
 // Public routes
 Route::post('/admin/login', [AdminApiController::class, 'login']);
+
+// Public API endpoints (with token authentication)
+Route::post('/posts/create', [PostApiController::class, 'create']);
+Route::get('/categories', [PostApiController::class, 'categories']);
+Route::get('/states', [PostApiController::class, 'states']);
 
 // Protected routes (require authentication)
 Route::middleware('auth:sanctum')->group(function () {
