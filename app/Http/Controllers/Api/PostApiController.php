@@ -227,26 +227,26 @@ class PostApiController extends Controller
     }
 
     /**
-     * Get all categories
+     * Get all categories (public endpoint)
      * GET /api/categories
      */
     public function categories()
     {
         return response()->json([
             'success' => true,
-            'data' => Category::all(['id', 'name'])
+            'data' => Category::all(['id', 'name', 'slug'])
         ]);
     }
 
     /**
-     * Get all states
+     * Get all states (public endpoint)
      * GET /api/states
      */
     public function states()
     {
         return response()->json([
             'success' => true,
-            'data' => State::all(['id', 'name'])
+            'data' => State::all(['id', 'name', 'slug'])
         ]);
     }
 
