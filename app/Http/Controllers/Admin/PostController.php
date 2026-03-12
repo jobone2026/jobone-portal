@@ -44,7 +44,7 @@ class PostController extends Controller
             $query->where('title', 'like', '%' . $request->search . '%');
         }
 
-        $posts = $query->latest()->paginate(20)->withQueryString();
+        $posts = $query->latest()->paginate(100)->withQueryString();
         $categories = Category::all();
         $states = State::all();
 
