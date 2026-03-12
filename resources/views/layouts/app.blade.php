@@ -262,6 +262,9 @@
 </head>
 <body class="bg-gray-50">
 
+    <!-- Breaking News Ticker -->
+    <x-breaking-news-ticker />
+
     <!-- Header -->
     <header class="bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm sticky top-0 z-50 border-b border-blue-100">
         <nav class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-3 md:py-4">
