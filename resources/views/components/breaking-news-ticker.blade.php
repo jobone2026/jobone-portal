@@ -6,11 +6,11 @@
         ->get();
 @endphp
 
-<div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-1.5 sticky top-0 z-50 shadow-md overflow-hidden">
+<div class="bg-white border-b-2 border-blue-600 py-1.5 sticky top-0 z-50 shadow-md overflow-hidden">
     <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
         <div class="flex items-center gap-2">
             <!-- Latest Jobs Label -->
-            <div class="flex-shrink-0 flex items-center gap-1.5 font-bold text-xs whitespace-nowrap bg-yellow-400 text-blue-900 px-2 py-0.5 rounded">
+            <div class="flex-shrink-0 flex items-center gap-1.5 font-bold text-xs whitespace-nowrap bg-blue-600 text-white px-2.5 py-1 rounded shadow-sm">
                 <i class="fas fa-briefcase text-xs"></i>
                 <span>LATEST JOBS</span>
             </div>
@@ -22,23 +22,23 @@
                         @forelse($latestJobs as $job)
                             <span class="ticker-item">
                                 <a href="{{ route('posts.show', [$job->type, $job->slug]) }}" 
-                                   class="hover:text-yellow-300 transition inline-block font-semibold text-white">
+                                   class="hover:text-blue-600 transition inline-block font-semibold text-gray-800">
                                     {{ $job->title }}
                                 </a>
-                                <span class="mx-2 text-yellow-300 font-bold">★</span>
+                                <span class="mx-2 text-red-500 font-bold">★</span>
                             </span>
                         @empty
-                            <span class="ticker-item">No jobs available</span>
+                            <span class="ticker-item text-gray-600">No jobs available</span>
                         @endforelse
                         
                         <!-- Duplicate for continuous scroll -->
                         @forelse($latestJobs as $job)
                             <span class="ticker-item">
                                 <a href="{{ route('posts.show', [$job->type, $job->slug]) }}" 
-                                   class="hover:text-yellow-300 transition inline-block font-semibold text-white">
+                                   class="hover:text-blue-600 transition inline-block font-semibold text-gray-800">
                                     {{ $job->title }}
                                 </a>
-                                <span class="mx-2 text-yellow-300 font-bold">★</span>
+                                <span class="mx-2 text-red-500 font-bold">★</span>
                             </span>
                         @empty
                         @endforelse
@@ -66,7 +66,6 @@
         padding: 0 0.5rem;
         font-size: 0.75rem;
         font-weight: 600;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     }
     
     @keyframes scroll-left {
