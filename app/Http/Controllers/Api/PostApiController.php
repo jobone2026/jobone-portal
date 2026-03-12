@@ -19,7 +19,7 @@ class PostApiController extends Controller
      * - Authorization: Bearer YOUR_API_TOKEN
      * - Content-Type: application/json
      */
-    public function create(Request request)
+    public function create(Request $request)
     {
         // Validate API token
         $token = $request->bearerToken();

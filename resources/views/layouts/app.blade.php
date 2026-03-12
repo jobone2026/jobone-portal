@@ -5,7 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- SEO Meta Tags -->
-    <x-seo-head />
+    @php
+        $seoData = $seo ?? [
+            'title' => 'JobOne.in - Latest Government Jobs, Admit Cards, Results & More',
+            'description' => 'Find latest government job notifications, admit cards, results, answer keys, and syllabus for SSC, UPSC, Railways, Banking, State PSC, Defence, Police, and Teaching jobs across India.',
+            'keywords' => 'government jobs, sarkari naukri, admit card, result, answer key, syllabus, SSC, UPSC, Railways, Banking',
+            'canonical' => url()->current(),
+            'og_title' => 'JobOne.in - Latest Government Jobs Portal',
+            'og_description' => 'Your trusted source for government job notifications and exam updates',
+            'og_image' => asset('images/og-image.jpg'),
+            'og_url' => url()->current(),
+        ];
+    @endphp
+    <x-seo-head :seo="$seoData" :schema="$schema ?? null" />
     
     <!-- Google Analytics -->
     @php
@@ -17,7 +29,17 @@
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '{{ $gaTrackingId }}');
+            gtag('config', '{{ $gaTrackingId }}', {
+                'page_title': '{{ $seoData['title'] ?? 'JobOne.in' }}',
+                'page_path': window.location.pathname
+            });
+            
+            // Send page view with title
+            gtag('event', 'page_view', {
+                'page_title': '{{ $seoData['title'] ?? 'JobOne.in' }}',
+                'page_path': window.location.pathname,
+                'page_location': window.location.href
+            });
             
             // Custom GA4 Events
             @if(isset($post))
@@ -283,6 +305,9 @@
             </div>
         </div>
     </div>
+
+    <!-- Latest Jobs Carousel -->
+    <x-latest-jobs-carousel />
 
     <!-- Categories Navigation Bar -->
     <div class="bg-gray-100 overflow-x-auto sticky top-[96px] md:top-32 z-40 border-b border-gray-200">
