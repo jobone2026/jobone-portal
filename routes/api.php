@@ -18,10 +18,23 @@ use App\Http\Controllers\Api\PostApiController;
 // Public routes
 Route::post('/admin/login', [AdminApiController::class, 'login']);
 
-// Public API endpoints (with token authentication)
+// API endpoints (with Bearer token authentication)
+Route::get('/posts', [PostApiController::class, 'list']);
+Route::get('/posts/{id}', [PostApiController::class, 'get']);
+Route::post('/posts', [PostApiController::class, 'create']);
+Route::put('/posts/{id}', [PostApiController::class, 'update']);
+Route::delete('/posts/{id}', [PostApiController::class, 'delete']);
+
+// Legacy endpoint (still supported)
 Route::post('/posts/create', [PostApiController::class, 'create']);
+
+// Categories & States
 Route::get('/categories', [PostApiController::class, 'categories']);
 Route::get('/states', [PostApiController::class, 'states']);
+
+// Token management
+Route::get('/token', [PostApiController::class, 'getToken']);
+Route::post('/token/generate', [PostApiController::class, 'generateToken']);
 
 // Protected routes (require authentication)
 Route::middleware('auth:sanctum')->group(function () {

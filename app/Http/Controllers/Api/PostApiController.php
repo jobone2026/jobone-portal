@@ -11,23 +11,89 @@ use Illuminate\Http\Request;
 class PostApiController extends Controller
 {
     /**
-     * Create a new job post via API
-     * 
-     * POST /api/posts/create
-     * 
-     * Required headers:
-     * - Authorization: Bearer YOUR_API_TOKEN
-     * - Content-Type: application/json
+     * Verify API token
      */
-    public function create(Request $request)
+    private function verifyToken($token)
     {
-        // Validate API token
+        return $token === env('API_TOKEN');
+    }
+
+    /**
+     * List all posts with pagination
+     * GET /api/posts
+     */
+    public function list(Request $request)
+    {
         $token = $request->bearerToken();
-        if ($token !== env('API_TOKEN')) {
+        if (!$this->verifyToken($token)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        // Validate input
+        $page = $request->get('page', 1);
+        $limit = $request->get('limit', 15);
+        $type = $request->get('type');
+        $category_id = $request->get('category_id');
+        $state_id = $request->get('state_id');
+
+        $query = Post::query();
+
+        if ($type) {
+            $query->where('type', $type);
+        }
+        if ($category_id) {
+            $query->where('category_id', $category_id);
+        }
+        if ($state_id) {
+            $query->where('state_id', $state_id);
+        }
+
+        $posts = $query->paginate($limit, ['*'], 'page', $page);
+
+        return response()->json([
+            'success' => true,
+            'data' => $posts->items(),
+            'pagination' => [
+                'total' => $posts->total(),
+                'per_page' => $posts->perPage(),
+                'current_page' => $posts->currentPage(),
+                'last_page' => $posts->lastPage(),
+            ]
+        ]);
+    }
+
+    /**
+     * Get single post by ID
+     * GET /api/posts/{id}
+     */
+    public function get(Request $request, $id)
+    {
+        $token = $request->bearerToken();
+        if (!$this->verifyToken($token)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $post = Post::find($id);
+        if (!$post) {
+            return response()->json(['error' => 'Post not found'], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $post
+        ]);
+    }
+
+    /**
+     * Create a new job post
+     * POST /api/posts
+     */
+    public function create(Request $request)
+    {
+        $token = $request->bearerToken();
+        if (!$this->verifyToken($token)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'type' => 'required|in:job,admit_card,result,answer_key,syllabus,blog',
@@ -40,10 +106,12 @@ class PostApiController extends Controller
             'total_posts' => 'nullable|integer',
             'important_links' => 'nullable|array',
             'is_featured' => 'nullable|boolean',
+            'meta_title' => 'nullable|string|max:60',
+            'meta_description' => 'nullable|string|max:160',
+            'meta_keywords' => 'nullable|string',
         ]);
 
         try {
-            // Create post
             $post = Post::create([
                 'title' => $validated['title'],
                 'slug' => \Str::slug($validated['title']),
@@ -57,20 +125,15 @@ class PostApiController extends Controller
                 'total_posts' => $validated['total_posts'] ?? null,
                 'important_links' => $validated['important_links'] ?? [],
                 'is_featured' => $validated['is_featured'] ?? false,
-                'meta_title' => $validated['title'],
-                'meta_description' => substr($validated['short_description'], 0, 160),
-                'meta_keywords' => implode(',', explode(' ', $validated['title'])),
+                'meta_title' => $validated['meta_title'] ?? $validated['title'],
+                'meta_description' => $validated['meta_description'] ?? substr($validated['short_description'], 0, 160),
+                'meta_keywords' => $validated['meta_keywords'] ?? implode(',', explode(' ', $validated['title'])),
             ]);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Post created successfully',
-                'post' => [
-                    'id' => $post->id,
-                    'title' => $post->title,
-                    'slug' => $post->slug,
-                    'url' => route('posts.show', [$post->type, $post->slug]),
-                ]
+                'data' => $post
             ], 201);
 
         } catch (\Exception $e) {
@@ -82,13 +145,97 @@ class PostApiController extends Controller
     }
 
     /**
+     * Update a post
+     * PUT /api/posts/{id}
+     */
+    public function update(Request $request, $id)
+    {
+        $token = $request->bearerToken();
+        if (!$this->verifyToken($token)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $post = Post::find($id);
+        if (!$post) {
+            return response()->json(['error' => 'Post not found'], 404);
+        }
+
+        $validated = $request->validate([
+            'title' => 'nullable|string|max:255',
+            'type' => 'nullable|in:job,admit_card,result,answer_key,syllabus,blog',
+            'short_description' => 'nullable|string',
+            'content' => 'nullable|string',
+            'category_id' => 'nullable|exists:categories,id',
+            'state_id' => 'nullable|exists:states,id',
+            'last_date' => 'nullable|date',
+            'notification_date' => 'nullable|date',
+            'total_posts' => 'nullable|integer',
+            'important_links' => 'nullable|array',
+            'is_featured' => 'nullable|boolean',
+            'meta_title' => 'nullable|string|max:60',
+            'meta_description' => 'nullable|string|max:160',
+            'meta_keywords' => 'nullable|string',
+        ]);
+
+        try {
+            $post->update($validated);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Post updated successfully',
+                'data' => $post
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Failed to update post',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Delete a post
+     * DELETE /api/posts/{id}
+     */
+    public function delete(Request $request, $id)
+    {
+        $token = $request->bearerToken();
+        if (!$this->verifyToken($token)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $post = Post::find($id);
+        if (!$post) {
+            return response()->json(['error' => 'Post not found'], 404);
+        }
+
+        try {
+            $post->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Post deleted successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Failed to delete post',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
      * Get all categories
      * GET /api/categories
      */
     public function categories()
     {
-        $categories = Category::all(['id', 'name']);
-        return response()->json($categories);
+        return response()->json([
+            'success' => true,
+            'data' => Category::all(['id', 'name'])
+        ]);
     }
 
     /**
@@ -97,7 +244,66 @@ class PostApiController extends Controller
      */
     public function states()
     {
-        $states = State::all(['id', 'name']);
-        return response()->json($states);
+        return response()->json([
+            'success' => true,
+            'data' => State::all(['id', 'name'])
+        ]);
+    }
+
+    /**
+     * Generate new API token
+     * POST /api/token/generate
+     */
+    public function generateToken(Request $request)
+    {
+        $token = $request->bearerToken();
+        if (!$this->verifyToken($token)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $newToken = 'jobone_sk_live_' . bin2hex(random_bytes(16));
+
+        try {
+            // Update .env file
+            $envPath = base_path('.env');
+            $envContent = file_get_contents($envPath);
+            $envContent = preg_replace(
+                '/API_TOKEN=.*/',
+                'API_TOKEN=' . $newToken,
+                $envContent
+            );
+            file_put_contents($envPath, $envContent);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'New API token generated',
+                'token' => $newToken,
+                'note' => 'Please restart PHP-FPM for changes to take effect'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Failed to generate token',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get current API token info
+     * GET /api/token
+     */
+    public function getToken(Request $request)
+    {
+        $token = $request->bearerToken();
+        if (!$this->verifyToken($token)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        return response()->json([
+            'success' => true,
+            'token' => $token,
+            'status' => 'active'
+        ]);
     }
 }
