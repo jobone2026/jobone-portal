@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -131,7 +131,85 @@
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     
+    <!-- RTL Language Detection -->
+    <script>
+        // RTL languages
+        const rtlLanguages = ['ar', 'he', 'ur', 'fa', 'yi'];
+        
+        function setRTL(lang) {
+            const html = document.documentElement;
+            if (rtlLanguages.includes(lang)) {
+                html.setAttribute('dir', 'rtl');
+                html.setAttribute('lang', lang);
+            } else {
+                html.setAttribute('dir', 'ltr');
+                html.setAttribute('lang', 'en');
+            }
+        }
+        
+        // Check saved language on page load
+        window.addEventListener('load', function() {
+            const savedLang = localStorage.getItem('selectedLanguage');
+            if (savedLang) {
+                setRTL(savedLang);
+            }
+        });
+        
+        // Listen for language changes
+        document.addEventListener('DOMContentLoaded', function() {
+            const langSelect = document.getElementById('custom_language_select');
+            if (langSelect) {
+                langSelect.addEventListener('change', function() {
+                    const lang = this.value || 'en';
+                    setRTL(lang);
+                });
+            }
+        });
+    </script>
+    
     <style>
+        /* RTL Support */
+        html[dir="rtl"] {
+            direction: rtl;
+            text-align: right;
+        }
+        
+        html[dir="rtl"] body {
+            direction: rtl;
+        }
+        
+        html[dir="rtl"] .flex {
+            flex-direction: row-reverse;
+        }
+        
+        html[dir="rtl"] .text-left {
+            text-align: right;
+        }
+        
+        html[dir="rtl"] .text-right {
+            text-align: left;
+        }
+        
+        html[dir="rtl"] .ml-auto {
+            margin-left: auto;
+            margin-right: 0;
+        }
+        
+        html[dir="rtl"] .mr-auto {
+            margin-right: auto;
+            margin-left: 0;
+        }
+        
+        html[dir="rtl"] .pl-4 {
+            padding-left: 0;
+            padding-right: 1rem;
+        }
+        
+        html[dir="rtl"] .pr-4 {
+            padding-right: 0;
+            padding-left: 1rem;
+        }
+        
         /* Hide Google Translate banner */
         .goog-te-banner-frame { 
             display: none !important; 
