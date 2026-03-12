@@ -1,44 +1,44 @@
 @php
-    $breakingNews = \App\Models\Post::published()
-        ->where('is_featured', true)
+    $latestJobs = \App\Models\Post::published()
+        ->ofType('job')
         ->latest()
         ->limit(10)
         ->get();
 @endphp
 
-<div class="bg-red-600 text-white py-2 sticky top-0 z-50 shadow-lg overflow-hidden">
+<div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-2 sticky top-0 z-50 shadow-md overflow-hidden">
     <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
-        <div class="flex items-center gap-3">
-            <!-- Breaking News Label -->
-            <div class="flex-shrink-0 flex items-center gap-2 font-bold text-sm md:text-base whitespace-nowrap">
-                <i class="fas fa-exclamation-circle animate-pulse"></i>
-                <span>BREAKING</span>
+        <div class="flex items-center gap-2 md:gap-3">
+            <!-- Latest Jobs Label -->
+            <div class="flex-shrink-0 flex items-center gap-2 font-bold text-sm md:text-base whitespace-nowrap bg-white bg-opacity-20 px-3 py-1 rounded">
+                <i class="fas fa-briefcase"></i>
+                <span>LATEST JOBS</span>
             </div>
             
-            <!-- News Ticker -->
+            <!-- Jobs Ticker -->
             <div class="flex-1 overflow-hidden">
                 <div class="ticker-container">
                     <div class="ticker-content">
-                        @forelse($breakingNews as $news)
+                        @forelse($latestJobs as $job)
                             <span class="ticker-item">
-                                <a href="{{ route('posts.show', [$news->type, $news->slug]) }}" 
-                                   class="hover:text-yellow-200 transition inline-block">
-                                    {{ $news->title }}
+                                <a href="{{ route('posts.show', [$job->type, $job->slug]) }}" 
+                                   class="hover:text-yellow-200 transition inline-block font-medium">
+                                    {{ $job->title }}
                                 </a>
-                                <span class="mx-4">•</span>
+                                <span class="mx-3 md:mx-4 text-yellow-300">•</span>
                             </span>
                         @empty
-                            <span class="ticker-item">No breaking news available</span>
+                            <span class="ticker-item">No jobs available</span>
                         @endforelse
                         
                         <!-- Duplicate for continuous scroll -->
-                        @forelse($breakingNews as $news)
+                        @forelse($latestJobs as $job)
                             <span class="ticker-item">
-                                <a href="{{ route('posts.show', [$news->type, $news->slug]) }}" 
-                                   class="hover:text-yellow-200 transition inline-block">
-                                    {{ $news->title }}
+                                <a href="{{ route('posts.show', [$job->type, $job->slug]) }}" 
+                                   class="hover:text-yellow-200 transition inline-block font-medium">
+                                    {{ $job->title }}
                                 </a>
-                                <span class="mx-4">•</span>
+                                <span class="mx-3 md:mx-4 text-yellow-300">•</span>
                             </span>
                         @empty
                         @endforelse
@@ -63,8 +63,9 @@
     
     .ticker-item {
         display: inline-block;
-        padding: 0 1rem;
+        padding: 0 0.5rem;
         font-size: 0.875rem;
+        font-weight: 500;
     }
     
     @keyframes scroll-left {
@@ -84,12 +85,18 @@
     /* Mobile optimization */
     @media (max-width: 640px) {
         .ticker-item {
-            padding: 0 0.5rem;
+            padding: 0 0.25rem;
             font-size: 0.75rem;
         }
         
         .ticker-content {
             animation: scroll-left 40s linear infinite;
+        }
+    }
+    
+    @media (min-width: 768px) {
+        .ticker-item {
+            font-size: 0.9375rem;
         }
     }
 </style>

@@ -387,9 +387,6 @@
         </div>
     </div>
 
-    <!-- Latest Jobs Carousel -->
-    <x-latest-jobs-carousel />
-
     <!-- Categories Navigation Bar -->
     <div class="bg-gray-100 overflow-x-auto sticky top-[96px] md:top-32 z-40 border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
