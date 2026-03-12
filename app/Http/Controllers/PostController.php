@@ -56,4 +56,16 @@ class PostController extends Controller
 
         return view('posts.show', compact('post', 'related', 'seo', 'schema'));
     }
+
+    public function loadMore(Request $request, $type)
+    {
+        $page = $request->input('page', 2);
+        
+        $posts = Post::published()->ofType($type)
+            ->with('category', 'state')
+            ->latest()
+            ->simplePaginate(50, ['*'], 'page', $page);
+
+        return view('posts.load-more', compact('posts'));
+    }
 }

@@ -14,11 +14,17 @@ Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('pag
 
 // Post type listings
 Route::get('/jobs', [PostController::class, 'index'])->defaults('type', 'job')->name('posts.jobs')->middleware('page.cache:1800');
+Route::get('/jobs/load-more', [PostController::class, 'loadMore'])->defaults('type', 'job')->name('posts.jobs.load-more');
 Route::get('/admit-cards', [PostController::class, 'index'])->defaults('type', 'admit_card')->name('posts.admit-cards')->middleware('page.cache:1800');
+Route::get('/admit-cards/load-more', [PostController::class, 'loadMore'])->defaults('type', 'admit_card')->name('posts.admit-cards.load-more');
 Route::get('/results', [PostController::class, 'index'])->defaults('type', 'result')->name('posts.results')->middleware('page.cache:1800');
+Route::get('/results/load-more', [PostController::class, 'loadMore'])->defaults('type', 'result')->name('posts.results.load-more');
 Route::get('/answer-keys', [PostController::class, 'index'])->defaults('type', 'answer_key')->name('posts.answer-keys')->middleware('page.cache:1800');
+Route::get('/answer-keys/load-more', [PostController::class, 'loadMore'])->defaults('type', 'answer_key')->name('posts.answer-keys.load-more');
 Route::get('/syllabus', [PostController::class, 'index'])->defaults('type', 'syllabus')->name('posts.syllabus')->middleware('page.cache:1800');
+Route::get('/syllabus/load-more', [PostController::class, 'loadMore'])->defaults('type', 'syllabus')->name('posts.syllabus.load-more');
 Route::get('/blogs', [PostController::class, 'index'])->defaults('type', 'blog')->name('posts.blogs')->middleware('page.cache:1800');
+Route::get('/blogs/load-more', [PostController::class, 'loadMore'])->defaults('type', 'blog')->name('posts.blogs.load-more');
 
 // Static pages
 Route::get('/about', [StaticPageController::class, 'about'])->name('pages.about')->middleware('page.cache:3600');
