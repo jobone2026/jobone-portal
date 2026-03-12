@@ -3,7 +3,14 @@
 @section('title', 'Posts Management')
 
 @section('content')
-    <div x-data="{ selectedPosts: [], selectAll: false, showFilters: false }" class="space-y-6">
+    <div x-data="{ 
+        selectedPosts: [], 
+        selectAll: false, 
+        showFilters: false,
+        currentPage: 1,
+        isLoading: false,
+        hasMore: {{ $posts->hasMorePages() ? 'true' : 'false' }}
+    }" class="space-y-6">
         <!-- Header Section -->
         <div class="bg-white rounded-2xl shadow-lg p-6 border border-slate-100">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -253,7 +260,24 @@
 
             <!-- Pagination -->
             <div class="bg-white rounded-2xl shadow-lg p-6 border border-slate-100">
-                {{ $posts->links() }}
+                <div class="flex flex-col items-center gap-4">
+                    <button 
+                        x-show="hasMore"
+                        @click="loadMore()"
+                        :disabled="isLoading"
+                        class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-xl hover:shadow-lg transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    >
+                        <span x-show="!isLoading">
+                            <i class="fas fa-chevron-down mr-2"></i>Load More Posts
+                        </span>
+                        <span x-show="isLoading" class="flex items-center gap-2">
+                            <i class="fas fa-spinner fa-spin"></i>Loading...
+                        </span>
+                    </button>
+                    <p class="text-sm text-slate-600">
+                        Showing <span x-text="currentPage * 100"></span> posts
+                    </p>
+                </div>
             </div>
         @else
             <!-- Empty State -->
@@ -270,4 +294,43 @@
             </div>
         @endif
     </div>
+
+    <script>
+        function loadMore() {
+            const isLoading = document.querySelector('[x-data]').__x.$data.isLoading;
+            if (isLoading) return;
+
+            const xData = document.querySelector('[x-data]').__x.$data;
+            xData.isLoading = true;
+            xData.currentPage++;
+
+            const params = new URLSearchParams({
+                page: xData.currentPage,
+                type: '{{ request("type") }}',
+                status: '{{ request("status") }}',
+                category_id: '{{ request("category_id") }}',
+                state_id: '{{ request("state_id") }}',
+                search: '{{ request("search") }}'
+            });
+
+            fetch(`{{ route('admin.posts.load-more') }}?${params}`)
+                .then(response => response.text())
+                .then(html => {
+                    const tbody = document.querySelector('table tbody');
+                    tbody.insertAdjacentHTML('beforeend', html);
+                    
+                    // Check if there are more pages
+                    if (!html.includes('</tr>') || html.trim().split('</tr>').length < 101) {
+                        xData.hasMore = false;
+                    }
+                    
+                    xData.isLoading = false;
+                })
+                .catch(error => {
+                    console.error('Error loading more posts:', error);
+                    xData.isLoading = false;
+                    alert('Error loading more posts. Please try again.');
+                });
+        }
+    </script>
 @endsection

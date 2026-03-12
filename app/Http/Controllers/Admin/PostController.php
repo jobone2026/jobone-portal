@@ -239,4 +239,35 @@ class PostController extends Controller
         return redirect()->route('admin.posts.index')
             ->with('success', $message);
     }
+
+    public function loadMore(Request $request)
+    {
+        $page = $request->input('page', 2);
+        $query = Post::with('category', 'state');
+
+        // Apply same filters as index
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('is_published', $request->status === 'published' ? 1 : 0);
+        }
+
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        if ($request->filled('state_id')) {
+            $query->where('state_id', $request->state_id);
+        }
+
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        $posts = $query->latest()->paginate(100, ['*'], 'page', $page);
+
+        return view('admin.posts.load-more', compact('posts'));
+    }
 }

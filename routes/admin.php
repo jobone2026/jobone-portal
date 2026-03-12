@@ -34,6 +34,7 @@ Route::prefix('admin')->group(function () {
 
         // Posts management
         Route::get('/posts', [PostController::class, 'index'])->name('admin.posts.index');
+        Route::get('/posts/load-more', [PostController::class, 'loadMore'])->name('admin.posts.load-more');
         Route::get('/posts/create', [PostController::class, 'create'])->name('admin.posts.create');
         Route::post('/posts', [PostController::class, 'store'])->name('admin.posts.store');
         Route::post('/posts/bulk-action', [PostController::class, 'bulkAction'])->name('admin.posts.bulk-action');
