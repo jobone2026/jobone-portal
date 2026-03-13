@@ -438,29 +438,29 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
                 <!-- About Section -->
                 <div>
-                    <h4 class="text-gray-900 font-semibold mb-3 text-sm flex items-center gap-2">
+                    <h4 class="text-gray-900 font-bold mb-3 text-base flex items-center gap-2">
                         <i class="fas fa-info-circle text-blue-600"></i> About
                     </h4>
                     <ul class="space-y-1.5">
-                        <li><a href="{{ route('pages.about') }}" class="text-gray-600 hover:text-blue-600 text-xs transition"><i class="fas fa-chevron-right text-xs"></i> About Us</a></li>
-                        <li><a href="{{ route('pages.contact') }}" class="text-gray-600 hover:text-blue-600 text-xs transition"><i class="fas fa-chevron-right text-xs"></i> Contact</a></li>
+                        <li><a href="{{ route('pages.about') }}" class="text-gray-600 hover:text-blue-600 text-sm font-semibold transition"><i class="fas fa-chevron-right text-xs"></i> About Us</a></li>
+                        <li><a href="{{ route('pages.contact') }}" class="text-gray-600 hover:text-blue-600 text-sm font-semibold transition"><i class="fas fa-chevron-right text-xs"></i> Contact</a></li>
                     </ul>
                 </div>
                 
                 <!-- Legal Section -->
                 <div>
-                    <h4 class="text-gray-900 font-semibold mb-3 text-sm flex items-center gap-2">
+                    <h4 class="text-gray-900 font-bold mb-3 text-base flex items-center gap-2">
                         <i class="fas fa-shield-alt text-emerald-600"></i> Legal
                     </h4>
                     <ul class="space-y-1.5">
-                        <li><a href="{{ route('pages.privacy') }}" class="text-gray-600 hover:text-emerald-600 text-xs transition"><i class="fas fa-chevron-right text-xs"></i> Privacy Policy</a></li>
-                        <li><a href="{{ route('pages.disclaimer') }}" class="text-gray-600 hover:text-emerald-600 text-xs transition"><i class="fas fa-chevron-right text-xs"></i> Disclaimer</a></li>
+                        <li><a href="{{ route('pages.privacy') }}" class="text-gray-600 hover:text-emerald-600 text-sm font-semibold transition"><i class="fas fa-chevron-right text-xs"></i> Privacy Policy</a></li>
+                        <li><a href="{{ route('pages.disclaimer') }}" class="text-gray-600 hover:text-emerald-600 text-sm font-semibold transition"><i class="fas fa-chevron-right text-xs"></i> Disclaimer</a></li>
                     </ul>
                 </div>
                 
                 <!-- Social Section -->
                 <div>
-                    <h4 class="text-gray-900 font-semibold mb-3 text-sm flex items-center gap-2">
+                    <h4 class="text-gray-900 font-bold mb-3 text-base flex items-center gap-2">
                         <i class="fas fa-share-alt text-purple-600"></i> Follow Us
                     </h4>
                     <ul class="space-y-1.5">
@@ -470,20 +470,20 @@
                             $telegramUrl = \App\Models\SiteSetting::where('key', 'telegram_url')->value('value');
                         @endphp
                         @if($facebookUrl)
-                            <li><a href="{{ $facebookUrl }}" target="_blank" class="text-gray-600 hover:text-purple-600 text-xs transition"><i class="fab fa-facebook"></i> Facebook</a></li>
+                            <li><a href="{{ $facebookUrl }}" target="_blank" class="text-gray-600 hover:text-purple-600 text-sm font-semibold transition"><i class="fab fa-facebook"></i> Facebook</a></li>
                         @endif
                         @if($twitterUrl)
-                            <li><a href="{{ $twitterUrl }}" target="_blank" class="text-gray-600 hover:text-purple-600 text-xs transition"><i class="fab fa-twitter"></i> Twitter</a></li>
+                            <li><a href="{{ $twitterUrl }}" target="_blank" class="text-gray-600 hover:text-purple-600 text-sm font-semibold transition"><i class="fab fa-twitter"></i> Twitter</a></li>
                         @endif
                         @if($telegramUrl)
-                            <li><a href="{{ $telegramUrl }}" target="_blank" class="text-gray-600 hover:text-purple-600 text-xs transition"><i class="fab fa-telegram"></i> Telegram</a></li>
+                            <li><a href="{{ $telegramUrl }}" target="_blank" class="text-gray-600 hover:text-purple-600 text-sm font-semibold transition"><i class="fab fa-telegram"></i> Telegram</a></li>
                         @endif
                     </ul>
                 </div>
                 
                 <!-- Contact Section -->
                 <div>
-                    <h4 class="text-gray-900 font-semibold mb-3 text-sm flex items-center gap-2">
+                    <h4 class="text-gray-900 font-bold mb-3 text-base flex items-center gap-2">
                         <i class="fas fa-envelope text-orange-600"></i> Contact
                     </h4>
                     @php
@@ -491,17 +491,17 @@
                         $phone = \App\Models\SiteSetting::where('key', 'phone')->value('value');
                     @endphp
                     @if($contactEmail)
-                        <p class="mb-1.5 text-gray-600 text-xs"><i class="fas fa-envelope text-xs"></i> {{ $contactEmail }}</p>
+                        <p class="mb-1.5 text-gray-600 text-sm font-semibold"><i class="fas fa-envelope text-xs"></i> {{ $contactEmail }}</p>
                     @endif
                     @if($phone)
-                        <p class="text-gray-600 text-xs"><i class="fas fa-phone text-xs"></i> {{ $phone }}</p>
+                        <p class="text-gray-600 text-sm font-semibold"><i class="fas fa-phone text-xs"></i> {{ $phone }}</p>
                     @endif
                 </div>
             </div>
             
             <!-- Divider -->
             <div class="border-t border-blue-200 pt-6 text-center">
-                <p class="text-gray-600 text-xs">&copy; 2026 JobOne.in. All rights reserved. | Designed with <i class="fas fa-heart text-red-500"></i> for Job Seekers</p>
+                <p class="text-gray-600 text-sm font-semibold">&copy; 2026 JobOne.in. All rights reserved. | Designed with <i class="fas fa-heart text-red-500"></i> for Job Seekers</p>
             </div>
         </div>
     </footer>
