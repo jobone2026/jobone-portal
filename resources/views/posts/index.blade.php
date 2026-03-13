@@ -107,7 +107,31 @@
             xData.currentPage++;
 
             const type = '{{ $type }}';
-            const url = `{{ url('/') }}/${type}/load-more?page=${xData.currentPage}`;
+            let routeName = '';
+            
+            // Map type to route name
+            switch(type) {
+                case 'job':
+                    routeName = '{{ route("posts.jobs.load-more") }}';
+                    break;
+                case 'admit_card':
+                    routeName = '{{ route("posts.admit-cards.load-more") }}';
+                    break;
+                case 'result':
+                    routeName = '{{ route("posts.results.load-more") }}';
+                    break;
+                case 'answer_key':
+                    routeName = '{{ route("posts.answer-keys.load-more") }}';
+                    break;
+                case 'syllabus':
+                    routeName = '{{ route("posts.syllabus.load-more") }}';
+                    break;
+                case 'blog':
+                    routeName = '{{ route("posts.blogs.load-more") }}';
+                    break;
+            }
+            
+            const url = `${routeName}?page=${xData.currentPage}`;
 
             fetch(url)
                 .then(response => response.text())
