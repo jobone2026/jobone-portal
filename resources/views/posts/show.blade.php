@@ -52,9 +52,6 @@
         ['label' => $post->title, 'url' => '#']
     ]" />
 
-    <!-- Share Buttons -->
-    <x-share-buttons />
-
     <article class="modern-content rounded-lg shadow-md p-6 md:p-8 mb-8">
         <div class="mb-6">
             <div class="flex justify-between items-start mb-4 flex-wrap gap-2">
