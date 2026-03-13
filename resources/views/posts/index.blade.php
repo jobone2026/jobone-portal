@@ -67,7 +67,7 @@
 
             <!-- Pagination Links -->
             <div class="mt-8">
-                {{ $posts->links() }}
+                {{ $posts->links('vendor.pagination.custom') }}
             </div>
         @else
             <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border border-gray-200 p-12 text-center">
