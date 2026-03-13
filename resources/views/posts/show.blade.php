@@ -55,7 +55,7 @@
     <article class="modern-content rounded-lg shadow-md p-6 md:p-8 mb-8">
         <div class="mb-6">
             <div class="flex justify-between items-start mb-4 flex-wrap gap-2">
-                <h1 class="text-sm font-bold text-gray-800 flex-1">{{ $post->title }}</h1>
+                <h1 class="font-bold text-gray-800 flex-1" style="font-size: 15px;">{{ $post->title }}</h1>
                 @if ($post->isNew())
                     <span class="bg-red-500 text-white px-3 py-1 rounded text-xs font-bold">NEW</span>
                 @endif
