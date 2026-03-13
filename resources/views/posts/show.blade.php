@@ -168,8 +168,10 @@
                 <a href="https://wa.me/?text={{ $encodedSimpleMessage }}" 
                    target="_blank" 
                    rel="noopener noreferrer"
-                   class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg transition font-semibold">
-                    <i class="fab fa-whatsapp text-xl"></i>
+                   class="flex items-center gap-3 bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded-lg transition font-semibold">
+                    <div class="bg-white bg-opacity-20 w-10 h-10 flex items-center justify-center rounded-full">
+                        <i class="fab fa-whatsapp text-xl"></i>
+                    </div>
                     <span>WhatsApp</span>
                 </a>
                 
@@ -177,8 +179,10 @@
                 <a href="https://t.me/share/url?url={{ $encodedUrl }}&text={{ $encodedTitle }}" 
                    target="_blank"
                    rel="noopener noreferrer"
-                   class="flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg transition font-semibold">
-                    <i class="fab fa-telegram text-xl"></i>
+                   class="flex items-center gap-3 bg-blue-500 hover:bg-blue-600 text-white px-5 py-3 rounded-lg transition font-semibold">
+                    <div class="bg-white bg-opacity-20 w-10 h-10 flex items-center justify-center rounded-full">
+                        <i class="fab fa-telegram text-xl"></i>
+                    </div>
                     <span>Telegram</span>
                 </a>
                 
@@ -186,8 +190,10 @@
                 <a href="https://www.facebook.com/sharer/sharer.php?u={{ $encodedUrl }}" 
                    target="_blank"
                    rel="noopener noreferrer"
-                   class="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg transition font-semibold">
-                    <i class="fab fa-facebook-f text-xl"></i>
+                   class="flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg transition font-semibold">
+                    <div class="bg-white bg-opacity-20 w-10 h-10 flex items-center justify-center rounded-full">
+                        <i class="fab fa-facebook-f text-xl"></i>
+                    </div>
                     <span>Facebook</span>
                 </a>
                 
@@ -195,8 +201,10 @@
                 <a href="https://twitter.com/intent/tweet?url={{ $encodedUrl }}&text={{ $encodedTitle }}" 
                    target="_blank"
                    rel="noopener noreferrer"
-                   class="flex items-center justify-center gap-2 bg-black hover:bg-gray-900 text-white px-4 py-3 rounded-lg transition font-semibold">
-                    <i class="fab fa-twitter text-xl"></i>
+                   class="flex items-center gap-3 bg-black hover:bg-gray-900 text-white px-5 py-3 rounded-lg transition font-semibold">
+                    <div class="bg-white bg-opacity-20 w-10 h-10 flex items-center justify-center rounded-full">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </div>
                     <span>Twitter</span>
                 </a>
             </div>
