@@ -1,4 +1,19 @@
 <div class="bg-white rounded-lg shadow-md p-6" x-data="seoAnalyzer()">
+    <!-- Validation Errors -->
+    @if ($errors->any())
+        <div class="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
+            <div class="flex items-center mb-2">
+                <i class="fas fa-exclamation-circle text-red-500 mr-2"></i>
+                <h3 class="text-red-800 font-bold">Please fix the following errors:</h3>
+            </div>
+            <ul class="list-disc list-inside text-red-700 text-sm space-y-1">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <!-- SEO Analyzer Panel -->
     <div class="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
         <div class="flex items-center justify-between mb-4">
@@ -83,14 +98,17 @@
     <div class="mb-6">
         <label for="title" class="block text-gray-700 font-bold mb-2">Title *</label>
         <input type="text" id="title" name="title" value="{{ old('title', $post->title ?? '') }}" required 
-               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600"
+               class="w-full px-4 py-2 border @error('title') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-blue-600"
                x-model="title" @input="analyze()">
+        @error('title')
+            <p class="text-red-500 text-xs mt-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p>
+        @enderror
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <div>
             <label for="type" class="block text-gray-700 font-bold mb-2">Type *</label>
-            <select id="type" name="type" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600">
+            <select id="type" name="type" required class="w-full px-4 py-2 border @error('type') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-blue-600">
                 <option value="">Select Type</option>
                 <option value="job" {{ old('type', $post->type ?? '') === 'job' ? 'selected' : '' }}>Job</option>
                 <option value="admit_card" {{ old('type', $post->type ?? '') === 'admit_card' ? 'selected' : '' }}>Admit Card</option>
@@ -99,58 +117,79 @@
                 <option value="answer_key" {{ old('type', $post->type ?? '') === 'answer_key' ? 'selected' : '' }}>Answer Key</option>
                 <option value="blog" {{ old('type', $post->type ?? '') === 'blog' ? 'selected' : '' }}>Blog</option>
             </select>
+            @error('type')
+                <p class="text-red-500 text-xs mt-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p>
+            @enderror
         </div>
         
         <div>
             <label for="category_id" class="block text-gray-700 font-bold mb-2">Category *</label>
-            <select id="category_id" name="category_id" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600">
+            <select id="category_id" name="category_id" required class="w-full px-4 py-2 border @error('category_id') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-blue-600">
                 <option value="">Select Category</option>
                 @foreach ($categories as $category)
                     <option value="{{ $category->id }}" {{ old('category_id', $post->category_id ?? '') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                 @endforeach
             </select>
+            @error('category_id')
+                <p class="text-red-500 text-xs mt-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p>
+            @enderror
         </div>
         
         <div>
             <label for="state_id" class="block text-gray-700 font-bold mb-2">State</label>
-            <select id="state_id" name="state_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600">
+            <select id="state_id" name="state_id" class="w-full px-4 py-2 border @error('state_id') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-blue-600">
                 <option value="">Select State</option>
                 @foreach ($states as $state)
                     <option value="{{ $state->id }}" {{ old('state_id', $post->state_id ?? '') == $state->id ? 'selected' : '' }}>{{ $state->name }}</option>
                 @endforeach
             </select>
+            @error('state_id')
+                <p class="text-red-500 text-xs mt-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p>
+            @enderror
         </div>
     </div>
 
     <div class="mb-6">
         <label for="content" class="block text-gray-700 font-bold mb-2">Content *</label>
         <textarea id="content" name="content" rows="10" required 
-                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600"
+                  class="w-full px-4 py-2 border @error('content') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-blue-600"
                   x-model="content" @input="analyze()">{!! old('content', $post->content ?? '') !!}</textarea>
         <p class="text-xs text-gray-500 mt-1">You can paste HTML content here. It will be preserved exactly as entered.</p>
+        @error('content')
+            <p class="text-red-500 text-xs mt-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p>
+        @enderror
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div>
             <label for="meta_title" class="block text-gray-700 font-bold mb-2">Meta Title (max 60 chars)</label>
             <input type="text" id="meta_title" name="meta_title" maxlength="60" value="{{ old('meta_title', $post->meta_title ?? '') }}" 
-                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600"
+                   class="w-full px-4 py-2 border @error('meta_title') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-blue-600"
                    x-model="metaTitle" @input="analyze()">
+            @error('meta_title')
+                <p class="text-red-500 text-xs mt-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p>
+            @enderror
         </div>
         
         <div>
             <label for="meta_description" class="block text-gray-700 font-bold mb-2">Meta Description (max 160 chars)</label>
             <input type="text" id="meta_description" name="meta_description" maxlength="160" value="{{ old('meta_description', $post->meta_description ?? '') }}" 
-                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600"
+                   class="w-full px-4 py-2 border @error('meta_description') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-blue-600"
                    x-model="metaDescription" @input="analyze()">
+            @error('meta_description')
+                <p class="text-red-500 text-xs mt-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p>
+            @enderror
         </div>
     </div>
 
     <div class="mb-6">
         <label for="meta_keywords" class="block text-gray-700 font-bold mb-2">Meta Keywords</label>
         <input type="text" id="meta_keywords" name="meta_keywords" value="{{ old('meta_keywords', $post->meta_keywords ?? '') }}" 
-               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600"
+               class="w-full px-4 py-2 border @error('meta_keywords') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-blue-600"
                x-model="metaKeywords" @input="analyze()">
+        @error('meta_keywords')
+            <p class="text-red-500 text-xs mt-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p>
+        @enderror
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
