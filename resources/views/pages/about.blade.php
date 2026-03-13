@@ -26,8 +26,6 @@
         }
     </style>
 
-    <x-share-buttons />
-
     <div class="modern-page-content rounded-lg shadow-md p-6 md:p-8">
         <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6"><i class="fas fa-building"></i> About JobOne.in</h1>
         

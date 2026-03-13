@@ -12,8 +12,6 @@
         }
     </style>
 
-    <x-share-buttons />
-
     <div class="glass-effect rounded-lg shadow-md p-8">
         <h1 class="text-4xl font-bold text-gray-800 mb-6">Contact Us</h1>
         

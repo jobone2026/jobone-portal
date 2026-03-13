@@ -71,9 +71,6 @@
         <p class="text-gray-600 text-sm"><i class="fas fa-briefcase"></i> All posts in {{ $category->name }} category</p>
     </div>
 
-    <!-- Share Buttons -->
-    <x-share-buttons />
-
     <!-- Three Column Layout -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Left Column: Jobs -->

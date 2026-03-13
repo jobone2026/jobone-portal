@@ -64,8 +64,6 @@
         }
     </style>
 
-    <x-share-buttons />
-
     <!-- Three Column Table Layout -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Left Column: Jobs -->

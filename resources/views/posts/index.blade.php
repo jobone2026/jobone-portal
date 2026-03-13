@@ -57,9 +57,6 @@
             <p class="text-gray-600 text-sm"><i class="fas fa-list"></i> Showing <span x-text="(currentPage * 50)"></span> posts</p>
         </div>
 
-        <!-- Share Buttons -->
-        <x-share-buttons />
-
         @if ($posts->count() > 0)
             <div class="space-y-0 mb-8" id="posts-container">
                 @foreach ($posts as $post)
