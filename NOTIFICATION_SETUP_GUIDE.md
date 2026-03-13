@@ -80,21 +80,40 @@ Use services like:
 3. Name it: `JobOne Notifications`
 4. Disable Google Analytics (optional)
 
-### Step 2: Get FCM Server Key
-1. In Firebase Console, go to Project Settings
-2. Click "Cloud Messaging" tab
-3. Copy "Server key"
+### Step 2: Get Firebase Credentials (New Method)
+1. In Firebase Console, go to **Project Settings** (gear icon)
+2. Go to **Service Accounts** tab
+3. Click **Generate New Private Key**
+4. Download the JSON file (e.g., `jobone-firebase-adminsdk.json`)
+5. Save it to: `storage/app/firebase/jobone-firebase-adminsdk.json`
 
-### Step 3: Add to .env
-```env
-FCM_SERVER_KEY=your_fcm_server_key_here
+### Step 3: Install Firebase Admin SDK
+```bash
+composer require kreait/firebase-php
 ```
 
-### Step 4: Add Firebase to Website
+### Step 4: Add to .env
+```env
+FIREBASE_CREDENTIALS=storage/app/firebase/jobone-firebase-adminsdk.json
+```
+
+### Step 5: Get Web Push Certificate (VAPID Key)
+1. In Firebase Console → Project Settings
+2. Go to **Cloud Messaging** tab
+3. Scroll to **Web configuration**
+4. Under **Web Push certificates**, click **Generate key pair**
+5. Copy the key (starts with `B...`)
+
+### Step 6: Add VAPID Key to .env
+```env
+FIREBASE_VAPID_KEY=your_vapid_key_here
+```
+
+### Step 7: Add Firebase to Website
 Create `public/firebase-messaging-sw.js`:
 ```javascript
-importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js');
 
 firebase.initializeApp({
   apiKey: "YOUR_API_KEY",
@@ -111,11 +130,65 @@ messaging.onBackgroundMessage((payload) => {
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
-    icon: payload.notification.icon
+    icon: payload.notification.icon,
+    click_action: payload.notification.click_action
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
+```
+
+### Step 8: Add to Layout (resources/views/layouts/app.blade.php)
+Add before `</head>`:
+```html
+<!-- Firebase Cloud Messaging -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+firebase.initializeApp(firebaseConfig);
+const messaging = firebase.messaging();
+
+// Request permission and get token
+function requestNotificationPermission() {
+  Notification.requestPermission().then((permission) => {
+    if (permission === 'granted') {
+      messaging.getToken({ vapidKey: '{{ env("FIREBASE_VAPID_KEY") }}' })
+        .then((token) => {
+          console.log('FCM Token:', token);
+          // Send token to server to save in database
+          fetch('/api/save-fcm-token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: token })
+          });
+        });
+    }
+  });
+}
+
+// Auto-request on page load
+if ('Notification' in window && Notification.permission === 'default') {
+  setTimeout(requestNotificationPermission, 3000);
+}
+
+// Handle foreground messages
+messaging.onMessage((payload) => {
+  console.log('Message received:', payload);
+  new Notification(payload.notification.title, {
+    body: payload.notification.body,
+    icon: payload.notification.icon
+  });
+});
+</script>
 ```
 
 ---

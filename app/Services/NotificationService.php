@@ -151,49 +151,43 @@ class NotificationService
     }
     
     /**
-     * Send Web Push Notification
+     * Send Web Push Notification using Firebase Admin SDK
      */
     protected function sendWebPushNotification(Post $post)
     {
-        // This will be implemented with Firebase Cloud Messaging (FCM)
-        $fcmServerKey = env('FCM_SERVER_KEY');
+        $firebaseCredentials = env('FIREBASE_CREDENTIALS');
         
-        if (!$fcmServerKey) {
-            Log::warning('FCM credentials not configured');
+        if (!$firebaseCredentials || !file_exists(base_path($firebaseCredentials))) {
+            Log::warning('Firebase credentials not configured');
             return false;
         }
         
-        $postUrl = route('posts.show', [$post->type, $post->slug]);
-        
-        $notification = [
-            'title' => '🔔 New ' . ucfirst(str_replace('_', ' ', $post->type)),
-            'body' => $post->title,
-            'icon' => asset('images/jobone-logo.png'),
-            'click_action' => $postUrl,
-        ];
-        
         try {
-            // Send to topic (all subscribers)
-            $response = Http::withHeaders([
-                'Authorization' => 'key=' . $fcmServerKey,
-                'Content-Type' => 'application/json',
-            ])->post('https://fcm.googleapis.com/fcm/send', [
-                'to' => '/topics/all_posts',
-                'notification' => $notification,
-                'data' => [
-                    'post_id' => $post->id,
+            // Initialize Firebase Admin SDK
+            $factory = (new \Kreait\Firebase\Factory)->withServiceAccount(base_path($firebaseCredentials));
+            $messaging = $factory->createMessaging();
+            
+            $postUrl = route('posts.show', [$post->type, $post->slug]);
+            
+            // Create notification message
+            $message = \Kreait\Firebase\Messaging\CloudMessage::withTarget('topic', 'all_posts')
+                ->withNotification([
+                    'title' => '🔔 New ' . ucfirst(str_replace('_', ' ', $post->type)),
+                    'body' => $post->title,
+                    'image' => asset('images/jobone-logo.png'),
+                ])
+                ->withData([
+                    'post_id' => (string) $post->id,
                     'post_type' => $post->type,
                     'url' => $postUrl,
-                ]
-            ]);
+                    'click_action' => $postUrl,
+                ]);
             
-            if ($response->successful()) {
-                Log::info('Web push notification sent for post: ' . $post->id);
-                return true;
-            } else {
-                Log::error('FCM API error: ' . $response->body());
-                return false;
-            }
+            $messaging->send($message);
+            
+            Log::info('Web push notification sent for post: ' . $post->id);
+            return true;
+            
         } catch (\Exception $e) {
             Log::error('Web push notification failed: ' . $e->getMessage());
             return false;
