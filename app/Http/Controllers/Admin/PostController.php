@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\State;
 use App\Services\CacheInvalidationService;
+use App\Services\NotificationService;
 use App\Services\OgImageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -103,6 +104,9 @@ class PostController extends Controller
         if ($post->is_published) {
             $url = route('posts.show', ['type' => $post->type, 'post' => $post->slug]);
             SubmitToIndexNow::dispatch($url)->delay(now()->addSeconds(30));
+            
+            // Send notifications (Telegram, WhatsApp, Web Push)
+            app(NotificationService::class)->sendNewPostNotifications($post);
         }
 
         return redirect()->route('admin.posts.index')
@@ -163,6 +167,11 @@ class PostController extends Controller
         if ($post->is_published && (!$wasPublished || $post->wasChanged('title') || $post->wasChanged('content'))) {
             $url = route('posts.show', ['type' => $post->type, 'post' => $post->slug]);
             SubmitToIndexNow::dispatch($url)->delay(now()->addSeconds(30));
+            
+            // Send notifications only if newly published
+            if (!$wasPublished) {
+                app(NotificationService::class)->sendNewPostNotifications($post);
+            }
         }
 
         return redirect()->route('admin.posts.index')
@@ -192,6 +201,9 @@ class PostController extends Controller
         if (!$wasPublished && $post->is_published) {
             $url = route('posts.show', ['type' => $post->type, 'post' => $post->slug]);
             SubmitToIndexNow::dispatch($url)->delay(now()->addSeconds(30));
+            
+            // Send notifications
+            app(NotificationService::class)->sendNewPostNotifications($post);
         }
 
         return response()->json(['success' => true]);
