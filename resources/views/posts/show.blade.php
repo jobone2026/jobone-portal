@@ -168,9 +168,11 @@
                 <a href="https://wa.me/?text={{ $encodedSimpleMessage }}" 
                    target="_blank" 
                    rel="noopener noreferrer"
-                   class="flex items-center gap-3 bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded-lg transition font-semibold">
-                    <div class="bg-white bg-opacity-20 w-10 h-10 flex items-center justify-center rounded-full">
-                        <i class="fab fa-whatsapp text-xl"></i>
+                   style="display: flex; align-items: center; gap: 12px; padding: 10px 20px; color: white; text-decoration: none; border-radius: 10px; font-weight: 600; transition: 0.3s; background: #25D366;"
+                   onmouseover="this.style.transform='scale(1.05)'" 
+                   onmouseout="this.style.transform='scale(1)'">
+                    <div style="background: rgba(255,255,255,0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                        <i class="fab fa-whatsapp" style="font-size: 20px;"></i>
                     </div>
                     <span>WhatsApp</span>
                 </a>
@@ -179,9 +181,11 @@
                 <a href="https://t.me/share/url?url={{ $encodedUrl }}&text={{ $encodedTitle }}" 
                    target="_blank"
                    rel="noopener noreferrer"
-                   class="flex items-center gap-3 bg-blue-500 hover:bg-blue-600 text-white px-5 py-3 rounded-lg transition font-semibold">
-                    <div class="bg-white bg-opacity-20 w-10 h-10 flex items-center justify-center rounded-full">
-                        <i class="fab fa-telegram text-xl"></i>
+                   style="display: flex; align-items: center; gap: 12px; padding: 10px 20px; color: white; text-decoration: none; border-radius: 10px; font-weight: 600; transition: 0.3s; background: #0088cc;"
+                   onmouseover="this.style.transform='scale(1.05)'" 
+                   onmouseout="this.style.transform='scale(1)'">
+                    <div style="background: rgba(255,255,255,0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                        <i class="fab fa-telegram" style="font-size: 20px;"></i>
                     </div>
                     <span>Telegram</span>
                 </a>
@@ -190,9 +194,11 @@
                 <a href="https://www.facebook.com/sharer/sharer.php?u={{ $encodedUrl }}" 
                    target="_blank"
                    rel="noopener noreferrer"
-                   class="flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg transition font-semibold">
-                    <div class="bg-white bg-opacity-20 w-10 h-10 flex items-center justify-center rounded-full">
-                        <i class="fab fa-facebook-f text-xl"></i>
+                   style="display: flex; align-items: center; gap: 12px; padding: 10px 20px; color: white; text-decoration: none; border-radius: 10px; font-weight: 600; transition: 0.3s; background: #1877F2;"
+                   onmouseover="this.style.transform='scale(1.05)'" 
+                   onmouseout="this.style.transform='scale(1)'">
+                    <div style="background: rgba(255,255,255,0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                        <i class="fab fa-facebook-f" style="font-size: 20px;"></i>
                     </div>
                     <span>Facebook</span>
                 </a>
@@ -201,9 +207,11 @@
                 <a href="https://twitter.com/intent/tweet?url={{ $encodedUrl }}&text={{ $encodedTitle }}" 
                    target="_blank"
                    rel="noopener noreferrer"
-                   class="flex items-center gap-3 bg-black hover:bg-gray-900 text-white px-5 py-3 rounded-lg transition font-semibold">
-                    <div class="bg-white bg-opacity-20 w-10 h-10 flex items-center justify-center rounded-full">
-                        <i class="fab fa-twitter text-xl"></i>
+                   style="display: flex; align-items: center; gap: 12px; padding: 10px 20px; color: white; text-decoration: none; border-radius: 10px; font-weight: 600; transition: 0.3s; background: #000000;"
+                   onmouseover="this.style.transform='scale(1.05)'" 
+                   onmouseout="this.style.transform='scale(1)'">
+                    <div style="background: rgba(255,255,255,0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                        <i class="fab fa-twitter" style="font-size: 20px;"></i>
                     </div>
                     <span>Twitter</span>
                 </a>
