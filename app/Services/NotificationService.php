@@ -17,11 +17,8 @@ class NotificationService
             // Send to Telegram
             $this->sendToTelegram($post);
             
-            // Send to WhatsApp
+            // Send to WhatsApp (if configured)
             $this->sendToWhatsApp($post);
-            
-            // Send Web Push Notification
-            $this->sendWebPushNotification($post);
             
             Log::info('Notifications sent successfully for post: ' . $post->id);
             
