@@ -217,49 +217,41 @@
             $encodedTitle = urlencode($shareTitle);
         @endphp
         
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <!-- WhatsApp -->
             <a href="https://wa.me/?text={{ $encodedSimpleMessage }}" 
                target="_blank" 
                rel="noopener noreferrer"
-               class="flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white px-6 py-4 rounded-xl transition transform hover:scale-105 shadow-lg">
-                <div class="bg-white bg-opacity-20 rounded-full p-2">
-                    <i class="fab fa-whatsapp text-3xl"></i>
-                </div>
-                <span class="font-bold text-base">WhatsApp</span>
+               class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg transition font-semibold">
+                <i class="fab fa-whatsapp text-xl"></i>
+                <span>WhatsApp</span>
             </a>
             
             <!-- Telegram -->
             <a href="https://t.me/share/url?url={{ $encodedUrl }}&text={{ $encodedTitle }}" 
                target="_blank"
                rel="noopener noreferrer"
-               class="flex items-center justify-center gap-3 bg-blue-500 hover:bg-blue-600 text-white px-6 py-4 rounded-xl transition transform hover:scale-105 shadow-lg">
-                <div class="bg-white bg-opacity-20 rounded-full p-2">
-                    <i class="fab fa-telegram text-3xl"></i>
-                </div>
-                <span class="font-bold text-base">Telegram</span>
+               class="flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg transition font-semibold">
+                <i class="fab fa-telegram text-xl"></i>
+                <span>Telegram</span>
             </a>
             
             <!-- Facebook -->
             <a href="https://www.facebook.com/sharer/sharer.php?u={{ $encodedUrl }}" 
                target="_blank"
                rel="noopener noreferrer"
-               class="flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 rounded-xl transition transform hover:scale-105 shadow-lg">
-                <div class="bg-white bg-opacity-20 rounded-full p-2">
-                    <i class="fab fa-facebook-f text-3xl"></i>
-                </div>
-                <span class="font-bold text-base">Facebook</span>
+               class="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg transition font-semibold">
+                <i class="fab fa-facebook-f text-xl"></i>
+                <span>Facebook</span>
             </a>
             
             <!-- Twitter/X -->
             <a href="https://twitter.com/intent/tweet?url={{ $encodedUrl }}&text={{ $encodedTitle }}" 
                target="_blank"
                rel="noopener noreferrer"
-               class="flex items-center justify-center gap-3 bg-gray-800 hover:bg-gray-900 text-white px-6 py-4 rounded-xl transition transform hover:scale-105 shadow-lg">
-                <div class="bg-white bg-opacity-20 rounded-full p-2">
-                    <i class="fab fa-twitter text-3xl"></i>
-                </div>
-                <span class="font-bold text-base">Twitter</span>
+               class="flex items-center justify-center gap-2 bg-black hover:bg-gray-900 text-white px-4 py-3 rounded-lg transition font-semibold">
+                <i class="fab fa-twitter text-xl"></i>
+                <span>Twitter</span>
             </a>
         </div>
         
