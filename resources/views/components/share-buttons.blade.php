@@ -1,4 +1,4 @@
-<div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg shadow-sm p-3 mb-6 border border-blue-100">
+<div class="bg-white rounded-lg shadow-sm p-3 mb-6 border border-gray-200">
     <div class="flex items-center justify-between flex-wrap gap-3">
         <div class="flex items-center gap-2">
             <i class="fas fa-share-alt text-blue-600 text-lg"></i>
