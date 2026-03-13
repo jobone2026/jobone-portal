@@ -203,7 +203,7 @@
     </div>
 
     <!-- Share Section -->
-    <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 shadow-sm">
+    <div class="bg-white border border-gray-200 rounded-xl p-6 mb-0 shadow-sm">
         <h3 class="font-bold text-gray-900 mb-4 text-base flex items-center gap-2">
             <i class="fas fa-share-alt"></i> Follow & Share
         </h3>

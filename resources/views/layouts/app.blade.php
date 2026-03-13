@@ -437,7 +437,7 @@
     <x-ad-slot position="footer" />
 
     <!-- Footer -->
-    <footer class="bg-gradient-to-r from-blue-50 to-indigo-50 text-gray-700 mt-12 border-t border-blue-100">
+    <footer class="bg-gradient-to-r from-blue-50 to-indigo-50 text-gray-700 mt-0 border-t border-blue-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
                 <!-- About Section -->
