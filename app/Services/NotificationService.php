@@ -20,6 +20,9 @@ class NotificationService
             // Send to WhatsApp (if configured)
             $this->sendToWhatsApp($post);
             
+            // Send Android Push Notification
+            $this->sendAndroidPushNotification($post);
+            
             Log::info('Notifications sent successfully for post: ' . $post->id);
             
             return true;
@@ -143,6 +146,61 @@ class NotificationService
             }
         } catch (\Exception $e) {
             Log::error('WhatsApp notification failed: ' . $e->getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Send Android Push Notification using FCM Legacy API
+     */
+    protected function sendAndroidPushNotification(Post $post)
+    {
+        $fcmServerKey = env('FCM_SERVER_KEY');
+        
+        if (!$fcmServerKey) {
+            Log::warning('FCM Server Key not configured');
+            return false;
+        }
+        
+        $postUrl = route('posts.show', [$post->type, $post->slug]);
+        $emoji = $this->getEmojiForType($post->type);
+        
+        $notification = [
+            'title' => $emoji . ' New ' . ucfirst(str_replace('_', ' ', $post->type)),
+            'body' => $post->title,
+            'icon' => 'ic_notification',
+            'sound' => 'default',
+            'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
+        ];
+        
+        $data = [
+            'post_id' => (string) $post->id,
+            'post_type' => $post->type,
+            'url' => $postUrl,
+            'title' => $post->title,
+        ];
+        
+        try {
+            // Send to topic (all app users)
+            $response = Http::withHeaders([
+                'Authorization' => 'key=' . $fcmServerKey,
+                'Content-Type' => 'application/json',
+            ])->post('https://fcm.googleapis.com/fcm/send', [
+                'to' => '/topics/all_posts',
+                'notification' => $notification,
+                'data' => $data,
+                'priority' => 'high',
+            ]);
+            
+            if ($response->successful()) {
+                Log::info('Android push notification sent for post: ' . $post->id);
+                return true;
+            } else {
+                Log::error('FCM API error: ' . $response->body());
+                return false;
+            }
+        } catch (\Exception $e) {
+            Log::error('Android push notification failed: ' . $e->getMessage());
             return false;
         }
     }
