@@ -53,15 +53,15 @@
     ]" />
 
     <article class="modern-content rounded-lg shadow-md p-6 md:p-8 mb-8">
-        <div class="mb-6">
-            <div class="flex justify-between items-start mb-4 flex-wrap gap-2">
+        <div class="mb-3">
+            <div class="flex justify-between items-start mb-2 flex-wrap gap-2">
                 <h1 class="font-bold text-gray-800 flex-1" style="font-size: 15px;">{{ $post->title }}</h1>
                 @if ($post->isNew())
                     <span class="bg-red-500 text-white px-3 py-1 rounded text-xs font-bold">NEW</span>
                 @endif
             </div>
 
-            <div class="flex flex-wrap gap-2 mb-4">
+            <div class="flex flex-wrap gap-2 mb-2">
                 <span class="text-xs bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-medium"><i class="fas fa-tag"></i> {{ ucfirst(str_replace('_', ' ', $post->type)) }}</span>
                 @if ($post->category)
                     <a href="{{ route('categories.show', $post->category) }}" class="text-xs bg-gray-100 text-gray-800 px-3 py-1 rounded-full hover:bg-gray-200 transition font-medium">
@@ -75,7 +75,7 @@
                 @endif
             </div>
 
-            <div class="flex justify-between items-center text-2xs text-gray-600 border-t border-b border-gray-200 py-3">
+            <div class="flex justify-between items-center text-2xs text-gray-600 border-t border-b border-gray-200 py-2">
                 <span><i class="fas fa-calendar"></i> Published: {{ $post->created_at->format('M d, Y') }}</span>
                 <span><i class="fas fa-eye"></i> {{ $post->view_count }} views</span>
             </div>
@@ -83,7 +83,7 @@
 
         <!-- Important Dates -->
         @if ($post->last_date || $post->notification_date || $post->total_posts)
-            <div class="bg-gradient-to-r from-blue-50 to-blue-100 border-l-4 border-blue-600 p-4 mb-6 rounded-r-lg">
+            <div class="bg-gradient-to-r from-blue-50 to-blue-100 border-l-4 border-blue-600 p-4 mb-3 rounded-r-lg">
                 <h3 class="font-bold text-blue-900 mb-2 text-sm"><i class="fas fa-info-circle"></i> Important Information</h3>
                 <ul class="text-xs text-blue-800 space-y-1">
                     @if ($post->notification_date)
@@ -100,12 +100,12 @@
         @endif
 
         <!-- Short Description -->
-        <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-lg mb-6 border border-gray-200">
+        <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-lg mb-3 border border-gray-200">
             <p class="text-gray-700 text-sm leading-relaxed">{{ $post->short_description }}</p>
         </div>
 
         <!-- Main Content -->
-        <div class="prose prose-sm max-w-none mb-6 text-sm">
+        <div class="prose prose-sm max-w-none mb-3 text-sm">
             {!! $post->content !!}
         </div>
 
@@ -122,7 +122,7 @@
             }
         @endphp
         @if (count($importantLinks) > 0)
-            <div class="bg-gradient-to-r from-green-50 to-green-100 border-l-4 border-green-600 p-4 mb-6 rounded-r-lg">
+            <div class="bg-gradient-to-r from-green-50 to-green-100 border-l-4 border-green-600 p-4 mb-3 rounded-r-lg">
                 <h3 class="font-bold text-green-900 mb-3 text-sm"><i class="fas fa-link"></i> Important Links</h3>
                 <ul class="space-y-2">
                     @foreach ($importantLinks as $key => $value)
@@ -147,7 +147,7 @@
         @endif
 
         <!-- Share Section -->
-        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm">
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-3 shadow-sm">
             <h3 class="font-bold text-gray-900 mb-4 text-base flex items-center gap-2">
                 <i class="fas fa-share-alt"></i> Share This Post
             </h3>
