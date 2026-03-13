@@ -67,17 +67,7 @@
 
             <!-- Pagination Links -->
             <div class="mt-8">
-                @if($posts->hasPages())
-                    {{ $posts->links('vendor.pagination.custom') }}
-                @else
-                    <div class="text-center text-gray-500 text-sm bg-yellow-50 border border-yellow-200 rounded p-4">
-                        <p><strong>📊 Pagination Debug:</strong></p>
-                        <p>Total posts: {{ $posts->total() }}</p>
-                        <p>Posts per page: 15</p>
-                        <p>Current page posts: {{ $posts->count() }}</p>
-                        <p class="mt-2 text-xs">Pagination will appear when total posts > 15</p>
-                    </div>
-                @endif
+                {{ $posts->links('vendor.pagination.custom') }}
             </div>
         @else
             <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border border-gray-200 p-12 text-center">
