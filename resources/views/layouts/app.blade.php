@@ -390,9 +390,8 @@
     <header class="bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm sticky top-0 z-50 border-b border-blue-100">
         <nav class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-3 md:py-4">
             <div class="flex justify-between items-center gap-2">
-                <!-- Logo with Indian Flag -->
+                <!-- Logo with Indian Flag on Left -->
                 <a href="{{ route('home') }}" class="flex items-center gap-2 flex-shrink-0">
-                    <img src="{{ asset('images/jobone-logo.png') }}" alt="JobOne.in" class="h-10 md:h-16 w-auto object-contain">
                     <!-- Animated Indian Flag -->
                     <div class="indian-flag-container">
                         <div class="flag-pole"></div>
@@ -418,6 +417,7 @@
                             <div class="flag-stripe green"></div>
                         </div>
                     </div>
+                    <img src="{{ asset('images/jobone-logo.png') }}" alt="JobOne.in" class="h-10 md:h-16 w-auto object-contain">
                 </a>
                 
                 <!-- Custom Language Selector (visible on all screens) -->

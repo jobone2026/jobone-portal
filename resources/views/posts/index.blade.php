@@ -67,7 +67,13 @@
 
             <!-- Pagination Links -->
             <div class="mt-8">
-                {{ $posts->links('vendor.pagination.custom') }}
+                @if($posts->hasPages())
+                    {{ $posts->links('vendor.pagination.custom') }}
+                @else
+                    <div class="text-center text-gray-500 text-sm">
+                        <p>Showing all {{ $posts->total() }} posts (pagination appears when more than 50 posts)</p>
+                    </div>
+                @endif
             </div>
         @else
             <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border border-gray-200 p-12 text-center">
