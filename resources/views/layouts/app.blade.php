@@ -181,8 +181,8 @@
         }
         
         .flag-pole-realistic {
-            width: 3px;
-            height: 45px;
+            width: 2px;
+            height: 35px;
             background: linear-gradient(to right, #8B4513, #A0522D, #8B4513);
             border-radius: 2px;
             box-shadow: 1px 0 3px rgba(0,0,0,0.3);
@@ -193,32 +193,32 @@
         .flag-pole-realistic::before {
             content: '';
             position: absolute;
-            top: -4px;
+            top: -3px;
             left: 50%;
             transform: translateX(-50%);
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             background: radial-gradient(circle, #FFD700, #DAA520);
             border-radius: 50%;
-            box-shadow: 0 0 4px rgba(255,215,0,0.6);
+            box-shadow: 0 0 3px rgba(255,215,0,0.6);
         }
         
         #indianFlag {
             display: block;
             margin-top: 2px;
             margin-left: -1px;
-            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+            filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.2));
         }
         
         /* Mobile responsive */
         @media (max-width: 768px) {
             .flag-pole-realistic {
-                height: 38px;
+                height: 28px;
             }
             
             #indianFlag {
-                width: 50px;
-                height: 33px;
+                width: 38px;
+                height: 25px;
             }
         }
         
@@ -328,7 +328,7 @@
                     <!-- Realistic Waving Flag -->
                     <div class="flag-container">
                         <div class="flag-pole-realistic"></div>
-                        <canvas id="indianFlag" width="60" height="40"></canvas>
+                        <canvas id="indianFlag" width="45" height="30"></canvas>
                     </div>
                     <img src="{{ asset('images/jobone-logo.png') }}" alt="JobOne.in" class="h-10 md:h-16 w-auto object-contain">
                 </a>
@@ -625,7 +625,7 @@
             return oc;
         }
         
-        const CHAKRA_SIZE = 12;
+        const CHAKRA_SIZE = 10;
         const chakraImg = buildChakra(CHAKRA_SIZE);
         let t = 0;
         
