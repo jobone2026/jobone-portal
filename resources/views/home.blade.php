@@ -201,4 +201,62 @@
         </div>
         @endif
     </div>
+
+    <!-- Share Section -->
+    <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 shadow-sm">
+        <h3 class="font-bold text-gray-900 mb-4 text-base flex items-center gap-2">
+            <i class="fas fa-share-alt"></i> Follow & Share
+        </h3>
+        
+        @php
+            $shareUrl = route('home');
+            $shareTitle = 'JobOne - Latest Government Jobs, Results, Admit Cards';
+            $simpleMessage = "{$shareTitle} - Visit: {$shareUrl}";
+            $encodedSimpleMessage = urlencode($simpleMessage);
+            $encodedUrl = urlencode($shareUrl);
+            $encodedTitle = urlencode($shareTitle);
+        @endphp
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <!-- WhatsApp -->
+            <a href="https://wa.me/?text={{ $encodedSimpleMessage }}" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg transition transform hover:scale-105 shadow-md">
+                <i class="fab fa-whatsapp text-2xl"></i>
+                <span class="font-semibold text-sm">WhatsApp</span>
+            </a>
+            
+            <!-- Telegram -->
+            <a href="https://t.me/share/url?url={{ $encodedUrl }}&text={{ $encodedTitle }}" 
+               target="_blank"
+               rel="noopener noreferrer"
+               class="flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg transition transform hover:scale-105 shadow-md">
+                <i class="fab fa-telegram text-2xl"></i>
+                <span class="font-semibold text-sm">Telegram</span>
+            </a>
+            
+            <!-- Facebook -->
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ $encodedUrl }}" 
+               target="_blank"
+               rel="noopener noreferrer"
+               class="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg transition transform hover:scale-105 shadow-md">
+                <i class="fab fa-facebook-f text-2xl"></i>
+                <span class="font-semibold text-sm">Facebook</span>
+            </a>
+            
+            <!-- Twitter/X -->
+            <a href="https://twitter.com/intent/tweet?url={{ $encodedUrl }}&text={{ $encodedTitle }}" 
+               target="_blank"
+               rel="noopener noreferrer"
+               class="flex items-center justify-center gap-2 bg-gray-900 hover:bg-black text-white px-4 py-3 rounded-lg transition transform hover:scale-105 shadow-md">
+                <i class="fab fa-twitter text-2xl"></i>
+                <span class="font-semibold text-sm">Twitter</span>
+            </a>
+        </div>
+        
+        <p class="text-xs text-gray-700 mt-4 text-center">
+            <i class="fas fa-info-circle"></i> Share with your friends and help them stay updated!
+        </p>
+    </div>
 @endsection
