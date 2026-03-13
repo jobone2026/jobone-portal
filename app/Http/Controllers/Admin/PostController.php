@@ -44,7 +44,7 @@ class PostController extends Controller
             $query->where('title', 'like', '%' . $request->search . '%');
         }
 
-        $posts = $query->latest()->paginate(100)->withQueryString();
+        $posts = $query->latest()->paginate(50)->withQueryString();
         $categories = Category::all();
         $states = State::all();
 
@@ -266,7 +266,7 @@ class PostController extends Controller
             $query->where('title', 'like', '%' . $request->search . '%');
         }
 
-        $posts = $query->latest()->paginate(100, ['*'], 'page', $page);
+        $posts = $query->latest()->paginate(50, ['*'], 'page', $page);
 
         return view('admin.posts.load-more', compact('posts'));
     }

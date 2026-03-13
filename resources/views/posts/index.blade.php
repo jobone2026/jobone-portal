@@ -70,10 +70,8 @@
                 @if($posts->hasPages())
                     {{ $posts->links('vendor.pagination.custom') }}
                 @else
-                    <div class="text-center text-gray-500 text-sm bg-yellow-50 border border-yellow-200 rounded p-4">
-                        <p><strong>Debug Info:</strong> Showing all {{ $posts->total() }} posts</p>
-                        <p class="text-xs mt-2">Pagination appears when more than 20 posts exist</p>
-                        <p class="text-xs">Current page has {{ $posts->count() }} posts</p>
+                    <div class="text-center text-gray-500 text-sm">
+                        <p>Showing all {{ $posts->total() }} posts (pagination appears when more than 100 posts)</p>
                     </div>
                 @endif
             </div>
