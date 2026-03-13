@@ -126,7 +126,8 @@
         <label for="content" class="block text-gray-700 font-bold mb-2">Content *</label>
         <textarea id="content" name="content" rows="10" required 
                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600"
-                  x-model="content" @input="analyze()">{{ old('content', $post->content ?? '') }}</textarea>
+                  x-model="content" @input="analyze()">{!! old('content', $post->content ?? '') !!}</textarea>
+        <p class="text-xs text-gray-500 mt-1">You can paste HTML content here. It will be preserved exactly as entered.</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -178,7 +179,7 @@
 function seoAnalyzer() {
     return {
         title: '{{ old('title', $post->title ?? '') }}',
-        content: `{{ old('content', $post->content ?? '') }}`,
+        content: {!! json_encode(old('content', $post->content ?? '')) !!},
         metaTitle: '{{ old('meta_title', $post->meta_title ?? '') }}',
         metaDescription: '{{ old('meta_description', $post->meta_description ?? '') }}',
         metaKeywords: '{{ old('meta_keywords', $post->meta_keywords ?? '') }}',
