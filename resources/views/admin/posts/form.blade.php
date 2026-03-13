@@ -1,12 +1,12 @@
-<div class="bg-white rounded-lg shadow-md p-6" x-data="seoAnalyzer()">
+<div class="bg-white rounded-lg shadow-md p-3 md:p-6" x-data="seoAnalyzer()">
     <!-- Validation Errors -->
     @if ($errors->any())
-        <div class="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
+        <div class="mb-4 bg-red-50 border-l-4 border-red-500 p-3 rounded-r-lg">
             <div class="flex items-center mb-2">
-                <i class="fas fa-exclamation-circle text-red-500 mr-2"></i>
-                <h3 class="text-red-800 font-bold">Please fix the following errors:</h3>
+                <i class="fas fa-exclamation-circle text-red-500 mr-2 text-sm"></i>
+                <h3 class="text-red-800 font-bold text-sm">Please fix the following errors:</h3>
             </div>
-            <ul class="list-disc list-inside text-red-700 text-sm space-y-1">
+            <ul class="list-disc list-inside text-red-700 text-xs space-y-1">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -15,100 +15,96 @@
     @endif
 
     <!-- SEO Analyzer Panel -->
-    <div class="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
-        <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
-                <i class="fas fa-chart-line text-blue-600"></i>
-                SEO Score Analyzer
+    <div class="mb-4 p-3 md:p-4 bg-white rounded-lg border border-gray-200">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-3 gap-2">
+            <h3 class="text-base md:text-lg font-bold text-gray-800 flex items-center gap-2">
+                <i class="fas fa-chart-line text-gray-600"></i>
+                SEO Score
             </h3>
-            <div class="text-2xl font-bold" :class="scoreColor">
+            <div class="text-xl md:text-2xl font-bold" :class="scoreColor">
                 <span x-text="totalScore"></span>/100
             </div>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
             <!-- Title Length -->
-            <div class="bg-white p-3 rounded-lg shadow-sm">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-sm font-semibold text-gray-700">Title Length</span>
-                    <div class="w-3 h-3 rounded-full" :class="titleLengthColor"></div>
+            <div class="bg-gray-50 p-2 md:p-3 rounded-lg border border-gray-200">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs md:text-sm font-semibold text-gray-700">Title</span>
+                    <div class="w-2 h-2 md:w-3 md:h-3 rounded-full" :class="titleLengthColor"></div>
                 </div>
                 <div class="text-xs text-gray-600">
-                    <span x-text="titleLength"></span> / 60 chars
+                    <span x-text="titleLength"></span>/60
                 </div>
-                <div class="text-xs mt-1" :class="titleLengthColor.replace('bg-', 'text-')" x-text="titleLengthMessage"></div>
             </div>
             
             <!-- Description Length -->
-            <div class="bg-white p-3 rounded-lg shadow-sm">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-sm font-semibold text-gray-700">Description Length</span>
-                    <div class="w-3 h-3 rounded-full" :class="descLengthColor"></div>
+            <div class="bg-gray-50 p-2 md:p-3 rounded-lg border border-gray-200">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs md:text-sm font-semibold text-gray-700">Description</span>
+                    <div class="w-2 h-2 md:w-3 md:h-3 rounded-full" :class="descLengthColor"></div>
                 </div>
                 <div class="text-xs text-gray-600">
-                    <span x-text="descLength"></span> / 160 chars
+                    <span x-text="descLength"></span>/160
                 </div>
-                <div class="text-xs mt-1" :class="descLengthColor.replace('bg-', 'text-')" x-text="descLengthMessage"></div>
             </div>
             
             <!-- Keyword in Title -->
-            <div class="bg-white p-3 rounded-lg shadow-sm">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-sm font-semibold text-gray-700">Keyword in Title</span>
-                    <div class="w-3 h-3 rounded-full" :class="keywordInTitleColor"></div>
+            <div class="bg-gray-50 p-2 md:p-3 rounded-lg border border-gray-200">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs md:text-sm font-semibold text-gray-700">Keyword</span>
+                    <div class="w-2 h-2 md:w-3 md:h-3 rounded-full" :class="keywordInTitleColor"></div>
                 </div>
-                <div class="text-xs mt-1" :class="keywordInTitleColor.replace('bg-', 'text-')" x-text="keywordInTitleMessage"></div>
+                <div class="text-xs text-gray-600">In Title</div>
             </div>
             
             <!-- Keyword in Description -->
-            <div class="bg-white p-3 rounded-lg shadow-sm">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-sm font-semibold text-gray-700">Keyword in Description</span>
-                    <div class="w-3 h-3 rounded-full" :class="keywordInDescColor"></div>
+            <div class="bg-gray-50 p-2 md:p-3 rounded-lg border border-gray-200">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs md:text-sm font-semibold text-gray-700">Keyword</span>
+                    <div class="w-2 h-2 md:w-3 md:h-3 rounded-full" :class="keywordInDescColor"></div>
                 </div>
-                <div class="text-xs mt-1" :class="keywordInDescColor.replace('bg-', 'text-')" x-text="keywordInDescMessage"></div>
+                <div class="text-xs text-gray-600">In Desc</div>
             </div>
             
             <!-- Content Word Count -->
-            <div class="bg-white p-3 rounded-lg shadow-sm">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-sm font-semibold text-gray-700">Content Words</span>
-                    <div class="w-3 h-3 rounded-full" :class="wordCountColor"></div>
+            <div class="bg-gray-50 p-2 md:p-3 rounded-lg border border-gray-200">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs md:text-sm font-semibold text-gray-700">Words</span>
+                    <div class="w-2 h-2 md:w-3 md:h-3 rounded-full" :class="wordCountColor"></div>
                 </div>
                 <div class="text-xs text-gray-600">
-                    <span x-text="wordCount"></span> words
+                    <span x-text="wordCount"></span>
                 </div>
-                <div class="text-xs mt-1" :class="wordCountColor.replace('bg-', 'text-')" x-text="wordCountMessage"></div>
             </div>
             
             <!-- Internal Links -->
-            <div class="bg-white p-3 rounded-lg shadow-sm">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-sm font-semibold text-gray-700">Internal Links</span>
-                    <div class="w-3 h-3 rounded-full" :class="linksCountColor"></div>
+            <div class="bg-gray-50 p-2 md:p-3 rounded-lg border border-gray-200">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs md:text-sm font-semibold text-gray-700">Links</span>
+                    <div class="w-2 h-2 md:w-3 md:h-3 rounded-full" :class="linksCountColor"></div>
                 </div>
                 <div class="text-xs text-gray-600">
-                    <span x-text="linksCount"></span> links
+                    <span x-text="linksCount"></span>
                 </div>
-                <div class="text-xs mt-1" :class="linksCountColor.replace('bg-', 'text-')" x-text="linksCountMessage"></div>
             </div>
         </div>
     </div>
 
-    <div class="mb-6">
-        <label for="title" class="block text-gray-700 font-bold mb-2">Title *</label>
+    <div class="mb-4">
+        <label for="title" class="block text-gray-700 font-bold mb-2 text-sm md:text-base">Title *</label>
         <input type="text" id="title" name="title" value="{{ old('title', $post->title ?? '') }}" required 
-               class="w-full px-4 py-2 border @error('title') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-blue-600"
+               class="w-full px-3 md:px-4 py-2 border @error('title') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-gray-600 text-sm md:text-base"
                x-model="title" @input="analyze()">
         @error('title')
             <p class="text-red-500 text-xs mt-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p>
         @enderror
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6 mb-4">
         <div>
-            <label for="type" class="block text-gray-700 font-bold mb-2">Type *</label>
-            <select id="type" name="type" required class="w-full px-4 py-2 border @error('type') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-blue-600">
+            <label for="type" class="block text-gray-700 font-bold mb-2 text-sm md:text-base">Type *</label>
+            <select id="type" name="type" required class="w-full px-3 md:px-4 py-2 border @error('type') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-gray-600 text-sm md:text-base">
                 <option value="">Select Type</option>
                 <option value="job" {{ old('type', $post->type ?? '') === 'job' ? 'selected' : '' }}>Job</option>
                 <option value="admit_card" {{ old('type', $post->type ?? '') === 'admit_card' ? 'selected' : '' }}>Admit Card</option>
@@ -123,8 +119,8 @@
         </div>
         
         <div>
-            <label for="category_id" class="block text-gray-700 font-bold mb-2">Category *</label>
-            <select id="category_id" name="category_id" required class="w-full px-4 py-2 border @error('category_id') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-blue-600">
+            <label for="category_id" class="block text-gray-700 font-bold mb-2 text-sm md:text-base">Category *</label>
+            <select id="category_id" name="category_id" required class="w-full px-3 md:px-4 py-2 border @error('category_id') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-gray-600 text-sm md:text-base">
                 <option value="">Select Category</option>
                 @foreach ($categories as $category)
                     <option value="{{ $category->id }}" {{ old('category_id', $post->category_id ?? '') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
@@ -136,8 +132,8 @@
         </div>
         
         <div>
-            <label for="state_id" class="block text-gray-700 font-bold mb-2">State</label>
-            <select id="state_id" name="state_id" class="w-full px-4 py-2 border @error('state_id') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-blue-600">
+            <label for="state_id" class="block text-gray-700 font-bold mb-2 text-sm md:text-base">State</label>
+            <select id="state_id" name="state_id" class="w-full px-3 md:px-4 py-2 border @error('state_id') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-gray-600 text-sm md:text-base">
                 <option value="">Select State</option>
                 @foreach ($states as $state)
                     <option value="{{ $state->id }}" {{ old('state_id', $post->state_id ?? '') == $state->id ? 'selected' : '' }}>{{ $state->name }}</option>
@@ -149,10 +145,10 @@
         </div>
     </div>
 
-    <div class="mb-6">
-        <label for="content" class="block text-gray-700 font-bold mb-2">Content *</label>
-        <textarea id="content" name="content" rows="10" required 
-                  class="w-full px-4 py-2 border @error('content') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-blue-600"
+    <div class="mb-4">
+        <label for="content" class="block text-gray-700 font-bold mb-2 text-sm md:text-base">Content *</label>
+        <textarea id="content" name="content" rows="8" required 
+                  class="w-full px-3 md:px-4 py-2 border @error('content') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-gray-600 text-sm md:text-base"
                   x-model="content" @input="analyze()">{!! old('content', $post->content ?? '') !!}</textarea>
         <p class="text-xs text-gray-500 mt-1">You can paste HTML content here. It will be preserved exactly as entered.</p>
         @error('content')
@@ -160,11 +156,11 @@
         @enderror
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 mb-4">
         <div>
-            <label for="meta_title" class="block text-gray-700 font-bold mb-2">Meta Title (max 60 chars)</label>
+            <label for="meta_title" class="block text-gray-700 font-bold mb-2 text-sm md:text-base">Meta Title (max 60 chars)</label>
             <input type="text" id="meta_title" name="meta_title" maxlength="60" value="{{ old('meta_title', $post->meta_title ?? '') }}" 
-                   class="w-full px-4 py-2 border @error('meta_title') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-blue-600"
+                   class="w-full px-3 md:px-4 py-2 border @error('meta_title') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-gray-600 text-sm md:text-base"
                    x-model="metaTitle" @input="analyze()">
             @error('meta_title')
                 <p class="text-red-500 text-xs mt-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p>
@@ -172,9 +168,9 @@
         </div>
         
         <div>
-            <label for="meta_description" class="block text-gray-700 font-bold mb-2">Meta Description (max 160 chars)</label>
+            <label for="meta_description" class="block text-gray-700 font-bold mb-2 text-sm md:text-base">Meta Description (max 160 chars)</label>
             <input type="text" id="meta_description" name="meta_description" maxlength="160" value="{{ old('meta_description', $post->meta_description ?? '') }}" 
-                   class="w-full px-4 py-2 border @error('meta_description') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-blue-600"
+                   class="w-full px-3 md:px-4 py-2 border @error('meta_description') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-gray-600 text-sm md:text-base"
                    x-model="metaDescription" @input="analyze()">
             @error('meta_description')
                 <p class="text-red-500 text-xs mt-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p>
@@ -182,15 +178,15 @@
         </div>
     </div>
 
-    <div class="mb-6">
-        <label for="meta_keywords" class="block text-gray-700 font-bold mb-2">
+    <div class="mb-4">
+        <label for="meta_keywords" class="block text-gray-700 font-bold mb-2 text-sm md:text-base">
             Meta Keywords 
             <span class="text-xs text-gray-500 font-normal">
                 (<span x-text="metaKeywords.length"></span>/1000 chars)
             </span>
         </label>
         <input type="text" id="meta_keywords" name="meta_keywords" maxlength="1000" value="{{ old('meta_keywords', $post->meta_keywords ?? '') }}" 
-               class="w-full px-4 py-2 border @error('meta_keywords') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-blue-600"
+               class="w-full px-3 md:px-4 py-2 border @error('meta_keywords') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-gray-600 text-sm md:text-base"
                x-model="metaKeywords" @input="analyze()">
         <p class="text-xs text-gray-500 mt-1">Separate keywords with commas. Max 1000 characters.</p>
         @error('meta_keywords')
@@ -198,23 +194,23 @@
         @enderror
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 mb-4">
         <div class="flex items-center">
-            <input type="checkbox" id="is_featured" name="is_featured" value="1" {{ old('is_featured', $post->is_featured ?? false) ? 'checked' : '' }} class="mr-2">
-            <label for="is_featured" class="text-gray-700 font-bold">Featured Post</label>
+            <input type="checkbox" id="is_featured" name="is_featured" value="1" {{ old('is_featured', $post->is_featured ?? false) ? 'checked' : '' }} class="mr-2 w-4 h-4">
+            <label for="is_featured" class="text-gray-700 font-bold text-sm md:text-base">Featured Post</label>
         </div>
         
         <div class="flex items-center">
-            <input type="checkbox" id="is_published" name="is_published" value="1" {{ old('is_published', $post->is_published ?? false) ? 'checked' : '' }} class="mr-2">
-            <label for="is_published" class="text-gray-700 font-bold">Published</label>
+            <input type="checkbox" id="is_published" name="is_published" value="1" {{ old('is_published', $post->is_published ?? false) ? 'checked' : '' }} class="mr-2 w-4 h-4">
+            <label for="is_published" class="text-gray-700 font-bold text-sm md:text-base">Published</label>
         </div>
     </div>
 
-    <div class="flex gap-4">
-        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+    <div class="flex flex-col md:flex-row gap-3 md:gap-4">
+        <button type="submit" class="w-full md:w-auto bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition text-sm md:text-base font-medium">
             {{ isset($post) ? 'Update Post' : 'Create Post' }}
         </button>
-        <a href="{{ route('admin.posts.index') }}" class="bg-gray-400 text-white px-6 py-2 rounded-lg hover:bg-gray-500">
+        <a href="{{ route('admin.posts.index') }}" class="w-full md:w-auto bg-gray-400 text-white px-6 py-3 rounded-lg hover:bg-gray-500 transition text-center text-sm md:text-base font-medium">
             Cancel
         </a>
     </div>
