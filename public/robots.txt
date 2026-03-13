@@ -5,19 +5,42 @@ Disallow: /admin/*
 Disallow: /search?
 Disallow: /*?page=
 Disallow: /api/
+Disallow: /*.json
+Disallow: /*.xml
+Disallow: /storage/
+Disallow: /vendor/
 
 # Sitemaps
 Sitemap: https://jobone.in/sitemap.xml
 
-# Crawl-delay
-Crawl-delay: 1
+# Crawl-delay for all bots
+Crawl-delay: 2
 
-# Allow specific bots
+# Allow search engines
 User-agent: Googlebot
 Allow: /
+Crawl-delay: 1
 
 User-agent: Bingbot
 Allow: /
+Crawl-delay: 1
 
 User-agent: Slurp
 Allow: /
+Crawl-delay: 1
+
+# Block aggressive crawlers
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
