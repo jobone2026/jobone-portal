@@ -172,120 +172,53 @@
     </script>
     
     <style>
-        /* Indian Flag Animation */
-        .indian-flag-container {
+        /* Realistic Waving Indian Flag */
+        .flag-container {
             position: relative;
-            width: 30px;
-            height: 40px;
             display: flex;
             align-items: flex-start;
+            gap: 0;
         }
         
-        .flag-pole {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 2px;
-            height: 40px;
-            background: linear-gradient(to bottom, #8B4513, #654321);
-            border-radius: 1px;
-        }
-        
-        .indian-flag {
-            position: absolute;
-            left: 2px;
-            top: 2px;
-            width: 28px;
-            height: 18px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            animation: wave 2s ease-in-out infinite;
-            transform-origin: left center;
-        }
-        
-        .flag-stripe {
-            width: 100%;
-            height: 33.33%;
-        }
-        
-        .flag-stripe.saffron {
-            background: #FF9933;
-        }
-        
-        .flag-stripe.white {
-            background: #FFFFFF;
+        .flag-pole-realistic {
+            width: 3px;
+            height: 45px;
+            background: linear-gradient(to right, #8B4513, #A0522D, #8B4513);
+            border-radius: 2px;
+            box-shadow: 1px 0 3px rgba(0,0,0,0.3);
             position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            z-index: 2;
         }
         
-        .flag-stripe.green {
-            background: #138808;
-        }
-        
-        .ashoka-chakra {
-            position: relative;
-            width: 8px;
-            height: 8px;
-            border: 0.5px solid #000080;
-            border-radius: 50%;
-        }
-        
-        .chakra-center {
+        .flag-pole-realistic::before {
+            content: '';
             position: absolute;
-            top: 50%;
+            top: -4px;
             left: 50%;
-            transform: translate(-50%, -50%);
-            width: 1.5px;
-            height: 1.5px;
-            background: #000080;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle, #FFD700, #DAA520);
             border-radius: 50%;
+            box-shadow: 0 0 4px rgba(255,215,0,0.6);
         }
         
-        .chakra-spoke {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0.3px;
-            height: 3px;
-            background: #000080;
-            transform-origin: center;
-            margin-left: -0.15px;
-            margin-top: -1.5px;
-        }
-        
-        @keyframes wave {
-            0%, 100% {
-                transform: perspective(100px) rotateY(0deg);
-            }
-            25% {
-                transform: perspective(100px) rotateY(-8deg);
-            }
-            75% {
-                transform: perspective(100px) rotateY(8deg);
-            }
+        #indianFlag {
+            display: block;
+            margin-top: 2px;
+            margin-left: -1px;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
         }
         
         /* Mobile responsive */
         @media (max-width: 768px) {
-            .indian-flag-container {
-                width: 24px;
-                height: 32px;
+            .flag-pole-realistic {
+                height: 38px;
             }
             
-            .indian-flag {
-                width: 22px;
-                height: 14px;
-            }
-            
-            .ashoka-chakra {
-                width: 6px;
-                height: 6px;
-            }
-            
-            .chakra-spoke {
-                height: 2.5px;
-                margin-top: -1.25px;
+            #indianFlag {
+                width: 50px;
+                height: 33px;
             }
         }
         
@@ -390,32 +323,12 @@
     <header class="bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm sticky top-0 z-50 border-b border-blue-100">
         <nav class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-3 md:py-4">
             <div class="flex justify-between items-center gap-2">
-                <!-- Logo with Indian Flag on Left -->
-                <a href="{{ route('home') }}" class="flex items-center gap-2 flex-shrink-0">
-                    <!-- Animated Indian Flag -->
-                    <div class="indian-flag-container">
-                        <div class="flag-pole"></div>
-                        <div class="indian-flag">
-                            <div class="flag-stripe saffron"></div>
-                            <div class="flag-stripe white">
-                                <div class="ashoka-chakra">
-                                    <div class="chakra-center"></div>
-                                    <div class="chakra-spoke" style="transform: rotate(0deg)"></div>
-                                    <div class="chakra-spoke" style="transform: rotate(15deg)"></div>
-                                    <div class="chakra-spoke" style="transform: rotate(30deg)"></div>
-                                    <div class="chakra-spoke" style="transform: rotate(45deg)"></div>
-                                    <div class="chakra-spoke" style="transform: rotate(60deg)"></div>
-                                    <div class="chakra-spoke" style="transform: rotate(75deg)"></div>
-                                    <div class="chakra-spoke" style="transform: rotate(90deg)"></div>
-                                    <div class="chakra-spoke" style="transform: rotate(105deg)"></div>
-                                    <div class="chakra-spoke" style="transform: rotate(120deg)"></div>
-                                    <div class="chakra-spoke" style="transform: rotate(135deg)"></div>
-                                    <div class="chakra-spoke" style="transform: rotate(150deg)"></div>
-                                    <div class="chakra-spoke" style="transform: rotate(165deg)"></div>
-                                </div>
-                            </div>
-                            <div class="flag-stripe green"></div>
-                        </div>
+                <!-- Logo with Realistic Waving Indian Flag on Left -->
+                <a href="{{ route('home') }}" class="flex items-center gap-3 flex-shrink-0">
+                    <!-- Realistic Waving Flag -->
+                    <div class="flag-container">
+                        <div class="flag-pole-realistic"></div>
+                        <canvas id="indianFlag" width="60" height="40"></canvas>
                     </div>
                     <img src="{{ asset('images/jobone-logo.png') }}" alt="JobOne.in" class="h-10 md:h-16 w-auto object-contain">
                 </a>
@@ -653,6 +566,154 @@
     </footer>
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Indian Flag Wave Animation -->
+    <script>
+    (function() {
+        const canvas = document.getElementById('indianFlag');
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width;
+        const H = canvas.height;
+        const COLS = 20;
+        const ROWS = 12;
+        const SPEED = 1.5;
+        const AMP = 4;
+        const FREQ = 0.08;
+        
+        // Build Ashoka Chakra
+        function buildChakra(size) {
+            const oc = document.createElement('canvas');
+            oc.width = oc.height = size;
+            const c = oc.getContext('2d');
+            const cx = size / 2, cy = size / 2, r = size / 2 - 1;
+            
+            c.strokeStyle = '#000080';
+            c.fillStyle = '#000080';
+            
+            // Outer ring
+            c.beginPath();
+            c.arc(cx, cy, r, 0, Math.PI * 2);
+            c.lineWidth = size * 0.08;
+            c.stroke();
+            
+            // Inner hub
+            c.beginPath();
+            c.arc(cx, cy, r * 0.18, 0, Math.PI * 2);
+            c.lineWidth = size * 0.05;
+            c.stroke();
+            
+            // Center dot
+            c.beginPath();
+            c.arc(cx, cy, r * 0.08, 0, Math.PI * 2);
+            c.fill();
+            
+            // 24 spokes
+            for (let i = 0; i < 24; i++) {
+                const angle = (i * Math.PI * 2) / 24;
+                const x1 = cx + Math.cos(angle) * r * 0.22;
+                const y1 = cy + Math.sin(angle) * r * 0.22;
+                const x2 = cx + Math.cos(angle) * r * 0.88;
+                const y2 = cy + Math.sin(angle) * r * 0.88;
+                c.beginPath();
+                c.moveTo(x1, y1);
+                c.lineTo(x2, y2);
+                c.lineWidth = size * 0.03;
+                c.stroke();
+            }
+            return oc;
+        }
+        
+        const CHAKRA_SIZE = 12;
+        const chakraImg = buildChakra(CHAKRA_SIZE);
+        let t = 0;
+        
+        function getWave(col, row, time) {
+            const progress = col / COLS;
+            const amplitude = AMP * progress * progress;
+            const w1 = Math.sin(col * FREQ * 2 - time * SPEED) * amplitude;
+            const w2 = Math.sin(col * FREQ * 3.5 - time * SPEED * 1.2) * amplitude * 0.3;
+            const w3 = Math.sin(row * 0.2 + col * FREQ - time * SPEED * 0.8) * amplitude * 0.15;
+            return w1 + w2 + w3;
+        }
+        
+        function drawFlag(time) {
+            ctx.clearRect(0, 0, W, H);
+            const cw = W / COLS;
+            const ch = H / ROWS;
+            
+            for (let row = 0; row < ROWS; row++) {
+                for (let col = 0; col < COLS; col++) {
+                    const tl = getWave(col, row, time);
+                    const tr = getWave(col + 1, row, time);
+                    const bl = getWave(col, row + 1, time);
+                    const br = getWave(col + 1, row + 1, time);
+                    
+                    const x0 = col * cw;
+                    const y0 = row * ch;
+                    
+                    const tlx = x0, tly = y0 + tl;
+                    const trx = x0 + cw, try_ = y0 + tr;
+                    const blx = x0, bly = y0 + ch + bl;
+                    const brx = x0 + cw, bry = y0 + ch + br;
+                    
+                    const rowFrac = row / ROWS;
+                    let baseColor;
+                    if (rowFrac < 1/3) baseColor = { r: 255, g: 153, b: 51 };
+                    else if (rowFrac < 2/3) baseColor = { r: 255, g: 255, b: 255 };
+                    else baseColor = { r: 19, g: 136, b: 8 };
+                    
+                    const slope = (tr - tl) / cw;
+                    const shade = Math.max(0, Math.min(1, 0.5 - slope * 0.5));
+                    const bright = 0.75 + shade * 0.5;
+                    
+                    const r = Math.min(255, baseColor.r * bright);
+                    const g = Math.min(255, baseColor.g * bright);
+                    const b = Math.min(255, baseColor.b * bright);
+                    
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.moveTo(tlx, tly);
+                    ctx.lineTo(trx, try_);
+                    ctx.lineTo(brx, bry);
+                    ctx.lineTo(blx, bly);
+                    ctx.closePath();
+                    ctx.fillStyle = `rgb(${r|0},${g|0},${b|0})`;
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+            
+            // Draw Ashoka Chakra
+            const whiteMid = H / 2;
+            const whiteCenterX = W * 0.45;
+            const waveMidX = getWave(COLS / 2, ROWS / 2, time);
+            
+            ctx.save();
+            ctx.translate(whiteCenterX, whiteMid + waveMidX - CHAKRA_SIZE / 2);
+            const slopeAtCenter = (getWave(COLS / 2 + 1, ROWS / 2, time) - getWave(COLS / 2 - 1, ROWS / 2, time)) / (2 * cw);
+            ctx.rotate(Math.atan(slopeAtCenter) * 0.4);
+            ctx.drawImage(chakraImg, -CHAKRA_SIZE / 2, 0, CHAKRA_SIZE, CHAKRA_SIZE);
+            ctx.restore();
+            
+            // Pole shadow
+            const grad = ctx.createLinearGradient(0, 0, W * 0.15, 0);
+            grad.addColorStop(0, 'rgba(0,0,0,0.25)');
+            grad.addColorStop(1, 'rgba(0,0,0,0)');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, W, H);
+        }
+        
+        function animate() {
+            t += 0.05;
+            drawFlag(t);
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+    })();
+    </script>
 
     <!-- Mobile Bottom Navigation -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 z-40 shadow-lg">
