@@ -14,7 +14,7 @@ class PostController extends Controller
         $posts = Post::published()->ofType($type)
             ->with('category', 'state')
             ->latest()
-            ->simplePaginate(50);
+            ->paginate(50);
 
         // SEO
         $seoService = app(SeoService::class);
