@@ -85,6 +85,11 @@
                 </button>
             </div>
 
+            <!-- Pagination Links -->
+            <div class="mt-8">
+                {{ $posts->links() }}
+            </div>
+
             <!-- No More Posts Message -->
             <div x-show="!hasMore && currentPage > 1" x-transition class="text-center mt-8 text-gray-500">
                 <p><i class="fas fa-check-circle"></i> All posts loaded</p>
