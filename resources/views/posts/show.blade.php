@@ -55,7 +55,7 @@
     <article class="modern-content rounded-lg shadow-md p-6 md:p-8 mb-8">
         <div class="mb-6">
             <div class="flex justify-between items-start mb-4 flex-wrap gap-2">
-                <h1 class="text-lg md:text-xl font-bold text-gray-800 flex-1">{{ $post->title }}</h1>
+                <h1 class="text-sm font-bold text-gray-800 flex-1">{{ $post->title }}</h1>
                 @if ($post->isNew())
                     <span class="bg-red-500 text-white px-3 py-1 rounded text-xs font-bold">NEW</span>
                 @endif
@@ -146,65 +146,6 @@
             </div>
         @endif
 
-        <!-- Modern Share Section -->
-        <div class="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-xl p-6 mb-6 shadow-sm">
-            <h3 class="font-bold text-purple-900 mb-4 text-base flex items-center gap-2">
-                <i class="fas fa-share-alt"></i> Share This Post
-            </h3>
-            
-            @php
-                $shareUrl = route('posts.show', [$post->type, $post->slug]);
-                $shareTitle = $post->title;
-                
-                // Simple message for sharing
-                $simpleMessage = "{$shareTitle} - Apply: {$shareUrl}";
-                $encodedSimpleMessage = urlencode($simpleMessage);
-                $encodedUrl = urlencode($shareUrl);
-                $encodedTitle = urlencode($shareTitle);
-            @endphp
-            
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <!-- WhatsApp -->
-                <a href="https://wa.me/?text={{ $encodedSimpleMessage }}" 
-                   target="_blank" 
-                   rel="noopener noreferrer"
-                   class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg transition transform hover:scale-105 shadow-md">
-                    <i class="fab fa-whatsapp text-xl"></i>
-                    <span class="font-semibold text-sm">WhatsApp</span>
-                </a>
-                
-                <!-- Telegram -->
-                <a href="https://t.me/share/url?url={{ $encodedUrl }}&text={{ $encodedTitle }}" 
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg transition transform hover:scale-105 shadow-md">
-                    <i class="fab fa-telegram text-xl"></i>
-                    <span class="font-semibold text-sm">Telegram</span>
-                </a>
-                
-                <!-- Facebook -->
-                <a href="https://www.facebook.com/sharer/sharer.php?u={{ $encodedUrl }}" 
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg transition transform hover:scale-105 shadow-md">
-                    <i class="fab fa-facebook-f text-xl"></i>
-                    <span class="font-semibold text-sm">Facebook</span>
-                </a>
-                
-                <!-- Twitter/X -->
-                <a href="https://twitter.com/intent/tweet?url={{ $encodedUrl }}&text={{ $encodedTitle }}" 
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="flex items-center justify-center gap-2 bg-black hover:bg-gray-800 text-white px-4 py-3 rounded-lg transition transform hover:scale-105 shadow-md">
-                    <i class="fab fa-twitter text-xl"></i>
-                    <span class="font-semibold text-sm">Twitter</span>
-                </a>
-            </div>
-            
-            <p class="text-xs text-purple-700 mt-4 text-center">
-                <i class="fas fa-info-circle"></i> Share with your friends and help them stay updated!
-            </p>
-        </div>
     </article>
 
     <!-- Ad Slot - After Post -->
