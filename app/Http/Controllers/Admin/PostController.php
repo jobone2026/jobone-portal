@@ -70,7 +70,7 @@ class PostController extends Controller
             'important_links' => 'nullable|json',
             'meta_title' => 'nullable|string|max:60',
             'meta_description' => 'nullable|string|max:160',
-            'meta_keywords' => 'nullable|string|max:500',
+            'meta_keywords' => 'nullable|string|max:1000',
             'is_featured' => 'boolean',
             'is_published' => 'boolean'
         ]);
@@ -128,7 +128,7 @@ class PostController extends Controller
             'important_links' => 'nullable|json',
             'meta_title' => 'nullable|string|max:60',
             'meta_description' => 'nullable|string|max:160',
-            'meta_keywords' => 'nullable|string|max:500',
+            'meta_keywords' => 'nullable|string|max:1000',
             'is_featured' => 'boolean',
             'is_published' => 'boolean'
         ]);

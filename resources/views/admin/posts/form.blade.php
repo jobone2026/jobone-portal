@@ -183,10 +183,16 @@
     </div>
 
     <div class="mb-6">
-        <label for="meta_keywords" class="block text-gray-700 font-bold mb-2">Meta Keywords</label>
-        <input type="text" id="meta_keywords" name="meta_keywords" value="{{ old('meta_keywords', $post->meta_keywords ?? '') }}" 
+        <label for="meta_keywords" class="block text-gray-700 font-bold mb-2">
+            Meta Keywords 
+            <span class="text-xs text-gray-500 font-normal">
+                (<span x-text="metaKeywords.length"></span>/1000 chars)
+            </span>
+        </label>
+        <input type="text" id="meta_keywords" name="meta_keywords" maxlength="1000" value="{{ old('meta_keywords', $post->meta_keywords ?? '') }}" 
                class="w-full px-4 py-2 border @error('meta_keywords') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:border-blue-600"
                x-model="metaKeywords" @input="analyze()">
+        <p class="text-xs text-gray-500 mt-1">Separate keywords with commas. Max 1000 characters.</p>
         @error('meta_keywords')
             <p class="text-red-500 text-xs mt-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p>
         @enderror
