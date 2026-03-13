@@ -172,6 +172,123 @@
     </script>
     
     <style>
+        /* Indian Flag Animation */
+        .indian-flag-container {
+            position: relative;
+            width: 30px;
+            height: 40px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .flag-pole {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(to bottom, #8B4513, #654321);
+            border-radius: 1px;
+        }
+        
+        .indian-flag {
+            position: absolute;
+            left: 2px;
+            top: 2px;
+            width: 28px;
+            height: 18px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            animation: wave 2s ease-in-out infinite;
+            transform-origin: left center;
+        }
+        
+        .flag-stripe {
+            width: 100%;
+            height: 33.33%;
+        }
+        
+        .flag-stripe.saffron {
+            background: #FF9933;
+        }
+        
+        .flag-stripe.white {
+            background: #FFFFFF;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .flag-stripe.green {
+            background: #138808;
+        }
+        
+        .ashoka-chakra {
+            position: relative;
+            width: 8px;
+            height: 8px;
+            border: 0.5px solid #000080;
+            border-radius: 50%;
+        }
+        
+        .chakra-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1.5px;
+            height: 1.5px;
+            background: #000080;
+            border-radius: 50%;
+        }
+        
+        .chakra-spoke {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0.3px;
+            height: 3px;
+            background: #000080;
+            transform-origin: center;
+            margin-left: -0.15px;
+            margin-top: -1.5px;
+        }
+        
+        @keyframes wave {
+            0%, 100% {
+                transform: perspective(100px) rotateY(0deg);
+            }
+            25% {
+                transform: perspective(100px) rotateY(-8deg);
+            }
+            75% {
+                transform: perspective(100px) rotateY(8deg);
+            }
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .indian-flag-container {
+                width: 24px;
+                height: 32px;
+            }
+            
+            .indian-flag {
+                width: 22px;
+                height: 14px;
+            }
+            
+            .ashoka-chakra {
+                width: 6px;
+                height: 6px;
+            }
+            
+            .chakra-spoke {
+                height: 2.5px;
+                margin-top: -1.25px;
+            }
+        }
+        
         /* RTL Support */
         html[dir="rtl"] {
             direction: rtl;
@@ -273,9 +390,34 @@
     <header class="bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm sticky top-0 z-50 border-b border-blue-100">
         <nav class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-3 md:py-4">
             <div class="flex justify-between items-center gap-2">
-                <!-- Logo -->
-                <a href="{{ route('home') }}" class="flex items-center flex-shrink-0">
+                <!-- Logo with Indian Flag -->
+                <a href="{{ route('home') }}" class="flex items-center gap-2 flex-shrink-0">
                     <img src="{{ asset('images/jobone-logo.png') }}" alt="JobOne.in" class="h-10 md:h-16 w-auto object-contain">
+                    <!-- Animated Indian Flag -->
+                    <div class="indian-flag-container">
+                        <div class="flag-pole"></div>
+                        <div class="indian-flag">
+                            <div class="flag-stripe saffron"></div>
+                            <div class="flag-stripe white">
+                                <div class="ashoka-chakra">
+                                    <div class="chakra-center"></div>
+                                    <div class="chakra-spoke" style="transform: rotate(0deg)"></div>
+                                    <div class="chakra-spoke" style="transform: rotate(15deg)"></div>
+                                    <div class="chakra-spoke" style="transform: rotate(30deg)"></div>
+                                    <div class="chakra-spoke" style="transform: rotate(45deg)"></div>
+                                    <div class="chakra-spoke" style="transform: rotate(60deg)"></div>
+                                    <div class="chakra-spoke" style="transform: rotate(75deg)"></div>
+                                    <div class="chakra-spoke" style="transform: rotate(90deg)"></div>
+                                    <div class="chakra-spoke" style="transform: rotate(105deg)"></div>
+                                    <div class="chakra-spoke" style="transform: rotate(120deg)"></div>
+                                    <div class="chakra-spoke" style="transform: rotate(135deg)"></div>
+                                    <div class="chakra-spoke" style="transform: rotate(150deg)"></div>
+                                    <div class="chakra-spoke" style="transform: rotate(165deg)"></div>
+                                </div>
+                            </div>
+                            <div class="flag-stripe green"></div>
+                        </div>
+                    </div>
                 </a>
                 
                 <!-- Custom Language Selector (visible on all screens) -->
