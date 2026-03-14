@@ -170,7 +170,7 @@ class NotificationService
             $postUrl = route('posts.show', [$post->type, $post->slug]);
             $emoji = $this->getEmojiForType($post->type);
             
-            // Create notification message
+            // Create notification message with clickable link
             $message = \Kreait\Firebase\Messaging\CloudMessage::withTarget('topic', 'all_posts')
                 ->withNotification(\Kreait\Firebase\Messaging\Notification::create(
                     $emoji . ' New ' . ucfirst(str_replace('_', ' ', $post->type)),
@@ -179,21 +179,30 @@ class NotificationService
                 ->withData([
                     'post_id' => (string) $post->id,
                     'post_type' => $post->type,
+                    'post_slug' => $post->slug,
                     'url' => $postUrl,
                     'title' => $post->title,
+                    'click_action' => 'OPEN_POST',
                 ])
                 ->withAndroidConfig([
                     'priority' => 'high',
                     'notification' => [
                         'icon' => 'ic_notification',
+                        'color' => '#2563eb',
                         'sound' => 'default',
                         'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
+                        'channel_id' => 'high_importance_channel',
+                        'tag' => 'post_' . $post->id,
+                    ],
+                    'data' => [
+                        'url' => $postUrl,
+                        'action' => 'open_url',
                     ]
                 ]);
             
             $messaging->send($message);
             
-            Log::info('Android push notification sent for post: ' . $post->id);
+            Log::info('Android push notification sent for post: ' . $post->id . ' with URL: ' . $postUrl);
             return true;
             
         } catch (\Exception $e) {
