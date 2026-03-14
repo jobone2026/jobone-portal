@@ -223,26 +223,4 @@ tail -f storage/logs/laravel.log | grep "Android push"
 ### Notification doesn't open URL
 - Check that `url_launcher` package is installed
 - Verify the URL is valid and accessible
-- Check Android permissions in AndroidManifest.xml
-
-### App crashes on notification click
-- Check Firebase configuration
-- Verify google-services.json is up to date
-- Check Logcat for error messages
-
-### URL opens but page not found
-- Verify the post slug is correct
-- Check that the post is published
-- Test the URL in a browser first
-
-## URL Format
-
-Posts are accessible at:
-- Jobs: `https://jobone.in/jobs/{slug}`
-- Results: `https://jobone.in/results/{slug}`
-- Admit Cards: `https://jobone.in/admit-cards/{slug}`
-- Answer Keys: `https://jobone.in/answer-keys/{slug}`
-- Syllabus: `https://jobone.in/syllabus/{slug}`
-- Blogs: `https://jobone.in/blogs/{slug}`
-
-The notification service automatically generates the correct URL based on post type.
+- Check Android permiss
