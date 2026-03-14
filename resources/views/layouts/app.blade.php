@@ -172,24 +172,6 @@
     </script>
     
     <style>
-        /* Global content cleanup - remove extra spacing from HTML content */
-        .post-content > *:first-child,
-        .prose > *:first-child {
-            margin-top: 0 !important;
-            padding-top: 0 !important;
-        }
-        .post-content > *:last-child,
-        .prose > *:last-child {
-            margin-bottom: 0 !important;
-            padding-bottom: 0 !important;
-        }
-        .post-content p:empty,
-        .post-content div:empty,
-        .prose p:empty,
-        .prose div:empty {
-            display: none;
-        }
-        
         /* Realistic Waving Indian Flag */
         .flag-container {
             position: relative;

@@ -32,29 +32,88 @@
         .modern-content a:hover {
             text-decoration: underline;
         }
-        /* Remove extra spacing from post content */
-        .post-content > *:first-child {
+        
+        /* Isolate post content styles - prevent CSS from affecting outside elements */
+        .post-content-isolated {
+            all: initial;
+            display: block;
+            font-family: inherit;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #4a5568;
+        }
+        
+        /* Reset and style only elements inside post content */
+        .post-content-isolated * {
+            all: revert;
+        }
+        
+        .post-content-isolated > *:first-child {
             margin-top: 0 !important;
             padding-top: 0 !important;
         }
-        .post-content > *:last-child {
+        
+        .post-content-isolated > *:last-child {
             margin-bottom: 0 !important;
             padding-bottom: 0 !important;
         }
-        .post-content p:empty,
-        .post-content div:empty,
-        .post-content br:first-child,
-        .post-content br:last-child {
+        
+        .post-content-isolated p:empty,
+        .post-content-isolated div:empty {
             display: none;
         }
-        .post-content > p,
-        .post-content > div {
-            margin-top: 0;
-            margin-bottom: 1rem;
+        
+        .post-content-isolated p {
+            margin: 0 0 1rem 0;
+            line-height: 1.6;
         }
-        .post-content > p:last-child,
-        .post-content > div:last-child {
-            margin-bottom: 0;
+        
+        .post-content-isolated h1,
+        .post-content-isolated h2,
+        .post-content-isolated h3,
+        .post-content-isolated h4,
+        .post-content-isolated h5,
+        .post-content-isolated h6 {
+            margin: 1.5rem 0 0.75rem 0;
+            font-weight: bold;
+            color: #1a202c;
+        }
+        
+        .post-content-isolated ul,
+        .post-content-isolated ol {
+            margin: 0 0 1rem 1.5rem;
+            padding: 0;
+        }
+        
+        .post-content-isolated table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        .post-content-isolated table td,
+        .post-content-isolated table th {
+            border: 1px solid #e5e7eb;
+            padding: 0.5rem;
+        }
+        
+        .post-content-isolated a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        
+        .post-content-isolated a:hover {
+            text-decoration: underline;
+        }
+        
+        .post-content-isolated img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        /* Prevent any styles from leaking out */
+        .post-content-wrapper {
+            isolation: isolate;
         }
     </style>
 
@@ -129,8 +188,10 @@
         </div>
 
         <!-- Main Content -->
-        <div class="prose prose-sm max-w-none mb-3 text-sm post-content">
-            {!! $post->content !!}
+        <div class="prose prose-sm max-w-none mb-3 text-sm post-content-wrapper">
+            <div class="post-content-isolated">
+                {!! $post->content !!}
+            </div>
         </div>
 
         <!-- Important Links -->
