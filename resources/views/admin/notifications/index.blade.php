@@ -173,7 +173,7 @@
 <div class="sn-label">
 <div class="sn-label-left">Link URL <span style="font-size:11px;color:var(--t3);font-weight:400;">(optional)</span></div>
 </div>
-<input type="url" name="link_url" class="sn-input" placeholder="https://jobone.in/job/example">
+<input type="url" name="url" class="sn-input" placeholder="https://jobone.in/job/example">
 <span class="sn-hint">Users will be redirected here when they tap the notification.</span>
 </div>
 
@@ -183,15 +183,15 @@
 </div>
 <div class="sn-recipients">
 <label class="sn-recipient-check">
-<input type="checkbox" name="send_to[]" value="firebase" checked>
+<input type="checkbox" name="channels[]" value="firebase" checked>
 <span>📱 Android App (Firebase)</span>
 </label>
 <label class="sn-recipient-check">
-<input type="checkbox" name="send_to[]" value="telegram">
+<input type="checkbox" name="channels[]" value="telegram">
 <span>✈️ Telegram Channel</span>
 </label>
 <label class="sn-recipient-check">
-<input type="checkbox" name="send_to[]" value="whatsapp">
+<input type="checkbox" name="channels[]" value="whatsapp">
 <span>💬 WhatsApp</span>
 </label>
 </div>

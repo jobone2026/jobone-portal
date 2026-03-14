@@ -19,16 +19,23 @@ class SettingController extends Controller
     {
         $validated = $request->validate([
             'site_name' => 'nullable|string|max:255',
-            'site_description' => 'nullable|string',
+            'site_description' => 'nullable|string|max:300',
             'ga_tracking_id' => 'nullable|string|max:50',
             'adsense_publisher_id' => 'nullable|string|max:50',
+            'header_scripts' => 'nullable|string',
             'contact_email' => 'nullable|email',
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string',
             'facebook_url' => 'nullable|url',
             'twitter_url' => 'nullable|url',
             'telegram_url' => 'nullable|url',
+            'youtube_url' => 'nullable|url',
+            'instagram_url' => 'nullable|url',
             'whatsapp_number' => 'nullable|string|max:20',
+            'whatsapp_channel' => 'nullable|url',
+            'meta_title' => 'nullable|string|max:60',
+            'meta_description' => 'nullable|string|max:160',
+            'meta_keywords' => 'nullable|string|max:1000',
         ]);
 
         foreach ($validated as $key => $value) {

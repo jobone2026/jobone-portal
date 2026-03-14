@@ -128,12 +128,9 @@
 <select name="position" id="adPosition" class="ad-select" required>
 <option value="">Select Position</option>
 <option value="header">Header</option>
-<option value="footer">Footer</option>
 <option value="sidebar">Sidebar</option>
-<option value="post_top">Post Top</option>
-<option value="post_bottom">Post Bottom</option>
-<option value="post_middle">Post Middle</option>
-<option value="between_posts">Between Posts</option>
+<option value="after_post">After Post</option>
+<option value="footer">Footer</option>
 </select>
 </div>
 
@@ -142,9 +139,7 @@
 <select name="type" id="adType" class="ad-select" required>
 <option value="">Select Type</option>
 <option value="adsense">Google AdSense</option>
-<option value="custom_html">Custom HTML</option>
-<option value="image">Image Banner</option>
-<option value="script">Custom Script</option>
+<option value="custom">Custom Code</option>
 </select>
 </div>
 
