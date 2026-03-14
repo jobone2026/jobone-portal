@@ -151,54 +151,51 @@ class NotificationService
     }
     
     /**
-     * Send Android Push Notification using FCM Legacy API
+     * Send Android Push Notification using Firebase Admin SDK
      */
     protected function sendAndroidPushNotification(Post $post)
     {
-        $fcmServerKey = env('FCM_SERVER_KEY');
+        $firebaseCredentials = env('FIREBASE_CREDENTIALS');
         
-        if (!$fcmServerKey) {
-            Log::warning('FCM Server Key not configured');
+        if (!$firebaseCredentials || !file_exists(base_path($firebaseCredentials))) {
+            Log::warning('Firebase credentials not configured');
             return false;
         }
         
-        $postUrl = route('posts.show', [$post->type, $post->slug]);
-        $emoji = $this->getEmojiForType($post->type);
-        
-        $notification = [
-            'title' => $emoji . ' New ' . ucfirst(str_replace('_', ' ', $post->type)),
-            'body' => $post->title,
-            'icon' => 'ic_notification',
-            'sound' => 'default',
-            'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
-        ];
-        
-        $data = [
-            'post_id' => (string) $post->id,
-            'post_type' => $post->type,
-            'url' => $postUrl,
-            'title' => $post->title,
-        ];
-        
         try {
-            // Send to topic (all app users)
-            $response = Http::withHeaders([
-                'Authorization' => 'key=' . $fcmServerKey,
-                'Content-Type' => 'application/json',
-            ])->post('https://fcm.googleapis.com/fcm/send', [
-                'to' => '/topics/all_posts',
-                'notification' => $notification,
-                'data' => $data,
-                'priority' => 'high',
-            ]);
+            // Initialize Firebase Admin SDK
+            $factory = (new \Kreait\Firebase\Factory)->withServiceAccount(base_path($firebaseCredentials));
+            $messaging = $factory->createMessaging();
             
-            if ($response->successful()) {
-                Log::info('Android push notification sent for post: ' . $post->id);
-                return true;
-            } else {
-                Log::error('FCM API error: ' . $response->body());
-                return false;
-            }
+            $postUrl = route('posts.show', [$post->type, $post->slug]);
+            $emoji = $this->getEmojiForType($post->type);
+            
+            // Create notification message
+            $message = \Kreait\Firebase\Messaging\CloudMessage::withTarget('topic', 'all_posts')
+                ->withNotification(\Kreait\Firebase\Messaging\Notification::create(
+                    $emoji . ' New ' . ucfirst(str_replace('_', ' ', $post->type)),
+                    $post->title
+                ))
+                ->withData([
+                    'post_id' => (string) $post->id,
+                    'post_type' => $post->type,
+                    'url' => $postUrl,
+                    'title' => $post->title,
+                ])
+                ->withAndroidConfig([
+                    'priority' => 'high',
+                    'notification' => [
+                        'icon' => 'ic_notification',
+                        'sound' => 'default',
+                        'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
+                    ]
+                ]);
+            
+            $messaging->send($message);
+            
+            Log::info('Android push notification sent for post: ' . $post->id);
+            return true;
+            
         } catch (\Exception $e) {
             Log::error('Android push notification failed: ' . $e->getMessage());
             return false;

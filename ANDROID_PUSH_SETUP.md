@@ -21,15 +21,21 @@ Complete guide to set up push notifications for your Android app.
 5. **Download** `google-services.json` file
 6. Click **Next** → **Next** → **Continue to console**
 
-### Step 3: Get Server Key (for Backend)
+### Step 3: Get Firebase Service Account (for Backend)
 1. In Firebase Console → **Project Settings** (gear icon)
-2. Go to **Cloud Messaging** tab
-3. Under **Cloud Messaging API (Legacy)**, enable it if disabled
-4. Copy the **Server key**
+2. Go to **Service Accounts** tab
+3. Click **Generate New Private Key** button
+4. Download the JSON file (e.g., `jobone-firebase-adminsdk.json`)
+5. Save it to your Laravel project: `storage/app/firebase/jobone-firebase-adminsdk.json`
 
-### Step 4: Add to Laravel .env
+### Step 4: Install Firebase Admin SDK in Laravel
+```bash
+composer require kreait/firebase-php
+```
+
+### Step 5: Add to Laravel .env
 ```env
-FCM_SERVER_KEY=AAAAxxxxxxx:xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+FIREBASE_CREDENTIALS=storage/app/firebase/jobone-firebase-adminsdk.json
 ```
 
 ---
