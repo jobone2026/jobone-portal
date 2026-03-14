@@ -137,190 +137,71 @@
             </div>
         @endif
 
-        <!-- Share Section -->
-        <div class="share-section-wrapper bg-white border border-gray-200 rounded-xl p-3 md:p-6 mb-0 shadow-sm">
-            <h3 class="share-title font-bold text-gray-900 mb-3 md:mb-4 text-sm md:text-base flex items-center gap-2">
-                <i class="fas fa-share-alt"></i> Share This Post
-            </h3>
+    </article>
+
+    <!-- Share Section - Outside article to avoid CSS conflicts -->
+    <div class="share-section-wrapper bg-white border border-gray-200 rounded-xl p-3 md:p-6 mb-4 md:mb-8 shadow-sm">
+        <h3 class="share-title font-bold text-gray-900 mb-3 md:mb-4 text-sm md:text-base flex items-center gap-2">
+            <i class="fas fa-share-alt"></i> Share This Post
+        </h3>
+        
+        @php
+            $shareUrl = route('posts.show', [$post->type, $post->slug]);
+            $shareTitle = $post->title;
             
-            @php
-                $shareUrl = route('posts.show', [$post->type, $post->slug]);
-                $shareTitle = $post->title;
-                
-                // Simple message for sharing
-                $simpleMessage = "{$shareTitle} - Apply: {$shareUrl}";
-                $encodedSimpleMessage = urlencode($simpleMessage);
-                $encodedUrl = urlencode($shareUrl);
-                $encodedTitle = urlencode($shareTitle);
-            @endphp
+            // Simple message for sharing
+            $simpleMessage = "{$shareTitle} - Apply: {$shareUrl}";
+            $encodedSimpleMessage = urlencode($simpleMessage);
+            $encodedUrl = urlencode($shareUrl);
+            $encodedTitle = urlencode($shareTitle);
+        @endphp
+        
+        <div class="share-buttons-grid grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
+            <!-- WhatsApp -->
+            <a href="https://wa.me/?text={{ $encodedSimpleMessage }}" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="share-btn share-btn-whatsapp"
+               style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; padding: 8px 10px !important; color: white !important; text-decoration: none !important; border-radius: 8px !important; font-weight: 600 !important; background: #25D366 !important; font-size: 12px !important; border: none !important; box-shadow: none !important;">
+                <i class="fab fa-whatsapp" style="font-size: 16px !important; color: white !important; margin: 0 !important; padding: 0 !important; background: none !important; border: none !important; box-shadow: none !important;"></i>
+                <span class="share-btn-text hidden sm:inline" style="color: white !important; font-size: 12px !important;">WhatsApp</span>
+            </a>
             
-            <div class="share-buttons-grid grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
-                <!-- WhatsApp -->
-                <a href="https://wa.me/?text={{ $encodedSimpleMessage }}" 
-                   target="_blank" 
-                   rel="noopener noreferrer"
-                   class="share-btn share-btn-whatsapp"
-                   style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; padding: 8px 10px !important; color: white !important; text-decoration: none !important; border-radius: 8px !important; font-weight: 600 !important; background: #25D366 !important; font-size: 12px !important; border: none !important; box-shadow: none !important;">
-                    <i class="fab fa-whatsapp" style="font-size: 16px !important; color: white !important; margin: 0 !important; padding: 0 !important; background: none !important; border: none !important; box-shadow: none !important;"></i>
-                    <span class="share-btn-text hidden sm:inline" style="color: white !important; font-size: 12px !important;">WhatsApp</span>
-                </a>
-                
-                <!-- Telegram -->
-                <a href="https://t.me/share/url?url={{ $encodedUrl }}&text={{ $encodedTitle }}" 
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="share-btn share-btn-telegram"
-                   style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; padding: 8px 10px !important; color: white !important; text-decoration: none !important; border-radius: 8px !important; font-weight: 600 !important; background: #0088cc !important; font-size: 12px !important; border: none !important; box-shadow: none !important;">
-                    <i class="fab fa-telegram" style="font-size: 16px !important; color: white !important; margin: 0 !important; padding: 0 !important; background: none !important; border: none !important; box-shadow: none !important;"></i>
-                    <span class="share-btn-text hidden sm:inline" style="color: white !important; font-size: 12px !important;">Telegram</span>
-                </a>
-                
-                <!-- Facebook -->
-                <a href="https://www.facebook.com/sharer/sharer.php?u={{ $encodedUrl }}" 
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="share-btn share-btn-facebook"
-                   style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; padding: 8px 10px !important; color: white !important; text-decoration: none !important; border-radius: 8px !important; font-weight: 600 !important; background: #1877F2 !important; font-size: 12px !important; border: none !important; box-shadow: none !important;">
-                    <i class="fab fa-facebook-f" style="font-size: 16px !important; color: white !important; margin: 0 !important; padding: 0 !important; background: none !important; border: none !important; box-shadow: none !important;"></i>
-                    <span class="share-btn-text hidden sm:inline" style="color: white !important; font-size: 12px !important;">Facebook</span>
-                </a>
-                
-                <!-- Twitter/X -->
-                <a href="https://twitter.com/intent/tweet?url={{ $encodedUrl }}&text={{ $encodedTitle }}" 
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="share-btn share-btn-twitter"
-                   style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; padding: 8px 10px !important; color: white !important; text-decoration: none !important; border-radius: 8px !important; font-weight: 600 !important; background: #000000 !important; font-size: 12px !important; border: none !important; box-shadow: none !important;">
-                    <i class="fab fa-twitter" style="font-size: 16px !important; color: white !important; margin: 0 !important; padding: 0 !important; background: none !important; border: none !important; box-shadow: none !important;"></i>
-                    <span class="share-btn-text hidden sm:inline" style="color: white !important; font-size: 12px !important;">Twitter</span>
-                </a>
-            </div>
+            <!-- Telegram -->
+            <a href="https://t.me/share/url?url={{ $encodedUrl }}&text={{ $encodedTitle }}" 
+               target="_blank"
+               rel="noopener noreferrer"
+               class="share-btn share-btn-telegram"
+               style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; padding: 8px 10px !important; color: white !important; text-decoration: none !important; border-radius: 8px !important; font-weight: 600 !important; background: #0088cc !important; font-size: 12px !important; border: none !important; box-shadow: none !important;">
+                <i class="fab fa-telegram" style="font-size: 16px !important; color: white !important; margin: 0 !important; padding: 0 !important; background: none !important; border: none !important; box-shadow: none !important;"></i>
+                <span class="share-btn-text hidden sm:inline" style="color: white !important; font-size: 12px !important;">Telegram</span>
+            </a>
             
-            <p class="share-hint text-xs text-gray-700 mt-3 md:mt-4 text-center">
-                <i class="fas fa-info-circle"></i> Share with your friends and help them stay updated!
-            </p>
+            <!-- Facebook -->
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ $encodedUrl }}" 
+               target="_blank"
+               rel="noopener noreferrer"
+               class="share-btn share-btn-facebook"
+               style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; padding: 8px 10px !important; color: white !important; text-decoration: none !important; border-radius: 8px !important; font-weight: 600 !important; background: #1877F2 !important; font-size: 12px !important; border: none !important; box-shadow: none !important;">
+                <i class="fab fa-facebook-f" style="font-size: 16px !important; color: white !important; margin: 0 !important; padding: 0 !important; background: none !important; border: none !important; box-shadow: none !important;"></i>
+                <span class="share-btn-text hidden sm:inline" style="color: white !important; font-size: 12px !important;">Facebook</span>
+            </a>
+            
+            <!-- Twitter/X -->
+            <a href="https://twitter.com/intent/tweet?url={{ $encodedUrl }}&text={{ $encodedTitle }}" 
+               target="_blank"
+               rel="noopener noreferrer"
+               class="share-btn share-btn-twitter"
+               style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; padding: 8px 10px !important; color: white !important; text-decoration: none !important; border-radius: 8px !important; font-weight: 600 !important; background: #000000 !important; font-size: 12px !important; border: none !important; box-shadow: none !important;">
+                <i class="fab fa-twitter" style="font-size: 16px !important; color: white !important; margin: 0 !important; padding: 0 !important; background: none !important; border: none !important; box-shadow: none !important;"></i>
+                <span class="share-btn-text hidden sm:inline" style="color: white !important; font-size: 12px !important;">Twitter</span>
+            </a>
         </div>
         
-        <style>
-            /* Protect share section from post content CSS */
-            .share-section-wrapper {
-                all: revert !important;
-                background: white !important;
-                border: 1px solid #e5e7eb !important;
-                border-radius: 0.75rem !important;
-                padding: 1.5rem !important;
-                margin-bottom: 0 !important;
-                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
-            }
-            
-            .share-title {
-                all: revert !important;
-                font-weight: 700 !important;
-                color: #111827 !important;
-                margin-bottom: 1rem !important;
-                font-size: 0.875rem !important;
-                display: flex !important;
-                align-items: center !important;
-                gap: 0.5rem !important;
-            }
-            
-            .share-buttons-grid {
-                all: revert !important;
-                display: grid !important;
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 0.5rem !important;
-            }
-            
-            .share-btn {
-                all: revert !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                gap: 6px !important;
-                padding: 8px 10px !important;
-                color: white !important;
-                text-decoration: none !important;
-                border-radius: 8px !important;
-                font-weight: 600 !important;
-                transition: all 0.3s !important;
-                font-size: 12px !important;
-                cursor: pointer !important;
-            }
-            
-            .share-btn:hover {
-                transform: translateY(-2px) !important;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
-            }
-            
-            .share-btn-whatsapp {
-                background: #25D366 !important;
-            }
-            
-            .share-btn-telegram {
-                background: #0088cc !important;
-            }
-            
-            .share-btn-facebook {
-                background: #1877F2 !important;
-            }
-            
-            .share-btn-twitter {
-                background: #000000 !important;
-            }
-            
-            .share-btn i {
-                all: revert !important;
-                font-size: 16px !important;
-                color: white !important;
-                margin-right: 6px !important;
-            }
-            
-            .share-btn-text {
-                all: revert !important;
-                color: white !important;
-                font-size: 12px !important;
-            }
-            
-            .share-hint {
-                all: revert !important;
-                font-size: 0.75rem !important;
-                color: #374151 !important;
-                margin-top: 1rem !important;
-                text-align: center !important;
-            }
-            
-            @media (min-width: 640px) {
-                .share-section-wrapper {
-                    padding: 1.5rem !important;
-                }
-                
-                .share-title {
-                    font-size: 1rem !important;
-                    margin-bottom: 1rem !important;
-                }
-                
-                .share-buttons-grid {
-                    grid-template-columns: repeat(4, 1fr) !important;
-                    gap: 1rem !important;
-                }
-                
-                .share-btn {
-                    gap: 12px !important;
-                    padding: 10px 20px !important;
-                    font-size: 14px !important;
-                }
-                
-                .share-btn i {
-                    font-size: 20px !important;
-                }
-                
-                .share-btn-text {
-                    font-size: 14px !important;
-                }
-            }
-        </style>
-
-    </article>
+        <p class="share-hint text-xs text-gray-700 mt-3 md:mt-4 text-center">
+            <i class="fas fa-info-circle"></i> Share with your friends and help them stay updated!
+        </p>
+    </div>
 
     <!-- Ad Slot - After Post -->
     <x-ad-slot position="after_post" />
