@@ -274,13 +274,11 @@
             
             .share-btn-icon {
                 all: revert !important;
-                background: rgba(255,255,255,0.2) !important;
                 width: 28px !important;
                 height: 28px !important;
                 display: flex !important;
                 align-items: center !important;
                 justify-content: center !important;
-                border-radius: 50% !important;
                 flex-shrink: 0 !important;
             }
             
