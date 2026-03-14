@@ -37,6 +37,7 @@
         .post-content-wrapper {
             isolation: isolate;
             contain: layout style;
+            position: relative;
         }
         
         .post-content-isolated {
@@ -45,6 +46,13 @@
             font-size: 14px;
             line-height: 1.6;
             color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Ensure styles inside content don't escape */
+        .post-content-isolated > style {
+            display: block !important;
         }
         
         /* Remove extra spacing */
@@ -169,16 +177,8 @@
         }
         
         /* Prevent any inline styles in content from affecting outside */
-        .post-content-isolated style,
         .post-content-isolated link[rel="stylesheet"] {
             display: none !important;
-        }
-        
-        /* Override any inline background colors or styles */
-        .post-content-isolated [style*="background"],
-        .post-content-isolated [style*="color"],
-        .post-content-isolated [style*="font"] {
-            background: transparent !important;
         }
     </style>
 
@@ -256,16 +256,33 @@
         <div class="prose prose-sm max-w-none mb-3 text-sm post-content-wrapper">
             <div class="post-content-isolated">
                 @php
-                    // Remove <style> tags and inline style attributes from content
-                    $cleanContent = $post->content;
-                    // Remove <style>...</style> tags
-                    $cleanContent = preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', '', $cleanContent);
-                    // Remove inline style attributes
-                    $cleanContent = preg_replace('/\s*style\s*=\s*["\'][^"\']*["\']/i', '', $cleanContent);
-                    // Remove <link> tags (CSS links)
-                    $cleanContent = preg_replace('/<link\b[^>]*>/i', '', $cleanContent);
+                    // Wrap content styles to be scoped only within .post-content-isolated
+                    $scopedContent = $post->content;
+                    
+                    // Find and scope all <style> tags
+                    $scopedContent = preg_replace_callback(
+                        '/<style\b[^>]*>(.*?)<\/style>/is',
+                        function($matches) {
+                            $css = $matches[1];
+                            // Prefix all CSS selectors with .post-content-isolated
+                            $css = preg_replace_callback(
+                                '/([^\r\n,{}]+)(,(?=[^}]*{)|\s*{)/',
+                                function($m) {
+                                    $selector = trim($m[1]);
+                                    // Skip @rules, :root, html, body
+                                    if (preg_match('/^(@|:root|html|body)/i', $selector)) {
+                                        return $m[0];
+                                    }
+                                    return '.post-content-isolated ' . $selector . $m[2];
+                                },
+                                $css
+                            );
+                            return '<style>' . $css . '</style>';
+                        },
+                        $scopedContent
+                    );
                 @endphp
-                {!! $cleanContent !!}
+                {!! $scopedContent !!}
             </div>
         </div>
 
