@@ -33,21 +33,21 @@
             text-decoration: underline;
         }
         
-        /* Isolate post content styles - prevent CSS from affecting outside elements */
+        /* Isolate post content - prevent styles from leaking out */
+        .post-content-wrapper {
+            isolation: isolate;
+            contain: layout style;
+        }
+        
         .post-content-isolated {
-            all: initial;
             display: block;
-            font-family: inherit;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             font-size: 14px;
             line-height: 1.6;
             color: #4a5568;
         }
         
-        /* Reset and style only elements inside post content */
-        .post-content-isolated * {
-            all: revert;
-        }
-        
+        /* Remove extra spacing */
         .post-content-isolated > *:first-child {
             margin-top: 0 !important;
             padding-top: 0 !important;
@@ -63,6 +63,7 @@
             display: none;
         }
         
+        /* Style elements inside post content */
         .post-content-isolated p {
             margin: 0 0 1rem 0;
             line-height: 1.6;
@@ -79,10 +80,20 @@
             color: #1a202c;
         }
         
+        .post-content-isolated h1:first-child,
+        .post-content-isolated h2:first-child,
+        .post-content-isolated h3:first-child {
+            margin-top: 0;
+        }
+        
         .post-content-isolated ul,
         .post-content-isolated ol {
             margin: 0 0 1rem 1.5rem;
             padding: 0;
+        }
+        
+        .post-content-isolated li {
+            margin-bottom: 0.5rem;
         }
         
         .post-content-isolated table {
@@ -95,6 +106,12 @@
         .post-content-isolated table th {
             border: 1px solid #e5e7eb;
             padding: 0.5rem;
+            text-align: left;
+        }
+        
+        .post-content-isolated table th {
+            background-color: #f3f4f6;
+            font-weight: bold;
         }
         
         .post-content-isolated a {
@@ -109,11 +126,51 @@
         .post-content-isolated img {
             max-width: 100%;
             height: auto;
+            display: block;
+            margin: 1rem 0;
         }
         
-        /* Prevent any styles from leaking out */
-        .post-content-wrapper {
-            isolation: isolate;
+        .post-content-isolated strong,
+        .post-content-isolated b {
+            font-weight: bold;
+        }
+        
+        .post-content-isolated em,
+        .post-content-isolated i {
+            font-style: italic;
+        }
+        
+        .post-content-isolated blockquote {
+            border-left: 4px solid #e5e7eb;
+            padding-left: 1rem;
+            margin: 1rem 0;
+            color: #6b7280;
+        }
+        
+        .post-content-isolated code {
+            background-color: #f3f4f6;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        
+        .post-content-isolated pre {
+            background-color: #f3f4f6;
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        .post-content-isolated pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        
+        /* Prevent any inline styles in content from affecting outside */
+        .post-content-isolated style {
+            display: none !important;
         }
     </style>
 
