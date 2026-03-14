@@ -160,9 +160,7 @@
                    target="_blank" 
                    rel="noopener noreferrer"
                    class="share-btn share-btn-whatsapp">
-                    <div class="share-btn-icon">
-                        <i class="fab fa-whatsapp"></i>
-                    </div>
+                    <i class="fab fa-whatsapp"></i>
                     <span class="share-btn-text hidden sm:inline">WhatsApp</span>
                 </a>
                 
@@ -171,9 +169,7 @@
                    target="_blank"
                    rel="noopener noreferrer"
                    class="share-btn share-btn-telegram">
-                    <div class="share-btn-icon">
-                        <i class="fab fa-telegram"></i>
-                    </div>
+                    <i class="fab fa-telegram"></i>
                     <span class="share-btn-text hidden sm:inline">Telegram</span>
                 </a>
                 
@@ -182,9 +178,7 @@
                    target="_blank"
                    rel="noopener noreferrer"
                    class="share-btn share-btn-facebook">
-                    <div class="share-btn-icon">
-                        <i class="fab fa-facebook-f"></i>
-                    </div>
+                    <i class="fab fa-facebook-f"></i>
                     <span class="share-btn-text hidden sm:inline">Facebook</span>
                 </a>
                 
@@ -193,9 +187,7 @@
                    target="_blank"
                    rel="noopener noreferrer"
                    class="share-btn share-btn-twitter">
-                    <div class="share-btn-icon">
-                        <i class="fab fa-twitter"></i>
-                    </div>
+                    <i class="fab fa-twitter"></i>
                     <span class="share-btn-text hidden sm:inline">Twitter</span>
                 </a>
             </div>
@@ -272,20 +264,11 @@
                 background: #000000 !important;
             }
             
-            .share-btn-icon {
-                all: revert !important;
-                width: 28px !important;
-                height: 28px !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                flex-shrink: 0 !important;
-            }
-            
-            .share-btn-icon i {
+            .share-btn i {
                 all: revert !important;
                 font-size: 16px !important;
                 color: white !important;
+                margin-right: 6px !important;
             }
             
             .share-btn-text {
@@ -323,12 +306,7 @@
                     font-size: 14px !important;
                 }
                 
-                .share-btn-icon {
-                    width: 40px !important;
-                    height: 40px !important;
-                }
-                
-                .share-btn-icon i {
+                .share-btn i {
                     font-size: 20px !important;
                 }
                 
