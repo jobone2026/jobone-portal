@@ -264,19 +264,42 @@
                         '/<style\b[^>]*>(.*?)<\/style>/is',
                         function($matches) {
                             $css = $matches[1];
-                            // Prefix all CSS selectors with .post-content-isolated
+                            
+                            // Replace :root with .post-content-isolated
+                            $css = preg_replace('/:root\s*{/', '.post-content-isolated {', $css);
+                            
+                            // Remove body styles completely as they affect the whole page
+                            $css = preg_replace('/body\s*{[^}]*}/i', '', $css);
+                            
+                            // Remove html styles
+                            $css = preg_replace('/html\s*{[^}]*}/i', '', $css);
+                            
+                            // Prefix all other CSS selectors with .post-content-isolated
                             $css = preg_replace_callback(
                                 '/([^\r\n,{}]+)(,(?=[^}]*{)|\s*{)/',
                                 function($m) {
                                     $selector = trim($m[1]);
-                                    // Skip @rules, :root, html, body
-                                    if (preg_match('/^(@|:root|html|body)/i', $selector)) {
+                                    
+                                    // Skip if already has .post-content-isolated
+                                    if (strpos($selector, '.post-content-isolated') !== false) {
                                         return $m[0];
                                     }
+                                    
+                                    // Skip @rules, @keyframes, @media
+                                    if (preg_match('/^@/i', $selector)) {
+                                        return $m[0];
+                                    }
+                                    
+                                    // Skip keyframe percentages
+                                    if (preg_match('/^\d+%$/', $selector) || $selector === 'from' || $selector === 'to') {
+                                        return $m[0];
+                                    }
+                                    
                                     return '.post-content-isolated ' . $selector . $m[2];
                                 },
                                 $css
                             );
+                            
                             return '<style>' . $css . '</style>';
                         },
                         $scopedContent
