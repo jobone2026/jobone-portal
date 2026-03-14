@@ -169,8 +169,16 @@
         }
         
         /* Prevent any inline styles in content from affecting outside */
-        .post-content-isolated style {
+        .post-content-isolated style,
+        .post-content-isolated link[rel="stylesheet"] {
             display: none !important;
+        }
+        
+        /* Override any inline background colors or styles */
+        .post-content-isolated [style*="background"],
+        .post-content-isolated [style*="color"],
+        .post-content-isolated [style*="font"] {
+            background: transparent !important;
         }
     </style>
 
@@ -247,7 +255,17 @@
         <!-- Main Content -->
         <div class="prose prose-sm max-w-none mb-3 text-sm post-content-wrapper">
             <div class="post-content-isolated">
-                {!! $post->content !!}
+                @php
+                    // Remove <style> tags and inline style attributes from content
+                    $cleanContent = $post->content;
+                    // Remove <style>...</style> tags
+                    $cleanContent = preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', '', $cleanContent);
+                    // Remove inline style attributes
+                    $cleanContent = preg_replace('/\s*style\s*=\s*["\'][^"\']*["\']/i', '', $cleanContent);
+                    // Remove <link> tags (CSS links)
+                    $cleanContent = preg_replace('/<link\b[^>]*>/i', '', $cleanContent);
+                @endphp
+                {!! $cleanContent !!}
             </div>
         </div>
 
