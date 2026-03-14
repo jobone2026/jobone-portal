@@ -38,3 +38,7 @@ delete-sample-posts.php
 /storage/app/backups
 *.sql
 *.sql.gz
+
+# Firebase credentials (sensitive)
+/storage/app/firebase
+jobone-firebase-adminsdk.json

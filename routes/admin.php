@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AuthorController;
 use App\Http\Controllers\Admin\BackupController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\StateController;
@@ -82,5 +83,9 @@ Route::prefix('admin')->group(function () {
         Route::delete('/backups/delete/{filename}', [BackupController::class, 'delete'])->name('admin.backups.delete');
         Route::post('/backups/restore', [BackupController::class, 'restore'])->name('admin.backups.restore');
         Route::post('/backups/upload', [BackupController::class, 'upload'])->name('admin.backups.upload');
+        
+        // Notifications management
+        Route::get('/notifications', [NotificationController::class, 'index'])->name('admin.notifications.index');
+        Route::post('/notifications/send', [NotificationController::class, 'send'])->name('admin.notifications.send');
     });
 });
