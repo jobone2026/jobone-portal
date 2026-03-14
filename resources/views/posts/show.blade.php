@@ -32,6 +32,30 @@
         .modern-content a:hover {
             text-decoration: underline;
         }
+        /* Remove extra spacing from post content */
+        .post-content > *:first-child {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+        .post-content > *:last-child {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
+        .post-content p:empty,
+        .post-content div:empty,
+        .post-content br:first-child,
+        .post-content br:last-child {
+            display: none;
+        }
+        .post-content > p,
+        .post-content > div {
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+        .post-content > p:last-child,
+        .post-content > div:last-child {
+            margin-bottom: 0;
+        }
     </style>
 
     <!-- Breadcrumb -->
@@ -105,7 +129,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="prose prose-sm max-w-none mb-3 text-sm">
+        <div class="prose prose-sm max-w-none mb-3 text-sm post-content">
             {!! $post->content !!}
         </div>
 
