@@ -57,7 +57,7 @@
     
     .ticker-content {
         display: flex;
-        animation: scroll-left 45s linear infinite;
+        animation: scroll-left 35s linear infinite;
         white-space: nowrap;
     }
     
@@ -90,7 +90,7 @@
         }
         
         .ticker-content {
-            animation: scroll-left 30s linear infinite;
+            animation: scroll-left 20s linear infinite;
         }
     }
     
@@ -100,7 +100,7 @@
         }
         
         .ticker-content {
-            animation: scroll-left 50s linear infinite;
+            animation: scroll-left 40s linear infinite;
         }
     }
 </style>
