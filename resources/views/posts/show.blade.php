@@ -10,175 +10,16 @@
 
 @section('content')
     <style>
-        .modern-content {
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-            border: 1px solid #e9ecef;
-        }
-        .modern-content h1, .modern-content h2, .modern-content h3 {
-            color: #1a202c;
-            margin-top: 1.5rem;
-            margin-bottom: 0.75rem;
-        }
-        .modern-content p {
-            color: #4a5568;
-            line-height: 1.6;
-            margin-bottom: 1rem;
-            font-size: 14px;
-        }
-        .modern-content a {
-            color: #0066cc;
-            text-decoration: none;
-        }
-        .modern-content a:hover {
-            text-decoration: underline;
-        }
-        
-        /* Isolate post content - prevent styles from leaking out */
+        /* Post content wrapper - basic isolation */
         .post-content-wrapper {
             isolation: isolate;
-            contain: layout style;
             position: relative;
         }
         
+        /* Allow content to have its own styles */
         .post-content-isolated {
             display: block;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            font-size: 14px;
-            line-height: 1.6;
-            color: #4a5568;
             position: relative;
-            z-index: 1;
-        }
-        
-        /* Ensure styles inside content don't escape */
-        .post-content-isolated > style {
-            display: block !important;
-        }
-        
-        /* Remove extra spacing */
-        .post-content-isolated > *:first-child {
-            margin-top: 0 !important;
-            padding-top: 0 !important;
-        }
-        
-        .post-content-isolated > *:last-child {
-            margin-bottom: 0 !important;
-            padding-bottom: 0 !important;
-        }
-        
-        .post-content-isolated p:empty,
-        .post-content-isolated div:empty {
-            display: none;
-        }
-        
-        /* Style elements inside post content */
-        .post-content-isolated p {
-            margin: 0 0 1rem 0;
-            line-height: 1.6;
-        }
-        
-        .post-content-isolated h1,
-        .post-content-isolated h2,
-        .post-content-isolated h3,
-        .post-content-isolated h4,
-        .post-content-isolated h5,
-        .post-content-isolated h6 {
-            margin: 1.5rem 0 0.75rem 0;
-            font-weight: bold;
-            color: #1a202c;
-        }
-        
-        .post-content-isolated h1:first-child,
-        .post-content-isolated h2:first-child,
-        .post-content-isolated h3:first-child {
-            margin-top: 0;
-        }
-        
-        .post-content-isolated ul,
-        .post-content-isolated ol {
-            margin: 0 0 1rem 1.5rem;
-            padding: 0;
-        }
-        
-        .post-content-isolated li {
-            margin-bottom: 0.5rem;
-        }
-        
-        .post-content-isolated table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1rem 0;
-        }
-        
-        .post-content-isolated table td,
-        .post-content-isolated table th {
-            border: 1px solid #e5e7eb;
-            padding: 0.5rem;
-            text-align: left;
-        }
-        
-        .post-content-isolated table th {
-            background-color: #f3f4f6;
-            font-weight: bold;
-        }
-        
-        .post-content-isolated a {
-            color: #0066cc;
-            text-decoration: none;
-        }
-        
-        .post-content-isolated a:hover {
-            text-decoration: underline;
-        }
-        
-        .post-content-isolated img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 1rem 0;
-        }
-        
-        .post-content-isolated strong,
-        .post-content-isolated b {
-            font-weight: bold;
-        }
-        
-        .post-content-isolated em,
-        .post-content-isolated i {
-            font-style: italic;
-        }
-        
-        .post-content-isolated blockquote {
-            border-left: 4px solid #e5e7eb;
-            padding-left: 1rem;
-            margin: 1rem 0;
-            color: #6b7280;
-        }
-        
-        .post-content-isolated code {
-            background-color: #f3f4f6;
-            padding: 0.2rem 0.4rem;
-            border-radius: 3px;
-            font-family: monospace;
-            font-size: 0.9em;
-        }
-        
-        .post-content-isolated pre {
-            background-color: #f3f4f6;
-            padding: 1rem;
-            border-radius: 5px;
-            overflow-x: auto;
-            margin: 1rem 0;
-        }
-        
-        .post-content-isolated pre code {
-            background-color: transparent;
-            padding: 0;
-        }
-        
-        /* Prevent any inline styles in content from affecting outside */
-        .post-content-isolated link[rel="stylesheet"] {
-            display: none !important;
         }
     </style>
 
@@ -200,7 +41,7 @@
         ['label' => $post->title, 'url' => '#']
     ]" />
 
-    <article class="modern-content rounded-lg shadow-md p-3 md:p-8 mb-4 md:mb-8">
+    <article class="bg-white rounded-lg shadow-md p-3 md:p-8 mb-4 md:mb-8">
         <div class="mb-3">
             <div class="flex justify-between items-start mb-2 flex-wrap gap-2">
                 <h1 class="font-bold text-gray-800 flex-1" style="font-size: 15px;">{{ $post->title }}</h1>
@@ -254,43 +95,10 @@
 
         <!-- Main Content -->
         <div class="prose prose-sm max-w-none mb-3 text-sm post-content-wrapper">
-            <div class="post-content-isolated" id="post-content-container">
+            <div class="post-content-isolated">
                 {!! $post->content !!}
             </div>
         </div>
-        
-        <script>
-            // Move content into Shadow DOM for complete isolation
-            (function() {
-                const container = document.getElementById('post-content-container');
-                if (container && container.attachShadow) {
-                    const content = container.innerHTML;
-                    container.innerHTML = '';
-                    const shadow = container.attachShadow({ mode: 'open' });
-                    
-                    // Add base styles
-                    const baseStyle = document.createElement('style');
-                    baseStyle.textContent = `
-                        :host {
-                            display: block;
-                            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-                            font-size: 14px;
-                            line-height: 1.6;
-                            color: #4a5568;
-                        }
-                        * {
-                            box-sizing: border-box;
-                        }
-                    `;
-                    shadow.appendChild(baseStyle);
-                    
-                    // Add content
-                    const contentDiv = document.createElement('div');
-                    contentDiv.innerHTML = content;
-                    shadow.appendChild(contentDiv);
-                }
-            })();
-        </script>
 
         <!-- Important Links -->
         @php
@@ -429,7 +237,7 @@
             <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4"><i class="fas fa-link"></i> Related Posts</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 @foreach ($related as $relatedPost)
-                    <div class="modern-content rounded-lg p-4">
+                    <div class="bg-white rounded-lg p-4 border border-gray-200">
                         <a href="{{ route('posts.show', ['type' => $relatedPost->type, 'post' => $relatedPost->slug]) }}" class="text-sm font-medium text-blue-600 hover:text-blue-800">
                             {{ $relatedPost->title }}
                         </a>
