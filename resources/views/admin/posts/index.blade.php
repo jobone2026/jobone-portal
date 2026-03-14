@@ -42,6 +42,17 @@
 .pm-action-btn.edit:hover{background:#dbeafe;border-color:#3b82f6;color:#1e40af;}
 .pm-action-btn.view:hover{background:#d1fae5;border-color:#10b981;color:#065f46;}
 .pm-action-btn.delete:hover{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.pm-pagination{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:16px;}
+.pm-pagination nav{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;}
+.pm-pagination .pagination-info{font-size:13px;color:var(--t2);}
+.pm-pagination .pagination-links{display:flex;gap:4px;}
+.pm-pagination .pagination-links a,
+.pm-pagination .pagination-links span{display:inline-flex;align-items:center;justify-content:center;min-width:36px;height:36px;padding:0 12px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;transition:all .15s;}
+.pm-pagination .pagination-links a{background:var(--white);color:var(--t2);}
+.pm-pagination .pagination-links a:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
+.pm-pagination .pagination-links span.current{background:var(--blue);color:#fff;border-color:var(--blue);}
+.pm-pagination .pagination-links span.disabled{background:var(--off);color:var(--t3);cursor:not-allowed;}
+.pm-pagination .pagination-links .dots{border:none;background:none;color:var(--t3);cursor:default;}
 .pm-bulk-bar{background:#eff6ff;border:1px solid #3b82f6;border-radius:8px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
 .pm-bulk-info{font-size:13px;font-weight:600;color:var(--t1);}
 .pm-bulk-actions{display:flex;gap:6px;flex-wrap:wrap;}

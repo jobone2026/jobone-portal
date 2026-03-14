@@ -22,8 +22,17 @@
 .pf-seo-item-val{font-size:11px;color:var(--t3);}
 .pf-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:18px;box-shadow:var(--sh0);}
 .pf-section-title{font-size:14px;font-weight:700;color:var(--t1);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
-.pf-field{margin-bottom:16px;}
+.pf-field{margin-bottom:16px;position:relative;}
 .pf-field:last-child{margin-bottom:0;}
+.pf-field.has-error .pf-input,
+.pf-field.has-error .pf-select,
+.pf-field.has-error .pf-textarea{border-color:var(--red);background:#fef2f2;}
+.pf-field.has-success .pf-input,
+.pf-field.has-success .pf-select,
+.pf-field.has-success .pf-textarea{border-color:var(--green);background:#f0fdf4;}
+.pf-field-icon{position:absolute;right:12px;top:34px;font-size:14px;}
+.pf-field-icon.success{color:var(--green);}
+.pf-field-icon.error{color:var(--red);}
 .pf-label{font-size:13px;font-weight:600;color:var(--t1);margin-bottom:6px;display:block;}
 .pf-label .req{color:var(--red);}
 .pf-hint{font-size:11.5px;color:var(--t3);margin-top:4px;display:block;}
@@ -134,14 +143,23 @@ SEO Score
 Basic Information
 </div>
 
-<div class="pf-field">
+<div class="pf-field" x-data="{ valid: false, touched: false }" :class="{ 'has-error': touched && !valid && title.length > 0, 'has-success': valid }">
 <label class="pf-label">Title <span class="req">*</span></label>
 <input type="text" name="title" class="pf-input @error('title') error @enderror" 
 value="{{ old('title', $post->title ?? '') }}" required
-x-model="title" @input="analyze()">
+x-model="title" @input="analyze(); touched = true; valid = title.length >= 10 && title.length <= 100" @blur="touched = true">
+<template x-if="valid">
+<i class="fas fa-check-circle pf-field-icon success"></i>
+</template>
+<template x-if="touched && !valid && title.length > 0">
+<i class="fas fa-exclamation-circle pf-field-icon error"></i>
+</template>
 @error('title')
 <span class="pf-error-msg"><i class="fas fa-exclamation-circle"></i>{{ $message }}</span>
 @enderror
+<template x-if="touched && !valid && title.length > 0">
+<span class="pf-hint" style="color:var(--red);" x-text="title.length < 10 ? 'Title must be at least 10 characters' : 'Title is too long (max 100 characters)'"></span>
+</template>
 </div>
 
 <div class="pf-grid-3">
@@ -188,14 +206,17 @@ x-model="title" @input="analyze()">
 </div>
 </div>
 
-<div class="pf-field">
+<div class="pf-field" x-data="{ valid: false, touched: false }" :class="{ 'has-error': touched && !valid && content.length > 0, 'has-success': valid }">
 <label class="pf-label">Content <span class="req">*</span></label>
 <textarea name="content" class="pf-textarea @error('content') error @enderror" required
-x-model="content" @input="analyze()">{!! old('content', $post->content ?? '') !!}</textarea>
+x-model="content" @input="analyze(); touched = true; valid = content.length >= 50" @blur="touched = true">{!! old('content', $post->content ?? '') !!}</textarea>
 <span class="pf-hint">You can paste HTML content here. It will be preserved exactly as entered.</span>
 @error('content')
 <span class="pf-error-msg"><i class="fas fa-exclamation-circle"></i>{{ $message }}</span>
 @enderror
+<template x-if="touched && !valid && content.length > 0">
+<span class="pf-hint" style="color:var(--red);">Content must be at least 50 characters (currently <span x-text="content.length"></span>)</span>
+</template>
 </div>
 </div>
 
