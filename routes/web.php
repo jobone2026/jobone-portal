@@ -48,6 +48,11 @@ Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap')
 Route::get('/sitemap-posts.xml', [SitemapController::class, 'posts'])->name('sitemap.posts');
 Route::get('/sitemap-categories.xml', [SitemapController::class, 'categories'])->name('sitemap.categories');
 Route::get('/sitemap-states.xml', [SitemapController::class, 'states'])->name('sitemap.states');
+
+// OSOG - Operations Guide (accessible at /osog)
+Route::get('/osog', function () {
+    return response()->file(public_path('osog-tool.php'));
+});
 Route::get('/sitemap-static.xml', [SitemapController::class, 'static'])->name('sitemap.static');
 Route::get('/sitemap-news.xml', [SitemapController::class, 'news'])->name('sitemap.news');
 
