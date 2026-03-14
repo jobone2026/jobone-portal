@@ -42,6 +42,17 @@
 .pm-action-btn.edit:hover{background:#dbeafe;border-color:#3b82f6;color:#1e40af;}
 .pm-action-btn.view:hover{background:#d1fae5;border-color:#10b981;color:#065f46;}
 .pm-action-btn.delete:hover{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.pm-bulk-bar{background:#eff6ff;border:1px solid #3b82f6;border-radius:8px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.pm-bulk-info{font-size:13px;font-weight:600;color:var(--t1);}
+.pm-bulk-actions{display:flex;gap:6px;flex-wrap:wrap;}
+.pm-bulk-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:600;border:none;cursor:pointer;transition:all .15s;}
+.pm-bulk-btn.publish{background:#10b981;color:#fff;}
+.pm-bulk-btn.publish:hover{background:#059669;}
+.pm-bulk-btn.unpublish{background:#f59e0b;color:#fff;}
+.pm-bulk-btn.unpublish:hover{background:#d97706;}
+.pm-bulk-btn.delete{background:#ef4444;color:#fff;}
+.pm-bulk-btn.delete:hover{background:#dc2626;}
+.pm-checkbox{width:16px;height:16px;accent-color:var(--blue);cursor:pointer;}
 .pm-pagination{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:16px;display:flex;justify-content:center;}
 .pm-empty{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:48px 24px;text-align:center;}
 .pm-empty-icon{width:64px;height:64px;background:var(--off);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
@@ -51,7 +62,7 @@
 @media(max-width:768px){.pm-table-wrap{overflow-x:auto;}.pm-table{min-width:800px;}}
 </style>
 
-<div x-data="{ showFilters: false }">
+<div x-data="{ showFilters: false, selectedPosts: [], selectAll: false }">
 
 <div class="pm-header">
 <div class="pm-title">Posts Management</div>
@@ -126,11 +137,36 @@ Clear
 </form>
 </div>
 
+<div x-show="selectedPosts.length > 0" x-transition class="pm-bulk-bar">
+<div class="pm-bulk-info">
+<i class="fas fa-check-circle"></i>
+<span x-text="selectedPosts.length"></span> post(s) selected
+</div>
+<form action="{{ route('admin.posts.bulk-action') }}" method="POST" class="pm-bulk-actions">
+@csrf
+<template x-for="postId in selectedPosts" :key="postId">
+<input type="hidden" name="posts[]" :value="postId">
+</template>
+<button type="submit" name="action" value="publish" class="pm-bulk-btn publish">
+<i class="fas fa-eye"></i> Publish
+</button>
+<button type="submit" name="action" value="unpublish" class="pm-bulk-btn unpublish">
+<i class="fas fa-eye-slash"></i> Unpublish
+</button>
+<button type="submit" name="action" value="delete" class="pm-bulk-btn delete" onclick="return confirm('Delete selected posts?')">
+<i class="fas fa-trash"></i> Delete
+</button>
+</form>
+</div>
+
 @if ($posts->count() > 0)
 <div class="pm-table-wrap">
 <table class="pm-table">
 <thead>
 <tr>
+<th style="width:40px">
+<input type="checkbox" class="pm-checkbox" @change="selectAll = !selectAll; selectedPosts = selectAll ? {{ json_encode($posts->pluck('id')->toArray()) }} : []">
+</th>
 <th style="width:40%">Post</th>
 <th style="width:15%">Type</th>
 <th style="width:15%">Category</th>
@@ -142,6 +178,11 @@ Clear
 <tbody>
 @foreach ($posts as $post)
 <tr>
+<td>
+<input type="checkbox" class="pm-checkbox" :value="{{ $post->id }}" 
+@change="selectedPosts.includes({{ $post->id }}) ? selectedPosts = selectedPosts.filter(id => id !== {{ $post->id }}) : selectedPosts.push({{ $post->id }})"
+:checked="selectedPosts.includes({{ $post->id }})">
+</td>
 <td>
 <div class="pm-post-title">{{ Str::limit($post->title, 60) }}</div>
 <div class="pm-post-meta">
@@ -190,7 +231,7 @@ Clear
 </div>
 
 <div class="pm-pagination">
-{{ $posts->links() }}
+{{ $posts->appends(request()->query())->links() }}
 </div>
 @else
 <div class="pm-empty">
