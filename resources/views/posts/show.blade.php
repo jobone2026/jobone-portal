@@ -254,60 +254,43 @@
 
         <!-- Main Content -->
         <div class="prose prose-sm max-w-none mb-3 text-sm post-content-wrapper">
-            <div class="post-content-isolated">
-                @php
-                    // Wrap content styles to be scoped only within .post-content-isolated
-                    $scopedContent = $post->content;
-                    
-                    // Find and scope all <style> tags
-                    $scopedContent = preg_replace_callback(
-                        '/<style\b[^>]*>(.*?)<\/style>/is',
-                        function($matches) {
-                            $css = $matches[1];
-                            
-                            // Replace :root with .post-content-isolated
-                            $css = preg_replace('/:root\s*{/', '.post-content-isolated {', $css);
-                            
-                            // Remove body styles completely as they affect the whole page
-                            $css = preg_replace('/body\s*{[^}]*}/i', '', $css);
-                            
-                            // Remove html styles
-                            $css = preg_replace('/html\s*{[^}]*}/i', '', $css);
-                            
-                            // Prefix all other CSS selectors with .post-content-isolated
-                            $css = preg_replace_callback(
-                                '/([^\r\n,{}]+)(,(?=[^}]*{)|\s*{)/',
-                                function($m) {
-                                    $selector = trim($m[1]);
-                                    
-                                    // Skip if already has .post-content-isolated
-                                    if (strpos($selector, '.post-content-isolated') !== false) {
-                                        return $m[0];
-                                    }
-                                    
-                                    // Skip @rules, @keyframes, @media
-                                    if (preg_match('/^@/i', $selector)) {
-                                        return $m[0];
-                                    }
-                                    
-                                    // Skip keyframe percentages
-                                    if (preg_match('/^\d+%$/', $selector) || $selector === 'from' || $selector === 'to') {
-                                        return $m[0];
-                                    }
-                                    
-                                    return '.post-content-isolated ' . $selector . $m[2];
-                                },
-                                $css
-                            );
-                            
-                            return '<style>' . $css . '</style>';
-                        },
-                        $scopedContent
-                    );
-                @endphp
-                {!! $scopedContent !!}
+            <div class="post-content-isolated" id="post-content-container">
+                {!! $post->content !!}
             </div>
         </div>
+        
+        <script>
+            // Move content into Shadow DOM for complete isolation
+            (function() {
+                const container = document.getElementById('post-content-container');
+                if (container && container.attachShadow) {
+                    const content = container.innerHTML;
+                    container.innerHTML = '';
+                    const shadow = container.attachShadow({ mode: 'open' });
+                    
+                    // Add base styles
+                    const baseStyle = document.createElement('style');
+                    baseStyle.textContent = `
+                        :host {
+                            display: block;
+                            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+                            font-size: 14px;
+                            line-height: 1.6;
+                            color: #4a5568;
+                        }
+                        * {
+                            box-sizing: border-box;
+                        }
+                    `;
+                    shadow.appendChild(baseStyle);
+                    
+                    // Add content
+                    const contentDiv = document.createElement('div');
+                    contentDiv.innerHTML = content;
+                    shadow.appendChild(contentDiv);
+                }
+            })();
+        </script>
 
         <!-- Important Links -->
         @php
