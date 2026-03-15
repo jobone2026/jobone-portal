@@ -309,7 +309,7 @@ class BackupController extends Controller
     public function upload(Request $request)
     {
         $request->validate([
-            'backup_upload' => 'required|file|mimes:zip|max:102400' // Max 100MB
+            'backup_upload' => 'required|file|mimes:zip|max:512000' // Max 500MB
         ]);
         
         try {
