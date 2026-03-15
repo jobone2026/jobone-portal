@@ -94,7 +94,6 @@
 
 <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
 @csrf
-@method('PUT')
 
 {{-- General Info --}}
 <div class="ss-section">
