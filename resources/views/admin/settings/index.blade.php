@@ -222,6 +222,11 @@
 <label class="ss-label"><i class="fab fa-whatsapp" style="color:#25d366;"></i> WhatsApp Channel</label>
 <input type="url" name="whatsapp_channel" class="ss-input" value="{{ old('whatsapp_channel', $settings['whatsapp_channel'] ?? '') }}" placeholder="https://whatsapp.com/channel/…">
 </div>
+<div class="ss-field">
+<label class="ss-label"><i class="fab fa-android" style="color:#3ddc84;"></i> Android App URL</label>
+<input type="url" name="android_app_url" class="ss-input" value="{{ old('android_app_url', $settings['android_app_url'] ?? '') }}" placeholder="https://play.google.com/store/apps/details?id=…">
+<span class="ss-hint">Google Play Store link for your Android app</span>
+</div>
 </div>
 </div>
 </div>

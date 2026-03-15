@@ -33,6 +33,7 @@ class SettingController extends Controller
             'instagram_url' => 'nullable|url',
             'whatsapp_number' => 'nullable|string|max:20',
             'whatsapp_channel' => 'nullable|url',
+            'android_app_url' => 'nullable|url',
             'meta_title' => 'nullable|string|max:60',
             'meta_description' => 'nullable|string|max:160',
             'meta_keywords' => 'nullable|string|max:1000',

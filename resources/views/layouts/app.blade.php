@@ -548,12 +548,18 @@
                     @php
                         $contactEmail = \App\Models\SiteSetting::where('key', 'contact_email')->value('value');
                         $phone = \App\Models\SiteSetting::where('key', 'phone')->value('value');
+                        $androidAppUrl = \App\Models\SiteSetting::where('key', 'android_app_url')->value('value');
                     @endphp
                     @if($contactEmail)
                         <p class="mb-1.5 text-gray-600 text-sm font-semibold"><i class="fas fa-envelope text-xs"></i> {{ $contactEmail }}</p>
                     @endif
                     @if($phone)
-                        <p class="text-gray-600 text-sm font-semibold"><i class="fas fa-phone text-xs"></i> {{ $phone }}</p>
+                        <p class="mb-1.5 text-gray-600 text-sm font-semibold"><i class="fas fa-phone text-xs"></i> {{ $phone }}</p>
+                    @endif
+                    @if($androidAppUrl)
+                        <a href="{{ $androidAppUrl }}" target="_blank" class="inline-flex items-center gap-2 text-gray-600 hover:text-green-600 text-sm font-semibold transition">
+                            <i class="fab fa-android text-xs"></i> Download App
+                        </a>
                     @endif
                 </div>
             </div>
