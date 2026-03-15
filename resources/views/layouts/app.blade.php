@@ -434,7 +434,7 @@
     </header>
 
     <!-- States Navigation Bar -->
-    <div class="bg-white overflow-x-auto sticky top-[52px] md:top-16 z-40 border-b border-gray-200">
+    <div class="bg-white overflow-x-auto sticky top-[52px] md:top-[64px] z-40 border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex gap-1 py-2 flex-nowrap">
                 @foreach ($states ?? [] as $state)
@@ -447,7 +447,7 @@
     </div>
 
     <!-- Categories Navigation Bar -->
-    <div class="bg-gray-100 overflow-x-auto sticky top-[96px] md:top-32 z-40 border-b border-gray-200">
+    <div class="bg-gray-100 overflow-x-auto sticky top-[100px] md:top-[112px] z-40 border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex gap-1 py-2 flex-nowrap">
                 @foreach ($categories ?? [] as $category)
