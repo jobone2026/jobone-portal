@@ -239,33 +239,68 @@ class BackupController extends Controller
             throw new \Exception('Backup file is empty');
         }
         
-        // Disable foreign key checks
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        // Get database connection
+        $connection = DB::connection();
+        $pdo = $connection->getPdo();
         
-        // Split SQL into individual statements
-        $statements = array_filter(
-            array_map('trim', explode(';', $sql)),
-            function($statement) {
-                return !empty($statement) && 
-                       !str_starts_with($statement, '--') && 
-                       !str_starts_with($statement, '/*');
+        // Disable foreign key checks
+        $pdo->exec('SET FOREIGN_KEY_CHECKS=0');
+        
+        // Split SQL into individual statements more carefully
+        $statements = [];
+        $currentStatement = '';
+        $inString = false;
+        $stringChar = '';
+        
+        $lines = explode("\n", $sql);
+        
+        foreach ($lines as $line) {
+            $line = trim($line);
+            
+            // Skip comments and empty lines
+            if (empty($line) || str_starts_with($line, '--') || str_starts_with($line, '/*')) {
+                continue;
             }
-        );
+            
+            $currentStatement .= ' ' . $line;
+            
+            // Check if statement ends with semicolon
+            if (str_ends_with($line, ';')) {
+                $statement = trim($currentStatement);
+                if (!empty($statement)) {
+                    $statements[] = $statement;
+                }
+                $currentStatement = '';
+            }
+        }
         
         // Execute each statement
+        $executed = 0;
+        $failed = 0;
+        
         foreach ($statements as $statement) {
-            if (!empty(trim($statement))) {
-                try {
-                    DB::statement($statement);
-                } catch (\Exception $e) {
-                    // Log error but continue
-                    \Log::warning('Restore statement failed: ' . $e->getMessage());
-                }
+            $statement = trim($statement);
+            
+            // Skip empty statements and comments
+            if (empty($statement) || str_starts_with($statement, '--') || str_starts_with($statement, '/*')) {
+                continue;
+            }
+            
+            try {
+                $pdo->exec($statement);
+                $executed++;
+            } catch (\Exception $e) {
+                $failed++;
+                \Log::warning('Restore statement failed: ' . substr($statement, 0, 100) . '... Error: ' . $e->getMessage());
             }
         }
         
         // Re-enable foreign key checks
-        DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        $pdo->exec('SET FOREIGN_KEY_CHECKS=1');
+        
+        if ($failed > 0) {
+            \Log::info("Restore completed: {$executed} statements executed, {$failed} failed");
+        }
     }
 
     /**
