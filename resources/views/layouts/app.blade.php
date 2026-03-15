@@ -554,11 +554,11 @@
                         <p class="mb-1.5 text-gray-600 text-sm font-semibold"><i class="fas fa-envelope text-xs"></i> {{ $contactEmail }}</p>
                     @endif
                     @if($phone)
-                        <p class="mb-1.5 text-gray-600 text-sm font-semibold"><i class="fas fa-phone text-xs"></i> {{ $phone }}</p>
+                        <p class="mb-3 text-gray-600 text-sm font-semibold"><i class="fas fa-phone text-xs"></i> {{ $phone }}</p>
                     @endif
                     @if($androidAppUrl)
-                        <a href="{{ $androidAppUrl }}" target="_blank" class="inline-flex items-center gap-2 text-gray-600 hover:text-green-600 text-sm font-semibold transition">
-                            <i class="fab fa-android text-xs"></i> Download App
+                        <a href="{{ $androidAppUrl }}" target="_blank" class="inline-block">
+                            <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" style="height: 50px; width: auto;">
                         </a>
                     @endif
                 </div>
