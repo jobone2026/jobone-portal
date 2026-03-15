@@ -175,7 +175,7 @@ class BackupController extends Controller
             
             // Extract SQL file from ZIP
             $zip = new ZipArchive();
-            $extractPath = storage_path('app/backups/temp');
+            $extractPath = storage_path('app/backups/temp_' . time());
             
             if (!file_exists($extractPath)) {
                 mkdir($extractPath, 0755, true);
@@ -202,8 +202,25 @@ class BackupController extends Controller
                 // Restore database using PHP
                 $this->restorePhpBackup($sqlFile);
                 
-                // Clean up temp files
-                unlink($sqlFile);
+                // Clean up temp files - remove all files first, then directory
+                if (file_exists($sqlFile)) {
+                    unlink($sqlFile);
+                }
+                
+                // Remove all files in temp directory
+                $tempFiles = scandir($extractPath);
+                foreach ($tempFiles as $file) {
+                    if ($file !== '.' && $file !== '..') {
+                        $filePath = $extractPath . '/' . $file;
+                        if (is_file($filePath)) {
+                            unlink($filePath);
+                        } elseif (is_dir($filePath)) {
+                            $this->removeDirectory($filePath);
+                        }
+                    }
+                }
+                
+                // Remove temp directory
                 if (is_dir($extractPath)) {
                     rmdir($extractPath);
                 }
@@ -224,6 +241,27 @@ class BackupController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('admin.backups.index')
                 ->with('error', 'Restore failed: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Recursively remove directory
+     */
+    private function removeDirectory($dir)
+    {
+        if (is_dir($dir)) {
+            $files = scandir($dir);
+            foreach ($files as $file) {
+                if ($file !== '.' && $file !== '..') {
+                    $path = $dir . '/' . $file;
+                    if (is_dir($path)) {
+                        $this->removeDirectory($path);
+                    } else {
+                        unlink($path);
+                    }
+                }
+            }
+            rmdir($dir);
         }
     }
 
