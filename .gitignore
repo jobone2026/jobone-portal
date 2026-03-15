@@ -42,3 +42,6 @@ delete-sample-posts.php
 # Firebase credentials (sensitive)
 /storage/app/firebase
 jobone-firebase-adminsdk.json
+
+# Server information (local only, do not push)
+SERVER_INFO.md
