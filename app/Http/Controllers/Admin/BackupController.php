@@ -287,8 +287,6 @@ class BackupController extends Controller
         // Split SQL into individual statements more carefully
         $statements = [];
         $currentStatement = '';
-        $inString = false;
-        $stringChar = '';
         
         $lines = explode("\n", $sql);
         
@@ -296,7 +294,7 @@ class BackupController extends Controller
             $line = trim($line);
             
             // Skip comments and empty lines
-            if (empty($line) || str_starts_with($line, '--') || str_starts_with($line, '/*')) {
+            if (empty($line) || str_starts_with($line, '--') || str_starts_with($line, '/*') || str_starts_with($line, '*')) {
                 continue;
             }
             
@@ -315,16 +313,26 @@ class BackupController extends Controller
         // Execute each statement
         $executed = 0;
         $failed = 0;
+        $skipped = 0;
         
         foreach ($statements as $statement) {
             $statement = trim($statement);
             
             // Skip empty statements and comments
             if (empty($statement) || str_starts_with($statement, '--') || str_starts_with($statement, '/*')) {
+                $skipped++;
+                continue;
+            }
+            
+            // Skip DROP TABLE statements - they delete data!
+            if (stripos($statement, 'DROP TABLE') !== false) {
+                \Log::warning('Skipped DROP TABLE statement for safety');
+                $skipped++;
                 continue;
             }
             
             try {
+                \Log::debug('Executing SQL: ' . substr($statement, 0, 80));
                 $pdo->exec($statement);
                 $executed++;
             } catch (\Exception $e) {
@@ -336,9 +344,7 @@ class BackupController extends Controller
         // Re-enable foreign key checks
         $pdo->exec('SET FOREIGN_KEY_CHECKS=1');
         
-        if ($failed > 0) {
-            \Log::info("Restore completed: {$executed} statements executed, {$failed} failed");
-        }
+        \Log::info("Restore completed: {$executed} executed, {$failed} failed, {$skipped} skipped");
     }
 
     /**
