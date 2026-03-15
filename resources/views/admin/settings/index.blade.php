@@ -245,7 +245,7 @@
 <div class="ss-field">
 <label class="ss-label">Default Meta Title</label>
 <div class="ss-char-wrap">
-<input type="text" name="meta_title" class="ss-input" id="metaTitle" maxlength="60" value="{{ old('meta_title', $settings['meta_title'] ?? '') }}" placeholder="JobOne.in – Latest Government Jobs 2026" oninput="updateCounter('metaTitle','metaTitleCounter',60)">
+<input type="text" name="meta_title" class="ss-input" id="metaTitle" maxlength="60" value="{{ old('meta_title', $settings['meta_title'] ?? 'JobOne.in – Latest Government Jobs & Admit Cards') }}" placeholder="JobOne.in – Latest Government Jobs 2026" oninput="updateCounter('metaTitle','metaTitleCounter',60)">
 <span class="ss-char-counter" id="metaTitleCounter">0/60</span>
 </div>
 <span class="ss-hint">Recommended: 50–60 characters</span>
@@ -253,14 +253,14 @@
 <div class="ss-field">
 <label class="ss-label">Default Meta Description</label>
 <div class="ss-char-wrap">
-<textarea name="meta_description" class="ss-textarea" rows="3" id="metaDesc" maxlength="160" placeholder="Your default meta description…" oninput="updateCounter('metaDesc','metaDescCounter',160)">{{ old('meta_description', $settings['meta_description'] ?? '') }}</textarea>
+<textarea name="meta_description" class="ss-textarea" rows="3" id="metaDesc" maxlength="160" placeholder="Your default meta description…" oninput="updateCounter('metaDesc','metaDescCounter',160)">{{ old('meta_description', $settings['meta_description'] ?? 'Find latest government job notifications, admit cards, results, answer keys, and syllabus for SSC, UPSC, Railways, Banking, and State PSC exams.') }}</textarea>
 <span class="ss-char-counter" id="metaDescCounter">0/160</span>
 </div>
 <span class="ss-hint">Recommended: 120–160 characters</span>
 </div>
 <div class="ss-field">
 <label class="ss-label">Default Meta Keywords</label>
-<input type="text" name="meta_keywords" class="ss-input" value="{{ old('meta_keywords', $settings['meta_keywords'] ?? '') }}" placeholder="government jobs, sarkari naukri, admit card, result…">
+<input type="text" name="meta_keywords" class="ss-input" value="{{ old('meta_keywords', $settings['meta_keywords'] ?? 'government jobs, sarkari naukri, admit card, result, answer key, syllabus, SSC, UPSC, Railways, Banking, State PSC') }}" placeholder="government jobs, sarkari naukri, admit card, result…">
 <span class="ss-hint">Comma-separated keywords</span>
 </div>
 </div>
