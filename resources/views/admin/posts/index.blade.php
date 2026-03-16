@@ -178,12 +178,13 @@ Clear
 <th style="width:40px">
 <input type="checkbox" class="pm-checkbox" @change="selectAll = !selectAll; selectedPosts = selectAll ? {{ json_encode($posts->pluck('id')->toArray()) }} : []">
 </th>
-<th style="width:40%">Post</th>
-<th style="width:15%">Type</th>
-<th style="width:15%">Category</th>
-<th style="width:12%">Status</th>
-<th style="width:10%">Views</th>
-<th style="width:8%">Actions</th>
+<th style="width:35%">Post</th>
+<th style="width:12%">Type</th>
+<th style="width:12%">Category</th>
+<th style="width:12%">State</th>
+<th style="width:10%">Status</th>
+<th style="width:8%">Views</th>
+<th style="width:11%">Actions</th>
 </tr>
 </thead>
 <tbody>
@@ -206,6 +207,7 @@ Clear
 </span>
 </td>
 <td>{{ $post->category->name ?? 'N/A' }}</td>
+<td>{{ $post->state->name ?? 'N/A' }}</td>
 <td>
 @if ($post->is_published)
 <span class="pm-badge published">

@@ -12,6 +12,7 @@ use App\Services\NotificationService;
 use App\Services\OgImageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class PostController extends Controller
@@ -68,7 +69,6 @@ class PostController extends Controller
             'category_id' => 'required|exists:categories,id',
             'state_id' => 'nullable|exists:states,id',
             'content' => 'required|string',
-            'important_links' => 'nullable|json',
             'meta_title' => 'nullable|string|max:60',
             'meta_description' => 'nullable|string|max:160',
             'meta_keywords' => 'nullable|string|max:1000',
@@ -82,6 +82,7 @@ class PostController extends Controller
         $validated['total_posts'] = null;
         $validated['last_date'] = null;
         $validated['notification_date'] = null;
+        $validated['important_links'] = null;
 
         $post = Post::create($validated);
         
@@ -93,20 +94,30 @@ class PostController extends Controller
                 $post->update(['image' => $ogImageUrl]);
             } catch (\Exception $e) {
                 // Log error but don't fail the post creation
-                \Log::warning('Failed to generate OG image: ' . $e->getMessage());
+                Log::warning('Failed to generate OG image: ' . $e->getMessage());
             }
         }
         
         // Invalidate cache
-        app(CacheInvalidationService::class)->invalidatePostCache($post);
+        try {
+            app(CacheInvalidationService::class)->invalidatePostCache($post);
+        } catch (\Exception $e) {
+            // Log error but don't fail the post creation
+            Log::warning('Failed to invalidate cache: ' . $e->getMessage());
+        }
         
         // Submit to IndexNow if published
         if ($post->is_published) {
-            $url = route('posts.show', ['type' => $post->type, 'post' => $post->slug]);
-            SubmitToIndexNow::dispatch($url)->delay(now()->addSeconds(30));
-            
-            // Send notifications (Telegram, WhatsApp, Web Push)
-            app(NotificationService::class)->sendNewPostNotifications($post);
+            try {
+                $url = route('posts.show', ['type' => $post->type, 'post' => $post]);
+                SubmitToIndexNow::dispatch($url)->delay(now()->addSeconds(30));
+                
+                // Send notifications (Telegram, WhatsApp, Web Push)
+                app(NotificationService::class)->sendNewPostNotifications($post);
+            } catch (\Exception $e) {
+                // Log error but don't fail the post creation
+                Log::warning('Failed to submit to IndexNow or send notifications: ' . $e->getMessage());
+            }
         }
 
         return redirect()->route('admin.posts.index')
@@ -129,7 +140,6 @@ class PostController extends Controller
             'category_id' => 'required|exists:categories,id',
             'state_id' => 'nullable|exists:states,id',
             'content' => 'required|string',
-            'important_links' => 'nullable|json',
             'meta_title' => 'nullable|string|max:60',
             'meta_description' => 'nullable|string|max:160',
             'meta_keywords' => 'nullable|string|max:1000',
@@ -142,6 +152,7 @@ class PostController extends Controller
         $validated['total_posts'] = null;
         $validated['last_date'] = null;
         $validated['notification_date'] = null;
+        $validated['important_links'] = $post->important_links; // Keep existing value
 
         $wasPublished = $post->is_published;
         
@@ -156,21 +167,31 @@ class PostController extends Controller
                 $post->update(['image' => $ogImageUrl]);
             } catch (\Exception $e) {
                 // Log error but don't fail the post update
-                \Log::warning('Failed to generate OG image: ' . $e->getMessage());
+                Log::warning('Failed to generate OG image: ' . $e->getMessage());
             }
         }
         
         // Invalidate cache
-        app(CacheInvalidationService::class)->invalidatePostCache($post);
+        try {
+            app(CacheInvalidationService::class)->invalidatePostCache($post);
+        } catch (\Exception $e) {
+            // Log error but don't fail the post update
+            Log::warning('Failed to invalidate cache: ' . $e->getMessage());
+        }
         
         // Submit to IndexNow if published or status changed to published
         if ($post->is_published && (!$wasPublished || $post->wasChanged('title') || $post->wasChanged('content'))) {
-            $url = route('posts.show', ['type' => $post->type, 'post' => $post->slug]);
-            SubmitToIndexNow::dispatch($url)->delay(now()->addSeconds(30));
-            
-            // Send notifications only if newly published
-            if (!$wasPublished) {
-                app(NotificationService::class)->sendNewPostNotifications($post);
+            try {
+                $url = route('posts.show', ['type' => $post->type, 'post' => $post]);
+                SubmitToIndexNow::dispatch($url)->delay(now()->addSeconds(30));
+                
+                // Send notifications only if newly published
+                if (!$wasPublished) {
+                    app(NotificationService::class)->sendNewPostNotifications($post);
+                }
+            } catch (\Exception $e) {
+                // Log error but don't fail the post update
+                Log::warning('Failed to submit to IndexNow or send notifications: ' . $e->getMessage());
             }
         }
 
@@ -180,8 +201,12 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
-        // Invalidate cache before deletion
-        app(CacheInvalidationService::class)->invalidatePostCache($post);
+        try {
+            // Invalidate cache before deletion
+            app(CacheInvalidationService::class)->invalidatePostCache($post);
+        } catch (\Exception $e) {
+            Log::warning('Failed to invalidate cache: ' . $e->getMessage());
+        }
         
         $post->delete();
 
@@ -195,15 +220,24 @@ class PostController extends Controller
         $post->update(['is_published' => !$post->is_published]);
         
         // Invalidate cache
-        app(CacheInvalidationService::class)->invalidatePostCache($post);
+        try {
+            app(CacheInvalidationService::class)->invalidatePostCache($post);
+        } catch (\Exception $e) {
+            Log::warning('Failed to invalidate cache: ' . $e->getMessage());
+        }
         
         // Submit to IndexNow if newly published
         if (!$wasPublished && $post->is_published) {
-            $url = route('posts.show', ['type' => $post->type, 'post' => $post->slug]);
-            SubmitToIndexNow::dispatch($url)->delay(now()->addSeconds(30));
-            
-            // Send notifications
-            app(NotificationService::class)->sendNewPostNotifications($post);
+            try {
+                $url = route('posts.show', ['type' => $post->type, 'post' => $post]);
+                SubmitToIndexNow::dispatch($url)->delay(now()->addSeconds(30));
+                
+                // Send notifications
+                app(NotificationService::class)->sendNewPostNotifications($post);
+            } catch (\Exception $e) {
+                // Log error but don't fail the toggle
+                Log::warning('Failed to submit to IndexNow or send notifications: ' . $e->getMessage());
+            }
         }
 
         return response()->json(['success' => true]);
@@ -214,7 +248,11 @@ class PostController extends Controller
         $post->update(['is_featured' => !$post->is_featured]);
         
         // Invalidate cache
-        app(CacheInvalidationService::class)->invalidatePostCache($post);
+        try {
+            app(CacheInvalidationService::class)->invalidatePostCache($post);
+        } catch (\Exception $e) {
+            Log::warning('Failed to invalidate cache: ' . $e->getMessage());
+        }
 
         return response()->json(['success' => true]);
     }
@@ -239,7 +277,11 @@ class PostController extends Controller
             }
             
             // Invalidate cache for each post
-            app(CacheInvalidationService::class)->invalidatePostCache($post);
+            try {
+                app(CacheInvalidationService::class)->invalidatePostCache($post);
+            } catch (\Exception $e) {
+                Log::warning('Failed to invalidate cache: ' . $e->getMessage());
+            }
         }
 
         $message = match($validated['action']) {

@@ -45,32 +45,32 @@ class NotificationService
             return false;
         }
         
-        $postUrl = route('posts.show', [$post->type, $post->slug]);
-        
-        // Format message with emojis
-        $emoji = $this->getEmojiForType($post->type);
-        $message = "{$emoji} *" . $this->escapeMarkdown($post->title) . "*\n\n";
-        
-        if ($post->short_description) {
-            $message .= $this->escapeMarkdown($post->short_description) . "\n\n";
-        }
-        
-        if ($post->last_date) {
-            $message .= "📅 *Last Date:* " . $post->last_date->format('d M Y') . "\n";
-        }
-        
-        if ($post->total_posts) {
-            $message .= "📊 *Total Posts:* " . $post->total_posts . "\n";
-        }
-        
-        $message .= "\n🔗 [Apply Now](" . $postUrl . ")";
-        $message .= "\n\n#" . str_replace(' ', '', ucwords(str_replace('_', ' ', $post->type)));
-        
-        if ($post->state) {
-            $message .= " #" . str_replace(' ', '', $post->state->name);
-        }
-        
         try {
+            $postUrl = route('posts.show', [$post->type, $post]);
+            
+            // Format message with emojis
+            $emoji = $this->getEmojiForType($post->type);
+            $message = "{$emoji} *" . $this->escapeMarkdown($post->title) . "*\n\n";
+            
+            if ($post->short_description) {
+                $message .= $this->escapeMarkdown($post->short_description) . "\n\n";
+            }
+            
+            if ($post->last_date) {
+                $message .= "📅 *Last Date:* " . $post->last_date->format('d M Y') . "\n";
+            }
+            
+            if ($post->total_posts) {
+                $message .= "📊 *Total Posts:* " . $post->total_posts . "\n";
+            }
+            
+            $message .= "\n🔗 [Apply Now](" . $postUrl . ")";
+            $message .= "\n\n#" . str_replace(' ', '', ucwords(str_replace('_', ' ', $post->type)));
+            
+            if ($post->state) {
+                $message .= " #" . str_replace(' ', '', $post->state->name);
+            }
+            
             $response = Http::post("https://api.telegram.org/bot{$botToken}/sendMessage", [
                 'chat_id' => $channelId,
                 'text' => $message,
@@ -105,27 +105,27 @@ class NotificationService
             return false;
         }
         
-        $postUrl = route('posts.show', [$post->type, $post->slug]);
-        
-        // Format message
-        $emoji = $this->getEmojiForType($post->type);
-        $message = "{$emoji} *{$post->title}*\n\n";
-        
-        if ($post->short_description) {
-            $message .= $post->short_description . "\n\n";
-        }
-        
-        if ($post->last_date) {
-            $message .= "📅 Last Date: " . $post->last_date->format('d M Y') . "\n";
-        }
-        
-        if ($post->total_posts) {
-            $message .= "📊 Total Posts: " . $post->total_posts . "\n";
-        }
-        
-        $message .= "\n🔗 Apply Now: " . $postUrl;
-        
         try {
+            $postUrl = route('posts.show', [$post->type, $post]);
+            
+            // Format message
+            $emoji = $this->getEmojiForType($post->type);
+            $message = "{$emoji} *{$post->title}*\n\n";
+            
+            if ($post->short_description) {
+                $message .= $post->short_description . "\n\n";
+            }
+            
+            if ($post->last_date) {
+                $message .= "📅 Last Date: " . $post->last_date->format('d M Y') . "\n";
+            }
+            
+            if ($post->total_posts) {
+                $message .= "📊 Total Posts: " . $post->total_posts . "\n";
+            }
+            
+            $message .= "\n🔗 Apply Now: " . $postUrl;
+            
             $response = Http::withToken($accessToken)
                 ->post("https://graph.facebook.com/v18.0/{$phoneNumberId}/messages", [
                     'messaging_product' => 'whatsapp',
@@ -167,7 +167,7 @@ class NotificationService
             $factory = (new \Kreait\Firebase\Factory)->withServiceAccount(base_path($firebaseCredentials));
             $messaging = $factory->createMessaging();
             
-            $postUrl = route('posts.show', [$post->type, $post->slug]);
+            $postUrl = route('posts.show', [$post->type, $post]);
             $emoji = $this->getEmojiForType($post->type);
             
             // Create notification message with clickable link
@@ -228,7 +228,7 @@ class NotificationService
             $factory = (new \Kreait\Firebase\Factory)->withServiceAccount(base_path($firebaseCredentials));
             $messaging = $factory->createMessaging();
             
-            $postUrl = route('posts.show', [$post->type, $post->slug]);
+            $postUrl = route('posts.show', [$post->type, $post]);
             
             // Create notification message
             $message = \Kreait\Firebase\Messaging\CloudMessage::withTarget('topic', 'all_posts')

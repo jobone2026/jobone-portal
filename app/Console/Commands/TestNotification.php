@@ -51,13 +51,35 @@ class TestNotification extends Command
         
         $this->newLine();
         
-        // Test Firebase
+        // Test Firebase (Android Push)
         $this->info('📱 Testing Firebase (Android Push)...');
         if (env('FIREBASE_CREDENTIALS')) {
             $credPath = base_path(env('FIREBASE_CREDENTIALS'));
             if (file_exists($credPath)) {
                 $this->info('✅ Firebase credentials found');
-                $this->info('   Notification will be sent when post is published');
+                
+                // Actually test sending a notification
+                try {
+                    $notificationService = app(NotificationService::class);
+                    
+                    // Use reflection to call the protected method
+                    $reflection = new \ReflectionClass($notificationService);
+                    $method = $reflection->getMethod('sendAndroidPushNotification');
+                    $method->setAccessible(true);
+                    
+                    $result = $method->invoke($notificationService, $post);
+                    
+                    if ($result) {
+                        $this->info('✅ Android push notification sent successfully!');
+                        $this->info('   Check your Android app for the notification');
+                        $this->info('   Topic: all_posts');
+                    } else {
+                        $this->warn('⚠️  Android push notification failed. Check logs.');
+                    }
+                } catch (\Exception $e) {
+                    $this->error('❌ Firebase error: ' . $e->getMessage());
+                    $this->info('   Check your Firebase project configuration');
+                }
             } else {
                 $this->warn('⚠️  Firebase credentials file not found at: ' . $credPath);
             }
@@ -83,16 +105,17 @@ class TestNotification extends Command
             ['Service', 'Status', 'Action'],
             [
                 ['Telegram', env('TELEGRAM_BOT_TOKEN') ? '✅ Ready' : '❌ Not configured', 'Check channel'],
-                ['Firebase', env('FIREBASE_CREDENTIALS') ? '✅ Ready' : '❌ Not configured', 'Publish a post'],
+                ['Firebase', env('FIREBASE_CREDENTIALS') ? '✅ Ready' : '❌ Not configured', 'Check Android app'],
                 ['WhatsApp', env('WHATSAPP_ACCESS_TOKEN') ? '✅ Ready' : '⚠️  Optional', 'Manual or API'],
             ]
         );
         
         $this->newLine();
-        $this->info('💡 Next Steps:');
-        $this->info('1. Set up Telegram: See TELEGRAM_SETUP_QUICK.md');
-        $this->info('2. Publish a post in admin panel');
-        $this->info('3. Check notifications arrive!');
+        $this->info('💡 Troubleshooting Tips:');
+        $this->info('1. Make sure your Android app is subscribed to "all_posts" topic');
+        $this->info('2. Check Firebase Console > Cloud Messaging for delivery stats');
+        $this->info('3. Ensure your app handles FLUTTER_NOTIFICATION_CLICK action');
+        $this->info('4. Check Laravel logs: storage/logs/laravel.log');
         
         return 0;
     }
