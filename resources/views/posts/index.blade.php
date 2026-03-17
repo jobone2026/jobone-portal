@@ -44,6 +44,43 @@
         .modern-list-item-date {
             font-size: 11px;
             color: #999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+        .modern-list-item-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 2px 6px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            color: #666;
+        }
+        .modern-list-item-badge.category {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        .modern-list-item-badge.state {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        .modern-list-item-badge.views {
+            background: #fff3e0;
+            color: #e65100;
+        }
+        .modern-list-item-badge.new {
+            background: #e8f5e9;
+            color: #2e7d32;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
     </style>
 
@@ -60,6 +97,29 @@
                         <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
                             {{ $post->title }}
                         </a>
+                        <div class="modern-list-item-date">
+                            <span><i class="fas fa-calendar-alt"></i> {{ $post->created_at->format('M d, Y') }}</span>
+                            @if($post->category)
+                            <span class="modern-list-item-badge category">
+                                <i class="fas fa-tag"></i> {{ $post->category->name }}
+                            </span>
+                            @endif
+                            @if($post->state)
+                            <span class="modern-list-item-badge state">
+                                <i class="fas fa-map-marker-alt"></i> {{ $post->state->name }}
+                            </span>
+                            @endif
+                            @if($post->view_count > 0)
+                            <span class="modern-list-item-badge views">
+                                <i class="fas fa-eye"></i> {{ number_format($post->view_count) }}
+                            </span>
+                            @endif
+                            @if($post->created_at->diffInDays(now()) <= 3)
+                            <span class="modern-list-item-badge new">
+                                <i class="fas fa-star"></i> NEW
+                            </span>
+                            @endif
+                        </div>
                     </div>
                 @endforeach
             </div>
