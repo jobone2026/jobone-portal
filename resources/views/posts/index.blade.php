@@ -1,7 +1,12 @@
 @extends('layouts.app')
 
 @php
-    $typeLabel = ucfirst(str_replace('_', ' ', $type ?? 'Post'));
+    if ($type === 'all') {
+        $typeLabel = 'All Posts';
+    } else {
+        $typeLabel = ucfirst(str_replace('_', ' ', $type ?? 'Post'));
+    }
+    
     if (isset($category)) {
         $title = $category->name . ' - ' . $typeLabel;
     } elseif (isset($state)) {
@@ -119,6 +124,26 @@
                                 <i class="fas fa-star"></i> NEW
                             </span>
                             @endif
+                            <span class="modern-list-item-badge type" style="background: 
+                                @if($post->type == 'job') #e3f2fd; color: #1976d2;
+                                @elseif($post->type == 'result') #e8f5e9; color: #2e7d32;
+                                @elseif($post->type == 'admit_card') #f3e5f5; color: #7b1fa2;
+                                @elseif($post->type == 'answer_key') #fff3e0; color: #e65100;
+                                @elseif($post->type == 'syllabus') #e8eaf6; color: #3f51b5;
+                                @elseif($post->type == 'blog') #fce4ec; color: #c2185b;
+                                @else #f0f0f0; color: #666;
+                                @endif">
+                                <i class="fas fa-
+                                    @if($post->type == 'job') briefcase
+                                    @elseif($post->type == 'result') chart-bar
+                                    @elseif($post->type == 'admit_card') id-card
+                                    @elseif($post->type == 'answer_key') key
+                                    @elseif($post->type == 'syllabus') book
+                                    @elseif($post->type == 'blog') pen-fancy
+                                    @else file
+                                    @endif"></i> 
+                                {{ ucfirst(str_replace('_', ' ', $post->type)) }}
+                            </span>
                         </div>
                     </div>
                 @endforeach

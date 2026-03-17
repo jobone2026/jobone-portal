@@ -9,16 +9,20 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    public function index($type)
+    public function index($type = null)
     {
-        $posts = Post::published()->ofType($type)
-            ->with('category', 'state')
-            ->latest()
-            ->paginate(50); // 50 posts per page
+        $query = Post::published()->with('category', 'state');
+        
+        // If type is specified and not 'all', filter by type
+        if ($type && $type !== 'all') {
+            $query->ofType($type);
+        }
+        
+        $posts = $query->latest()->paginate(50); // 50 posts per page
 
         // SEO
         $seoService = app(SeoService::class);
-        $seo = $seoService->generateListingSeo($type);
+        $seo = $seoService->generateListingSeo($type ?? 'all');
 
         return view('posts.index', compact('posts', 'type', 'seo'));
     }

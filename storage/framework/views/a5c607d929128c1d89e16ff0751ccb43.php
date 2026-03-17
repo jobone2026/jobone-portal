@@ -1,9 +1,7 @@
-@extends('layouts.app')
+<?php $__env->startSection('title', 'Government Job Portal - Latest Jobs & Opportunities'); ?>
+<?php $__env->startSection('description', 'Find latest government jobs, admit cards, results, syllabus, answer keys and more'); ?>
 
-@section('title', 'Government Job Portal - Latest Jobs & Opportunities')
-@section('description', 'Find latest government jobs, admit cards, results, syllabus, answer keys and more')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <style>
         .modern-card {
             background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
@@ -116,60 +114,73 @@
                 <i class="fas fa-list"></i> All Latest Updates
             </div>
             <div>
-                @php
+                <?php
                     // Combine all posts and sort by created_at
                     $allPosts = collect();
                     foreach($sections as $sectionName => $posts) {
                         $allPosts = $allPosts->merge($posts);
                     }
                     $allPosts = $allPosts->sortByDesc('created_at')->take(100);
-                @endphp
+                ?>
                 
-                @foreach ($allPosts as $post)
+                <?php $__currentLoopData = $allPosts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="modern-card-item">
-                    <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
-                        {{ $post->title }}
+                    <a href="<?php echo e(route('posts.show', ['type' => $post->type, 'post' => $post->slug])); ?>">
+                        <?php echo e($post->title); ?>
+
                     </a>
                     <div class="modern-card-item-date">
-                        <span><i class="fas fa-calendar-alt"></i> {{ $post->created_at->format('M d, Y') }}</span>
-                        @if($post->category)
+                        <span><i class="fas fa-calendar-alt"></i> <?php echo e($post->created_at->format('M d, Y')); ?></span>
+                        <?php if($post->category): ?>
                         <span class="modern-card-item-badge category">
-                            <i class="fas fa-tag"></i> {{ $post->category->name }}
+                            <i class="fas fa-tag"></i> <?php echo e($post->category->name); ?>
+
                         </span>
-                        @endif
-                        @if($post->state)
+                        <?php endif; ?>
+                        <?php if($post->state): ?>
                         <span class="modern-card-item-badge state">
-                            <i class="fas fa-map-marker-alt"></i> {{ $post->state->name }}
+                            <i class="fas fa-map-marker-alt"></i> <?php echo e($post->state->name); ?>
+
                         </span>
-                        @endif
-                        @if($post->view_count > 0)
+                        <?php endif; ?>
+                        <?php if($post->view_count > 0): ?>
                         <span class="modern-card-item-badge views">
-                            <i class="fas fa-eye"></i> {{ number_format($post->view_count) }}
+                            <i class="fas fa-eye"></i> <?php echo e(number_format($post->view_count)); ?>
+
                         </span>
-                        @endif
-                        @if($post->created_at->diffInDays(now()) <= 3)
+                        <?php endif; ?>
+                        <?php if($post->created_at->diffInDays(now()) <= 3): ?>
                         <span class="modern-card-item-badge new">
                             <i class="fas fa-star"></i> NEW
                         </span>
-                        @endif
-                        <span class="modern-card-item-badge type" style="background: #e3f2fd; color: #1976d2;">
+                        <?php endif; ?>
+                        <span class="modern-card-item-badge type" style="background: 
+                            <?php if($post->type == 'job'): ?> #e3f2fd; color: #1976d2;
+                            <?php elseif($post->type == 'result'): ?> #e8f5e9; color: #2e7d32;
+                            <?php elseif($post->type == 'admit_card'): ?> #f3e5f5; color: #7b1fa2;
+                            <?php elseif($post->type == 'answer_key'): ?> #fff3e0; color: #e65100;
+                            <?php elseif($post->type == 'syllabus'): ?> #e8eaf6; color: #3f51b5;
+                            <?php elseif($post->type == 'blog'): ?> #fce4ec; color: #c2185b;
+                            <?php else: ?> #f0f0f0; color: #666;
+                            <?php endif; ?>">
                             <i class="fas fa-
-                                @if($post->type == 'job') briefcase
-                                @elseif($post->type == 'result') chart-bar
-                                @elseif($post->type == 'admit_card') id-card
-                                @elseif($post->type == 'answer_key') key
-                                @elseif($post->type == 'syllabus') book
-                                @elseif($post->type == 'blog') pen-fancy
-                                @else file
-                                @endif"></i> 
-                            {{ ucfirst(str_replace('_', ' ', $post->type)) }}
+                                <?php if($post->type == 'job'): ?> briefcase
+                                <?php elseif($post->type == 'result'): ?> chart-bar
+                                <?php elseif($post->type == 'admit_card'): ?> id-card
+                                <?php elseif($post->type == 'answer_key'): ?> key
+                                <?php elseif($post->type == 'syllabus'): ?> book
+                                <?php elseif($post->type == 'blog'): ?> pen-fancy
+                                <?php else: ?> file
+                                <?php endif; ?>"></i> 
+                            <?php echo e(ucfirst(str_replace('_', ' ', $post->type))); ?>
+
                         </span>
                     </div>
                 </div>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
             <div class="modern-card-footer text-blue-600">
-                <a href="{{ route('posts.jobs') }}">View All Posts →</a>
+                <a href="<?php echo e(route('posts.jobs')); ?>">View All Posts →</a>
             </div>
         </div>
     </div>
@@ -180,18 +191,18 @@
             <i class="fas fa-share-alt"></i> Follow & Share
         </h3>
         
-        @php
+        <?php
             $shareUrl = route('home');
             $shareTitle = 'JobOne - Latest Government Jobs, Results, Admit Cards';
             $simpleMessage = "{$shareTitle} - Visit: {$shareUrl}";
             $encodedSimpleMessage = urlencode($simpleMessage);
             $encodedUrl = urlencode($shareUrl);
             $encodedTitle = urlencode($shareTitle);
-        @endphp
+        ?>
         
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <!-- WhatsApp -->
-            <a href="https://wa.me/?text={{ $encodedSimpleMessage }}" 
+            <a href="https://wa.me/?text=<?php echo e($encodedSimpleMessage); ?>" 
                target="_blank" 
                rel="noopener noreferrer"
                style="display: flex; align-items: center; gap: 12px; padding: 10px 20px; color: white; text-decoration: none; border-radius: 10px; font-weight: 600; transition: 0.3s; background: #25D366;"
@@ -204,7 +215,7 @@
             </a>
             
             <!-- Telegram -->
-            <a href="https://t.me/share/url?url={{ $encodedUrl }}&text={{ $encodedTitle }}" 
+            <a href="https://t.me/share/url?url=<?php echo e($encodedUrl); ?>&text=<?php echo e($encodedTitle); ?>" 
                target="_blank"
                rel="noopener noreferrer"
                style="display: flex; align-items: center; gap: 12px; padding: 10px 20px; color: white; text-decoration: none; border-radius: 10px; font-weight: 600; transition: 0.3s; background: #0088cc;"
@@ -217,7 +228,7 @@
             </a>
             
             <!-- Facebook -->
-            <a href="https://www.facebook.com/sharer/sharer.php?u={{ $encodedUrl }}" 
+            <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo e($encodedUrl); ?>" 
                target="_blank"
                rel="noopener noreferrer"
                style="display: flex; align-items: center; gap: 12px; padding: 10px 20px; color: white; text-decoration: none; border-radius: 10px; font-weight: 600; transition: 0.3s; background: #1877F2;"
@@ -230,7 +241,7 @@
             </a>
             
             <!-- Twitter/X -->
-            <a href="https://twitter.com/intent/tweet?url={{ $encodedUrl }}&text={{ $encodedTitle }}" 
+            <a href="https://twitter.com/intent/tweet?url=<?php echo e($encodedUrl); ?>&text=<?php echo e($encodedTitle); ?>" 
                target="_blank"
                rel="noopener noreferrer"
                style="display: flex; align-items: center; gap: 12px; padding: 10px 20px; color: white; text-decoration: none; border-radius: 10px; font-weight: 600; transition: 0.3s; background: #000000;"
@@ -247,4 +258,6 @@
             <i class="fas fa-info-circle"></i> Share with your friends and help them stay updated!
         </p>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\job\govt-job-portal-new\resources\views/home.blade.php ENDPATH**/ ?>

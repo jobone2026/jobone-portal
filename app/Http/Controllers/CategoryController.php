@@ -14,7 +14,7 @@ class CategoryController extends Controller
             ->published()
             ->with('state')
             ->latest()
-            ->get();
+            ->paginate(50); // 50 posts per page
 
         $states = State::all();
         $categories = Category::all();

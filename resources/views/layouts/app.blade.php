@@ -400,7 +400,7 @@
                 @endphp
                 
                 <!-- All India Box -->
-                <a href="{{ route('posts.jobs') }}" class="state-box" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; border: 2px solid #1d4ed8;">
+                <a href="{{ route('posts.all') }}" class="state-box" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; border: 2px solid #1d4ed8;">
                     All India
                 </a>
                 

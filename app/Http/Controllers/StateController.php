@@ -10,12 +10,12 @@ class StateController extends Controller
 {
     public function show(State $state)
     {
-        // Get only posts for this specific state
+        // Get only posts for this specific state with pagination
         $posts = $state->posts()
             ->published()
             ->with(['category', 'state'])
             ->latest()
-            ->get();
+            ->paginate(50); // 50 posts per page
 
         $states = State::all();
         $categories = Category::all();

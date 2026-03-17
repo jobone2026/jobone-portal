@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('page.cache:600');
 
 // Post type listings
+Route::get('/all-posts', [PostController::class, 'index'])->defaults('type', 'all')->name('posts.all');
 Route::get('/jobs', [PostController::class, 'index'])->defaults('type', 'job')->name('posts.jobs');
 Route::get('/jobs/load-more', [PostController::class, 'loadMore'])->defaults('type', 'job')->name('posts.jobs.load-more');
 Route::get('/admit-cards', [PostController::class, 'index'])->defaults('type', 'admit_card')->name('posts.admit-cards');

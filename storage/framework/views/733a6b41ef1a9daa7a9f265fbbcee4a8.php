@@ -1,20 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
     <!-- SEO Meta Tags -->
+    <?php
+        $seoData = $seo ?? [
+            'title' => 'JobOne.in - Latest Government Jobs, Admit Cards, Results & More',
+            'description' => 'Find latest government job notifications, admit cards, results, answer keys, and syllabus for SSC, UPSC, Railways, Banking, State PSC, Defence, Police, and Teaching jobs across India.',
+            'keywords' => 'government jobs, sarkari naukri, admit card, result, answer key, syllabus, SSC, UPSC, Railways, Banking',
+            'canonical' => url()->current(),
+            'og_title' => 'JobOne.in - Latest Government Jobs Portal',
+            'og_description' => 'Your trusted source for government job notifications and exam updates',
+            'og_image' => asset('images/og-image.jpg'),
+            'og_url' => url()->current(),
+        ];
+    ?>
     <?php if (isset($component)) { $__componentOriginal4232ba5ed77147a6b6573253fafb715d = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal4232ba5ed77147a6b6573253fafb715d = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.seo-head','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.seo-head','data' => ['seo' => $seoData,'schema' => $schema ?? null]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('seo-head'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes([]); ?>
+<?php $component->withAttributes(['seo' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($seoData),'schema' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($schema ?? null)]); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal4232ba5ed77147a6b6573253fafb715d)): ?>
@@ -36,35 +52,10 @@
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '<?php echo e($gaTrackingId); ?>');
-            
-            // Custom GA4 Events
-            <?php if(isset($post)): ?>
-            // Track post view
-            gtag('event', 'post_view', {
-                'post_id': '<?php echo e($post->id); ?>',
-                'post_type': '<?php echo e($post->type); ?>',
-                'category': '<?php echo e($post->category->name ?? "Unknown"); ?>',
-                'post_title': '<?php echo e($post->title); ?>'
+            gtag('config', '<?php echo e($gaTrackingId); ?>', {
+                'page_title': '<?php echo e($seoData['title'] ?? 'JobOne.in'); ?>',
+                'page_path': window.location.pathname
             });
-            <?php endif; ?>
-            
-            // Track search events
-            <?php if(request()->routeIs('search')): ?>
-            gtag('event', 'search', {
-                'search_term': '<?php echo e(request()->input("q", "")); ?>'
-            });
-            <?php endif; ?>
-            
-            // Function to track share events
-            function trackShare(method, url, title) {
-                gtag('event', 'share', {
-                    'method': method,
-                    'content_type': 'post',
-                    'item_id': url,
-                    'item_name': title
-                });
-            }
         </script>
     <?php endif; ?>
     
@@ -73,32 +64,39 @@
     <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Google Translate API -->
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en',
-                includedLanguages: 'en,hi,te,ta,kn,ml,mr,gu,bn,pa,or,as',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false
-            }, 'google_translate_element');
-        }
-    </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-    
     <style>
-        .goog-te-banner-frame.skiptranslate { display: none !important; }
-        body { top: 0px !important; }
-        #google_translate_element { display: none; }
-        
-        /* Custom Language Selector */
-        .language-selector {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
+        /* RTL Support */
+        html[dir="rtl"] {
+            direction: rtl;
+            text-align: right;
         }
-        .language-selector select {
-            padding: 4px 6px;
+        
+        html[dir="rtl"] body {
+            direction: rtl;
+        }
+        
+        html[dir="rtl"] .flex {
+            flex-direction: row-reverse;
+        }
+        
+        /* Hide Google Translate banner */
+        .goog-te-banner-frame { 
+            display: none !important; 
+        }
+        body { 
+            top: 0 !important; 
+        }
+        
+        #google_translate_element {
+            position: fixed;
+            bottom: -200px;
+            left: -200px;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        #custom_language_select {
+            padding: 4px 8px;
             border: 1px solid #d1d5db;
             border-radius: 0.375rem;
             font-size: 0.75rem;
@@ -106,53 +104,78 @@
             color: #4b5563;
             cursor: pointer;
             min-width: 60px;
+            max-width: 80px;
         }
-        .language-selector select:hover {
+        
+        #custom_language_select:hover {
             border-color: #3b82f6;
         }
-        .language-selector i {
-            font-size: 0.875rem;
-            color: #3b82f6;
-        }
     </style>
+
 </head>
 <body class="bg-gray-50">
+
+    <!-- Breaking News Ticker -->
+    <?php if (isset($component)) { $__componentOriginaldc543275657bbe4a9ddb99c32484ec13 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginaldc543275657bbe4a9ddb99c32484ec13 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.breaking-news-ticker','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('breaking-news-ticker'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginaldc543275657bbe4a9ddb99c32484ec13)): ?>
+<?php $attributes = $__attributesOriginaldc543275657bbe4a9ddb99c32484ec13; ?>
+<?php unset($__attributesOriginaldc543275657bbe4a9ddb99c32484ec13); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginaldc543275657bbe4a9ddb99c32484ec13)): ?>
+<?php $component = $__componentOriginaldc543275657bbe4a9ddb99c32484ec13; ?>
+<?php unset($__componentOriginaldc543275657bbe4a9ddb99c32484ec13); ?>
+<?php endif; ?>
+
     <!-- Header -->
     <header class="bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm sticky top-0 z-50 border-b border-blue-100">
         <nav class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-3 md:py-4">
             <div class="flex justify-between items-center gap-2">
                 <!-- Logo -->
-                <a href="<?php echo e(route('home')); ?>" class="flex items-center flex-shrink-0">
+                <a href="<?php echo e(route('home')); ?>" class="flex items-center gap-3 flex-shrink-0">
                     <img src="<?php echo e(asset('images/jobone-logo.png')); ?>" alt="JobOne.in" class="h-10 md:h-16 w-auto object-contain">
                 </a>
                 
-                <!-- Language Selector (hidden on mobile) -->
-                <div class="language-selector hidden sm:flex">
-                    <i class="fas fa-globe text-blue-600"></i>
-                    <select onchange="changeLanguage(this.value)" class="text-xs">
-                        <option value="en">EN</option>
-                        <option value="hi">HI</option>
-                        <option value="te">TE</option>
-                        <option value="ta">TA</option>
-                        <option value="kn">KN</option>
-                        <option value="ml">ML</option>
-                        <option value="mr">MR</option>
-                        <option value="gu">GU</option>
-                        <option value="bn">BN</option>
-                        <option value="pa">PA</option>
-                        <option value="or">OR</option>
-                        <option value="as">AS</option>
+                <!-- Custom Language Selector -->
+                <div class="flex items-center gap-1 notranslate">
+                    <i class="fas fa-globe text-blue-600 text-sm"></i>
+                    <select id="custom_language_select" class="text-xs notranslate">
+                        <option value="">English</option>
+                        <option value="hi">हिंदी</option>
+                        <option value="te">తెలుగు</option>
+                        <option value="ta">தமிழ்</option>
+                        <option value="kn">ಕನ್ನಡ</option>
+                        <option value="ml">മലയാളം</option>
+                        <option value="mr">मराठी</option>
+                        <option value="gu">ગુજરાતી</option>
+                        <option value="bn">বাংলা</option>
+                        <option value="pa">ਪੰਜਾਬੀ</option>
+                        <option value="or">ଓଡ଼ିଆ</option>
+                        <option value="as">অসমীয়া</option>
                     </select>
                 </div>
                 
+                <!-- Hidden Google Translate Widget -->
+                <div id="google_translate_element"></div>
+                
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-2">
-                    <a href="<?php echo e(route('home')); ?>" class="px-4 py-2 text-gray-700 hover:text-blue-600 <?php echo e(request()->routeIs('home') ? 'border-b-2 border-blue-600' : ''); ?> text-sm font-medium"><i class="fas fa-home"></i> Home</a>
-                    <a href="<?php echo e(route('posts.jobs')); ?>" class="px-4 py-2 text-gray-700 hover:text-blue-600 <?php echo e(request()->routeIs('posts.jobs') ? 'border-b-2 border-blue-600' : ''); ?> text-sm font-medium"><i class="fas fa-briefcase"></i> Jobs</a>
-                    <a href="<?php echo e(route('posts.admit-cards')); ?>" class="px-4 py-2 text-gray-700 hover:text-blue-600 <?php echo e(request()->routeIs('posts.admit-cards') ? 'border-b-2 border-blue-600' : ''); ?> text-sm font-medium"><i class="fas fa-id-card"></i> Admit</a>
-                    <a href="<?php echo e(route('posts.results')); ?>" class="px-4 py-2 text-gray-700 hover:text-blue-600 <?php echo e(request()->routeIs('posts.results') ? 'border-b-2 border-blue-600' : ''); ?> text-sm font-medium"><i class="fas fa-chart-bar"></i> Results</a>
-                    <a href="<?php echo e(route('posts.syllabus')); ?>" class="px-4 py-2 text-gray-700 hover:text-blue-600 <?php echo e(request()->routeIs('posts.syllabus') ? 'border-b-2 border-blue-600' : ''); ?> text-sm font-medium"><i class="fas fa-book"></i> Syllabus</a>
-                    <a href="<?php echo e(route('posts.blogs')); ?>" class="px-4 py-2 text-gray-700 hover:text-blue-600 <?php echo e(request()->routeIs('posts.blogs') ? 'border-b-2 border-blue-600' : ''); ?> text-sm font-medium"><i class="fas fa-pen-fancy"></i> Blogs</a>
+                    <a href="<?php echo e(route('home')); ?>" class="px-4 py-2 text-gray-700 hover:text-blue-600 text-sm font-medium"><i class="fas fa-home"></i> Home</a>
+                    <a href="<?php echo e(route('posts.jobs')); ?>" class="px-4 py-2 text-gray-700 hover:text-blue-600 text-sm font-medium"><i class="fas fa-briefcase"></i> Jobs</a>
+                    <a href="<?php echo e(route('posts.admit-cards')); ?>" class="px-4 py-2 text-gray-700 hover:text-blue-600 text-sm font-medium"><i class="fas fa-id-card"></i> Admit</a>
+                    <a href="<?php echo e(route('posts.results')); ?>" class="px-4 py-2 text-gray-700 hover:text-blue-600 text-sm font-medium"><i class="fas fa-chart-bar"></i> Results</a>
+                    <a href="<?php echo e(route('posts.syllabus')); ?>" class="px-4 py-2 text-gray-700 hover:text-blue-600 text-sm font-medium"><i class="fas fa-book"></i> Syllabus</a>
+                    <a href="<?php echo e(route('posts.blogs')); ?>" class="px-4 py-2 text-gray-700 hover:text-blue-600 text-sm font-medium"><i class="fas fa-pen-fancy"></i> Blogs</a>
                 </div>
                 
                 <!-- Search Bar -->
@@ -200,35 +223,227 @@
                         </template>
                     </div>
                 </div>
-                
-                <!-- Mobile Menu Button -->
-                <button class="md:hidden hidden text-gray-700" x-data="{ open: false }" @click="open = !open">
-                    <i class="fas fa-bars text-xl"></i>
-                </button>
-            </div>
-            
-            <!-- Mobile Navigation - Hidden (using bottom nav instead) -->
-            <div class="md:hidden mt-4 space-y-2 hidden" x-show="open">
-                <a href="<?php echo e(route('home')); ?>" class="block px-4 py-2 text-gray-700 hover:text-blue-600 text-sm"><i class="fas fa-home"></i> Home</a>
-                <a href="<?php echo e(route('posts.jobs')); ?>" class="block px-4 py-2 text-gray-700 hover:text-blue-600 text-sm"><i class="fas fa-briefcase"></i> Jobs</a>
-                <a href="<?php echo e(route('posts.admit-cards')); ?>" class="block px-4 py-2 text-gray-700 hover:text-blue-600 text-sm"><i class="fas fa-id-card"></i> Admit Cards</a>
-                <a href="<?php echo e(route('posts.results')); ?>" class="block px-4 py-2 text-gray-700 hover:text-blue-600 text-sm"><i class="fas fa-chart-bar"></i> Results</a>
-                <a href="<?php echo e(route('posts.syllabus')); ?>" class="block px-4 py-2 text-gray-700 hover:text-blue-600 text-sm"><i class="fas fa-book"></i> Syllabus</a>
-                <a href="<?php echo e(route('posts.blogs')); ?>" class="block px-4 py-2 text-gray-700 hover:text-blue-600 text-sm"><i class="fas fa-pen-fancy"></i> Blogs</a>
-                <form action="<?php echo e(route('search')); ?>" method="GET" class="flex gap-2 mt-4">
-                    <input type="text" name="q" placeholder="Search..." class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none text-sm">
-                    <button type="submit" class="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"><i class="fas fa-search"></i></button>
-                </form>
             </div>
         </nav>
     </header>
 
-    <!-- States Navigation Bar -->
-    <div class="bg-white overflow-x-auto sticky top-[52px] md:top-16 z-40 border-b border-gray-200">
+    
+
+    <!-- Category Image Cards Section -->
+    <style>
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+            gap: 12px;
+            padding: 16px 0;
+        }
+        
+        .category-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            height: 100px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e5e7eb;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            text-decoration: none;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+        
+        .category-icon {
+            font-size: 32px;
+            color: #3b82f6;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .category-card:hover .category-icon {
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .category-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #374151;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .category-card:hover .category-label {
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .category-grid {
+                grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+                gap: 10px;
+            }
+            
+            .category-card {
+                height: 90px;
+            }
+            
+            .category-icon {
+                font-size: 28px;
+                margin-bottom: 6px;
+            }
+            
+            .category-label {
+                font-size: 11px;
+            }
+        }
+    </style>
+    <div class="bg-gray-50 border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex gap-1 py-2 flex-nowrap">
-                <?php $__currentLoopData = $states ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $state): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <a href="<?php echo e(route('states.show', $state)); ?>" class="px-3 py-1 bg-white text-blue-600 border border-blue-600 rounded text-xs font-semibold whitespace-nowrap hover:bg-blue-50">
+            <div class="category-grid">
+                <!-- Banking -->
+                <a href="<?php echo e(route('categories.show', 'banking')); ?>" class="category-card" title="Banking Jobs">
+                    <i class="fas fa-university category-icon"></i>
+                    <span class="category-label">Banking</span>
+                </a>
+                
+                <!-- Railways -->
+                <a href="<?php echo e(route('categories.show', 'railways')); ?>" class="category-card" title="Railways Jobs">
+                    <i class="fas fa-train category-icon"></i>
+                    <span class="category-label">Railways</span>
+                </a>
+                
+                <!-- SSC -->
+                <a href="<?php echo e(route('categories.show', 'ssc')); ?>" class="category-card" title="SSC Jobs">
+                    <i class="fas fa-file-alt category-icon"></i>
+                    <span class="category-label">SSC</span>
+                </a>
+                
+                <!-- UPSC -->
+                <a href="<?php echo e(route('categories.show', 'upsc')); ?>" class="category-card" title="UPSC Jobs">
+                    <i class="fas fa-graduation-cap category-icon"></i>
+                    <span class="category-label">UPSC</span>
+                </a>
+                
+                <!-- State PSC -->
+                <a href="<?php echo e(route('categories.show', 'state-psc')); ?>" class="category-card" title="State PSC Jobs">
+                    <i class="fas fa-map-marker-alt category-icon"></i>
+                    <span class="category-label">State PSC</span>
+                </a>
+                
+                <!-- Defence -->
+                <a href="<?php echo e(route('categories.show', 'defence')); ?>" class="category-card" title="Defence Jobs">
+                    <i class="fas fa-shield-alt category-icon"></i>
+                    <span class="category-label">Defence</span>
+                </a>
+                
+                <!-- Police -->
+                <a href="<?php echo e(route('categories.show', 'police')); ?>" class="category-card" title="Police Jobs">
+                    <i class="fas fa-user-shield category-icon"></i>
+                    <span class="category-label">Police</span>
+                </a>
+                
+                <!-- Blog -->
+                <a href="<?php echo e(route('posts.blogs')); ?>" class="category-card" title="Blog">
+                    <i class="fas fa-blog category-icon"></i>
+                    <span class="category-label">Blog</span>
+                </a>
+            </div>
+        </div>
+    </div>
+<!-- States Navigation Bar -->
+    <style>
+        .states-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(65px, 1fr));
+            gap: 8px;
+            padding: 12px 0;
+        }
+        
+        .state-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 6px;
+            background: white;
+            border: 2px solid #3b82f6;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #3b82f6;
+            font-weight: 600;
+            font-size: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 35px;
+            line-height: 1.1;
+        }
+        
+        .state-box:hover {
+            background: #3b82f6;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .states-grid {
+                grid-template-columns: repeat(auto-fit, minmax(55px, 1fr));
+                gap: 6px;
+                padding: 10px 0;
+            }
+            
+            .state-box {
+                font-size: 9px;
+                padding: 6px 4px;
+                min-height: 30px;
+            }
+        }
+    </style>
+    <div class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="states-grid">
+                <?php
+                    use Illuminate\Support\Str;
+                    $allStates = [
+                        'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
+                        'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand',
+                        'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur',
+                        'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab',
+                        'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura',
+                        'Uttar Pradesh', 'Uttarakhand', 'West Bengal', 'Delhi', 'Jammu & Kashmir',
+                        'Ladakh', 'Puducherry', 'Chandigarh', 'Andaman & Nicobar', 'Lakshadweep',
+                        'Dadra & Nagar Haveli', 'Daman & Diu'
+                    ];
+                    
+                    // Get states with job counts
+                    $statesWithJobs = collect($allStates)->map(function($stateName) use ($states) {
+                        $state = $states->firstWhere('name', $stateName);
+                        if ($state) {
+                            // Get job count for this state
+                            $jobCount = \App\Models\Post::where('state_id', $state->id)
+                                ->where('is_published', 1)
+                                ->count();
+                            return $jobCount > 0 ? $state : null;
+                        }
+                        return null;
+                    })->filter(); // Remove null values (states with 0 jobs)
+                ?>
+                
+                <!-- All India Box -->
+                <a href="<?php echo e(route('posts.all')); ?>" class="state-box" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; border: 2px solid #1d4ed8;">
+                    All India
+                </a>
+                
+                <?php $__currentLoopData = $statesWithJobs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $state): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <a href="<?php echo e(route('states.show', $state->slug)); ?>" class="state-box">
                         <?php echo e($state->name); ?>
 
                     </a>
@@ -236,21 +451,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Categories Navigation Bar -->
-    <div class="bg-gray-100 overflow-x-auto sticky top-[96px] md:top-32 z-40 border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex gap-1 py-2 flex-nowrap">
-                <?php $__currentLoopData = $categories ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <a href="<?php echo e(route('categories.show', $category)); ?>" class="px-3 py-1 bg-white text-gray-700 border border-gray-300 rounded text-xs font-semibold whitespace-nowrap hover:bg-gray-50">
-                        <?php echo e($category->name); ?>
-
-                    </a>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            </div>
-        </div>
-    </div>
-
     <!-- Ad Slot - Header -->
     <?php if (isset($component)) { $__componentOriginal6224023613e8aab946c7515047a47263 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal6224023613e8aab946c7515047a47263 = $attributes; } ?>
@@ -323,34 +523,34 @@
 <?php endif; ?>
 
     <!-- Footer -->
-    <footer class="bg-gradient-to-r from-blue-50 to-indigo-50 text-gray-700 mt-12 border-t border-blue-100">
+    <footer class="bg-gradient-to-r from-blue-50 to-indigo-50 text-gray-700 mt-0 border-t border-blue-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
                 <!-- About Section -->
                 <div>
-                    <h4 class="text-gray-900 font-semibold mb-3 text-sm flex items-center gap-2">
+                    <h4 class="text-gray-900 font-bold mb-3 text-base flex items-center gap-2">
                         <i class="fas fa-info-circle text-blue-600"></i> About
                     </h4>
                     <ul class="space-y-1.5">
-                        <li><a href="<?php echo e(route('pages.about')); ?>" class="text-gray-600 hover:text-blue-600 text-xs transition"><i class="fas fa-chevron-right text-xs"></i> About Us</a></li>
-                        <li><a href="<?php echo e(route('pages.contact')); ?>" class="text-gray-600 hover:text-blue-600 text-xs transition"><i class="fas fa-chevron-right text-xs"></i> Contact</a></li>
+                        <li><a href="<?php echo e(route('pages.about')); ?>" class="text-gray-600 hover:text-blue-600 text-sm font-semibold transition"><i class="fas fa-chevron-right text-xs"></i> About Us</a></li>
+                        <li><a href="<?php echo e(route('pages.contact')); ?>" class="text-gray-600 hover:text-blue-600 text-sm font-semibold transition"><i class="fas fa-chevron-right text-xs"></i> Contact</a></li>
                     </ul>
                 </div>
                 
                 <!-- Legal Section -->
                 <div>
-                    <h4 class="text-gray-900 font-semibold mb-3 text-sm flex items-center gap-2">
+                    <h4 class="text-gray-900 font-bold mb-3 text-base flex items-center gap-2">
                         <i class="fas fa-shield-alt text-emerald-600"></i> Legal
                     </h4>
                     <ul class="space-y-1.5">
-                        <li><a href="<?php echo e(route('pages.privacy')); ?>" class="text-gray-600 hover:text-emerald-600 text-xs transition"><i class="fas fa-chevron-right text-xs"></i> Privacy Policy</a></li>
-                        <li><a href="<?php echo e(route('pages.disclaimer')); ?>" class="text-gray-600 hover:text-emerald-600 text-xs transition"><i class="fas fa-chevron-right text-xs"></i> Disclaimer</a></li>
+                        <li><a href="<?php echo e(route('pages.privacy')); ?>" class="text-gray-600 hover:text-emerald-600 text-sm font-semibold transition"><i class="fas fa-chevron-right text-xs"></i> Privacy Policy</a></li>
+                        <li><a href="<?php echo e(route('pages.disclaimer')); ?>" class="text-gray-600 hover:text-emerald-600 text-sm font-semibold transition"><i class="fas fa-chevron-right text-xs"></i> Disclaimer</a></li>
                     </ul>
                 </div>
                 
                 <!-- Social Section -->
                 <div>
-                    <h4 class="text-gray-900 font-semibold mb-3 text-sm flex items-center gap-2">
+                    <h4 class="text-gray-900 font-bold mb-3 text-base flex items-center gap-2">
                         <i class="fas fa-share-alt text-purple-600"></i> Follow Us
                     </h4>
                     <ul class="space-y-1.5">
@@ -360,100 +560,49 @@
                             $telegramUrl = \App\Models\SiteSetting::where('key', 'telegram_url')->value('value');
                         ?>
                         <?php if($facebookUrl): ?>
-                            <li><a href="<?php echo e($facebookUrl); ?>" target="_blank" class="text-gray-600 hover:text-purple-600 text-xs transition"><i class="fab fa-facebook"></i> Facebook</a></li>
+                            <li><a href="<?php echo e($facebookUrl); ?>" target="_blank" class="text-gray-600 hover:text-purple-600 text-sm font-semibold transition"><i class="fab fa-facebook"></i> Facebook</a></li>
                         <?php endif; ?>
                         <?php if($twitterUrl): ?>
-                            <li><a href="<?php echo e($twitterUrl); ?>" target="_blank" class="text-gray-600 hover:text-purple-600 text-xs transition"><i class="fab fa-twitter"></i> Twitter</a></li>
+                            <li><a href="<?php echo e($twitterUrl); ?>" target="_blank" class="text-gray-600 hover:text-purple-600 text-sm font-semibold transition"><i class="fab fa-twitter"></i> Twitter</a></li>
                         <?php endif; ?>
                         <?php if($telegramUrl): ?>
-                            <li><a href="<?php echo e($telegramUrl); ?>" target="_blank" class="text-gray-600 hover:text-purple-600 text-xs transition"><i class="fab fa-telegram"></i> Telegram</a></li>
+                            <li><a href="<?php echo e($telegramUrl); ?>" target="_blank" class="text-gray-600 hover:text-purple-600 text-sm font-semibold transition"><i class="fab fa-telegram"></i> Telegram</a></li>
                         <?php endif; ?>
                     </ul>
                 </div>
                 
                 <!-- Contact Section -->
                 <div>
-                    <h4 class="text-gray-900 font-semibold mb-3 text-sm flex items-center gap-2">
+                    <h4 class="text-gray-900 font-bold mb-3 text-base flex items-center gap-2">
                         <i class="fas fa-envelope text-orange-600"></i> Contact
                     </h4>
                     <?php
                         $contactEmail = \App\Models\SiteSetting::where('key', 'contact_email')->value('value');
                         $phone = \App\Models\SiteSetting::where('key', 'phone')->value('value');
+                        $androidAppUrl = \App\Models\SiteSetting::where('key', 'android_app_url')->value('value');
                     ?>
                     <?php if($contactEmail): ?>
-                        <p class="mb-1.5 text-gray-600 text-xs"><i class="fas fa-envelope text-xs"></i> <?php echo e($contactEmail); ?></p>
+                        <p class="mb-1.5 text-gray-600 text-sm font-semibold"><i class="fas fa-envelope text-xs"></i> <?php echo e($contactEmail); ?></p>
                     <?php endif; ?>
                     <?php if($phone): ?>
-                        <p class="text-gray-600 text-xs"><i class="fas fa-phone text-xs"></i> <?php echo e($phone); ?></p>
+                        <p class="mb-3 text-gray-600 text-sm font-semibold"><i class="fas fa-phone text-xs"></i> <?php echo e($phone); ?></p>
+                    <?php endif; ?>
+                    <?php if($androidAppUrl): ?>
+                        <a href="<?php echo e($androidAppUrl); ?>" target="_blank" class="inline-block">
+                            <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" style="height: 50px; width: auto;">
+                        </a>
                     <?php endif; ?>
                 </div>
             </div>
             
             <!-- Divider -->
             <div class="border-t border-blue-200 pt-6 text-center">
-                <p class="text-gray-600 text-xs">&copy; 2026 JobOne.in. All rights reserved. | Designed with <i class="fas fa-heart text-red-500"></i> for Job Seekers</p>
+                <p class="text-gray-600 text-sm font-semibold">&copy; 2026 JobOne.in. All rights reserved. | Designed with <i class="fas fa-heart text-red-500"></i> for Job Seekers</p>
             </div>
         </div>
     </footer>
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-    <script>
-        function changeLanguage(lang) {
-            if (lang === 'en') {
-                location.reload();
-            } else {
-                const element = document.querySelector('html');
-                const googleTranslateElement = document.querySelector('.goog-te-combo');
-                if (googleTranslateElement) {
-                    googleTranslateElement.value = lang;
-                    googleTranslateElement.dispatchEvent(new Event('change'));
-                }
-            }
-        }
-    </script>
-
-    <!-- Mobile Bottom Navigation -->
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 z-40 shadow-lg">
-        <div class="flex justify-around items-center">
-            <a href="<?php echo e(route('home')); ?>" class="flex-1 flex flex-col items-center justify-center py-2.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 transition <?php echo e(request()->routeIs('home') ? 'text-blue-600 bg-blue-50' : ''); ?>">
-                <i class="fas fa-home text-lg"></i>
-                <span class="text-xs mt-0.5">Home</span>
-            </a>
-            <a href="<?php echo e(route('posts.jobs')); ?>" class="flex-1 flex flex-col items-center justify-center py-2.5 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 transition <?php echo e(request()->routeIs('posts.jobs') ? 'text-emerald-600 bg-emerald-50' : ''); ?>">
-                <i class="fas fa-briefcase text-lg"></i>
-                <span class="text-xs mt-0.5">Jobs</span>
-            </a>
-            <a href="<?php echo e(route('posts.admit-cards')); ?>" class="flex-1 flex flex-col items-center justify-center py-2.5 text-gray-500 hover:text-purple-600 hover:bg-purple-50 transition <?php echo e(request()->routeIs('posts.admit-cards') ? 'text-purple-600 bg-purple-50' : ''); ?>">
-                <i class="fas fa-id-card text-lg"></i>
-                <span class="text-xs mt-0.5">Admit</span>
-            </a>
-            <a href="<?php echo e(route('posts.results')); ?>" class="flex-1 flex flex-col items-center justify-center py-2.5 text-gray-500 hover:text-orange-600 hover:bg-orange-50 transition <?php echo e(request()->routeIs('posts.results') ? 'text-orange-600 bg-orange-50' : ''); ?>">
-                <i class="fas fa-chart-bar text-lg"></i>
-                <span class="text-xs mt-0.5">Results</span>
-            </a>
-            <a href="<?php echo e(route('posts.syllabus')); ?>" class="flex-1 flex flex-col items-center justify-center py-2.5 text-gray-500 hover:text-pink-600 hover:bg-pink-50 transition <?php echo e(request()->routeIs('posts.syllabus') ? 'text-pink-600 bg-pink-50' : ''); ?>">
-                <i class="fas fa-book text-lg"></i>
-                <span class="text-xs mt-0.5">Syllabus</span>
-            </a>
-            <a href="<?php echo e(route('posts.blogs')); ?>" class="flex-1 flex flex-col items-center justify-center py-2.5 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 transition <?php echo e(request()->routeIs('posts.blogs') ? 'text-indigo-600 bg-indigo-50' : ''); ?>">
-                <i class="fas fa-pen-fancy text-lg"></i>
-                <span class="text-xs mt-0.5">Blogs</span>
-            </a>
-        </div>
-    </nav>
-
-    <!-- Add padding to main content and footer for mobile bottom nav -->
-    <style>
-        @media (max-width: 768px) {
-            main {
-                padding-bottom: 80px;
-            }
-            footer {
-                padding-bottom: 70px;
-            }
-        }
-    </style>
 </body>
 </html>
 <?php /**PATH C:\xampp\htdocs\job\govt-job-portal-new\resources\views/layouts/app.blade.php ENDPATH**/ ?>
