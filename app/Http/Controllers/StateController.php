@@ -10,9 +10,10 @@ class StateController extends Controller
 {
     public function show(State $state)
     {
+        // Get only posts for this specific state
         $posts = $state->posts()
             ->published()
-            ->with('category')
+            ->with(['category', 'state'])
             ->latest()
             ->get();
 

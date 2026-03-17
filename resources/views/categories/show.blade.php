@@ -84,7 +84,6 @@
                     <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
                         {{ $post->title }}
                     </a>
-                    <div class="modern-card-item-date"><i class="fas fa-calendar-alt"></i> {{ $post->created_at->format('M d, Y') }}</div>
                 </div>
                 @empty
                 <div class="modern-card-item text-gray-500">
@@ -108,7 +107,6 @@
                     <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
                         {{ $post->title }}
                     </a>
-                    <div class="modern-card-item-date"><i class="fas fa-calendar-alt"></i> {{ $post->created_at->format('M d, Y') }}</div>
                 </div>
                 @empty
                 <div class="modern-card-item text-gray-500">
@@ -132,7 +130,6 @@
                     <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
                         {{ $post->title }}
                     </a>
-                    <div class="modern-card-item-date"><i class="fas fa-calendar-alt"></i> {{ $post->created_at->format('M d, Y') }}</div>
                 </div>
                 @empty
                 <div class="modern-card-item text-gray-500">
@@ -159,7 +156,6 @@
                     <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
                         {{ $post->title }}
                     </a>
-                    <div class="modern-card-item-date"><i class="fas fa-calendar-alt"></i> {{ $post->created_at->format('M d, Y') }}</div>
                 </div>
                 @empty
                 <div class="modern-card-item text-gray-500">
@@ -183,7 +179,6 @@
                     <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
                         {{ $post->title }}
                     </a>
-                    <div class="modern-card-item-date"><i class="fas fa-calendar-alt"></i> {{ $post->created_at->format('M d, Y') }}</div>
                 </div>
                 @empty
                 <div class="modern-card-item text-gray-500">
@@ -207,7 +202,6 @@
                     <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
                         {{ $post->title }}
                     </a>
-                    <div class="modern-card-item-date"><i class="fas fa-calendar-alt"></i> {{ $post->created_at->format('M d, Y') }}</div>
                 </div>
                 @empty
                 <div class="modern-card-item text-gray-500">

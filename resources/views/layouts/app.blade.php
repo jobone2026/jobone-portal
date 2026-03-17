@@ -37,41 +37,6 @@
                 'page_title': '{{ $seoData['title'] ?? 'JobOne.in' }}',
                 'page_path': window.location.pathname
             });
-            
-            // Send page view with title
-            gtag('event', 'page_view', {
-                'page_title': '{{ $seoData['title'] ?? 'JobOne.in' }}',
-                'page_path': window.location.pathname,
-                'page_location': window.location.href
-            });
-            
-            // Custom GA4 Events
-            @if(isset($post))
-            // Track post view
-            gtag('event', 'post_view', {
-                'post_id': '{{ $post->id }}',
-                'post_type': '{{ $post->type }}',
-                'category': '{{ $post->category->name ?? "Unknown" }}',
-                'post_title': '{{ $post->title }}'
-            });
-            @endif
-            
-            // Track search events
-            @if(request()->routeIs('search'))
-            gtag('event', 'search', {
-                'search_term': '{{ request()->input("q", "") }}'
-            });
-            @endif
-            
-            // Function to track share events
-            function trackShare(method, url, title) {
-                gtag('event', 'share', {
-                    'method': method,
-                    'content_type': 'post',
-                    'item_id': url,
-                    'item_name': title
-                });
-            }
         </script>
     @endif
     
@@ -80,148 +45,7 @@
     <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Google Translate API -->
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en',
-                includedLanguages: 'en,hi,te,ta,kn,ml,mr,gu,bn,pa,or,as'
-            }, 'google_translate_element');
-            
-            // Wait for Google Translate to load
-            setTimeout(function() {
-                var combo = document.querySelector('.goog-te-combo');
-                if (combo) {
-                    // Restore saved language on page load
-                    var savedLang = localStorage.getItem('selectedLanguage');
-                    if (savedLang && savedLang !== 'en') {
-                        combo.value = savedLang;
-                        combo.dispatchEvent(new Event('change'));
-                        
-                        // Update dropdown to show selected language
-                        var customSelect = document.getElementById('custom_language_select');
-                        if (customSelect) {
-                            customSelect.value = savedLang;
-                        }
-                    }
-                    
-                    // Sync custom dropdown with Google Translate
-                    var customSelect = document.getElementById('custom_language_select');
-                    if (customSelect) {
-                        customSelect.addEventListener('change', function() {
-                            if (this.value === '') {
-                                // For English, reset Google Translate
-                                combo.value = 'en';
-                                combo.dispatchEvent(new Event('change'));
-                                
-                                // Clear localStorage
-                                localStorage.removeItem('selectedLanguage');
-                                
-                                // Reload after a short delay to ensure translation is removed
-                                setTimeout(function() {
-                                    window.location.reload();
-                                }, 500);
-                            } else {
-                                // For other languages
-                                combo.value = this.value;
-                                combo.dispatchEvent(new Event('change'));
-                                localStorage.setItem('selectedLanguage', this.value);
-                            }
-                        });
-                    }
-                }
-            }, 1500);
-        }
-    </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-    
-    <!-- RTL Language Detection -->
-    <script>
-        // RTL languages
-        const rtlLanguages = ['ar', 'he', 'ur', 'fa', 'yi'];
-        
-        function setRTL(lang) {
-            const html = document.documentElement;
-            if (rtlLanguages.includes(lang)) {
-                html.setAttribute('dir', 'rtl');
-                html.setAttribute('lang', lang);
-            } else {
-                html.setAttribute('dir', 'ltr');
-                html.setAttribute('lang', 'en');
-            }
-        }
-        
-        // Check saved language on page load
-        window.addEventListener('load', function() {
-            const savedLang = localStorage.getItem('selectedLanguage');
-            if (savedLang) {
-                setRTL(savedLang);
-            }
-        });
-        
-        // Listen for language changes
-        document.addEventListener('DOMContentLoaded', function() {
-            const langSelect = document.getElementById('custom_language_select');
-            if (langSelect) {
-                langSelect.addEventListener('change', function() {
-                    const lang = this.value || 'en';
-                    setRTL(lang);
-                });
-            }
-        });
-    </script>
-    
     <style>
-        /* Realistic Waving Indian Flag */
-        .flag-container {
-            position: relative;
-            display: flex;
-            align-items: flex-start;
-            gap: 0;
-        }
-        
-        .flag-pole-realistic {
-            width: 2px;
-            height: 30px;
-            background: linear-gradient(to right, #8B4513, #A0522D, #8B4513);
-            border-radius: 1px;
-            box-shadow: 1px 0 2px rgba(0,0,0,0.3);
-            position: relative;
-            z-index: 2;
-        }
-        
-        .flag-pole-realistic::before {
-            content: '';
-            position: absolute;
-            top: -3px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 4px;
-            height: 4px;
-            background: radial-gradient(circle, #FFD700, #DAA520);
-            border-radius: 50%;
-            box-shadow: 0 0 2px rgba(255,215,0,0.6);
-        }
-        
-        #indianFlag {
-            display: block;
-            margin-top: 1px;
-            margin-left: -1px;
-            filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.15));
-        }
-        
-        /* Mobile responsive */
-        @media (max-width: 768px) {
-            .flag-pole-realistic {
-                height: 25px;
-            }
-            
-            #indianFlag {
-                width: 30px;
-                height: 20px;
-            }
-        }
-        
         /* RTL Support */
         html[dir="rtl"] {
             direction: rtl;
@@ -236,34 +60,6 @@
             flex-direction: row-reverse;
         }
         
-        html[dir="rtl"] .text-left {
-            text-align: right;
-        }
-        
-        html[dir="rtl"] .text-right {
-            text-align: left;
-        }
-        
-        html[dir="rtl"] .ml-auto {
-            margin-left: auto;
-            margin-right: 0;
-        }
-        
-        html[dir="rtl"] .mr-auto {
-            margin-right: auto;
-            margin-left: 0;
-        }
-        
-        html[dir="rtl"] .pl-4 {
-            padding-left: 0;
-            padding-right: 1rem;
-        }
-        
-        html[dir="rtl"] .pr-4 {
-            padding-right: 0;
-            padding-left: 1rem;
-        }
-        
         /* Hide Google Translate banner */
         .goog-te-banner-frame { 
             display: none !important; 
@@ -272,20 +68,6 @@
             top: 0 !important; 
         }
         
-        /* Hide the top frame completely */
-        body > .skiptranslate {
-            display: none !important;
-        }
-        
-        iframe.goog-te-banner-frame {
-            display: none !important;
-        }
-        
-        .goog-te-banner-frame.skiptranslate {
-            display: none !important;
-        }
-        
-        /* Hide Google Translate widget completely */
         #google_translate_element {
             position: fixed;
             bottom: -200px;
@@ -294,7 +76,6 @@
             pointer-events: none;
         }
         
-        /* Custom language selector */
         #custom_language_select {
             padding: 4px 8px;
             border: 1px solid #d1d5db;
@@ -311,7 +92,6 @@
             border-color: #3b82f6;
         }
     </style>
-    
 
 </head>
 <body class="bg-gray-50">
@@ -323,17 +103,12 @@
     <header class="bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm sticky top-0 z-50 border-b border-blue-100">
         <nav class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-3 md:py-4">
             <div class="flex justify-between items-center gap-2">
-                <!-- Logo with Realistic Waving Indian Flag on Left -->
+                <!-- Logo -->
                 <a href="{{ route('home') }}" class="flex items-center gap-3 flex-shrink-0">
-                    <!-- Realistic Waving Flag -->
-                    <div class="flag-container">
-                        <div class="flag-pole-realistic"></div>
-                        <canvas id="indianFlag" width="35" height="23"></canvas>
-                    </div>
                     <img src="{{ asset('images/jobone-logo.png') }}" alt="JobOne.in" class="h-10 md:h-16 w-auto object-contain">
                 </a>
                 
-                <!-- Custom Language Selector (visible on all screens) -->
+                <!-- Custom Language Selector -->
                 <div class="flex items-center gap-1 notranslate">
                     <i class="fas fa-globe text-blue-600 text-sm"></i>
                     <select id="custom_language_select" class="text-xs notranslate">
@@ -357,12 +132,12 @@
                 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-2">
-                    <a href="{{ route('home') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('home') ? 'border-b-2 border-blue-600' : '' }} text-sm font-medium"><i class="fas fa-home"></i> Home</a>
-                    <a href="{{ route('posts.jobs') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('posts.jobs') ? 'border-b-2 border-blue-600' : '' }} text-sm font-medium"><i class="fas fa-briefcase"></i> Jobs</a>
-                    <a href="{{ route('posts.admit-cards') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('posts.admit-cards') ? 'border-b-2 border-blue-600' : '' }} text-sm font-medium"><i class="fas fa-id-card"></i> Admit</a>
-                    <a href="{{ route('posts.results') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('posts.results') ? 'border-b-2 border-blue-600' : '' }} text-sm font-medium"><i class="fas fa-chart-bar"></i> Results</a>
-                    <a href="{{ route('posts.syllabus') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('posts.syllabus') ? 'border-b-2 border-blue-600' : '' }} text-sm font-medium"><i class="fas fa-book"></i> Syllabus</a>
-                    <a href="{{ route('posts.blogs') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('posts.blogs') ? 'border-b-2 border-blue-600' : '' }} text-sm font-medium"><i class="fas fa-pen-fancy"></i> Blogs</a>
+                    <a href="{{ route('home') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 text-sm font-medium"><i class="fas fa-home"></i> Home</a>
+                    <a href="{{ route('posts.jobs') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 text-sm font-medium"><i class="fas fa-briefcase"></i> Jobs</a>
+                    <a href="{{ route('posts.admit-cards') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 text-sm font-medium"><i class="fas fa-id-card"></i> Admit</a>
+                    <a href="{{ route('posts.results') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 text-sm font-medium"><i class="fas fa-chart-bar"></i> Results</a>
+                    <a href="{{ route('posts.syllabus') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 text-sm font-medium"><i class="fas fa-book"></i> Syllabus</a>
+                    <a href="{{ route('posts.blogs') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 text-sm font-medium"><i class="fas fa-pen-fancy"></i> Blogs</a>
                 </div>
                 
                 <!-- Search Bar -->
@@ -410,55 +185,227 @@
                         </template>
                     </div>
                 </div>
-                
-                <!-- Mobile Menu Button -->
-                <button class="md:hidden hidden text-gray-700" x-data="{ open: false }" @click="open = !open">
-                    <i class="fas fa-bars text-xl"></i>
-                </button>
-            </div>
-            
-            <!-- Mobile Navigation - Hidden (using bottom nav instead) -->
-            <div class="md:hidden mt-4 space-y-2 hidden" x-show="open">
-                <a href="{{ route('home') }}" class="block px-4 py-2 text-gray-700 hover:text-blue-600 text-sm"><i class="fas fa-home"></i> Home</a>
-                <a href="{{ route('posts.jobs') }}" class="block px-4 py-2 text-gray-700 hover:text-blue-600 text-sm"><i class="fas fa-briefcase"></i> Jobs</a>
-                <a href="{{ route('posts.admit-cards') }}" class="block px-4 py-2 text-gray-700 hover:text-blue-600 text-sm"><i class="fas fa-id-card"></i> Admit Cards</a>
-                <a href="{{ route('posts.results') }}" class="block px-4 py-2 text-gray-700 hover:text-blue-600 text-sm"><i class="fas fa-chart-bar"></i> Results</a>
-                <a href="{{ route('posts.syllabus') }}" class="block px-4 py-2 text-gray-700 hover:text-blue-600 text-sm"><i class="fas fa-book"></i> Syllabus</a>
-                <a href="{{ route('posts.blogs') }}" class="block px-4 py-2 text-gray-700 hover:text-blue-600 text-sm"><i class="fas fa-pen-fancy"></i> Blogs</a>
-                <form action="{{ route('search') }}" method="GET" class="flex gap-2 mt-4">
-                    <input type="text" name="q" placeholder="Search..." class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none text-sm">
-                    <button type="submit" class="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"><i class="fas fa-search"></i></button>
-                </form>
             </div>
         </nav>
     </header>
 
-    <!-- States Navigation Bar -->
-    <div class="bg-white overflow-x-auto sticky top-[52px] md:top-[64px] z-40 border-b border-gray-200">
+    
+
+    <!-- Category Image Cards Section -->
+    <style>
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+            gap: 12px;
+            padding: 16px 0;
+        }
+        
+        .category-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            height: 100px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e5e7eb;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            text-decoration: none;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+        
+        .category-icon {
+            font-size: 32px;
+            color: #3b82f6;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .category-card:hover .category-icon {
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .category-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #374151;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .category-card:hover .category-label {
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .category-grid {
+                grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+                gap: 10px;
+            }
+            
+            .category-card {
+                height: 90px;
+            }
+            
+            .category-icon {
+                font-size: 28px;
+                margin-bottom: 6px;
+            }
+            
+            .category-label {
+                font-size: 11px;
+            }
+        }
+    </style>
+    <div class="bg-gray-50 border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex gap-1 py-2 flex-nowrap">
-                @foreach ($states ?? [] as $state)
-                    <a href="{{ route('states.show', $state) }}" class="px-3 py-1 bg-white text-blue-600 border border-blue-600 rounded text-xs font-semibold whitespace-nowrap hover:bg-blue-50">
+            <div class="category-grid">
+                <!-- Banking -->
+                <a href="{{ route('categories.show', 'banking') }}" class="category-card" title="Banking Jobs">
+                    <i class="fas fa-university category-icon"></i>
+                    <span class="category-label">Banking</span>
+                </a>
+                
+                <!-- Railways -->
+                <a href="{{ route('categories.show', 'railways') }}" class="category-card" title="Railways Jobs">
+                    <i class="fas fa-train category-icon"></i>
+                    <span class="category-label">Railways</span>
+                </a>
+                
+                <!-- SSC -->
+                <a href="{{ route('categories.show', 'ssc') }}" class="category-card" title="SSC Jobs">
+                    <i class="fas fa-file-alt category-icon"></i>
+                    <span class="category-label">SSC</span>
+                </a>
+                
+                <!-- UPSC -->
+                <a href="{{ route('categories.show', 'upsc') }}" class="category-card" title="UPSC Jobs">
+                    <i class="fas fa-graduation-cap category-icon"></i>
+                    <span class="category-label">UPSC</span>
+                </a>
+                
+                <!-- State PSC -->
+                <a href="{{ route('categories.show', 'state-psc') }}" class="category-card" title="State PSC Jobs">
+                    <i class="fas fa-map-marker-alt category-icon"></i>
+                    <span class="category-label">State PSC</span>
+                </a>
+                
+                <!-- Defence -->
+                <a href="{{ route('categories.show', 'defence') }}" class="category-card" title="Defence Jobs">
+                    <i class="fas fa-shield-alt category-icon"></i>
+                    <span class="category-label">Defence</span>
+                </a>
+                
+                <!-- Police -->
+                <a href="{{ route('categories.show', 'police') }}" class="category-card" title="Police Jobs">
+                    <i class="fas fa-user-shield category-icon"></i>
+                    <span class="category-label">Police</span>
+                </a>
+                
+                <!-- Blog -->
+                <a href="{{ route('posts.blogs') }}" class="category-card" title="Blog">
+                    <i class="fas fa-blog category-icon"></i>
+                    <span class="category-label">Blog</span>
+                </a>
+            </div>
+        </div>
+    </div>
+<!-- States Navigation Bar -->
+    <style>
+        .states-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(65px, 1fr));
+            gap: 8px;
+            padding: 12px 0;
+        }
+        
+        .state-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 6px;
+            background: white;
+            border: 2px solid #3b82f6;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #3b82f6;
+            font-weight: 600;
+            font-size: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 35px;
+            line-height: 1.1;
+        }
+        
+        .state-box:hover {
+            background: #3b82f6;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .states-grid {
+                grid-template-columns: repeat(auto-fit, minmax(55px, 1fr));
+                gap: 6px;
+                padding: 10px 0;
+            }
+            
+            .state-box {
+                font-size: 9px;
+                padding: 6px 4px;
+                min-height: 30px;
+            }
+        }
+    </style>
+    <div class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="states-grid">
+                @php
+                    use Illuminate\Support\Str;
+                    $allStates = [
+                        'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
+                        'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand',
+                        'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur',
+                        'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab',
+                        'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura',
+                        'Uttar Pradesh', 'Uttarakhand', 'West Bengal', 'Delhi', 'Jammu & Kashmir',
+                        'Ladakh', 'Puducherry', 'Chandigarh', 'Andaman & Nicobar', 'Lakshadweep',
+                        'Dadra & Nagar Haveli', 'Daman & Diu'
+                    ];
+                    
+                    // Get states with job counts
+                    $statesWithJobs = collect($allStates)->map(function($stateName) use ($states) {
+                        $state = $states->firstWhere('name', $stateName);
+                        if ($state) {
+                            // Get job count for this state
+                            $jobCount = \App\Models\Post::where('state_id', $state->id)
+                                ->where('is_published', 1)
+                                ->count();
+                            return $jobCount > 0 ? $state : null;
+                        }
+                        return null;
+                    })->filter(); // Remove null values (states with 0 jobs)
+                @endphp
+                @foreach ($statesWithJobs as $state)
+                    <a href="{{ route('states.show', $state->slug) }}" class="state-box">
                         {{ $state->name }}
                     </a>
                 @endforeach
             </div>
         </div>
     </div>
-
-    <!-- Categories Navigation Bar -->
-    <div class="bg-gray-100 overflow-x-auto sticky top-[100px] md:top-[112px] z-40 border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex gap-1 py-2 flex-nowrap">
-                @foreach ($categories ?? [] as $category)
-                    <a href="{{ route('categories.show', $category) }}" class="px-3 py-1 bg-white text-gray-700 border border-gray-300 rounded text-xs font-semibold whitespace-nowrap hover:bg-gray-50">
-                        {{ $category->name }}
-                    </a>
-                @endforeach
-            </div>
-        </div>
-    </div>
-
     <!-- Ad Slot - Header -->
     <x-ad-slot position="header" />
 
@@ -572,195 +519,5 @@
     </footer>
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-    <!-- Indian Flag Wave Animation -->
-    <script>
-    (function() {
-        const canvas = document.getElementById('indianFlag');
-        if (!canvas) return;
-        
-        const ctx = canvas.getContext('2d');
-        const W = canvas.width;
-        const H = canvas.height;
-        const COLS = 20;
-        const ROWS = 12;
-        const SPEED = 1.5;
-        const AMP = 4;
-        const FREQ = 0.08;
-        
-        // Build Ashoka Chakra
-        function buildChakra(size) {
-            const oc = document.createElement('canvas');
-            oc.width = oc.height = size;
-            const c = oc.getContext('2d');
-            const cx = size / 2, cy = size / 2, r = size / 2 - 1;
-            
-            c.strokeStyle = '#000080';
-            c.fillStyle = '#000080';
-            
-            // Outer ring
-            c.beginPath();
-            c.arc(cx, cy, r, 0, Math.PI * 2);
-            c.lineWidth = size * 0.08;
-            c.stroke();
-            
-            // Inner hub
-            c.beginPath();
-            c.arc(cx, cy, r * 0.18, 0, Math.PI * 2);
-            c.lineWidth = size * 0.05;
-            c.stroke();
-            
-            // Center dot
-            c.beginPath();
-            c.arc(cx, cy, r * 0.08, 0, Math.PI * 2);
-            c.fill();
-            
-            // 24 spokes
-            for (let i = 0; i < 24; i++) {
-                const angle = (i * Math.PI * 2) / 24;
-                const x1 = cx + Math.cos(angle) * r * 0.22;
-                const y1 = cy + Math.sin(angle) * r * 0.22;
-                const x2 = cx + Math.cos(angle) * r * 0.88;
-                const y2 = cy + Math.sin(angle) * r * 0.88;
-                c.beginPath();
-                c.moveTo(x1, y1);
-                c.lineTo(x2, y2);
-                c.lineWidth = size * 0.03;
-                c.stroke();
-            }
-            return oc;
-        }
-        
-        const CHAKRA_SIZE = 8;
-        const chakraImg = buildChakra(CHAKRA_SIZE);
-        let t = 0;
-        
-        function getWave(col, row, time) {
-            const progress = col / COLS;
-            const amplitude = AMP * progress * progress;
-            const w1 = Math.sin(col * FREQ * 2 - time * SPEED) * amplitude;
-            const w2 = Math.sin(col * FREQ * 3.5 - time * SPEED * 1.2) * amplitude * 0.3;
-            const w3 = Math.sin(row * 0.2 + col * FREQ - time * SPEED * 0.8) * amplitude * 0.15;
-            return w1 + w2 + w3;
-        }
-        
-        function drawFlag(time) {
-            ctx.clearRect(0, 0, W, H);
-            const cw = W / COLS;
-            const ch = H / ROWS;
-            
-            for (let row = 0; row < ROWS; row++) {
-                for (let col = 0; col < COLS; col++) {
-                    const tl = getWave(col, row, time);
-                    const tr = getWave(col + 1, row, time);
-                    const bl = getWave(col, row + 1, time);
-                    const br = getWave(col + 1, row + 1, time);
-                    
-                    const x0 = col * cw;
-                    const y0 = row * ch;
-                    
-                    const tlx = x0, tly = y0 + tl;
-                    const trx = x0 + cw, try_ = y0 + tr;
-                    const blx = x0, bly = y0 + ch + bl;
-                    const brx = x0 + cw, bry = y0 + ch + br;
-                    
-                    const rowFrac = row / ROWS;
-                    let baseColor;
-                    if (rowFrac < 1/3) baseColor = { r: 255, g: 153, b: 51 };
-                    else if (rowFrac < 2/3) baseColor = { r: 255, g: 255, b: 255 };
-                    else baseColor = { r: 19, g: 136, b: 8 };
-                    
-                    const slope = (tr - tl) / cw;
-                    const shade = Math.max(0, Math.min(1, 0.5 - slope * 0.5));
-                    const bright = 0.75 + shade * 0.5;
-                    
-                    const r = Math.min(255, baseColor.r * bright);
-                    const g = Math.min(255, baseColor.g * bright);
-                    const b = Math.min(255, baseColor.b * bright);
-                    
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.moveTo(tlx, tly);
-                    ctx.lineTo(trx, try_);
-                    ctx.lineTo(brx, bry);
-                    ctx.lineTo(blx, bly);
-                    ctx.closePath();
-                    ctx.fillStyle = `rgb(${r|0},${g|0},${b|0})`;
-                    ctx.fill();
-                    ctx.restore();
-                }
-            }
-            
-            // Draw Ashoka Chakra
-            const whiteMid = H / 2;
-            const whiteCenterX = W * 0.45;
-            const waveMidX = getWave(COLS / 2, ROWS / 2, time);
-            
-            ctx.save();
-            ctx.translate(whiteCenterX, whiteMid + waveMidX - CHAKRA_SIZE / 2);
-            const slopeAtCenter = (getWave(COLS / 2 + 1, ROWS / 2, time) - getWave(COLS / 2 - 1, ROWS / 2, time)) / (2 * cw);
-            ctx.rotate(Math.atan(slopeAtCenter) * 0.4);
-            ctx.drawImage(chakraImg, -CHAKRA_SIZE / 2, 0, CHAKRA_SIZE, CHAKRA_SIZE);
-            ctx.restore();
-            
-            // Pole shadow
-            const grad = ctx.createLinearGradient(0, 0, W * 0.15, 0);
-            grad.addColorStop(0, 'rgba(0,0,0,0.25)');
-            grad.addColorStop(1, 'rgba(0,0,0,0)');
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, W, H);
-        }
-        
-        function animate() {
-            t += 0.05;
-            drawFlag(t);
-            requestAnimationFrame(animate);
-        }
-        
-        animate();
-    })();
-    </script>
-
-    <!-- Mobile Bottom Navigation -->
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 z-40 shadow-lg">
-        <div class="flex justify-around items-center">
-            <a href="{{ route('home') }}" class="flex-1 flex flex-col items-center justify-center py-2.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 transition {{ request()->routeIs('home') ? 'text-blue-600 bg-blue-50' : '' }}">
-                <i class="fas fa-home text-lg"></i>
-                <span class="text-xs mt-0.5">Home</span>
-            </a>
-            <a href="{{ route('posts.jobs') }}" class="flex-1 flex flex-col items-center justify-center py-2.5 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 transition {{ request()->routeIs('posts.jobs') ? 'text-emerald-600 bg-emerald-50' : '' }}">
-                <i class="fas fa-briefcase text-lg"></i>
-                <span class="text-xs mt-0.5">Jobs</span>
-            </a>
-            <a href="{{ route('posts.admit-cards') }}" class="flex-1 flex flex-col items-center justify-center py-2.5 text-gray-500 hover:text-purple-600 hover:bg-purple-50 transition {{ request()->routeIs('posts.admit-cards') ? 'text-purple-600 bg-purple-50' : '' }}">
-                <i class="fas fa-id-card text-lg"></i>
-                <span class="text-xs mt-0.5">Admit</span>
-            </a>
-            <a href="{{ route('posts.results') }}" class="flex-1 flex flex-col items-center justify-center py-2.5 text-gray-500 hover:text-orange-600 hover:bg-orange-50 transition {{ request()->routeIs('posts.results') ? 'text-orange-600 bg-orange-50' : '' }}">
-                <i class="fas fa-chart-bar text-lg"></i>
-                <span class="text-xs mt-0.5">Results</span>
-            </a>
-            <a href="{{ route('posts.syllabus') }}" class="flex-1 flex flex-col items-center justify-center py-2.5 text-gray-500 hover:text-pink-600 hover:bg-pink-50 transition {{ request()->routeIs('posts.syllabus') ? 'text-pink-600 bg-pink-50' : '' }}">
-                <i class="fas fa-book text-lg"></i>
-                <span class="text-xs mt-0.5">Syllabus</span>
-            </a>
-            <a href="{{ route('posts.blogs') }}" class="flex-1 flex flex-col items-center justify-center py-2.5 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 transition {{ request()->routeIs('posts.blogs') ? 'text-indigo-600 bg-indigo-50' : '' }}">
-                <i class="fas fa-pen-fancy text-lg"></i>
-                <span class="text-xs mt-0.5">Blogs</span>
-            </a>
-        </div>
-    </nav>
-
-    <!-- Add padding to main content and footer for mobile bottom nav -->
-    <style>
-        @media (max-width: 768px) {
-            main {
-                padding-bottom: 80px;
-            }
-            footer {
-                padding-bottom: 70px;
-            }
-        }
-    </style>
 </body>
 </html>

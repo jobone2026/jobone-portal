@@ -66,8 +66,6 @@
             font-size: 10px;
             font-weight: 600;
             color: #666;
-            max-width: 120px;
-            line-height: 1.2;
         }
         .modern-card-item-badge.category {
             background: #e3f2fd;
@@ -76,8 +74,6 @@
         .modern-card-item-badge.state {
             background: #f3e5f5;
             color: #7b1fa2;
-            white-space: normal;
-            word-break: break-word;
         }
         .modern-card-item-badge.views {
             background: #fff3e0;
