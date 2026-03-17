@@ -48,38 +48,40 @@
         }
         
         .modern-card-header {
-            padding: 14px 18px;
-            font-size: 15px;
+            padding: 16px 20px;
+            font-size: 16px;
             font-weight: 700;
             color: white;
             border-radius: 8px 8px 0 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 12px;
+            gap: 16px;
             background: linear-gradient(135deg, currentColor 0%, currentColor 100%);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
         }
         
         .modern-card-header-title {
             flex: 1;
-            min-width: 150px;
+            min-width: 120px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            font-size: 16px;
         }
         
         .post-count-badge {
-            background: rgba(255, 255, 255, 0.3);
-            padding: 5px 12px;
-            border-radius: 14px;
-            font-size: 11px;
-            font-weight: 700;
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            color: #1e293b;
+            padding: 6px 14px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 800;
             white-space: nowrap;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.4);
             flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
         
         .modern-card-item {
@@ -262,14 +264,16 @@
             }
             .modern-card-header {
                 font-size: 14px;
-                padding: 12px 14px;
+                padding: 14px 16px;
+                gap: 12px;
             }
             .modern-card-header-title {
-                font-size: 13px;
+                font-size: 14px;
+                gap: 8px;
             }
             .post-count-badge {
-                font-size: 10px;
-                padding: 4px 10px;
+                font-size: 11px;
+                padding: 5px 12px;
             }
         }
     </style>
