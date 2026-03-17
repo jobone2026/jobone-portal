@@ -5,69 +5,144 @@
 
 @section('content')
     <style>
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        
+        @keyframes slide-in {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
         .modern-card {
             background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-            border: 1px solid #e9ecef;
-            transition: all 0.3s ease;
+            border: 2px solid #e9ecef;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             min-height: 200px;
+            position: relative;
+            overflow: hidden;
         }
+        
+        .modern-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+        
+        .modern-card:hover::before {
+            transform: translateX(100%);
+        }
+        
         .modern-card:hover {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+            transform: translateY(-4px);
+            border-color: #cbd5e1;
         }
+        
         .modern-card-header {
-            padding: 12px 16px;
-            font-size: 14px;
-            font-weight: 600;
+            padding: 14px 18px;
+            font-size: 15px;
+            font-weight: 700;
             color: white;
             border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, currentColor 0%, currentColor 100%);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
+        
+        .post-count-badge {
+            background: rgba(255, 255, 255, 0.25);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+        
         .modern-card-item {
-            padding: 10px 16px;
+            padding: 12px 18px;
             border-bottom: 1px solid #f0f0f0;
+            border-left: 3px solid transparent;
             font-size: 13px;
-            line-height: 1.4;
-            transition: all 0.2s ease;
+            line-height: 1.5;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            gap: 12px;
+            gap: 14px;
+            position: relative;
         }
+        
         .modern-card-item:last-child {
             border-bottom: none;
         }
+        
         .modern-card-item:hover {
-            background: #f8f9fa;
-            padding-left: 20px;
+            background: linear-gradient(90deg, #f8f9fa 0%, #ffffff 100%);
+            padding-left: 22px;
+            animation: slide-in 0.3s ease;
         }
+        
+        /* Colorful left border on hover */
+        .modern-card-item:nth-child(6n+1):hover { border-left-color: #2563eb; } /* Blue */
+        .modern-card-item:nth-child(6n+2):hover { border-left-color: #059669; } /* Green */
+        .modern-card-item:nth-child(6n+3):hover { border-left-color: #7c3aed; } /* Purple */
+        .modern-card-item:nth-child(6n+4):hover { border-left-color: #dc2626; } /* Red */
+        .modern-card-item:nth-child(6n+5):hover { border-left-color: #ea580c; } /* Orange */
+        .modern-card-item:nth-child(6n+6):hover { border-left-color: #0891b2; } /* Cyan */
+        
         .modern-card-item-content {
             flex: 1;
             min-width: 0;
         }
+        
         .modern-card-item a {
             color: #0066cc;
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
             display: block;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
+            transition: all 0.2s ease;
         }
+        
         .modern-card-item a:hover {
             color: #0052a3;
             text-decoration: underline;
+            transform: translateX(2px);
         }
+        
         .modern-card-item-meta {
-            font-size: 10px;
+            font-size: 11px;
             color: #666;
             display: flex;
-            gap: 8px;
+            gap: 10px;
             flex-wrap: wrap;
-            margin-top: 2px;
+            margin-top: 4px;
         }
+        
         .modern-card-item-meta span {
             display: inline-flex;
             align-items: center;
-            gap: 3px;
+            gap: 4px;
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 4px;
         }
+        
+        .modern-card-item-meta i {
+            font-size: 9px;
+        }
+        
         .modern-card-item-date {
             font-size: 11px;
             color: #999;
@@ -77,56 +152,79 @@
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            gap: 2px;
+            gap: 3px;
+            background: #f8fafc;
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
         }
+        
         .modern-card-item-date-day {
-            font-size: 16px;
-            font-weight: 700;
+            font-size: 18px;
+            font-weight: 800;
             color: #2563eb;
             line-height: 1;
         }
+        
         .modern-card-item-date-month {
-            font-size: 10px;
-            font-weight: 600;
-            color: #666;
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748b;
             text-transform: uppercase;
             line-height: 1;
+            letter-spacing: 0.5px;
         }
+        
         .modern-card-item-date-year {
             font-size: 9px;
-            color: #999;
+            color: #94a3b8;
             line-height: 1;
         }
+        
         .post-badge {
             display: inline-block;
-            padding: 2px 6px;
-            border-radius: 3px;
+            padding: 3px 8px;
+            border-radius: 4px;
             font-size: 9px;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
+        
         .badge-new {
-            background: #dcfce7;
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
             color: #166534;
+            animation: pulse-glow 2s ease-in-out infinite;
+            box-shadow: 0 2px 6px rgba(22, 101, 52, 0.2);
         }
+        
         .badge-hot {
-            background: #fee2e2;
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
             color: #991b1b;
+            box-shadow: 0 2px 6px rgba(153, 27, 27, 0.2);
         }
+        
         .modern-card-footer {
-            padding: 10px 16px;
-            background: #f8f9fa;
+            padding: 12px 18px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             text-align: center;
             border-radius: 0 0 8px 8px;
-            font-size: 12px;
+            font-size: 13px;
+            border-top: 2px solid #e2e8f0;
         }
+        
         .modern-card-footer a {
             color: inherit;
-            font-weight: 600;
+            font-weight: 700;
             text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
         }
+        
         .modern-card-footer a:hover {
-            text-decoration: underline;
+            transform: translateX(4px);
         }
         
         /* Different colors for each post type */
@@ -136,6 +234,24 @@
         .modern-card-item:nth-child(6n+4) a { color: #dc2626; } /* Red */
         .modern-card-item:nth-child(6n+5) a { color: #ea580c; } /* Orange */
         .modern-card-item:nth-child(6n+6) a { color: #0891b2; } /* Cyan */
+        
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .modern-card-item {
+                padding: 10px 14px;
+                gap: 10px;
+            }
+            .modern-card-item-date {
+                padding: 6px 8px;
+            }
+            .modern-card-item-date-day {
+                font-size: 16px;
+            }
+            .modern-card-header {
+                font-size: 14px;
+                padding: 12px 14px;
+            }
+        }
     </style>
 
     <!-- Three Column Table Layout -->
@@ -144,7 +260,8 @@
         @if ($sections['jobs']->count() > 0)
         <div class="modern-card rounded-lg overflow-hidden">
             <div class="modern-card-header bg-blue-600">
-                <i class="fas fa-briefcase"></i> Latest Jobs
+                <span><i class="fas fa-briefcase"></i> Latest Jobs</span>
+                <span class="post-count-badge">{{ $sections['jobs']->count() }} Posts</span>
             </div>
             <div>
                 @foreach ($sections['jobs']->take(50) as $post)
@@ -183,7 +300,8 @@
         @if ($sections['results']->count() > 0)
         <div class="modern-card rounded-lg overflow-hidden">
             <div class="modern-card-header bg-green-600">
-                <i class="fas fa-chart-bar"></i> Exam Results
+                <span><i class="fas fa-chart-bar"></i> Exam Results</span>
+                <span class="post-count-badge">{{ $sections['results']->count() }} Posts</span>
             </div>
             <div>
                 @foreach ($sections['results']->take(50) as $post)
@@ -222,7 +340,8 @@
         @if ($sections['admit_cards']->count() > 0)
         <div class="modern-card rounded-lg overflow-hidden">
             <div class="modern-card-header bg-purple-600">
-                <i class="fas fa-id-card"></i> Admit Cards
+                <span><i class="fas fa-id-card"></i> Admit Cards</span>
+                <span class="post-count-badge">{{ $sections['admit_cards']->count() }} Posts</span>
             </div>
             <div>
                 @foreach ($sections['admit_cards']->take(50) as $post)
@@ -264,7 +383,8 @@
         @if ($sections['answer_keys']->count() > 0)
         <div class="modern-card rounded-lg overflow-hidden">
             <div class="modern-card-header bg-yellow-600">
-                <i class="fas fa-key"></i> Answer Keys
+                <span><i class="fas fa-key"></i> Answer Keys</span>
+                <span class="post-count-badge">{{ $sections['answer_keys']->count() }} Posts</span>
             </div>
             <div>
                 @foreach ($sections['answer_keys']->take(50) as $post)
@@ -303,7 +423,8 @@
         @if ($sections['syllabus']->count() > 0)
         <div class="modern-card rounded-lg overflow-hidden">
             <div class="modern-card-header bg-indigo-600">
-                <i class="fas fa-book"></i> Syllabus
+                <span><i class="fas fa-book"></i> Syllabus</span>
+                <span class="post-count-badge">{{ $sections['syllabus']->count() }} Posts</span>
             </div>
             <div>
                 @foreach ($sections['syllabus']->take(50) as $post)
@@ -342,7 +463,8 @@
         @if ($sections['blogs']->count() > 0)
         <div class="modern-card rounded-lg overflow-hidden">
             <div class="modern-card-header bg-pink-600">
-                <i class="fas fa-pen-fancy"></i> Blogs
+                <span><i class="fas fa-pen-fancy"></i> Blogs</span>
+                <span class="post-count-badge">{{ $sections['blogs']->count() }} Posts</span>
             </div>
             <div>
                 @foreach ($sections['blogs']->take(50) as $post)
