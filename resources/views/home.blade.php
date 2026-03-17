@@ -60,28 +60,37 @@
             background: linear-gradient(135deg, currentColor 0%, currentColor 100%);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
             flex-wrap: nowrap;
+            min-height: 56px;
         }
         
         .modern-card-header-title {
-            flex: 1;
-            min-width: 120px;
+            flex: 1 1 auto;
+            min-width: 0;
             display: flex;
             align-items: center;
             gap: 10px;
             font-size: 16px;
+            overflow: visible;
+            white-space: nowrap;
+        }
+        
+        .modern-card-header-title i {
+            flex-shrink: 0;
         }
         
         .post-count-badge {
             background: rgba(255, 255, 255, 0.95);
             color: #1e293b;
-            padding: 6px 14px;
-            border-radius: 16px;
-            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
             font-weight: 800;
             white-space: nowrap;
             border: 2px solid rgba(255, 255, 255, 0.4);
             flex-shrink: 0;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            min-width: 35px;
+            text-align: center;
         }
         
         .modern-card-item {
@@ -263,17 +272,20 @@
                 font-size: 16px;
             }
             .modern-card-header {
-                font-size: 14px;
-                padding: 14px 16px;
-                gap: 12px;
+                font-size: 13px;
+                padding: 12px 14px;
+                gap: 10px;
+                flex-wrap: wrap;
+                min-height: auto;
             }
             .modern-card-header-title {
-                font-size: 14px;
-                gap: 8px;
+                font-size: 13px;
+                gap: 6px;
+                flex: 1 1 100%;
             }
             .post-count-badge {
-                font-size: 11px;
-                padding: 5px 12px;
+                font-size: 10px;
+                padding: 3px 8px;
             }
         }
     </style>
