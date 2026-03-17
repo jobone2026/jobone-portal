@@ -109,7 +109,7 @@
     </style>
 
     <!-- Six Column Layout - Different Post Types -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
         <!-- Left Column: Jobs -->
         <div class="modern-card rounded-lg overflow-hidden">
             <div class="modern-card-header bg-blue-600">
@@ -250,7 +250,7 @@
     </div>
 
     <!-- Second Row: Answer Keys, Syllabus, Blogs -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
         <!-- Answer Keys -->
         <div class="modern-card rounded-lg overflow-hidden">
             <div class="modern-card-header bg-yellow-600">

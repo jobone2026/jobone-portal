@@ -5,112 +5,100 @@
 
 <?php $__env->startSection('content'); ?>
     <style>
-        .post-type-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 11px;
+        .modern-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+            min-height: 200px;
+        }
+        .modern-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+        .modern-card-header {
+            padding: 12px 16px;
+            font-size: 14px;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .post-type-badge.job {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             color: white;
+            border-radius: 8px 8px 0 0;
         }
-        .post-type-badge.result {
-            background: linear-gradient(135deg, #10b981, #047857);
-            color: white;
-        }
-        .post-type-badge.admit_card {
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-            color: white;
-        }
-        .post-type-badge.answer_key {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-        }
-        .post-type-badge.syllabus {
-            background: linear-gradient(135deg, #6366f1, #4f46e5);
-            color: white;
-        }
-        .post-type-badge.blog {
-            background: linear-gradient(135deg, #ec4899, #db2777);
-            color: white;
-        }
-        .single-column-card {
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 12px;
-            transition: all 0.2s ease;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-        .single-column-card:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            transform: translateY(-1px);
-        }
-        .single-column-card h3 {
-            margin: 0 0 8px 0;
-            font-size: 16px;
-            font-weight: 600;
+        .modern-card-item {
+            padding: 10px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 13px;
             line-height: 1.4;
+            transition: all 0.2s ease;
         }
-        .single-column-card h3 a {
-            color: #1f2937;
+        .modern-card-item:last-child {
+            border-bottom: none;
+        }
+        .modern-card-item:hover {
+            background: #f8f9fa;
+            padding-left: 20px;
+        }
+        .modern-card-item a {
+            color: #0066cc;
             text-decoration: none;
+            font-weight: 500;
+            display: block;
+            margin-bottom: 4px;
         }
-        .single-column-card h3 a:hover {
-            color: #3b82f6;
+        .modern-card-item a:hover {
+            color: #0052a3;
+            text-decoration: underline;
         }
-        .single-column-card-meta {
+        .modern-card-item-date {
+            font-size: 11px;
+            color: #999;
+            margin-top: 2px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
             flex-wrap: wrap;
-            font-size: 12px;
-            color: #6b7280;
-            margin-top: 8px;
         }
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .meta-badge {
+        .modern-card-item-badge {
             display: inline-flex;
             align-items: center;
             gap: 3px;
             padding: 2px 6px;
-            background: #f3f4f6;
+            background: #f0f0f0;
             border-radius: 4px;
             font-size: 10px;
             font-weight: 600;
-            color: #374151;
+            color: #666;
         }
-        .meta-badge.category {
-            background: #dbeafe;
-            color: #1d4ed8;
+        .modern-card-item-badge.category {
+            background: #e3f2fd;
+            color: #1976d2;
         }
-        .meta-badge.state {
-            background: #fce7f3;
-            color: #be185d;
+        .modern-card-item-badge.state {
+            background: #f3e5f5;
+            color: #7b1fa2;
         }
-        .meta-badge.views {
-            background: #fed7aa;
-            color: #c2410c;
+        .modern-card-item-badge.views {
+            background: #fff3e0;
+            color: #e65100;
         }
-        .meta-badge.new {
-            background: #dcfce7;
-            color: #166534;
+        .modern-card-item-badge.new {
+            background: #e8f5e9;
+            color: #2e7d32;
             animation: pulse 2s infinite;
         }
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.7; }
+        }
+        .modern-card-footer {
+            padding: 10px 16px;
+            background: #f8f9fa;
+            text-align: center;
+            border-radius: 0 0 8px 8px;
+            font-size: 12px;
+        }
+        .modern-card-footer a {
+            color: inherit;
+            font-weight: 600;
+            text-decoration: none;
         }
     </style>
 
@@ -122,74 +110,280 @@
         <p class="text-gray-600 text-sm"><i class="fas fa-briefcase"></i> All posts in <?php echo e($category->name); ?> category (<?php echo e($posts->total()); ?> total)</p>
     </div>
 
-    <!-- Single Column Layout -->
-    <div class="space-y-3">
-        <?php $__empty_1 = true; $__currentLoopData = $posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-        <div class="single-column-card">
-            <div class="flex items-start justify-between gap-3">
-                <div class="flex-1">
-                    <div class="flex items-center gap-2 mb-2">
-                        <?php
-                            $typeConfig = [
-                                'job' => ['icon' => 'fas fa-briefcase', 'label' => 'Job'],
-                                'result' => ['icon' => 'fas fa-chart-bar', 'label' => 'Result'],
-                                'admit_card' => ['icon' => 'fas fa-id-card', 'label' => 'Admit Card'],
-                                'answer_key' => ['icon' => 'fas fa-key', 'label' => 'Answer Key'],
-                                'syllabus' => ['icon' => 'fas fa-book', 'label' => 'Syllabus'],
-                                'blog' => ['icon' => 'fas fa-pen-fancy', 'label' => 'Blog']
-                            ];
-                            $config = $typeConfig[$post->type] ?? ['icon' => 'fas fa-file', 'label' => ucfirst($post->type)];
-                        ?>
-                        <span class="post-type-badge <?php echo e($post->type); ?>">
-                            <i class="<?php echo e($config['icon']); ?>"></i>
-                            <?php echo e($config['label']); ?>
+    <!-- Six Column Layout - Different Post Types for This Category -->
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <!-- Left Column: Jobs -->
+        <div class="modern-card rounded-lg overflow-hidden">
+            <div class="modern-card-header bg-blue-600">
+                <i class="fas fa-briefcase"></i> Jobs in <?php echo e($category->name); ?>
 
-                        </span>
-                    </div>
-                    <h3>
-                        <a href="<?php echo e(route('posts.show', ['type' => $post->type, 'post' => $post->slug])); ?>">
-                            <?php echo e($post->title); ?>
+            </div>
+            <div>
+                <?php $__empty_1 = true; $__currentLoopData = $posts->where('type', 'job'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <div class="modern-card-item">
+                    <a href="<?php echo e(route('posts.show', ['type' => $post->type, 'post' => $post->slug])); ?>">
+                        <?php echo e($post->title); ?>
 
-                        </a>
-                    </h3>
-                    <div class="single-column-card-meta">
-                        <div class="meta-item">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span><?php echo e($post->created_at->format('M d, Y')); ?></span>
-                        </div>
-                        <?php if($post->category): ?>
-                        <span class="meta-badge category">
-                            <i class="fas fa-tag"></i> <?php echo e($post->category->name); ?>
-
-                        </span>
-                        <?php endif; ?>
+                    </a>
+                    <div class="modern-card-item-date">
+                        <span><i class="fas fa-calendar-alt"></i> <?php echo e($post->created_at->format('M d, Y')); ?></span>
                         <?php if($post->state): ?>
-                        <span class="meta-badge state">
+                        <span class="modern-card-item-badge state">
                             <i class="fas fa-map-marker-alt"></i> <?php echo e($post->state->name); ?>
 
                         </span>
                         <?php endif; ?>
                         <?php if($post->view_count > 0): ?>
-                        <span class="meta-badge views">
+                        <span class="modern-card-item-badge views">
                             <i class="fas fa-eye"></i> <?php echo e(number_format($post->view_count)); ?>
 
                         </span>
                         <?php endif; ?>
                         <?php if($post->created_at->diffInDays(now()) <= 3): ?>
-                        <span class="meta-badge new">
+                        <span class="modern-card-item-badge new">
                             <i class="fas fa-star"></i> NEW
                         </span>
                         <?php endif; ?>
                     </div>
                 </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                <div class="modern-card-item text-gray-500">
+                    No jobs found
+                </div>
+                <?php endif; ?>
+            </div>
+            <div class="modern-card-footer text-blue-600">
+                <span><?php echo e($posts->where('type', 'job')->count()); ?> jobs</span>
             </div>
         </div>
-        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-        <div class="text-center py-12">
-            <i class="fas fa-inbox text-4xl text-gray-400 mb-4"></i>
-            <p class="text-gray-500 text-lg">No posts found in this category</p>
+
+        <!-- Middle Column: Results -->
+        <div class="modern-card rounded-lg overflow-hidden">
+            <div class="modern-card-header bg-green-600">
+                <i class="fas fa-chart-bar"></i> Results in <?php echo e($category->name); ?>
+
+            </div>
+            <div>
+                <?php $__empty_1 = true; $__currentLoopData = $posts->where('type', 'result'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <div class="modern-card-item">
+                    <a href="<?php echo e(route('posts.show', ['type' => $post->type, 'post' => $post->slug])); ?>">
+                        <?php echo e($post->title); ?>
+
+                    </a>
+                    <div class="modern-card-item-date">
+                        <span><i class="fas fa-calendar-alt"></i> <?php echo e($post->created_at->format('M d, Y')); ?></span>
+                        <?php if($post->state): ?>
+                        <span class="modern-card-item-badge state">
+                            <i class="fas fa-map-marker-alt"></i> <?php echo e($post->state->name); ?>
+
+                        </span>
+                        <?php endif; ?>
+                        <?php if($post->view_count > 0): ?>
+                        <span class="modern-card-item-badge views">
+                            <i class="fas fa-eye"></i> <?php echo e(number_format($post->view_count)); ?>
+
+                        </span>
+                        <?php endif; ?>
+                        <?php if($post->created_at->diffInDays(now()) <= 3): ?>
+                        <span class="modern-card-item-badge new">
+                            <i class="fas fa-star"></i> NEW
+                        </span>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                <div class="modern-card-item text-gray-500">
+                    No results found
+                </div>
+                <?php endif; ?>
+            </div>
+            <div class="modern-card-footer text-green-600">
+                <span><?php echo e($posts->where('type', 'result')->count()); ?> results</span>
+            </div>
         </div>
-        <?php endif; ?>
+
+        <!-- Right Column: Admit Cards -->
+        <div class="modern-card rounded-lg overflow-hidden">
+            <div class="modern-card-header bg-purple-600">
+                <i class="fas fa-id-card"></i> Admit Cards in <?php echo e($category->name); ?>
+
+            </div>
+            <div>
+                <?php $__empty_1 = true; $__currentLoopData = $posts->where('type', 'admit_card'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <div class="modern-card-item">
+                    <a href="<?php echo e(route('posts.show', ['type' => $post->type, 'post' => $post->slug])); ?>">
+                        <?php echo e($post->title); ?>
+
+                    </a>
+                    <div class="modern-card-item-date">
+                        <span><i class="fas fa-calendar-alt"></i> <?php echo e($post->created_at->format('M d, Y')); ?></span>
+                        <?php if($post->state): ?>
+                        <span class="modern-card-item-badge state">
+                            <i class="fas fa-map-marker-alt"></i> <?php echo e($post->state->name); ?>
+
+                        </span>
+                        <?php endif; ?>
+                        <?php if($post->view_count > 0): ?>
+                        <span class="modern-card-item-badge views">
+                            <i class="fas fa-eye"></i> <?php echo e(number_format($post->view_count)); ?>
+
+                        </span>
+                        <?php endif; ?>
+                        <?php if($post->created_at->diffInDays(now()) <= 3): ?>
+                        <span class="modern-card-item-badge new">
+                            <i class="fas fa-star"></i> NEW
+                        </span>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                <div class="modern-card-item text-gray-500">
+                    No admit cards found
+                </div>
+                <?php endif; ?>
+            </div>
+            <div class="modern-card-footer text-purple-600">
+                <span><?php echo e($posts->where('type', 'admit_card')->count()); ?> admit cards</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Row: Answer Keys, Syllabus, Blogs -->
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+        <!-- Answer Keys -->
+        <div class="modern-card rounded-lg overflow-hidden">
+            <div class="modern-card-header bg-yellow-600">
+                <i class="fas fa-key"></i> Answer Keys in <?php echo e($category->name); ?>
+
+            </div>
+            <div>
+                <?php $__empty_1 = true; $__currentLoopData = $posts->where('type', 'answer_key'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <div class="modern-card-item">
+                    <a href="<?php echo e(route('posts.show', ['type' => $post->type, 'post' => $post->slug])); ?>">
+                        <?php echo e($post->title); ?>
+
+                    </a>
+                    <div class="modern-card-item-date">
+                        <span><i class="fas fa-calendar-alt"></i> <?php echo e($post->created_at->format('M d, Y')); ?></span>
+                        <?php if($post->state): ?>
+                        <span class="modern-card-item-badge state">
+                            <i class="fas fa-map-marker-alt"></i> <?php echo e($post->state->name); ?>
+
+                        </span>
+                        <?php endif; ?>
+                        <?php if($post->view_count > 0): ?>
+                        <span class="modern-card-item-badge views">
+                            <i class="fas fa-eye"></i> <?php echo e(number_format($post->view_count)); ?>
+
+                        </span>
+                        <?php endif; ?>
+                        <?php if($post->created_at->diffInDays(now()) <= 3): ?>
+                        <span class="modern-card-item-badge new">
+                            <i class="fas fa-star"></i> NEW
+                        </span>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                <div class="modern-card-item text-gray-500">
+                    No answer keys found
+                </div>
+                <?php endif; ?>
+            </div>
+            <div class="modern-card-footer text-yellow-600">
+                <span><?php echo e($posts->where('type', 'answer_key')->count()); ?> answer keys</span>
+            </div>
+        </div>
+
+        <!-- Syllabus -->
+        <div class="modern-card rounded-lg overflow-hidden">
+            <div class="modern-card-header bg-indigo-600">
+                <i class="fas fa-book"></i> Syllabus in <?php echo e($category->name); ?>
+
+            </div>
+            <div>
+                <?php $__empty_1 = true; $__currentLoopData = $posts->where('type', 'syllabus'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <div class="modern-card-item">
+                    <a href="<?php echo e(route('posts.show', ['type' => $post->type, 'post' => $post->slug])); ?>">
+                        <?php echo e($post->title); ?>
+
+                    </a>
+                    <div class="modern-card-item-date">
+                        <span><i class="fas fa-calendar-alt"></i> <?php echo e($post->created_at->format('M d, Y')); ?></span>
+                        <?php if($post->state): ?>
+                        <span class="modern-card-item-badge state">
+                            <i class="fas fa-map-marker-alt"></i> <?php echo e($post->state->name); ?>
+
+                        </span>
+                        <?php endif; ?>
+                        <?php if($post->view_count > 0): ?>
+                        <span class="modern-card-item-badge views">
+                            <i class="fas fa-eye"></i> <?php echo e(number_format($post->view_count)); ?>
+
+                        </span>
+                        <?php endif; ?>
+                        <?php if($post->created_at->diffInDays(now()) <= 3): ?>
+                        <span class="modern-card-item-badge new">
+                            <i class="fas fa-star"></i> NEW
+                        </span>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                <div class="modern-card-item text-gray-500">
+                    No syllabus found
+                </div>
+                <?php endif; ?>
+            </div>
+            <div class="modern-card-footer text-indigo-600">
+                <span><?php echo e($posts->where('type', 'syllabus')->count()); ?> syllabus</span>
+            </div>
+        </div>
+
+        <!-- Blogs -->
+        <div class="modern-card rounded-lg overflow-hidden">
+            <div class="modern-card-header bg-pink-600">
+                <i class="fas fa-pen-fancy"></i> Blogs in <?php echo e($category->name); ?>
+
+            </div>
+            <div>
+                <?php $__empty_1 = true; $__currentLoopData = $posts->where('type', 'blog'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <div class="modern-card-item">
+                    <a href="<?php echo e(route('posts.show', ['type' => $post->type, 'post' => $post->slug])); ?>">
+                        <?php echo e($post->title); ?>
+
+                    </a>
+                    <div class="modern-card-item-date">
+                        <span><i class="fas fa-calendar-alt"></i> <?php echo e($post->created_at->format('M d, Y')); ?></span>
+                        <?php if($post->state): ?>
+                        <span class="modern-card-item-badge state">
+                            <i class="fas fa-map-marker-alt"></i> <?php echo e($post->state->name); ?>
+
+                        </span>
+                        <?php endif; ?>
+                        <?php if($post->view_count > 0): ?>
+                        <span class="modern-card-item-badge views">
+                            <i class="fas fa-eye"></i> <?php echo e(number_format($post->view_count)); ?>
+
+                        </span>
+                        <?php endif; ?>
+                        <?php if($post->created_at->diffInDays(now()) <= 3): ?>
+                        <span class="modern-card-item-badge new">
+                            <i class="fas fa-star"></i> NEW
+                        </span>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                <div class="modern-card-item text-gray-500">
+                    No blogs found
+                </div>
+                <?php endif; ?>
+            </div>
+            <div class="modern-card-footer text-pink-600">
+                <span><?php echo e($posts->where('type', 'blog')->count()); ?> blogs</span>
+            </div>
+        </div>
     </div>
 
     <!-- Pagination -->

@@ -61,13 +61,27 @@
         }
         
         /* Hide Google Translate banner */
-        .goog-te-banner-frame { 
-            display: none !important; 
+        .goog-te-banner-frame {
+            display: none !important;
         }
-        body { 
-            top: 0 !important; 
+        body {
+            top: 0 !important;
         }
         
+        /* Hide the top frame completely */
+        body > .skiptranslate {
+            display: none !important;
+        }
+        
+        iframe.goog-te-banner-frame {
+            display: none !important;
+        }
+        
+        .goog-te-banner-frame.skiptranslate {
+            display: none !important;
+        }
+        
+        /* Hide Google Translate widget completely */
         #google_translate_element {
             position: fixed;
             bottom: -200px;
@@ -96,8 +110,57 @@
 </head>
 <body class="bg-gray-50">
 
-    <!-- Breaking News Ticker -->
-    <x-breaking-news-ticker />
+    <!-- Language Chooser Bar -->
+    <div class="bg-white border-b border-gray-200 py-3 shadow-sm notranslate">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-center gap-3 flex-wrap notranslate">
+                <div class="flex items-center gap-2 flex-wrap notranslate">
+                    <button onclick="changeLanguage('')" class="language-btn notranslate" data-lang="">English</button>
+                    <button onclick="changeLanguage('hi')" class="language-btn notranslate" data-lang="hi">हिंदी</button>
+                    <button onclick="changeLanguage('te')" class="language-btn notranslate" data-lang="te">తెలుగు</button>
+                    <button onclick="changeLanguage('ta')" class="language-btn notranslate" data-lang="ta">தமிழ்</button>
+                    <button onclick="changeLanguage('kn')" class="language-btn notranslate" data-lang="kn">ಕನ್ನಡ</button>
+                    <button onclick="changeLanguage('ml')" class="language-btn notranslate" data-lang="ml">മലയാളം</button>
+                    <button onclick="changeLanguage('mr')" class="language-btn notranslate" data-lang="mr">मराठी</button>
+                    <button onclick="changeLanguage('gu')" class="language-btn notranslate" data-lang="gu">ગુજરાતી</button>
+                    <button onclick="changeLanguage('bn')" class="language-btn notranslate" data-lang="bn">বাংলা</button>
+                    <button onclick="changeLanguage('pa')" class="language-btn notranslate" data-lang="pa">ਪੰਜਾਬੀ</button>
+                    <button onclick="changeLanguage('or')" class="language-btn notranslate" data-lang="or">ଓଡ଼ିଆ</button>
+                    <button onclick="changeLanguage('as')" class="language-btn notranslate" data-lang="as">অসমীয়া</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .language-btn {
+            padding: 6px 16px;
+            background: #f8f9fa;
+            color: #495057;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .language-btn:hover {
+            background: #e9ecef;
+            border-color: #3b82f6;
+            color: #3b82f6;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .language-btn {
+                padding: 4px 12px;
+                font-size: 12px;
+            }
+        }
+    </style>
 
     <!-- Header -->
     <header class="bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm sticky top-0 z-50 border-b border-blue-100">
@@ -108,9 +171,8 @@
                     <img src="{{ asset('images/jobone-logo.png') }}" alt="JobOne.in" class="h-10 md:h-16 w-auto object-contain">
                 </a>
                 
-                <!-- Custom Language Selector -->
-                <div class="flex items-center gap-1 notranslate">
-                    <i class="fas fa-globe text-blue-600 text-sm"></i>
+                <!-- Custom Language Selector - Hidden -->
+                <div class="hidden">
                     <select id="custom_language_select" class="text-xs notranslate">
                         <option value="">English</option>
                         <option value="hi">हिंदी</option>
@@ -129,6 +191,13 @@
                 
                 <!-- Hidden Google Translate Widget -->
                 <div id="google_translate_element"></div>
+                
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="p-2 text-gray-700 hover:text-blue-600 focus:outline-none">
+                        <i id="mobile-menu-icon" class="fas fa-bars text-lg"></i>
+                    </button>
+                </div>
                 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-2">
@@ -187,6 +256,41 @@
                 </div>
             </div>
         </nav>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden bg-white border-t border-gray-200 shadow-lg hidden">
+            <div class="px-4 py-3 space-y-2">
+                <a href="{{ route('home') }}" class="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded text-sm font-medium">
+                    <i class="fas fa-home w-4"></i> Home
+                </a>
+                <a href="{{ route('posts.jobs') }}" class="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded text-sm font-medium">
+                    <i class="fas fa-briefcase w-4"></i> Jobs
+                </a>
+                <a href="{{ route('posts.admit-cards') }}" class="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded text-sm font-medium">
+                    <i class="fas fa-id-card w-4"></i> Admit Cards
+                </a>
+                <a href="{{ route('posts.results') }}" class="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded text-sm font-medium">
+                    <i class="fas fa-chart-bar w-4"></i> Results
+                </a>
+                <a href="{{ route('posts.syllabus') }}" class="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded text-sm font-medium">
+                    <i class="fas fa-book w-4"></i> Syllabus
+                </a>
+                <a href="{{ route('posts.blogs') }}" class="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded text-sm font-medium">
+                    <i class="fas fa-pen-fancy w-4"></i> Blogs
+                </a>
+                
+                <!-- Mobile Search -->
+                <div class="pt-3 border-t border-gray-200">
+                    <form action="{{ route('search') }}" method="GET" class="flex gap-2">
+                        <input type="text" name="q" placeholder="Search..." 
+                               class="flex-1 px-3 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-sm">
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </header>
 
     
@@ -525,5 +629,100 @@
     </footer>
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Google Translate Script -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,hi,te,ta,kn,ml,mr,gu,bn,pa,or,as'
+            }, 'google_translate_element');
+
+            // Wait for Google Translate to load
+            setTimeout(function() {
+                var combo = document.querySelector('.goog-te-combo');
+                if (combo) {
+                    // Restore saved language on page load
+                    var savedLang = localStorage.getItem('selectedLanguage');
+                    if (savedLang) {
+                        combo.value = savedLang;
+                        combo.dispatchEvent(new Event('change'));
+                        
+                        var customSelect = document.getElementById('custom_language_select');
+                        if (customSelect) {
+                            customSelect.value = savedLang;
+                        }
+                    }
+
+                    // Sync custom dropdown with Google Translate
+                    var customSelect = document.getElementById('custom_language_select');
+                    if (customSelect) {
+                        customSelect.addEventListener('change', function() {
+                            if (this.value === '') {
+                                // For English, reset Google Translate
+                                combo.value = 'en';
+                                combo.dispatchEvent(new Event('change'));
+                                
+                                // Clear localStorage
+                                localStorage.removeItem('selectedLanguage');
+                            } else {
+                                // Change to selected language
+                                combo.value = this.value;
+                                combo.dispatchEvent(new Event('change'));
+                                
+                                // Save to localStorage
+                                localStorage.setItem('selectedLanguage', this.value);
+                            }
+                        });
+                    }
+                    
+                    // Language chooser buttons
+                    var languageButtons = document.querySelectorAll('.language-btn');
+                    languageButtons.forEach(function(button) {
+                        button.addEventListener('click', function() {
+                            var langCode = this.getAttribute('data-lang');
+                            if (langCode === '') {
+                                combo.value = 'en';
+                                combo.dispatchEvent(new Event('change'));
+                                localStorage.removeItem('selectedLanguage');
+                            } else {
+                                combo.value = langCode;
+                                combo.dispatchEvent(new Event('change'));
+                                localStorage.setItem('selectedLanguage', langCode);
+                            }
+                            
+                            // Update custom select
+                            var customSelect = document.getElementById('custom_language_select');
+                            if (customSelect) {
+                                customSelect.value = langCode;
+                            }
+                        });
+                    });
+                }
+            }, 1500);
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    
+    <script>
+        // Mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            var mobileMenuButton = document.getElementById('mobile-menu-button');
+            var mobileMenu = document.getElementById('mobile-menu');
+            var mobileMenuIcon = document.getElementById('mobile-menu-icon');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                    
+                    if (mobileMenu.classList.contains('hidden')) {
+                        mobileMenuIcon.className = 'fas fa-bars text-lg';
+                    } else {
+                        mobileMenuIcon.className = 'fas fa-times text-lg';
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
