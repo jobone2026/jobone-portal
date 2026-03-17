@@ -6,7 +6,7 @@
         ->get();
 @endphp
 
-<div class="bg-white border-b-2 border-blue-600 py-1.5 sticky top-0 z-50 shadow-md overflow-hidden">
+<div class="bg-white border-b-2 border-blue-600 py-1.5 sticky top-0 z-[100] shadow-md overflow-hidden">
     <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
         <div class="flex items-center gap-2">
             <!-- Latest Jobs Label -->

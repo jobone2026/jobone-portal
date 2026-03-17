@@ -5,159 +5,6 @@
 
 @section('content')
     <style>
-        /* Breaking News Styles */
-        .breaking-news-container {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
-            overflow: hidden;
-        }
-        .breaking-news-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-            color: white;
-        }
-        .breaking-news-badge {
-            background: #ef4444;
-            color: white;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-        .breaking-news-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: white;
-        }
-        .breaking-news-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 12px;
-        }
-        .breaking-news-item {
-            background: white;
-            border-radius: 8px;
-            padding: 14px;
-            transition: all 0.3s ease;
-            border-left: 4px solid;
-            position: relative;
-            overflow: hidden;
-        }
-        .breaking-news-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-        }
-        .breaking-news-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 60px;
-            height: 60px;
-            opacity: 0.1;
-            border-radius: 50%;
-        }
-        /* Post Type Colors */
-        .breaking-news-item.type-job {
-            border-left-color: #2563eb;
-        }
-        .breaking-news-item.type-job::before {
-            background: #2563eb;
-        }
-        .breaking-news-item.type-result {
-            border-left-color: #059669;
-        }
-        .breaking-news-item.type-result::before {
-            background: #059669;
-        }
-        .breaking-news-item.type-admit_card {
-            border-left-color: #7c3aed;
-        }
-        .breaking-news-item.type-admit_card::before {
-            background: #7c3aed;
-        }
-        .breaking-news-item.type-answer_key {
-            border-left-color: #d97706;
-        }
-        .breaking-news-item.type-answer_key::before {
-            background: #d97706;
-        }
-        .breaking-news-item.type-syllabus {
-            border-left-color: #4f46e5;
-        }
-        .breaking-news-item.type-syllabus::before {
-            background: #4f46e5;
-        }
-        .breaking-news-item.type-blog {
-            border-left-color: #db2777;
-        }
-        .breaking-news-item.type-blog::before {
-            background: #db2777;
-        }
-        .breaking-news-type-badge {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
-            color: white;
-        }
-        .breaking-news-type-badge.job { background: #2563eb; }
-        .breaking-news-type-badge.result { background: #059669; }
-        .breaking-news-type-badge.admit_card { background: #7c3aed; }
-        .breaking-news-type-badge.answer_key { background: #d97706; }
-        .breaking-news-type-badge.syllabus { background: #4f46e5; }
-        .breaking-news-type-badge.blog { background: #db2777; }
-        .breaking-news-link {
-            color: #1f2937;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            line-height: 1.4;
-            display: block;
-            margin-bottom: 8px;
-        }
-        .breaking-news-link:hover {
-            color: #2563eb;
-        }
-        .breaking-news-date {
-            font-size: 11px;
-            color: #6b7280;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .breaking-news-new {
-            background: #ef4444;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 9px;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-left: 8px;
-            animation: blink 1.5s infinite;
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        
         .modern-card {
             background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
             border: 1px solid #e9ecef;
@@ -180,9 +27,14 @@
             border-bottom: 1px solid #f0f0f0;
             font-size: 13px;
             line-height: 1.4;
+            transition: all 0.2s ease;
         }
         .modern-card-item:last-child {
             border-bottom: none;
+        }
+        .modern-card-item:hover {
+            background: #f8f9fa;
+            padding-left: 20px;
         }
         .modern-card-item a {
             color: #0066cc;
@@ -215,59 +67,15 @@
         .modern-card-footer a:hover {
             text-decoration: underline;
         }
+        
+        /* Different colors for each post type */
+        .modern-card-item:nth-child(6n+1) a { color: #2563eb; } /* Blue */
+        .modern-card-item:nth-child(6n+2) a { color: #059669; } /* Green */
+        .modern-card-item:nth-child(6n+3) a { color: #7c3aed; } /* Purple */
+        .modern-card-item:nth-child(6n+4) a { color: #dc2626; } /* Red */
+        .modern-card-item:nth-child(6n+5) a { color: #ea580c; } /* Orange */
+        .modern-card-item:nth-child(6n+6) a { color: #0891b2; } /* Cyan */
     </style>
-
-    <!-- Breaking News Section -->
-    <div class="breaking-news-container">
-        <div class="breaking-news-header">
-            <span class="breaking-news-badge">
-                <i class="fas fa-bolt"></i> Breaking News
-            </span>
-            <span class="breaking-news-title">Latest Updates</span>
-        </div>
-        <div class="breaking-news-grid">
-            @php
-                $breakingNews = collect([
-                    $sections['jobs']->take(3),
-                    $sections['results']->take(2),
-                    $sections['admit_cards']->take(2),
-                    $sections['answer_keys']->take(1),
-                    $sections['syllabus']->take(1),
-                    $sections['blogs']->take(1)
-                ])->flatten()->sortByDesc('created_at')->take(10);
-            @endphp
-            
-            @foreach($breakingNews as $post)
-            <div class="breaking-news-item type-{{ $post->type }}">
-                <span class="breaking-news-type-badge {{ $post->type }}">
-                    @if($post->type === 'job')
-                        <i class="fas fa-briefcase"></i> Job
-                    @elseif($post->type === 'result')
-                        <i class="fas fa-chart-bar"></i> Result
-                    @elseif($post->type === 'admit_card')
-                        <i class="fas fa-id-card"></i> Admit Card
-                    @elseif($post->type === 'answer_key')
-                        <i class="fas fa-key"></i> Answer Key
-                    @elseif($post->type === 'syllabus')
-                        <i class="fas fa-book"></i> Syllabus
-                    @elseif($post->type === 'blog')
-                        <i class="fas fa-pen-fancy"></i> Blog
-                    @endif
-                </span>
-                @if($post->created_at->diffInHours(now()) < 24)
-                    <span class="breaking-news-new">NEW</span>
-                @endif
-                <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}" class="breaking-news-link">
-                    {{ Str::limit($post->title, 80) }}
-                </a>
-                <div class="breaking-news-date">
-                    <i class="fas fa-clock"></i>
-                    {{ $post->created_at->diffForHumans() }}
-                </div>
-            </div>
-            @endforeach
-        </div>
-    </div>
 
     <!-- Three Column Table Layout -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
