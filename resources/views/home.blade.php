@@ -28,6 +28,10 @@
             font-size: 13px;
             line-height: 1.4;
             transition: all 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
         }
         .modern-card-item:last-child {
             border-bottom: none;
@@ -35,6 +39,10 @@
         .modern-card-item:hover {
             background: #f8f9fa;
             padding-left: 20px;
+        }
+        .modern-card-item-content {
+            flex: 1;
+            min-width: 0;
         }
         .modern-card-item a {
             color: #0066cc;
@@ -47,10 +55,63 @@
             color: #0052a3;
             text-decoration: underline;
         }
+        .modern-card-item-meta {
+            font-size: 10px;
+            color: #666;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 2px;
+        }
+        .modern-card-item-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
         .modern-card-item-date {
             font-size: 11px;
             color: #999;
-            margin-top: 2px;
+            white-space: nowrap;
+            text-align: right;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 2px;
+        }
+        .modern-card-item-date-day {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2563eb;
+            line-height: 1;
+        }
+        .modern-card-item-date-month {
+            font-size: 10px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            line-height: 1;
+        }
+        .modern-card-item-date-year {
+            font-size: 9px;
+            color: #999;
+            line-height: 1;
+        }
+        .post-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-new {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .badge-hot {
+            background: #fee2e2;
+            color: #991b1b;
         }
         .modern-card-footer {
             padding: 10px 16px;
@@ -88,10 +149,27 @@
             <div>
                 @foreach ($sections['jobs']->take(50) as $post)
                 <div class="modern-card-item">
-                    <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
-                        {{ $post->title }}
-                    </a>
-                    <div class="modern-card-item-date"><i class="fas fa-calendar-alt"></i> {{ $post->created_at->format('M d, Y') }}</div>
+                    <div class="modern-card-item-content">
+                        <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
+                            {{ $post->title }}
+                        </a>
+                        <div class="modern-card-item-meta">
+                            @if($post->isNew())
+                            <span class="post-badge badge-new">NEW</span>
+                            @endif
+                            @if($post->category)
+                            <span><i class="fas fa-tag"></i> {{ $post->category->name }}</span>
+                            @endif
+                            @if($post->state)
+                            <span><i class="fas fa-map-marker-alt"></i> {{ $post->state->name }}</span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="modern-card-item-date">
+                        <div class="modern-card-item-date-day">{{ $post->created_at->format('d') }}</div>
+                        <div class="modern-card-item-date-month">{{ $post->created_at->format('M') }}</div>
+                        <div class="modern-card-item-date-year">{{ $post->created_at->format('Y') }}</div>
+                    </div>
                 </div>
                 @endforeach
             </div>
@@ -110,10 +188,27 @@
             <div>
                 @foreach ($sections['results']->take(50) as $post)
                 <div class="modern-card-item">
-                    <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
-                        {{ $post->title }}
-                    </a>
-                    <div class="modern-card-item-date"><i class="fas fa-calendar-alt"></i> {{ $post->created_at->format('M d, Y') }}</div>
+                    <div class="modern-card-item-content">
+                        <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
+                            {{ $post->title }}
+                        </a>
+                        <div class="modern-card-item-meta">
+                            @if($post->isNew())
+                            <span class="post-badge badge-new">NEW</span>
+                            @endif
+                            @if($post->category)
+                            <span><i class="fas fa-tag"></i> {{ $post->category->name }}</span>
+                            @endif
+                            @if($post->state)
+                            <span><i class="fas fa-map-marker-alt"></i> {{ $post->state->name }}</span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="modern-card-item-date">
+                        <div class="modern-card-item-date-day">{{ $post->created_at->format('d') }}</div>
+                        <div class="modern-card-item-date-month">{{ $post->created_at->format('M') }}</div>
+                        <div class="modern-card-item-date-year">{{ $post->created_at->format('Y') }}</div>
+                    </div>
                 </div>
                 @endforeach
             </div>
@@ -132,10 +227,27 @@
             <div>
                 @foreach ($sections['admit_cards']->take(50) as $post)
                 <div class="modern-card-item">
-                    <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
-                        {{ $post->title }}
-                    </a>
-                    <div class="modern-card-item-date"><i class="fas fa-calendar-alt"></i> {{ $post->created_at->format('M d, Y') }}</div>
+                    <div class="modern-card-item-content">
+                        <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
+                            {{ $post->title }}
+                        </a>
+                        <div class="modern-card-item-meta">
+                            @if($post->isNew())
+                            <span class="post-badge badge-new">NEW</span>
+                            @endif
+                            @if($post->category)
+                            <span><i class="fas fa-tag"></i> {{ $post->category->name }}</span>
+                            @endif
+                            @if($post->state)
+                            <span><i class="fas fa-map-marker-alt"></i> {{ $post->state->name }}</span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="modern-card-item-date">
+                        <div class="modern-card-item-date-day">{{ $post->created_at->format('d') }}</div>
+                        <div class="modern-card-item-date-month">{{ $post->created_at->format('M') }}</div>
+                        <div class="modern-card-item-date-year">{{ $post->created_at->format('Y') }}</div>
+                    </div>
                 </div>
                 @endforeach
             </div>
@@ -157,10 +269,27 @@
             <div>
                 @foreach ($sections['answer_keys']->take(50) as $post)
                 <div class="modern-card-item">
-                    <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
-                        {{ $post->title }}
-                    </a>
-                    <div class="modern-card-item-date"><i class="fas fa-calendar-alt"></i> {{ $post->created_at->format('M d, Y') }}</div>
+                    <div class="modern-card-item-content">
+                        <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
+                            {{ $post->title }}
+                        </a>
+                        <div class="modern-card-item-meta">
+                            @if($post->isNew())
+                            <span class="post-badge badge-new">NEW</span>
+                            @endif
+                            @if($post->category)
+                            <span><i class="fas fa-tag"></i> {{ $post->category->name }}</span>
+                            @endif
+                            @if($post->state)
+                            <span><i class="fas fa-map-marker-alt"></i> {{ $post->state->name }}</span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="modern-card-item-date">
+                        <div class="modern-card-item-date-day">{{ $post->created_at->format('d') }}</div>
+                        <div class="modern-card-item-date-month">{{ $post->created_at->format('M') }}</div>
+                        <div class="modern-card-item-date-year">{{ $post->created_at->format('Y') }}</div>
+                    </div>
                 </div>
                 @endforeach
             </div>
@@ -179,10 +308,27 @@
             <div>
                 @foreach ($sections['syllabus']->take(50) as $post)
                 <div class="modern-card-item">
-                    <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
-                        {{ $post->title }}
-                    </a>
-                    <div class="modern-card-item-date"><i class="fas fa-calendar-alt"></i> {{ $post->created_at->format('M d, Y') }}</div>
+                    <div class="modern-card-item-content">
+                        <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
+                            {{ $post->title }}
+                        </a>
+                        <div class="modern-card-item-meta">
+                            @if($post->isNew())
+                            <span class="post-badge badge-new">NEW</span>
+                            @endif
+                            @if($post->category)
+                            <span><i class="fas fa-tag"></i> {{ $post->category->name }}</span>
+                            @endif
+                            @if($post->state)
+                            <span><i class="fas fa-map-marker-alt"></i> {{ $post->state->name }}</span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="modern-card-item-date">
+                        <div class="modern-card-item-date-day">{{ $post->created_at->format('d') }}</div>
+                        <div class="modern-card-item-date-month">{{ $post->created_at->format('M') }}</div>
+                        <div class="modern-card-item-date-year">{{ $post->created_at->format('Y') }}</div>
+                    </div>
                 </div>
                 @endforeach
             </div>
@@ -201,10 +347,27 @@
             <div>
                 @foreach ($sections['blogs']->take(50) as $post)
                 <div class="modern-card-item">
-                    <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
-                        {{ $post->title }}
-                    </a>
-                    <div class="modern-card-item-date"><i class="fas fa-calendar-alt"></i> {{ $post->created_at->format('M d, Y') }}</div>
+                    <div class="modern-card-item-content">
+                        <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
+                            {{ $post->title }}
+                        </a>
+                        <div class="modern-card-item-meta">
+                            @if($post->isNew())
+                            <span class="post-badge badge-new">NEW</span>
+                            @endif
+                            @if($post->category)
+                            <span><i class="fas fa-tag"></i> {{ $post->category->name }}</span>
+                            @endif
+                            @if($post->state)
+                            <span><i class="fas fa-map-marker-alt"></i> {{ $post->state->name }}</span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="modern-card-item-date">
+                        <div class="modern-card-item-date-day">{{ $post->created_at->format('d') }}</div>
+                        <div class="modern-card-item-date-month">{{ $post->created_at->format('M') }}</div>
+                        <div class="modern-card-item-date-year">{{ $post->created_at->format('Y') }}</div>
+                    </div>
                 </div>
                 @endforeach
             </div>
