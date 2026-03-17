@@ -1,7 +1,7 @@
 
 
-<?php $__env->startSection('title', $category->name . ' - Government Jobs'); ?>
-<?php $__env->startSection('description', 'Latest government jobs in ' . $category->name); ?>
+<?php $__env->startSection('title', $state->name . ' - Government Jobs'); ?>
+<?php $__env->startSection('description', 'Latest government jobs in ' . $state->name); ?>
 
 <?php $__env->startSection('content'); ?>
     <style>
@@ -27,14 +27,9 @@
             border-bottom: 1px solid #f0f0f0;
             font-size: 13px;
             line-height: 1.4;
-            transition: all 0.2s ease;
         }
         .modern-card-item:last-child {
             border-bottom: none;
-        }
-        .modern-card-item:hover {
-            background: #f8f9fa;
-            padding-left: 20px;
         }
         .modern-card-item a {
             color: #0066cc;
@@ -95,6 +90,11 @@
             border-radius: 0 0 8px 8px;
             font-size: 12px;
         }
+        .modern-card-footer a {
+            color: inherit;
+            font-weight: 600;
+            text-decoration: none;
+        }
         .modern-card-footer a:hover {
             text-decoration: underline;
         }
@@ -142,18 +142,17 @@
 
     <div class="mb-6">
         <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-2">
-            <i class="fas fa-folder"></i> <?php echo e($category->name); ?>
-
+            <i class="fas fa-map-marker-alt"></i> <?php echo e($state->name); ?> - Government Jobs
         </h1>
-        <p class="text-gray-600 text-sm"><i class="fas fa-briefcase"></i> All posts in <?php echo e($category->name); ?> category (<?php echo e($posts->total()); ?> total)</p>
+        <p class="text-gray-600 text-sm"><i class="fas fa-briefcase"></i> Showing <?php echo e($posts->count()); ?> of <?php echo e($posts->total()); ?> posts in <?php echo e($state->name); ?></p>
     </div>
 
-    <!-- Six Column Layout - Different Post Types for This Category -->
+    <!-- Six Column Layout - Different Post Types for This State -->
     <div class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
         <!-- Left Column: Jobs -->
         <div class="modern-card rounded-lg overflow-hidden">
             <div class="modern-card-header" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
-                <i class="fas fa-briefcase"></i> Jobs in <?php echo e($category->name); ?>
+                <i class="fas fa-briefcase"></i> Jobs in <?php echo e($state->name); ?>
 
             </div>
             <div>
@@ -165,9 +164,9 @@
                     </a>
                     <div class="modern-card-item-date">
                         <span><i class="fas fa-calendar-alt"></i> <?php echo e($post->created_at->format('M d, Y')); ?></span>
-                        <?php if($post->state): ?>
-                        <span class="modern-card-item-badge state">
-                            <i class="fas fa-map-marker-alt"></i> <?php echo e($post->state->name); ?>
+                        <?php if($post->category): ?>
+                        <span class="modern-card-item-badge category">
+                            <i class="fas fa-tag"></i> <?php echo e($post->category->name); ?>
 
                         </span>
                         <?php endif; ?>
@@ -198,7 +197,7 @@
         <!-- Middle Column: Results -->
         <div class="modern-card rounded-lg overflow-hidden">
             <div class="modern-card-header" style="background: linear-gradient(135deg, #14b8a6 0%, #0f766e 100%);">
-                <i class="fas fa-chart-bar"></i> Results in <?php echo e($category->name); ?>
+                <i class="fas fa-chart-bar"></i> Results in <?php echo e($state->name); ?>
 
             </div>
             <div>
@@ -210,9 +209,9 @@
                     </a>
                     <div class="modern-card-item-date">
                         <span><i class="fas fa-calendar-alt"></i> <?php echo e($post->created_at->format('M d, Y')); ?></span>
-                        <?php if($post->state): ?>
-                        <span class="modern-card-item-badge state">
-                            <i class="fas fa-map-marker-alt"></i> <?php echo e($post->state->name); ?>
+                        <?php if($post->category): ?>
+                        <span class="modern-card-item-badge category">
+                            <i class="fas fa-tag"></i> <?php echo e($post->category->name); ?>
 
                         </span>
                         <?php endif; ?>
@@ -243,7 +242,7 @@
         <!-- Right Column: Admit Cards -->
         <div class="modern-card rounded-lg overflow-hidden">
             <div class="modern-card-header" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);">
-                <i class="fas fa-id-card"></i> Admit Cards in <?php echo e($category->name); ?>
+                <i class="fas fa-id-card"></i> Admit Cards in <?php echo e($state->name); ?>
 
             </div>
             <div>
@@ -255,9 +254,9 @@
                     </a>
                     <div class="modern-card-item-date">
                         <span><i class="fas fa-calendar-alt"></i> <?php echo e($post->created_at->format('M d, Y')); ?></span>
-                        <?php if($post->state): ?>
-                        <span class="modern-card-item-badge state">
-                            <i class="fas fa-map-marker-alt"></i> <?php echo e($post->state->name); ?>
+                        <?php if($post->category): ?>
+                        <span class="modern-card-item-badge category">
+                            <i class="fas fa-tag"></i> <?php echo e($post->category->name); ?>
 
                         </span>
                         <?php endif; ?>
@@ -288,7 +287,7 @@
         <!-- Answer Keys -->
         <div class="modern-card rounded-lg overflow-hidden">
             <div class="modern-card-header" style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);">
-                <i class="fas fa-key"></i> Answer Keys in <?php echo e($category->name); ?>
+                <i class="fas fa-key"></i> Answer Keys in <?php echo e($state->name); ?>
 
             </div>
             <div>
@@ -300,9 +299,9 @@
                     </a>
                     <div class="modern-card-item-date">
                         <span><i class="fas fa-calendar-alt"></i> <?php echo e($post->created_at->format('M d, Y')); ?></span>
-                        <?php if($post->state): ?>
-                        <span class="modern-card-item-badge state">
-                            <i class="fas fa-map-marker-alt"></i> <?php echo e($post->state->name); ?>
+                        <?php if($post->category): ?>
+                        <span class="modern-card-item-badge category">
+                            <i class="fas fa-tag"></i> <?php echo e($post->category->name); ?>
 
                         </span>
                         <?php endif; ?>
@@ -333,7 +332,7 @@
         <!-- Syllabus -->
         <div class="modern-card rounded-lg overflow-hidden">
             <div class="modern-card-header" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
-                <i class="fas fa-book"></i> Syllabus in <?php echo e($category->name); ?>
+                <i class="fas fa-book"></i> Syllabus in <?php echo e($state->name); ?>
 
             </div>
             <div>
@@ -345,9 +344,9 @@
                     </a>
                     <div class="modern-card-item-date">
                         <span><i class="fas fa-calendar-alt"></i> <?php echo e($post->created_at->format('M d, Y')); ?></span>
-                        <?php if($post->state): ?>
-                        <span class="modern-card-item-badge state">
-                            <i class="fas fa-map-marker-alt"></i> <?php echo e($post->state->name); ?>
+                        <?php if($post->category): ?>
+                        <span class="modern-card-item-badge category">
+                            <i class="fas fa-tag"></i> <?php echo e($post->category->name); ?>
 
                         </span>
                         <?php endif; ?>
@@ -378,7 +377,7 @@
         <!-- Blogs -->
         <div class="modern-card rounded-lg overflow-hidden">
             <div class="modern-card-header" style="background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);">
-                <i class="fas fa-pen-fancy"></i> Blogs in <?php echo e($category->name); ?>
+                <i class="fas fa-pen-fancy"></i> Blogs in <?php echo e($state->name); ?>
 
             </div>
             <div>
@@ -390,9 +389,9 @@
                     </a>
                     <div class="modern-card-item-date">
                         <span><i class="fas fa-calendar-alt"></i> <?php echo e($post->created_at->format('M d, Y')); ?></span>
-                        <?php if($post->state): ?>
-                        <span class="modern-card-item-badge state">
-                            <i class="fas fa-map-marker-alt"></i> <?php echo e($post->state->name); ?>
+                        <?php if($post->category): ?>
+                        <span class="modern-card-item-badge category">
+                            <i class="fas fa-tag"></i> <?php echo e($post->category->name); ?>
 
                         </span>
                         <?php endif; ?>
@@ -421,7 +420,7 @@
         </div>
     </div>
 
-    <!-- Pagination -->
+    <!-- Pagination Links -->
     <?php if($posts->hasPages()): ?>
     <div class="mt-8">
         <?php echo e($posts->links()); ?>
@@ -430,4 +429,4 @@
     <?php endif; ?>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\job\govt-job-portal-new\resources\views/categories/show.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\job\govt-job-portal-new\resources\views/states/show.blade.php ENDPATH**/ ?>

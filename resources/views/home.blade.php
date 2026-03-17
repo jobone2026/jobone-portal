@@ -42,10 +42,50 @@
             font-weight: 500;
             display: block;
             margin-bottom: 4px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         .modern-card-item a:hover {
             color: #0052a3;
             text-decoration: underline;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .modern-card {
+                min-height: 180px;
+            }
+            .modern-card-header {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            .modern-card-item {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            .modern-card-item:hover {
+                padding-left: 16px;
+            }
+            .modern-card-item a {
+                font-size: 12px;
+                line-height: 1.3;
+            }
+            .modern-card-footer {
+                padding: 8px 12px;
+                font-size: 11px;
+            }
+        }
+        
+        /* Ensure proper grid behavior */
+        .grid {
+            display: grid;
+            width: 100%;
+        }
+        
+        @media (max-width: 767px) {
+            .grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
         }
         .modern-card-item-date {
             font-size: 11px;
@@ -109,10 +149,10 @@
     </style>
 
     <!-- Six Column Layout - Different Post Types -->
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
         <!-- Left Column: Jobs -->
         <div class="modern-card rounded-lg overflow-hidden">
-            <div class="modern-card-header bg-blue-600">
+            <div class="modern-card-header" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
                 <i class="fas fa-briefcase"></i> Latest Jobs
             </div>
             <div>
@@ -158,7 +198,7 @@
 
         <!-- Middle Column: Results -->
         <div class="modern-card rounded-lg overflow-hidden">
-            <div class="modern-card-header bg-green-600">
+            <div class="modern-card-header" style="background: linear-gradient(135deg, #14b8a6 0%, #0f766e 100%);">
                 <i class="fas fa-chart-bar"></i> Exam Results
             </div>
             <div>
@@ -204,7 +244,7 @@
 
         <!-- Right Column: Admit Cards -->
         <div class="modern-card rounded-lg overflow-hidden">
-            <div class="modern-card-header bg-purple-600">
+            <div class="modern-card-header" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);">
                 <i class="fas fa-id-card"></i> Admit Cards
             </div>
             <div>
@@ -247,13 +287,10 @@
                 <a href="{{ route('posts.admit-cards') }}">View All Admit Cards →</a>
             </div>
         </div>
-    </div>
 
-    <!-- Second Row: Answer Keys, Syllabus, Blogs -->
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
         <!-- Answer Keys -->
         <div class="modern-card rounded-lg overflow-hidden">
-            <div class="modern-card-header bg-yellow-600">
+            <div class="modern-card-header" style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);">
                 <i class="fas fa-key"></i> Answer Keys
             </div>
             <div>
@@ -299,7 +336,7 @@
 
         <!-- Syllabus -->
         <div class="modern-card rounded-lg overflow-hidden">
-            <div class="modern-card-header bg-indigo-600">
+            <div class="modern-card-header" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
                 <i class="fas fa-book"></i> Syllabus
             </div>
             <div>
@@ -345,7 +382,7 @@
 
         <!-- Blogs -->
         <div class="modern-card rounded-lg overflow-hidden">
-            <div class="modern-card-header bg-pink-600">
+            <div class="modern-card-header" style="background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);">
                 <i class="fas fa-pen-fancy"></i> Blogs
             </div>
             <div>
@@ -384,8 +421,10 @@
                 </div>
                 @endforelse
             </div>
-            <div class="modern-card-footer text-pink-600">
-                <a href="{{ route('posts.blogs') }}">View All Blogs →</a>
+            <div class="modern-card-footer">
+                <a href="{{ route('posts.blogs') }}" class="text-pink-600">
+                    <span>{{ count($sections['blogs'] ?? []) }} blogs</span>
+                </a>
             </div>
         </div>
     </div>

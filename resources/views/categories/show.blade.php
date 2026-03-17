@@ -95,10 +95,48 @@
             border-radius: 0 0 8px 8px;
             font-size: 12px;
         }
-        .modern-card-footer a {
-            color: inherit;
-            font-weight: 600;
-            text-decoration: none;
+        .modern-card-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .modern-card {
+                min-height: 180px;
+            }
+            .modern-card-header {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            .modern-card-item {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            .modern-card-item:hover {
+                padding-left: 16px;
+            }
+            .modern-card-item a {
+                font-size: 12px;
+                line-height: 1.3;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+            }
+            .modern-card-footer {
+                padding: 8px 12px;
+                font-size: 11px;
+            }
+        }
+        
+        /* Ensure proper grid behavior */
+        .grid {
+            display: grid;
+            width: 100%;
+        }
+        
+        @media (max-width: 767px) {
+            .grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
         }
     </style>
 
@@ -110,10 +148,10 @@
     </div>
 
     <!-- Six Column Layout - Different Post Types for This Category -->
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
         <!-- Left Column: Jobs -->
         <div class="modern-card rounded-lg overflow-hidden">
-            <div class="modern-card-header bg-blue-600">
+            <div class="modern-card-header" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
                 <i class="fas fa-briefcase"></i> Jobs in {{ $category->name }}
             </div>
             <div>
@@ -154,7 +192,7 @@
 
         <!-- Middle Column: Results -->
         <div class="modern-card rounded-lg overflow-hidden">
-            <div class="modern-card-header bg-green-600">
+            <div class="modern-card-header" style="background: linear-gradient(135deg, #14b8a6 0%, #0f766e 100%);">
                 <i class="fas fa-chart-bar"></i> Results in {{ $category->name }}
             </div>
             <div>
@@ -195,7 +233,7 @@
 
         <!-- Right Column: Admit Cards -->
         <div class="modern-card rounded-lg overflow-hidden">
-            <div class="modern-card-header bg-purple-600">
+            <div class="modern-card-header" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);">
                 <i class="fas fa-id-card"></i> Admit Cards in {{ $category->name }}
             </div>
             <div>
@@ -233,13 +271,10 @@
                 <span>{{ $posts->where('type', 'admit_card')->count() }} admit cards</span>
             </div>
         </div>
-    </div>
 
-    <!-- Second Row: Answer Keys, Syllabus, Blogs -->
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
         <!-- Answer Keys -->
         <div class="modern-card rounded-lg overflow-hidden">
-            <div class="modern-card-header bg-yellow-600">
+            <div class="modern-card-header" style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);">
                 <i class="fas fa-key"></i> Answer Keys in {{ $category->name }}
             </div>
             <div>
@@ -280,7 +315,7 @@
 
         <!-- Syllabus -->
         <div class="modern-card rounded-lg overflow-hidden">
-            <div class="modern-card-header bg-indigo-600">
+            <div class="modern-card-header" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
                 <i class="fas fa-book"></i> Syllabus in {{ $category->name }}
             </div>
             <div>
@@ -321,7 +356,7 @@
 
         <!-- Blogs -->
         <div class="modern-card rounded-lg overflow-hidden">
-            <div class="modern-card-header bg-pink-600">
+            <div class="modern-card-header" style="background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);">
                 <i class="fas fa-pen-fancy"></i> Blogs in {{ $category->name }}
             </div>
             <div>

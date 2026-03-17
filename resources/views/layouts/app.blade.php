@@ -111,7 +111,7 @@
 <body class="bg-gray-50">
 
     <!-- Language Chooser Bar -->
-    <div class="bg-white border-b border-gray-200 py-3 shadow-sm notranslate">
+    <div class="bg-gradient-to-r from-sky-50 via-blue-50 to-indigo-50 border-b border-gray-200 py-3 shadow-sm notranslate">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-center gap-3 flex-wrap notranslate">
                 <div class="flex items-center gap-2 flex-wrap notranslate">
@@ -135,23 +135,24 @@
     <style>
         .language-btn {
             padding: 6px 16px;
-            background: #f8f9fa;
-            color: #495057;
-            border: 1px solid #dee2e6;
-            border-radius: 6px;
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+            color: #0c4a6e;
+            border: 2px solid #0ea5e9;
+            border-radius: 8px;
             font-size: 13px;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             white-space: nowrap;
+            position: relative;
+            overflow: hidden;
         }
         
         .language-btn:hover {
-            background: #e9ecef;
-            border-color: #3b82f6;
-            color: #3b82f6;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
         }
         
         @media (max-width: 768px) {
@@ -163,7 +164,7 @@
     </style>
 
     <!-- Header -->
-    <header class="bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm sticky top-0 z-50 border-b border-blue-100">
+    <header class="bg-gradient-to-r from-emerald-50 to-teal-50 shadow-sm sticky top-0 z-50 border-b border-emerald-100">
         <nav class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-3 md:py-4">
             <div class="flex justify-between items-center gap-2">
                 <!-- Logo -->
@@ -316,39 +317,182 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            border: 1px solid #e5e7eb;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 2px solid;
             text-decoration: none;
         }
         
         .category-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Banking - Emerald/Green */
+        .category-card:nth-child(1) {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-color: #10b981;
+        }
+        .category-card:nth-child(1) .category-icon {
+            color: #059669;
+        }
+        .category-card:nth-child(1) .category-label {
+            color: #065f46;
+        }
+        .category-card:nth-child(1):hover {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        .category-card:nth-child(1):hover .category-icon,
+        .category-card:nth-child(1):hover .category-label {
+            color: white;
+        }
+        
+        /* Railways - Teal */
+        .category-card:nth-child(2) {
+            background: linear-gradient(135deg, #ccfbf1 0%, #99f6e4 100%);
+            border-color: #14b8a6;
+        }
+        .category-card:nth-child(2) .category-icon {
+            color: #0f766e;
+        }
+        .category-card:nth-child(2) .category-label {
+            color: #134e4a;
+        }
+        .category-card:nth-child(2):hover {
+            background: linear-gradient(135deg, #14b8a6 0%, #0f766e 100%);
+        }
+        .category-card:nth-child(2):hover .category-icon,
+        .category-card:nth-child(2):hover .category-label {
+            color: white;
+        }
+        
+        /* SSC - Cyan */
+        .category-card:nth-child(3) {
+            background: linear-gradient(135deg, #cffafe 0%, #a5f3fc 100%);
+            border-color: #06b6d4;
+        }
+        .category-card:nth-child(3) .category-icon {
+            color: #0891b2;
+        }
+        .category-card:nth-child(3) .category-label {
+            color: #164e63;
+        }
+        .category-card:nth-child(3):hover {
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+        }
+        .category-card:nth-child(3):hover .category-icon,
+        .category-card:nth-child(3):hover .category-label {
+            color: white;
+        }
+        
+        /* UPSC - Indigo */
+        .category-card:nth-child(4) {
+            background: linear-gradient(135deg, #c7d2fe 0%, #a5b4fc 100%);
+            border-color: #6366f1;
+        }
+        .category-card:nth-child(4) .category-icon {
+            color: #4f46e5;
+        }
+        .category-card:nth-child(4) .category-label {
+            color: #3730a3;
+        }
+        .category-card:nth-child(4):hover {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+        }
+        .category-card:nth-child(4):hover .category-icon,
+        .category-card:nth-child(4):hover .category-label {
+            color: white;
+        }
+        
+        /* State PSC - Violet */
+        .category-card:nth-child(5) {
+            background: linear-gradient(135deg, #e9d5ff 0%, #d8b4fe 100%);
+            border-color: #8b5cf6;
+        }
+        .category-card:nth-child(5) .category-icon {
+            color: #7c3aed;
+        }
+        .category-card:nth-child(5) .category-label {
+            color: #5b21b6;
+        }
+        .category-card:nth-child(5):hover {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        }
+        .category-card:nth-child(5):hover .category-icon,
+        .category-card:nth-child(5):hover .category-label {
+            color: white;
+        }
+        
+        /* Defence - Slate */
+        .category-card:nth-child(6) {
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+            border-color: #64748b;
+        }
+        .category-card:nth-child(6) .category-icon {
+            color: #475569;
+        }
+        .category-card:nth-child(6) .category-label {
+            color: #334155;
+        }
+        .category-card:nth-child(6):hover {
+            background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+        }
+        .category-card:nth-child(6):hover .category-icon,
+        .category-card:nth-child(6):hover .category-label {
+            color: white;
+        }
+        
+        /* Police - Orange */
+        .category-card:nth-child(7) {
+            background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
+            border-color: #ea580c;
+        }
+        .category-card:nth-child(7) .category-icon {
+            color: #dc2626;
+        }
+        .category-card:nth-child(7) .category-label {
+            color: #9a3412;
+        }
+        .category-card:nth-child(7):hover {
+            background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+        }
+        .category-card:nth-child(7):hover .category-icon,
+        .category-card:nth-child(7):hover .category-label {
+            color: white;
+        }
+        
+        /* Blog - Rose */
+        .category-card:nth-child(8) {
+            background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+            border-color: #ec4899;
+        }
+        .category-card:nth-child(8) .category-icon {
+            color: #db2777;
+        }
+        .category-card:nth-child(8) .category-label {
+            color: #9f1239;
+        }
+        .category-card:nth-child(8):hover {
+            background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+        }
+        .category-card:nth-child(8):hover .category-icon,
+        .category-card:nth-child(8):hover .category-label {
+            color: white;
         }
         
         .category-icon {
             font-size: 32px;
-            color: #3b82f6;
             margin-bottom: 8px;
             transition: all 0.3s ease;
         }
         
         .category-card:hover .category-icon {
-            color: white;
             transform: scale(1.1);
         }
         
         .category-label {
             font-size: 12px;
             font-weight: 600;
-            color: #374151;
             text-align: center;
             transition: all 0.3s ease;
-        }
-        
-        .category-card:hover .category-label {
-            color: white;
         }
         
         @media (max-width: 768px) {
@@ -439,10 +583,9 @@
             justify-content: center;
             padding: 8px 6px;
             background: white;
-            border: 2px solid #3b82f6;
-            border-radius: 4px;
+            border: 2px solid;
+            border-radius: 6px;
             text-decoration: none;
-            color: #3b82f6;
             font-weight: 600;
             font-size: 10px;
             text-align: center;
@@ -452,11 +595,89 @@
             line-height: 1.1;
         }
         
-        .state-box:hover {
-            background: #3b82f6;
+        /* All India - Special gradient */
+        .state-box:first-child {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
+            border-color: #059669;
+            font-weight: 700;
+        }
+        
+        .state-box:first-child:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
+        }
+        
+        /* Cycle through colors for other states */
+        .state-box:nth-child(6n+2) {
+            border-color: #14b8a6;
+            color: #0f766e;
+            background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+        }
+        .state-box:nth-child(6n+2):hover {
+            background: linear-gradient(135deg, #14b8a6 0%, #0f766e 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3);
+        }
+        
+        .state-box:nth-child(6n+3) {
+            border-color: #06b6d4;
+            color: #0891b2;
+            background: linear-gradient(135deg, #f0fdff 0%, #cffafe 100%);
+        }
+        .state-box:nth-child(6n+3):hover {
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+        }
+        
+        .state-box:nth-child(6n+4) {
+            border-color: #6366f1;
+            color: #4f46e5;
+            background: linear-gradient(135deg, #faf5ff 0%, #c7d2fe 100%);
+        }
+        .state-box:nth-child(6n+4):hover {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+        
+        .state-box:nth-child(6n+5) {
+            border-color: #8b5cf6;
+            color: #7c3aed;
+            background: linear-gradient(135deg, #faf5ff 0%, #e9d5ff 100%);
+        }
+        .state-box:nth-child(6n+5):hover {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+        
+        .state-box:nth-child(6n+6) {
+            border-color: #64748b;
+            color: #475569;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+        .state-box:nth-child(6n+6):hover {
+            background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(100, 116, 139, 0.3);
+        }
+        
+        .state-box:nth-child(6n+7) {
+            border-color: #ea580c;
+            color: #dc2626;
+            background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+        }
+        .state-box:nth-child(6n+7):hover {
+            background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
+        }
+        
+        .state-box:hover {
+            transform: translateY(-2px);
         }
         
         @media (max-width: 768px) {
@@ -504,7 +725,7 @@
                 @endphp
                 
                 <!-- All India Box -->
-                <a href="{{ route('posts.all') }}" class="state-box" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; border: 2px solid #1d4ed8;">
+                <a href="{{ route('posts.all') }}" class="state-box">
                     All India
                 </a>
                 
@@ -549,7 +770,7 @@
     <x-ad-slot position="footer" />
 
     <!-- Footer -->
-    <footer class="bg-gradient-to-r from-blue-50 to-indigo-50 text-gray-700 mt-0 border-t border-blue-100">
+    <footer class="bg-gradient-to-r from-emerald-50 to-teal-50 text-gray-700 mt-0 border-t border-emerald-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
                 <!-- About Section -->
@@ -622,7 +843,7 @@
             </div>
             
             <!-- Divider -->
-            <div class="border-t border-blue-200 pt-6 text-center">
+            <div class="border-t border-emerald-200 pt-6 text-center">
                 <p class="text-gray-600 text-sm font-semibold">&copy; 2026 JobOne.in. All rights reserved. | Designed with <i class="fas fa-heart text-red-500"></i> for Job Seekers</p>
             </div>
         </div>
