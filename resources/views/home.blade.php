@@ -56,17 +56,30 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 12px;
             background: linear-gradient(135deg, currentColor 0%, currentColor 100%);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            flex-wrap: wrap;
+        }
+        
+        .modern-card-header-title {
+            flex: 1;
+            min-width: 150px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .post-count-badge {
-            background: rgba(255, 255, 255, 0.25);
-            padding: 4px 10px;
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 5px 12px;
+            border-radius: 14px;
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 700;
             backdrop-filter: blur(10px);
+            white-space: nowrap;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            flex-shrink: 0;
         }
         
         .modern-card-item {
@@ -251,6 +264,13 @@
                 font-size: 14px;
                 padding: 12px 14px;
             }
+            .modern-card-header-title {
+                font-size: 13px;
+            }
+            .post-count-badge {
+                font-size: 10px;
+                padding: 4px 10px;
+            }
         }
     </style>
 
@@ -260,8 +280,8 @@
         @if ($sections['jobs']->count() > 0)
         <div class="modern-card rounded-lg overflow-hidden">
             <div class="modern-card-header bg-blue-600">
-                <span><i class="fas fa-briefcase"></i> Latest Jobs</span>
-                <span class="post-count-badge">{{ $sections['jobs']->count() }} Posts</span>
+                <span class="modern-card-header-title"><i class="fas fa-briefcase"></i> Latest Jobs</span>
+                <span class="post-count-badge">{{ $sections['jobs']->count() }}</span>
             </div>
             <div>
                 @foreach ($sections['jobs']->take(50) as $post)
@@ -300,8 +320,8 @@
         @if ($sections['results']->count() > 0)
         <div class="modern-card rounded-lg overflow-hidden">
             <div class="modern-card-header bg-green-600">
-                <span><i class="fas fa-chart-bar"></i> Exam Results</span>
-                <span class="post-count-badge">{{ $sections['results']->count() }} Posts</span>
+                <span class="modern-card-header-title"><i class="fas fa-chart-bar"></i> Exam Results</span>
+                <span class="post-count-badge">{{ $sections['results']->count() }}</span>
             </div>
             <div>
                 @foreach ($sections['results']->take(50) as $post)
@@ -340,8 +360,8 @@
         @if ($sections['admit_cards']->count() > 0)
         <div class="modern-card rounded-lg overflow-hidden">
             <div class="modern-card-header bg-purple-600">
-                <span><i class="fas fa-id-card"></i> Admit Cards</span>
-                <span class="post-count-badge">{{ $sections['admit_cards']->count() }} Posts</span>
+                <span class="modern-card-header-title"><i class="fas fa-id-card"></i> Admit Cards</span>
+                <span class="post-count-badge">{{ $sections['admit_cards']->count() }}</span>
             </div>
             <div>
                 @foreach ($sections['admit_cards']->take(50) as $post)
@@ -383,8 +403,8 @@
         @if ($sections['answer_keys']->count() > 0)
         <div class="modern-card rounded-lg overflow-hidden">
             <div class="modern-card-header bg-yellow-600">
-                <span><i class="fas fa-key"></i> Answer Keys</span>
-                <span class="post-count-badge">{{ $sections['answer_keys']->count() }} Posts</span>
+                <span class="modern-card-header-title"><i class="fas fa-key"></i> Answer Keys</span>
+                <span class="post-count-badge">{{ $sections['answer_keys']->count() }}</span>
             </div>
             <div>
                 @foreach ($sections['answer_keys']->take(50) as $post)
@@ -423,8 +443,8 @@
         @if ($sections['syllabus']->count() > 0)
         <div class="modern-card rounded-lg overflow-hidden">
             <div class="modern-card-header bg-indigo-600">
-                <span><i class="fas fa-book"></i> Syllabus</span>
-                <span class="post-count-badge">{{ $sections['syllabus']->count() }} Posts</span>
+                <span class="modern-card-header-title"><i class="fas fa-book"></i> Syllabus</span>
+                <span class="post-count-badge">{{ $sections['syllabus']->count() }}</span>
             </div>
             <div>
                 @foreach ($sections['syllabus']->take(50) as $post)
@@ -463,8 +483,8 @@
         @if ($sections['blogs']->count() > 0)
         <div class="modern-card rounded-lg overflow-hidden">
             <div class="modern-card-header bg-pink-600">
-                <span><i class="fas fa-pen-fancy"></i> Blogs</span>
-                <span class="post-count-badge">{{ $sections['blogs']->count() }} Posts</span>
+                <span class="modern-card-header-title"><i class="fas fa-pen-fancy"></i> Blogs</span>
+                <span class="post-count-badge">{{ $sections['blogs']->count() }}</span>
             </div>
             <div>
                 @foreach ($sections['blogs']->take(50) as $post)
