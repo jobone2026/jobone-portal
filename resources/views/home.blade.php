@@ -108,24 +108,15 @@
         .modern-card-item a { color: #0066cc !important; } /* Single blue color for all */
     </style>
 
-    <!-- Single Column Layout - All Posts -->
-    <div class="grid grid-cols-1 gap-4">
-        <!-- All Posts Combined -->
+    <!-- Six Column Layout - Different Post Types -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Left Column: Jobs -->
         <div class="modern-card rounded-lg overflow-hidden">
-            <div class="modern-card-header bg-gradient-to-r from-blue-600 to-indigo-600">
-                <i class="fas fa-list"></i> All Latest Updates
+            <div class="modern-card-header bg-blue-600">
+                <i class="fas fa-briefcase"></i> Latest Jobs
             </div>
             <div>
-                @php
-                    // Combine all posts and sort by created_at
-                    $allPosts = collect();
-                    foreach($sections as $sectionName => $posts) {
-                        $allPosts = $allPosts->merge($posts);
-                    }
-                    $allPosts = $allPosts->sortByDesc('created_at')->take(100);
-                @endphp
-                
-                @foreach ($allPosts as $post)
+                @forelse ($sections['jobs'] ?? [] as $post)
                 <div class="modern-card-item">
                     <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
                         {{ $post->title }}
@@ -152,24 +143,249 @@
                             <i class="fas fa-star"></i> NEW
                         </span>
                         @endif
-                        <span class="modern-card-item-badge type" style="background: #e3f2fd; color: #1976d2;">
-                            <i class="fas fa-
-                                @if($post->type == 'job') briefcase
-                                @elseif($post->type == 'result') chart-bar
-                                @elseif($post->type == 'admit_card') id-card
-                                @elseif($post->type == 'answer_key') key
-                                @elseif($post->type == 'syllabus') book
-                                @elseif($post->type == 'blog') pen-fancy
-                                @else file
-                                @endif"></i> 
-                            {{ ucfirst(str_replace('_', ' ', $post->type)) }}
-                        </span>
                     </div>
                 </div>
-                @endforeach
+                @empty
+                <div class="modern-card-item text-gray-500">
+                    No jobs found
+                </div>
+                @endforelse
             </div>
             <div class="modern-card-footer text-blue-600">
-                <a href="{{ route('posts.jobs') }}">View All Posts →</a>
+                <a href="{{ route('posts.jobs') }}">View All Jobs →</a>
+            </div>
+        </div>
+
+        <!-- Middle Column: Results -->
+        <div class="modern-card rounded-lg overflow-hidden">
+            <div class="modern-card-header bg-green-600">
+                <i class="fas fa-chart-bar"></i> Exam Results
+            </div>
+            <div>
+                @forelse ($sections['results'] ?? [] as $post)
+                <div class="modern-card-item">
+                    <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
+                        {{ $post->title }}
+                    </a>
+                    <div class="modern-card-item-date">
+                        <span><i class="fas fa-calendar-alt"></i> {{ $post->created_at->format('M d, Y') }}</span>
+                        @if($post->category)
+                        <span class="modern-card-item-badge category">
+                            <i class="fas fa-tag"></i> {{ $post->category->name }}
+                        </span>
+                        @endif
+                        @if($post->state)
+                        <span class="modern-card-item-badge state">
+                            <i class="fas fa-map-marker-alt"></i> {{ $post->state->name }}
+                        </span>
+                        @endif
+                        @if($post->view_count > 0)
+                        <span class="modern-card-item-badge views">
+                            <i class="fas fa-eye"></i> {{ number_format($post->view_count) }}
+                        </span>
+                        @endif
+                        @if($post->created_at->diffInDays(now()) <= 3)
+                        <span class="modern-card-item-badge new">
+                            <i class="fas fa-star"></i> NEW
+                        </span>
+                        @endif
+                    </div>
+                </div>
+                @empty
+                <div class="modern-card-item text-gray-500">
+                    No results found
+                </div>
+                @endforelse
+            </div>
+            <div class="modern-card-footer text-green-600">
+                <a href="{{ route('posts.results') }}">View All Results →</a>
+            </div>
+        </div>
+
+        <!-- Right Column: Admit Cards -->
+        <div class="modern-card rounded-lg overflow-hidden">
+            <div class="modern-card-header bg-purple-600">
+                <i class="fas fa-id-card"></i> Admit Cards
+            </div>
+            <div>
+                @forelse ($sections['admit_cards'] ?? [] as $post)
+                <div class="modern-card-item">
+                    <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
+                        {{ $post->title }}
+                    </a>
+                    <div class="modern-card-item-date">
+                        <span><i class="fas fa-calendar-alt"></i> {{ $post->created_at->format('M d, Y') }}</span>
+                        @if($post->category)
+                        <span class="modern-card-item-badge category">
+                            <i class="fas fa-tag"></i> {{ $post->category->name }}
+                        </span>
+                        @endif
+                        @if($post->state)
+                        <span class="modern-card-item-badge state">
+                            <i class="fas fa-map-marker-alt"></i> {{ $post->state->name }}
+                        </span>
+                        @endif
+                        @if($post->view_count > 0)
+                        <span class="modern-card-item-badge views">
+                            <i class="fas fa-eye"></i> {{ number_format($post->view_count) }}
+                        </span>
+                        @endif
+                        @if($post->created_at->diffInDays(now()) <= 3)
+                        <span class="modern-card-item-badge new">
+                            <i class="fas fa-star"></i> NEW
+                        </span>
+                        @endif
+                    </div>
+                </div>
+                @empty
+                <div class="modern-card-item text-gray-500">
+                    No admit cards found
+                </div>
+                @endforelse
+            </div>
+            <div class="modern-card-footer text-purple-600">
+                <a href="{{ route('posts.admit-cards') }}">View All Admit Cards →</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Row: Answer Keys, Syllabus, Blogs -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+        <!-- Answer Keys -->
+        <div class="modern-card rounded-lg overflow-hidden">
+            <div class="modern-card-header bg-yellow-600">
+                <i class="fas fa-key"></i> Answer Keys
+            </div>
+            <div>
+                @forelse ($sections['answer_keys'] ?? [] as $post)
+                <div class="modern-card-item">
+                    <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
+                        {{ $post->title }}
+                    </a>
+                    <div class="modern-card-item-date">
+                        <span><i class="fas fa-calendar-alt"></i> {{ $post->created_at->format('M d, Y') }}</span>
+                        @if($post->category)
+                        <span class="modern-card-item-badge category">
+                            <i class="fas fa-tag"></i> {{ $post->category->name }}
+                        </span>
+                        @endif
+                        @if($post->state)
+                        <span class="modern-card-item-badge state">
+                            <i class="fas fa-map-marker-alt"></i> {{ $post->state->name }}
+                        </span>
+                        @endif
+                        @if($post->view_count > 0)
+                        <span class="modern-card-item-badge views">
+                            <i class="fas fa-eye"></i> {{ number_format($post->view_count) }}
+                        </span>
+                        @endif
+                        @if($post->created_at->diffInDays(now()) <= 3)
+                        <span class="modern-card-item-badge new">
+                            <i class="fas fa-star"></i> NEW
+                        </span>
+                        @endif
+                    </div>
+                </div>
+                @empty
+                <div class="modern-card-item text-gray-500">
+                    No answer keys found
+                </div>
+                @endforelse
+            </div>
+            <div class="modern-card-footer text-yellow-600">
+                <a href="{{ route('posts.answer-keys') }}">View All Answer Keys →</a>
+            </div>
+        </div>
+
+        <!-- Syllabus -->
+        <div class="modern-card rounded-lg overflow-hidden">
+            <div class="modern-card-header bg-indigo-600">
+                <i class="fas fa-book"></i> Syllabus
+            </div>
+            <div>
+                @forelse ($sections['syllabus'] ?? [] as $post)
+                <div class="modern-card-item">
+                    <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
+                        {{ $post->title }}
+                    </a>
+                    <div class="modern-card-item-date">
+                        <span><i class="fas fa-calendar-alt"></i> {{ $post->created_at->format('M d, Y') }}</span>
+                        @if($post->category)
+                        <span class="modern-card-item-badge category">
+                            <i class="fas fa-tag"></i> {{ $post->category->name }}
+                        </span>
+                        @endif
+                        @if($post->state)
+                        <span class="modern-card-item-badge state">
+                            <i class="fas fa-map-marker-alt"></i> {{ $post->state->name }}
+                        </span>
+                        @endif
+                        @if($post->view_count > 0)
+                        <span class="modern-card-item-badge views">
+                            <i class="fas fa-eye"></i> {{ number_format($post->view_count) }}
+                        </span>
+                        @endif
+                        @if($post->created_at->diffInDays(now()) <= 3)
+                        <span class="modern-card-item-badge new">
+                            <i class="fas fa-star"></i> NEW
+                        </span>
+                        @endif
+                    </div>
+                </div>
+                @empty
+                <div class="modern-card-item text-gray-500">
+                    No syllabus found
+                </div>
+                @endforelse
+            </div>
+            <div class="modern-card-footer text-indigo-600">
+                <a href="{{ route('posts.syllabus') }}">View All Syllabus →</a>
+            </div>
+        </div>
+
+        <!-- Blogs -->
+        <div class="modern-card rounded-lg overflow-hidden">
+            <div class="modern-card-header bg-pink-600">
+                <i class="fas fa-pen-fancy"></i> Blogs
+            </div>
+            <div>
+                @forelse ($sections['blogs'] ?? [] as $post)
+                <div class="modern-card-item">
+                    <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
+                        {{ $post->title }}
+                    </a>
+                    <div class="modern-card-item-date">
+                        <span><i class="fas fa-calendar-alt"></i> {{ $post->created_at->format('M d, Y') }}</span>
+                        @if($post->category)
+                        <span class="modern-card-item-badge category">
+                            <i class="fas fa-tag"></i> {{ $post->category->name }}
+                        </span>
+                        @endif
+                        @if($post->state)
+                        <span class="modern-card-item-badge state">
+                            <i class="fas fa-map-marker-alt"></i> {{ $post->state->name }}
+                        </span>
+                        @endif
+                        @if($post->view_count > 0)
+                        <span class="modern-card-item-badge views">
+                            <i class="fas fa-eye"></i> {{ number_format($post->view_count) }}
+                        </span>
+                        @endif
+                        @if($post->created_at->diffInDays(now()) <= 3)
+                        <span class="modern-card-item-badge new">
+                            <i class="fas fa-star"></i> NEW
+                        </span>
+                        @endif
+                    </div>
+                </div>
+                @empty
+                <div class="modern-card-item text-gray-500">
+                    No blogs found
+                </div>
+                @endforelse
+            </div>
+            <div class="modern-card-footer text-pink-600">
+                <a href="{{ route('posts.blogs') }}">View All Blogs →</a>
             </div>
         </div>
     </div>
