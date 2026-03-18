@@ -1,0 +1,42 @@
+DEPLOYMENT COMMANDS FOR SERVER
+================================
+
+Run these commands on the server to deploy the domain filtering feature:
+
+cd /var/www/jobone
+
+# Stash any local changes
+git stash
+
+# Pull latest code from GitHub
+git pull origin main
+
+# Clear all caches
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
+php artisan route:clear
+
+# Restart PHP-FPM
+sudo systemctl restart php8.2-fpm
+
+# Test karnatakajob.online (should show ONLY Karnataka)
+curl -s https://karnatakajob.online | grep -o 'state-box">[^<]*</a' | head -5
+
+# Test jobone.in (should show ALL states)
+curl -s https://jobone.in | grep -o 'state-box">[^<]*</a' | head -5
+
+
+WHAT THIS DOES:
+===============
+1. Stashes any local changes on the server
+2. Pulls the latest code from GitHub (commit d12eab9)
+3. Clears all Laravel caches
+4. Restarts PHP-FPM to apply changes
+5. Tests both domains to verify filtering works
+
+
+EXPECTED RESULTS:
+=================
+- karnatakajob.online: Should show ONLY "Karnataka" state box
+- jobone.in: Should show "All India" + all state boxes (Karnataka, Maharashtra, etc.)
