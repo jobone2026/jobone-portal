@@ -234,8 +234,24 @@ class SeoService
     // Convenience methods for controllers
     public function generateHomeSeo(): array
     {
+        // Check if domain is filtered to Karnataka
+        $isKarnatakaDomain = config('app.domain_state_slug') === 'karnataka';
+        
+        if ($isKarnatakaDomain) {
+            return [
+                'title' => 'Karnataka Government Jobs 2026 - Latest Govt Jobs in Karnataka | KarnatakaJob.Online',
+                'description' => 'Find latest Karnataka government jobs 2026, Karnataka govt jobs, Karnataka job alerts, Karnataka sarkari naukri, govt jobs in Karnataka for freshers, Karnataka recruitment 2026. Your trusted Karnataka job portal.',
+                'keywords' => 'karnataka government jobs, karnataka govt jobs 2026, latest govt jobs in karnataka, karnataka job alerts, karnataka sarkari naukri, govt jobs in karnataka for freshers, karnataka recruitment 2026, karnataka job portal, karnataka sarkari result, karnataka job vacancy',
+                'canonical' => url('/'),
+                'og_title' => 'Karnataka Government Jobs 2026 - Latest Govt Jobs in Karnataka',
+                'og_description' => 'Find latest Karnataka government jobs 2026, Karnataka govt jobs, Karnataka job alerts, Karnataka sarkari naukri, govt jobs in Karnataka for freshers.',
+                'og_image' => asset('images/og-image.jpg'),
+                'og_url' => url('/'),
+            ];
+        }
+        
         return [
-            'title' => $this->generateTitle('home'),
+            'title' => 'Latest Government Jobs 2026 - SSC, UPSC, Railways, Banking | JobOne.in',
             'description' => $this->generateDescription('home'),
             'keywords' => $this->generateKeywords('home'),
             'canonical' => url('/'),
