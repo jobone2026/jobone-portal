@@ -1,0 +1,48 @@
+HOW TO PUSH TO GITHUB
+=====================
+
+Your local git is configured with wrong credentials. Here's how to fix it:
+
+OPTION 1: Push with correct credentials (Quick)
+------------------------------------------------
+Run this command in PowerShell/Terminal:
+
+cd C:\xampp\htdocs\job\govt-job-portal-new
+git push https://jobone2026:YOUR_GITHUB_TOKEN@github.com/jobone2026/jobone-portal.git main
+
+
+OPTION 2: Update git credentials permanently
+---------------------------------------------
+1. Update the remote URL:
+   git remote set-url origin https://jobone2026:YOUR_GITHUB_TOKEN@github.com/jobone2026/jobone-portal.git
+
+2. Then push normally:
+   git push origin main
+
+Note: Replace YOUR_GITHUB_TOKEN with your actual GitHub personal access token
+
+
+AFTER PUSHING TO GITHUB
+========================
+Run these commands on your server (ubuntu@ip-172-26-3-50):
+
+cd /var/www/jobone
+git stash
+git pull origin main
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
+php artisan route:clear
+sudo systemctl restart php8.2-fpm
+
+# Test the results
+curl -s https://karnatakajob.online | grep -o 'state-box">[^<]*</a' | head -5
+curl -s https://jobone.in | grep -o 'state-box">[^<]*</a' | head -5
+
+
+WHAT WILL HAPPEN
+================
+After deployment:
+- karnatakajob.online will show ONLY Karnataka state box
+- jobone.in will show All India + all state boxes
+- The domain filtering will be fully functional
