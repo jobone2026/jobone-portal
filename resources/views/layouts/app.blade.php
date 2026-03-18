@@ -710,6 +710,15 @@
                         'Dadra & Nagar Haveli', 'Daman & Diu'
                     ];
                     
+                    // Filter states based on domain
+                    $domainStateId = config('app.domain_state_id');
+                    if ($domainStateId) {
+                        $domainState = \App\Models\State::find($domainStateId);
+                        if ($domainState) {
+                            $allStates = [$domainState->name];
+                        }
+                    }
+                    
                     // Get states with job counts
                     $statesWithJobs = collect($allStates)->map(function($stateName) use ($states) {
                         $state = $states->firstWhere('name', $stateName);
@@ -724,16 +733,26 @@
                     })->filter(); // Remove null values (states with 0 jobs)
                 @endphp
                 
-                <!-- All India Box -->
-                <a href="{{ route('posts.all') }}" class="state-box">
-                    All India
-                </a>
-                
-                @foreach ($statesWithJobs as $state)
-                    <a href="{{ route('states.show', $state->slug) }}" class="state-box">
-                        {{ $state->name }}
+                <!-- Show state selector only if not domain-filtered -->
+                @if (!config('app.domain_state_id'))
+                    <!-- All India Box -->
+                    <a href="{{ route('posts.all') }}" class="state-box">
+                        All India
                     </a>
-                @endforeach
+                    
+                    @foreach ($statesWithJobs as $state)
+                        <a href="{{ route('states.show', $state->slug) }}" class="state-box">
+                            {{ $state->name }}
+                        </a>
+                    @endforeach
+                @else
+                    <!-- Show only current state for domain-filtered pages -->
+                    @foreach ($statesWithJobs as $state)
+                        <a href="{{ route('states.show', $state->slug) }}" class="state-box">
+                            {{ $state->name }}
+                        </a>
+                    @endforeach
+                @endif
             </div>
         </div>
     </div>
