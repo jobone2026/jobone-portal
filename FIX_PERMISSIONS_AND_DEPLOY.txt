@@ -1,0 +1,36 @@
+═══════════════════════════════════════════════════════════════
+STEP 1: FIX PERMISSIONS FIRST
+═══════════════════════════════════════════════════════════════
+
+Run this command to fix file ownership:
+
+cd /var/www/jobone && sudo chown -R ubuntu:ubuntu . && git stash && git pull origin main && sudo chown -R www-data:www-data storage bootstrap/cache && sudo chmod -R 775 storage bootstrap/cache && php artisan config:clear && php artisan cache:clear && php artisan view:clear && php artisan route:clear && sudo systemctl restart php8.2-fpm && echo "" && echo "=== TESTING KARNATAKAJOB.ONLINE ===" && curl -s https://karnatakajob.online | grep -o 'state-box">[^<]*</a' | head -5 && echo "" && echo "=== TESTING JOBONE.IN ===" && curl -s https://jobone.in | grep -o 'state-box">[^<]*</a' | head -5
+
+
+═══════════════════════════════════════════════════════════════
+WHAT THIS DOES:
+═══════════════════════════════════════════════════════════════
+
+1. Changes ownership to ubuntu user (so git can work)
+2. Stashes any local changes
+3. Pulls latest code from GitHub
+4. Changes storage/cache ownership back to www-data (for Laravel)
+5. Sets proper permissions (775)
+6. Clears all caches
+7. Restarts PHP-FPM
+8. Tests both domains
+
+
+═══════════════════════════════════════════════════════════════
+EXPECTED OUTPUT:
+═══════════════════════════════════════════════════════════════
+
+=== TESTING KARNATAKAJOB.ONLINE ===
+state-box">Karnataka</a
+
+=== TESTING JOBONE.IN ===
+state-box">All India</a
+state-box">Karnataka</a
+state-box">Maharashtra</a
+state-box">Tamil Nadu</a
+state-box">Uttar Pradesh</
