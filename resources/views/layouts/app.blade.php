@@ -116,17 +116,26 @@
             <div class="flex items-center justify-center gap-3 flex-wrap notranslate">
                 <div class="flex items-center gap-2 flex-wrap notranslate">
                     <button onclick="changeLanguage('')" class="language-btn notranslate" data-lang="">English</button>
-                    <button onclick="changeLanguage('hi')" class="language-btn notranslate" data-lang="hi">हिंदी</button>
-                    <button onclick="changeLanguage('te')" class="language-btn notranslate" data-lang="te">తెలుగు</button>
-                    <button onclick="changeLanguage('ta')" class="language-btn notranslate" data-lang="ta">தமிழ்</button>
-                    <button onclick="changeLanguage('kn')" class="language-btn notranslate" data-lang="kn">ಕನ್ನಡ</button>
-                    <button onclick="changeLanguage('ml')" class="language-btn notranslate" data-lang="ml">മലയാളം</button>
-                    <button onclick="changeLanguage('mr')" class="language-btn notranslate" data-lang="mr">मराठी</button>
-                    <button onclick="changeLanguage('gu')" class="language-btn notranslate" data-lang="gu">ગુજરાતી</button>
-                    <button onclick="changeLanguage('bn')" class="language-btn notranslate" data-lang="bn">বাংলা</button>
-                    <button onclick="changeLanguage('pa')" class="language-btn notranslate" data-lang="pa">ਪੰਜਾਬੀ</button>
-                    <button onclick="changeLanguage('or')" class="language-btn notranslate" data-lang="or">ଓଡ଼ିଆ</button>
-                    <button onclick="changeLanguage('as')" class="language-btn notranslate" data-lang="as">অসমীয়া</button>
+                    
+                    @if (!config('app.domain_state_id'))
+                        <!-- Show all languages for main domain -->
+                        <button onclick="changeLanguage('hi')" class="language-btn notranslate" data-lang="hi">हिंदी</button>
+                        <button onclick="changeLanguage('te')" class="language-btn notranslate" data-lang="te">తెలుగు</button>
+                        <button onclick="changeLanguage('ta')" class="language-btn notranslate" data-lang="ta">தமிழ்</button>
+                        <button onclick="changeLanguage('kn')" class="language-btn notranslate" data-lang="kn">ಕನ್ನಡ</button>
+                        <button onclick="changeLanguage('ml')" class="language-btn notranslate" data-lang="ml">മലയാളം</button>
+                        <button onclick="changeLanguage('mr')" class="language-btn notranslate" data-lang="mr">मराठी</button>
+                        <button onclick="changeLanguage('gu')" class="language-btn notranslate" data-lang="gu">ગુજરાતી</button>
+                        <button onclick="changeLanguage('bn')" class="language-btn notranslate" data-lang="bn">বাংলা</button>
+                        <button onclick="changeLanguage('pa')" class="language-btn notranslate" data-lang="pa">ਪੰਜਾਬੀ</button>
+                        <button onclick="changeLanguage('or')" class="language-btn notranslate" data-lang="or">ଓଡ଼ିଆ</button>
+                        <button onclick="changeLanguage('as')" class="language-btn notranslate" data-lang="as">অসমীয়া</button>
+                    @else
+                        <!-- Show only state-specific language for filtered domains -->
+                        @if (config('app.domain_state_slug') === 'karnataka')
+                            <button onclick="changeLanguage('kn')" class="language-btn notranslate" data-lang="kn">ಕನ್ನಡ</button>
+                        @endif
+                    @endif
                 </div>
             </div>
         </div>
