@@ -11,14 +11,25 @@ class PostController extends Controller
 {
     public function index($type = null)
     {
+        // Check if domain is filtered to a specific state
+        $stateId = config('app.domain_state_id');
+        
         // If type is 'all', get separate collections for each post type for 6-column layout
         if ($type === 'all') {
-            $jobs = Post::published()->ofType('job')->with('category', 'state')->latest()->limit(10)->get();
-            $results = Post::published()->ofType('result')->with('category', 'state')->latest()->limit(10)->get();
-            $admitCards = Post::published()->ofType('admit_card')->with('category', 'state')->latest()->limit(10)->get();
-            $answerKeys = Post::published()->ofType('answer_key')->with('category', 'state')->latest()->limit(10)->get();
-            $syllabus = Post::published()->ofType('syllabus')->with('category', 'state')->latest()->limit(10)->get();
-            $blogs = Post::published()->ofType('blog')->with('category', 'state')->latest()->limit(10)->get();
+            $queryBuilder = function($postType) use ($stateId) {
+                $q = Post::published()->ofType($postType);
+                if ($stateId) {
+                    $q->where('state_id', $stateId);
+                }
+                return $q->with('category', 'state')->latest()->limit(10)->get();
+            };
+            
+            $jobs = $queryBuilder('job');
+            $results = $queryBuilder('result');
+            $admitCards = $queryBuilder('admit_card');
+            $answerKeys = $queryBuilder('answer_key');
+            $syllabus = $queryBuilder('syllabus');
+            $blogs = $queryBuilder('blog');
             
             // Create a merged collection for pagination info
             $allPosts = collect()
@@ -54,6 +65,10 @@ class PostController extends Controller
             
             if ($type) {
                 $query->ofType($type);
+            }
+            
+            if ($stateId) {
+                $query->where('state_id', $stateId);
             }
             
             $posts = $query->latest()->paginate(50);
@@ -104,11 +119,15 @@ class PostController extends Controller
     public function loadMore(Request $request, $type)
     {
         $page = $request->input('page', 2);
+        $stateId = config('app.domain_state_id');
         
-        $posts = Post::published()->ofType($type)
-            ->with('category', 'state')
-            ->latest()
-            ->simplePaginate(50, ['*'], 'page', $page);
+        $query = Post::published()->ofType($type)->with('category', 'state');
+        
+        if ($stateId) {
+            $query->where('state_id', $stateId);
+        }
+        
+        $posts = $query->latest()->simplePaginate(50, ['*'], 'page', $page);
 
         return view('posts.load-more', compact('posts'));
     }

@@ -15,12 +15,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin.auth' => \App\Http\Middleware\AdminAuth::class,
             'page.cache' => \App\Http\Middleware\PageCache::class,
-            'anti.scraping' => \App\Http\Middleware\AntiScraping::class,
         ]);
         
-        // Apply anti-scraping to web routes
+        // Apply domain state filter to web routes
         $middleware->web(append: [
-            \App\Http\Middleware\AntiScraping::class,
+            \App\Http\Middleware\DomainStateFilter::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -13,21 +13,27 @@ class HomeController extends Controller
 {
     public function index()
     {
+        // Check if domain is filtered to a specific state
+        $stateId = config('app.domain_state_id');
+        $cacheKey = $stateId ? "home_sections_state_{$stateId}" : 'home_sections';
+        
         // Cache home page sections for 10 minutes
-        $sections = Cache::remember('home_sections', 600, function () {
+        $sections = Cache::remember($cacheKey, 600, function () use ($stateId) {
+            $query = function($type) use ($stateId) {
+                $q = Post::published()->ofType($type);
+                if ($stateId) {
+                    $q->where('state_id', $stateId);
+                }
+                return $q->with('category', 'state')->latest()->limit(50)->get();
+            };
+            
             return [
-                'jobs' => Post::published()->ofType('job')
-                    ->with('category', 'state')->latest()->limit(50)->get(),
-                'admit_cards' => Post::published()->ofType('admit_card')
-                    ->with('category', 'state')->latest()->limit(50)->get(),
-                'results' => Post::published()->ofType('result')
-                    ->with('category', 'state')->latest()->limit(50)->get(),
-                'answer_keys' => Post::published()->ofType('answer_key')
-                    ->with('category', 'state')->latest()->limit(50)->get(),
-                'syllabus' => Post::published()->ofType('syllabus')
-                    ->with('category', 'state')->latest()->limit(50)->get(),
-                'blogs' => Post::published()->ofType('blog')
-                    ->with('category', 'state')->latest()->limit(50)->get(),
+                'jobs' => $query('job'),
+                'admit_cards' => $query('admit_card'),
+                'results' => $query('result'),
+                'answer_keys' => $query('answer_key'),
+                'syllabus' => $query('syllabus'),
+                'blogs' => $query('blog'),
             ];
         });
 

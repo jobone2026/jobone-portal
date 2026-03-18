@@ -1,0 +1,185 @@
+DOMAIN-BASED STATE FILTERING - ARCHITECTURE FLOW
+=================================================
+
+┌─────────────────────────────────────────────────────────────────┐
+│                         USER REQUEST                            │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+        ┌─────────────────────────────────────────┐
+        │   http://karnatakajob.online/jobs       │
+        │              OR                         │
+        │   http://jobone.in/jobs                 │
+        └─────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    LARAVEL APPLICATION                          │
+│                                                                 │
+│  ┌───────────────────────────────────────────────────────────┐ │
+│  │  1. DomainStateFilter Middleware                          │ │
+│  │     - Reads request domain                                │ │
+│  │     - Checks DOMAIN_STATE_MAP from .env                   │ │
+│  │     - Looks up state in database                          │ │
+│  │     - Sets config values if match found                   │ │
+│  └───────────────────────────────────────────────────────────┘ │
+│                              │                                  │
+│                              ▼                                  │
+│  ┌───────────────────────────────────────────────────────────┐ │
+│  │  2. Route Handling                                        │ │
+│  │     - Routes to appropriate controller                    │ │
+│  │     - HomeController, PostController, etc.                │ │
+│  └───────────────────────────────────────────────────────────┘ │
+│                              │                                  │
+│                              ▼                                  │
+│  ┌───────────────────────────────────────────────────────────┐ │
+│  │  3. Controller Logic                                      │ │
+│  │     - Checks config('app.domain_state_id')                │ │
+│  │     - Builds database query                               │ │
+│  │     - Adds state filter if domain_state_id exists         │ │
+│  └───────────────────────────────────────────────────────────┘ │
+│                              │                                  │
+│                              ▼                                  │
+│  ┌───────────────────────────────────────────────────────────┐ │
+│  │  4. Database Query                                        │ │
+│  │                                                           │ │
+│  │  IF domain_state_id SET:                                  │ │
+│  │    SELECT * FROM posts                                    │ │
+│  │    WHERE state_id = {domain_state_id}                     │ │
+│  │    AND is_published = 1                                   │ │
+│  │                                                           │ │
+│  │  IF domain_state_id NOT SET:                              │ │
+│  │    SELECT * FROM posts                                    │ │
+│  │    WHERE is_published = 1                                 │ │
+│  └───────────────────────────────────────────────────────────┘ │
+│                              │                                  │
+│                              ▼                                  │
+│  ┌───────────────────────────────────────────────────────────┐ │
+│  │  5. View Rendering                                        │ │
+│  │     - Blade templates render filtered data                │ │
+│  │     - Same templates for all domains                      │ │
+│  └───────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+        ┌─────────────────────────────────────────┐
+        │         RESPONSE TO USER                │
+        │                                         │
+        │  karnatakajob.online → Karnataka only   │
+        │  jobone.in → All states                 │
+        └─────────────────────────────────────────┘
+
+
+EXAMPLE FLOW: karnatakajob.online
+==================================
+
+1. User visits: http://karnatakajob.online/jobs
+   
+2. DomainStateFilter Middleware:
+   ├─ Reads domain: "karnatakajob.online"
+   ├─ Checks .env: DOMAIN_STATE_MAP=karnatakajob.online:karnataka
+   ├─ Finds match: karnataka
+   ├─ Queries DB: SELECT * FROM states WHERE slug = 'karnataka'
+   ├─ Gets state: {id: 1, name: "Karnataka", slug: "karnataka"}
+   └─ Sets config:
+      ├─ app.domain_state_id = 1
+      ├─ app.domain_state_slug = "karnataka"
+      └─ app.domain_state_name = "Karnataka"
+
+3. PostController@index:
+   ├─ Reads: $stateId = config('app.domain_state_id') // 1
+   ├─ Builds query: Post::published()->ofType('job')
+   ├─ Adds filter: ->where('state_id', 1)
+   └─ Executes: SELECT * FROM posts WHERE type='job' AND state_id=1 AND is_published=1
+
+4. Returns: Only Karnataka jobs
+
+
+EXAMPLE FLOW: jobone.in
+========================
+
+1. User visits: http://jobone.in/jobs
+   
+2. DomainStateFilter Middleware:
+   ├─ Reads domain: "jobone.in"
+   ├─ Checks .env: DOMAIN_STATE_MAP=karnatakajob.online:karnataka
+   ├─ No match found for "jobone.in"
+   └─ Does nothing (no config set)
+
+3. PostController@index:
+   ├─ Reads: $stateId = config('app.domain_state_id') // null
+   ├─ Builds query: Post::published()->ofType('job')
+   ├─ No state filter added
+   └─ Executes: SELECT * FROM posts WHERE type='job' AND is_published=1
+
+4. Returns: All jobs from all states
+
+
+CACHE STRATEGY
+==============
+
+┌─────────────────────────────────────────────────────────────┐
+│  Cache Key Generation                                       │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  IF domain_state_id SET:                                    │
+│    Cache Key: "home_sections_state_{state_id}"              │
+│    Example: "home_sections_state_1"                         │
+│                                                             │
+│  IF domain_state_id NOT SET:                                │
+│    Cache Key: "home_sections"                               │
+│                                                             │
+│  Result: Each domain has independent cache                  │
+└─────────────────────────────────────────────────────────────┘
+
+
+CONFIGURATION FLOW
+==================
+
+.env File
+   │
+   ├─ DOMAIN_STATE_MAP=karnatakajob.online:karnataka
+   │
+   ▼
+DomainStateFilter Middleware
+   │
+   ├─ Parses: ["karnatakajob.online" => "karnataka"]
+   ├─ Matches current domain
+   ├─ Queries database for state
+   │
+   ▼
+Config Values Set
+   │
+   ├─ config(['app.domain_state_id' => 1])
+   ├─ config(['app.domain_state_slug' => 'karnataka'])
+   └─ config(['app.domain_state_name' => 'Karnataka'])
+   │
+   ▼
+Controllers Read Config
+   │
+   ├─ $stateId = config('app.domain_state_id')
+   │
+   ▼
+Database Queries Filtered
+   │
+   └─ WHERE state_id = $stateId
+
+
+AFFECTED PAGES
+==============
+
+✓ Homepage (/)
+✓ Jobs Listing (/jobs)
+✓ Admit Cards (/admit-cards)
+✓ Results (/results)
+✓ Answer Keys (/answer-keys)
+✓ Syllabus (/syllabus)
+✓ Blogs (/blogs)
+✓ Category Pages (/category/{slug})
+✓ Search Results (/search)
+✓ Search Autocomplete
+✓ Load More (AJAX)
+
+✗ Single Post View (shows if exists, regardless of domain)
+✗ Admin Panel (no filtering)
+✗ API Endpoints (use state_id parameter instead)

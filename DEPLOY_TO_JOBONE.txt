@@ -1,0 +1,217 @@
+╔═══════════════════════════════════════════════════════════════╗
+║     DEPLOY DOMAIN FILTERING TO /var/www/jobone               ║
+╚═══════════════════════════════════════════════════════════════╝
+
+STEP 1: UPLOAD FILES TO SERVER
+─────────────────────────────────────────────────────────────────
+From your local machine, upload these files to the server:
+
+Files to upload:
+1. app/Http/Middleware/DomainStateFilter.php
+2. app/Http/Controllers/HomeController.php
+3. app/Http/Controllers/PostController.php
+4. app/Http/Controllers/SearchController.php
+5. app/Http/Controllers/CategoryController.php
+6. verify-domain-filter.php
+
+Using SCP:
+scp -r govt-job-portal-new/app/Http/Middleware/DomainStateFilter.php ubuntu@YOUR_SERVER:/tmp/
+scp govt-job-portal-new/app/Http/Controllers/HomeController.php ubuntu@YOUR_SERVER:/tmp/
+scp govt-job-portal-new/app/Http/Controllers/PostController.php ubuntu@YOUR_SERVER:/tmp/
+scp govt-job-portal-new/app/Http/Controllers/SearchController.php ubuntu@YOUR_SERVER:/tmp/
+scp govt-job-portal-new/app/Http/Controllers/CategoryController.php ubuntu@YOUR_SERVER:/tmp/
+scp govt-job-portal-new/verify-domain-filter.php ubuntu@YOUR_SERVER:/tmp/
+
+
+STEP 2: ON THE SERVER - COPY FILES
+─────────────────────────────────────────────────────────────────
+SSH into your server and run:
+
+cd /var/www/jobone
+
+# Copy middleware
+sudo cp /tmp/DomainStateFilter.php app/Http/Middleware/
+
+# Copy controllers
+sudo cp /tmp/HomeController.php app/Http/Controllers/
+sudo cp /tmp/PostController.php app/Http/Controllers/
+sudo cp /tmp/SearchController.php app/Http/Controllers/
+sudo cp /tmp/CategoryController.php app/Http/Controllers/
+
+# Copy verification script
+sudo cp /tmp/verify-domain-filter.php .
+sudo chmod +x verify-domain-filter.php
+
+
+STEP 3: UPDATE bootstrap/app.php
+─────────────────────────────────────────────────────────────────
+sudo nano bootstrap/app.php
+
+Find this section:
+    ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->alias([
+            'admin.auth' => \App\Http\Middleware\AdminAuth::class,
+            'page.cache' => \App\Http\Middleware\PageCache::class,
+            'anti.scraping' => \App\Http\Middleware\AntiScraping::class,
+        ]);
+        
+        // Apply anti-scraping to web routes
+        $middleware->web(append: [
+            \App\Http\Middleware\AntiScraping::class,
+        ]);
+    })
+
+Change to:
+    ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->alias([
+            'admin.auth' => \App\Http\Middleware\AdminAuth::class,
+            'page.cache' => \App\Http\Middleware\PageCache::class,
+            'anti.scraping' => \App\Http\Middleware\AntiScraping::class,
+        ]);
+        
+        // Apply domain state filter and anti-scraping to web routes
+        $middleware->web(append: [
+            \App\Http\Middleware\DomainStateFilter::class,
+            \App\Http\Middleware\AntiScraping::class,
+        ]);
+    })
+
+Save: Ctrl+X, Y, Enter
+
+
+STEP 4: UPDATE .env FILE
+─────────────────────────────────────────────────────────────────
+sudo nano .env
+
+Add this line at the end:
+
+# Domain-specific state filtering
+DOMAIN_STATE_MAP=karnatakajob.online:karnataka,www.karnatakajob.online:karnataka
+
+Save: Ctrl+X, Y, Enter
+
+
+STEP 5: VERIFY KARNATAKA STATE EXISTS
+─────────────────────────────────────────────────────────────────
+php artisan tinker
+
+Run:
+\App\Models\State::where('slug', 'karnataka')->first();
+
+If it returns null, create it:
+\App\Models\State::create(['name' => 'Karnataka', 'slug' => 'karnataka']);
+
+Exit: exit
+
+
+STEP 6: FIX PERMISSIONS
+─────────────────────────────────────────────────────────────────
+sudo chown -R www-data:www-data storage bootstrap/cache
+sudo chmod -R 775 storage bootstrap/cache
+
+
+STEP 7: CLEAR CACHES
+─────────────────────────────────────────────────────────────────
+php artisan config:clear
+sudo php artisan cache:clear
+php artisan view:clear
+php artisan route:clear
+
+
+STEP 8: RESTART PHP-FPM
+─────────────────────────────────────────────────────────────────
+sudo systemctl daemon-reload
+sudo systemctl restart php8.2-fpm
+
+Check status:
+sudo systemctl status php8.2-fpm
+
+
+STEP 9: VERIFY INSTALLATION
+─────────────────────────────────────────────────────────────────
+php verify-domain-filter.php
+
+Expected output:
+✓ DOMAIN_STATE_MAP found
+✓ State 'karnataka' found
+✓ DomainStateFilter middleware registered
+✓ DomainStateFilter.php exists
+
+
+STEP 10: CONFIGURE NGINX
+─────────────────────────────────────────────────────────────────
+sudo nano /etc/nginx/sites-available/karnatakajob.online
+
+Add:
+server {
+    listen 80;
+    server_name karnatakajob.online www.karnatakajob.online;
+    
+    root /var/www/jobone/public;
+    index index.php index.html;
+    
+    access_log /var/log/nginx/karnatakajob-access.log;
+    error_log /var/log/nginx/karnatakajob-error.log;
+    
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+    
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+    
+    location ~ /\. {
+        deny all;
+    }
+}
+
+Enable site:
+sudo ln -s /etc/nginx/sites-available/karnatakajob.online /etc/nginx/sites-enabled/
+
+Test and reload:
+sudo nginx -t
+sudo systemctl reload nginx
+
+
+STEP 11: TEST
+─────────────────────────────────────────────────────────────────
+# Test locally (add to /etc/hosts first)
+echo "YOUR_SERVER_IP karnatakajob.online" | sudo tee -a /etc/hosts
+
+# Visit in browser
+http://karnatakajob.online
+
+Should show ONLY Karnataka jobs
+
+
+TROUBLESHOOTING
+─────────────────────────────────────────────────────────────────
+Problem: Shows all states instead of Karnataka only
+Solution:
+  grep DOMAIN_STATE_MAP .env
+  php artisan config:clear
+  sudo systemctl restart php8.2-fpm
+
+Problem: 500 error
+Solution:
+  tail -f storage/logs/laravel.log
+  Check file permissions
+
+Problem: Middleware not working
+Solution:
+  cat bootstrap/app.php | grep DomainStateFilter
+  php artisan route:list
+
+
+QUICK COMMANDS (Copy-Paste)
+─────────────────────────────────────────────────────────────────
+cd /var/www/jobone
+sudo chown -R www-data:www-data storage bootstrap/cache
+sudo chmod -R 775 storage bootstrap/cache
+php artisan config:clear && sudo php artisan cache:clear && php artisan view:clear
+sudo systemctl daemon-reload && sudo systemctl restart php8.2-fpm
+php verify-domain-filter.php

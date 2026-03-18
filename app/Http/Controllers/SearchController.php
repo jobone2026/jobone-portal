@@ -10,13 +10,20 @@ class SearchController extends Controller
     public function index(Request $request)
     {
         $query = $request->input('q', '');
+        $stateId = config('app.domain_state_id');
 
-        $posts = Post::published()
-            ->where('title', 'like', "%{$query}%")
-            ->orWhere('short_description', 'like', "%{$query}%")
-            ->with('category', 'state')
-            ->latest()
-            ->paginate(50);
+        $postsQuery = Post::published()
+            ->where(function($q) use ($query) {
+                $q->where('title', 'like', "%{$query}%")
+                  ->orWhere('short_description', 'like', "%{$query}%");
+            })
+            ->with('category', 'state');
+        
+        if ($stateId) {
+            $postsQuery->where('state_id', $stateId);
+        }
+        
+        $posts = $postsQuery->latest()->paginate(50);
 
         // Add noindex for empty results or deep pagination
         $noindex = $posts->isEmpty() || $posts->currentPage() > 3;
@@ -27,16 +34,21 @@ class SearchController extends Controller
     public function autocomplete(Request $request)
     {
         $query = $request->input('q', '');
+        $stateId = config('app.domain_state_id');
 
         if (strlen($query) < 3) {
             return response()->json([]);
         }
 
-        $posts = Post::published()
+        $postsQuery = Post::published()
             ->where('title', 'like', "%{$query}%")
-            ->select('id', 'title', 'slug', 'type')
-            ->limit(8)
-            ->get();
+            ->select('id', 'title', 'slug', 'type');
+        
+        if ($stateId) {
+            $postsQuery->where('state_id', $stateId);
+        }
+        
+        $posts = $postsQuery->limit(8)->get();
 
         return response()->json($posts);
     }

@@ -10,11 +10,15 @@ class CategoryController extends Controller
 {
     public function show(Category $category)
     {
-        $posts = $category->posts()
-            ->published()
-            ->with('state')
-            ->latest()
-            ->paginate(50); // 50 posts per page
+        $stateId = config('app.domain_state_id');
+        
+        $postsQuery = $category->posts()->published()->with('state');
+        
+        if ($stateId) {
+            $postsQuery->where('state_id', $stateId);
+        }
+        
+        $posts = $postsQuery->latest()->paginate(50); // 50 posts per page
 
         $states = State::all();
         $categories = Category::all();

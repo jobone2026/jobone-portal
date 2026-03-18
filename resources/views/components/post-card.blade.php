@@ -31,15 +31,3 @@
             <span class="text-xs bg-green-100 text-green-700 px-1 py-0.5 rounded">{{ $post->state->name }}</span>
         @endif
     </div>
-    
-    <p class="text-gray-600 text-xs mb-0.5 line-clamp-1">{{ Str::limit($post->short_description, 60) }}</p>
-    
-    <div class="flex justify-between items-center text-gray-500 mb-0.5">
-        <span class="text-2xs">{{ $post->created_at->format('M d') }}</span>
-        <span class="text-2xs">👁️ {{ $post->view_count }}</span>
-    </div>
-    
-    <a href="{{ route('posts.show', [$post->type, $post->slug]) }}" class="inline-block {{ $colors['link'] }} font-semibold text-xs">
-        Read More →
-    </a>
-</div>
