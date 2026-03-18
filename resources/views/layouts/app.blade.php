@@ -176,17 +176,25 @@
                 <div class="hidden">
                     <select id="custom_language_select" class="text-xs notranslate">
                         <option value="">English</option>
-                        <option value="hi">हिंदी</option>
-                        <option value="te">తెలుగు</option>
-                        <option value="ta">தமிழ்</option>
-                        <option value="kn">ಕನ್ನಡ</option>
-                        <option value="ml">മലയാളം</option>
-                        <option value="mr">मराठी</option>
-                        <option value="gu">ગુજરાતી</option>
-                        <option value="bn">বাংলা</option>
-                        <option value="pa">ਪੰਜਾਬੀ</option>
-                        <option value="or">ଓଡ଼ିଆ</option>
-                        <option value="as">অসমীয়া</option>
+                        @if (!config('app.domain_state_id'))
+                            <!-- Show all languages for main domain -->
+                            <option value="hi">हिंदी</option>
+                            <option value="te">తెలుగు</option>
+                            <option value="ta">தமிழ்</option>
+                            <option value="kn">ಕನ್ನಡ</option>
+                            <option value="ml">മലയാളം</option>
+                            <option value="mr">मराठी</option>
+                            <option value="gu">ગુજરાતી</option>
+                            <option value="bn">বাংলা</option>
+                            <option value="pa">ਪੰਜਾਬੀ</option>
+                            <option value="or">ଓଡ଼ିଆ</option>
+                            <option value="as">অসমীয়া</option>
+                        @else
+                            <!-- Show only state-specific language for filtered domains -->
+                            @if (config('app.domain_state_slug') === 'karnataka')
+                                <option value="kn">ಕನ್ನಡ</option>
+                            @endif
+                        @endif
                     </select>
                 </div>
                 
@@ -746,7 +754,11 @@
                         </a>
                     @endforeach
                 @else
-                    <!-- Show only current state for domain-filtered pages -->
+                    <!-- Show All India + current state for domain-filtered pages -->
+                    <a href="{{ route('posts.all') }}" class="state-box">
+                        All India
+                    </a>
+                    
                     @foreach ($statesWithJobs as $state)
                         <a href="{{ route('states.show', $state->slug) }}" class="state-box">
                             {{ $state->name }}
