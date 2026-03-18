@@ -1,0 +1,36 @@
+═══════════════════════════════════════════════════════════════
+COPY AND PASTE THIS COMMAND INTO YOUR SERVER
+═══════════════════════════════════════════════════════════════
+
+cd /var/www/jobone && sudo chown -R ubuntu:ubuntu . && rm -f app/Http/Middleware/DomainStateFilter.php && git stash && git pull origin main && sudo chown -R www-data:www-data storage bootstrap/cache && sudo chmod -R 775 storage bootstrap/cache && php artisan config:clear && php artisan cache:clear && php artisan view:clear && php artisan route:clear && sudo systemctl restart php8.2-fpm && echo "" && echo "=== KARNATAKAJOB.ONLINE (should show ONLY Karnataka) ===" && curl -s https://karnatakajob.online | grep -o 'state-box">[^<]*</a' | head -5 && echo "" && echo "=== JOBONE.IN (should show ALL states) ===" && curl -s https://jobone.in | grep -o 'state-box">[^<]*</a' | head -5 && echo "" && echo "✅ DEPLOYMENT COMPLETE!"
+
+
+═══════════════════════════════════════════════════════════════
+WHAT THIS DOES:
+═══════════════════════════════════════════════════════════════
+
+1. Fix file ownership for git
+2. Remove old DomainStateFilter.php file
+3. Stash local changes
+4. Pull latest code from GitHub
+5. Fix Laravel permissions
+6. Clear all caches
+7. Restart PHP-FPM
+8. Test both domains
+
+
+═══════════════════════════════════════════════════════════════
+EXPECTED RESULTS:
+═══════════════════════════════════════════════════════════════
+
+=== KARNATAKAJOB.ONLINE ===
+state-box">Karnataka</a
+(ONLY Karnataka - no other states)
+
+=== JOBONE.IN ===
+state-box">All India</a
+state-box">Karnataka</a
+state-box">Maharashtra</a
+state-box">Tamil Nadu</a
+state-box">Uttar Pradesh</a
+(All India + ALL states)
