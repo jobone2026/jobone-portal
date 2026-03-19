@@ -17,6 +17,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'page.cache' => \App\Http\Middleware\PageCache::class,
         ]);
         
+        // Apply TejasFoodie middleware first (before any other processing)
+        $middleware->web(prepend: [
+            \App\Http\Middleware\TejasFoodieMiddleware::class,
+        ]);
+        
         // Apply domain state filter to web routes
         $middleware->web(append: [
             \App\Http\Middleware\DomainStateFilter::class,

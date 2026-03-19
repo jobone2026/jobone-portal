@@ -1,0 +1,60 @@
+═══════════════════════════════════════════════════════════
+COPY & PASTE THESE COMMANDS
+═══════════════════════════════════════════════════════════
+
+═══════════════════════════════════════════════════════════
+STEP 1: LOCAL MACHINE (Windows) - Push to GitHub
+═══════════════════════════════════════════════════════════
+
+cd C:\xampp\htdocs\job\govt-job-portal-new
+
+git add .
+
+git commit -m "Add tejasfoodie.store domain with landing page"
+
+git push origin main
+
+
+═══════════════════════════════════════════════════════════
+STEP 2: SERVER (Linux) - Deploy
+═══════════════════════════════════════════════════════════
+
+ssh root@YOUR_SERVER_IP
+
+cd /var/www/govt-job-portal-new
+
+git pull origin main
+
+sudo bash setup-tejasfoodie.sh
+
+
+═══════════════════════════════════════════════════════════
+THAT'S IT! 
+═══════════════════════════════════════════════════════════
+
+After running the server commands, you'll be prompted for:
+1. Email address (for SSL certificate)
+2. Agree to terms (press Y)
+3. Redirect HTTP to HTTPS (press 2 for Yes)
+
+Then visit: https://tejasfoodie.store
+
+
+═══════════════════════════════════════════════════════════
+IF YOU NEED TO UPDATE HTML LATER
+═══════════════════════════════════════════════════════════
+
+LOCAL:
+cd C:\xampp\htdocs\job\govt-job-portal-new
+git add public/tejasfoodie.html
+git commit -m "Update landing page"
+git push origin main
+
+SERVER:
+ssh root@YOUR_SERVER_IP
+cd /var/www/govt-job-portal-new
+git pull origin main
+sudo systemctl reload nginx
+
+
+═══════════════════════════════════════════════════════════
