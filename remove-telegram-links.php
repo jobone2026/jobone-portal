@@ -74,6 +74,32 @@ foreach ($posts as $post) {
         '/Download\s+Mobile\s+Apps\s+for\s+the\s+Latest\s+Updates/i',
         '/Marital\s+Bio\s+Data\s+Maker/i',
         '/Join\s+Channel\s*/i',
+        
+        // Remove competitor website names and links
+        '/<a[^>]*href=["\']https?:\/\/[^"\']*freejobalert[^"\']*["\'][^>]*>.*?<\/a>/i',
+        '/<a[^>]*href=["\']https?:\/\/[^"\']*sarkari[^"\']*["\'][^>]*>.*?<\/a>/i',
+        '/<a[^>]*href=["\']https?:\/\/[^"\']*sarakari[^"\']*["\'][^>]*>.*?<\/a>/i',
+        '/https?:\/\/[^\s<>"]*freejobalert[^\s<>"]*/i',
+        '/https?:\/\/[^\s<>"]*sarkari[^\s<>"]*/i',
+        '/https?:\/\/[^\s<>"]*sarakari[^\s<>"]*/i',
+        
+        // Remove text mentions
+        '/freejobalert\.com/i',
+        '/free\s*job\s*alert/i',
+        '/sarkari\s*result/i',
+        '/sarkari\s*naukri/i',
+        '/sarakari\s*result/i',
+        '/sarakari\s*naukri/i',
+        
+        // Remove as standalone words
+        '/\bfreejobalert\b/i',
+        '/\bsarkari\b/i',
+        '/\bsarakari\b/i',
+        
+        // Remove links with these domains
+        '/<a[^>]*>.*?freejobalert.*?<\/a>/i',
+        '/<a[^>]*>.*?sarkari.*?<\/a>/i',
+        '/<a[^>]*>.*?sarakari.*?<\/a>/i',
     ];
     
     $newContent = $originalContent;
