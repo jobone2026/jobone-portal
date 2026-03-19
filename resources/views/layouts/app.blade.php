@@ -764,7 +764,7 @@
                     @endforeach
                 @else
                     <!-- Show All India + current state for domain-filtered pages -->
-                    <a href="{{ route('posts.all') }}" class="state-box">
+                    <a href="https://jobone.in/all-posts" class="state-box">
                         All India
                     </a>
                     
