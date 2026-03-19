@@ -56,6 +56,24 @@ foreach ($posts as $post) {
         // Telegram divs/sections
         '/<div[^>]*telegram[^>]*>.*?<\/div>/is',
         '/<p[^>]*>.*?telegram.*?<\/p>/is',
+        
+        // Promotional text patterns
+        '/Download Mobile Apps for the Latest Updates/i',
+        '/How to [A-Z]+ OTR Registration \(Video Hindi\)/i',
+        '/Download Date Extended Notice/i',
+        '/Marital Bio Data Maker/i',
+        '/Join Channel/i',
+        '/Full Notification Before/i',
+        
+        // Generic promotional patterns
+        '/<a[^>]*>Download Mobile Apps.*?<\/a>/i',
+        '/<a[^>]*>Join Channel.*?<\/a>/i',
+        '/<a[^>]*>.*?Bio Data Maker.*?<\/a>/i',
+        
+        // Remove standalone promotional text
+        '/Download\s+Mobile\s+Apps\s+for\s+the\s+Latest\s+Updates/i',
+        '/Marital\s+Bio\s+Data\s+Maker/i',
+        '/Join\s+Channel\s*/i',
     ];
     
     $newContent = $originalContent;
