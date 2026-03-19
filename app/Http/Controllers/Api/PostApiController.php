@@ -232,9 +232,12 @@ class PostApiController extends Controller
      */
     public function categories()
     {
+        $categories = Category::orderBy('name', 'asc')->get(['id', 'name', 'slug']);
+        
         return response()->json([
             'success' => true,
-            'data' => Category::all(['id', 'name', 'slug'])
+            'total' => $categories->count(),
+            'data' => $categories
         ]);
     }
 
@@ -244,9 +247,12 @@ class PostApiController extends Controller
      */
     public function states()
     {
+        $states = State::orderBy('name', 'asc')->get(['id', 'name', 'slug']);
+        
         return response()->json([
             'success' => true,
-            'data' => State::all(['id', 'name', 'slug'])
+            'total' => $states->count(),
+            'data' => $states
         ]);
     }
 

@@ -377,6 +377,7 @@ curl -X GET "https://jobone.in/api/categories" \
 ```json
 {
   "success": true,
+  "total": 15,
   "data": [
     {
       "id": 1,
@@ -402,6 +403,8 @@ curl -X GET "https://jobone.in/api/categories" \
 }
 ```
 
+**Note:** The API returns all categories ordered alphabetically. Use the `id` field when creating/filtering posts by category.
+
 ---
 
 ### 7. GET - All States (Public)
@@ -422,25 +425,33 @@ curl -X GET "https://jobone.in/api/states" \
 ```json
 {
   "success": true,
+  "total": 36,
   "data": [
     {
       "id": 1,
+      "name": "Andhra Pradesh",
+      "slug": "andhra-pradesh"
+    },
+    {
+      "id": 2,
       "name": "Karnataka",
       "slug": "karnataka"
     },
     {
-      "id": 2,
+      "id": 3,
       "name": "Maharashtra",
       "slug": "maharashtra"
     },
     {
-      "id": 3,
+      "id": 4,
       "name": "Tamil Nadu",
       "slug": "tamil-nadu"
     }
   ]
 }
 ```
+
+**Note:** The API returns all Indian states ordered alphabetically. Use the `id` field when creating/filtering posts by state.
 
 ---
 
