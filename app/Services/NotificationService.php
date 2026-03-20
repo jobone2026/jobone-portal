@@ -48,27 +48,42 @@ class NotificationService
         try {
             $postUrl = route('posts.show', [$post->type, $post]);
             
-            // Format message with emojis
-            $emoji = $this->getEmojiForType($post->type);
-            $message = "{$emoji} *" . $this->escapeMarkdown($post->title) . "*\n\n";
+            // Format message with your custom style
+            $message = "🔥 *New Vacancy* 🔥\n";
+            $message .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
+            $message .= "🔥 *" . $this->escapeMarkdown($post->title) . "*\n\n";
             
-            if ($post->short_description) {
-                $message .= $this->escapeMarkdown($post->short_description) . "\n\n";
+            // Add organization if available
+            if ($post->organization) {
+                $message .= "🏢 *Organization:* " . $this->escapeMarkdown($post->organization) . "\n";
             }
             
-            if ($post->last_date) {
-                $message .= "📅 *Last Date:* " . $post->last_date->format('d M Y') . "\n";
-            }
-            
+            // Add total posts if available
             if ($post->total_posts) {
-                $message .= "📊 *Total Posts:* " . $post->total_posts . "\n";
+                $message .= "👥 *Total Posts:* " . $post->total_posts . "\n";
             }
             
-            $message .= "\n🔗 [Apply Now](" . $postUrl . ")";
-            $message .= "\n\n#" . str_replace(' ', '', ucwords(str_replace('_', ' ', $post->type)));
+            // Add notification date if available
+            if ($post->notification_date) {
+                $message .= "🟣 *Application Start:* " . $post->notification_date->format('d-m-Y') . "\n";
+            }
             
+            // Add last date if available
+            if ($post->last_date) {
+                $message .= "🟢 *Last Date:* " . $post->last_date->format('d-m-Y') . "\n";
+            } else {
+                $message .= "🟢 *Last Date:* -\n";
+            }
+            
+            $message .= "\n➡️ *Apply Here:* [Click Here](" . $postUrl . ")\n";
+            
+            // Add hashtags
+            $message .= "\n#" . str_replace(' ', '', ucwords(str_replace('_', ' ', $post->type)));
             if ($post->state) {
                 $message .= " #" . str_replace(' ', '', $post->state->name);
+            }
+            if ($post->category) {
+                $message .= " #" . str_replace(' ', '', $post->category->name);
             }
             
             $response = Http::post("https://api.telegram.org/bot{$botToken}/sendMessage", [
