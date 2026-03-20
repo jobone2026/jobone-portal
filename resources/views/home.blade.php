@@ -183,6 +183,25 @@
                     <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
                         {{ $post->title }}
                     </a>
+                    
+                    <!-- Vacancies and Last Date -->
+                    @if($post->total_posts || $post->last_date)
+                    <div class="flex gap-2 mt-2 mb-2 flex-wrap">
+                        @if($post->total_posts)
+                        <div class="flex items-center gap-1 text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded font-semibold border border-blue-200">
+                            <i class="fas fa-users"></i>
+                            <span>{{ number_format($post->total_posts) }}</span>
+                        </div>
+                        @endif
+                        @if($post->last_date)
+                        <div class="flex items-center gap-1 text-xs bg-red-50 text-red-700 px-2 py-1 rounded font-semibold border border-red-200">
+                            <i class="fas fa-calendar-times"></i>
+                            <span>{{ $post->last_date->format('d M') }}</span>
+                        </div>
+                        @endif
+                    </div>
+                    @endif
+                    
                     <div class="modern-card-item-date">
                         <span><i class="fas fa-calendar-alt"></i> {{ $post->created_at->format('M d, Y') }}</span>
                         @if($post->category)
@@ -193,11 +212,6 @@
                         @if($post->state)
                         <span class="modern-card-item-badge state">
                             <i class="fas fa-map-marker-alt"></i> {{ $post->state->name }}
-                        </span>
-                        @endif
-                        @if($post->view_count > 0)
-                        <span class="modern-card-item-badge views">
-                            <i class="fas fa-eye"></i> {{ number_format($post->view_count) }}
                         </span>
                         @endif
                         @if($post->created_at->diffInDays(now()) <= 3)
