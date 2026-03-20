@@ -204,6 +204,40 @@ x-model="title" @input="analyze(); touched = true; valid = title.length >= 10 &&
 <span class="pf-error-msg"><i class="fas fa-exclamation-circle"></i>{{ $message }}</span>
 @enderror
 </div>
+
+<div class="pf-field">
+<label class="pf-label">Organization</label>
+<input type="text" name="organization" class="pf-input @error('organization') error @enderror"
+value="{{ old('organization', $post->organization ?? '') }}"
+placeholder="e.g., SSC, UPSC, Indian Railways">
+<span class="pf-hint">Name of the recruiting organization</span>
+@error('organization')
+<span class="pf-error-msg"><i class="fas fa-exclamation-circle"></i>{{ $message }}</span>
+@enderror
+</div>
+</div>
+
+<div class="pf-grid-2">
+<div class="pf-field">
+<label class="pf-label">Total Vacancies</label>
+<input type="number" name="total_posts" class="pf-input @error('total_posts') error @enderror"
+value="{{ old('total_posts', $post->total_posts ?? '') }}"
+placeholder="e.g., 500" min="1">
+<span class="pf-hint">Number of available positions</span>
+@error('total_posts')
+<span class="pf-error-msg"><i class="fas fa-exclamation-circle"></i>{{ $message }}</span>
+@enderror
+</div>
+
+<div class="pf-field">
+<label class="pf-label">Last Date</label>
+<input type="date" name="last_date" class="pf-input @error('last_date') error @enderror"
+value="{{ old('last_date', isset($post->last_date) ? $post->last_date->format('Y-m-d') : '') }}">
+<span class="pf-hint">Application deadline</span>
+@error('last_date')
+<span class="pf-error-msg"><i class="fas fa-exclamation-circle"></i>{{ $message }}</span>
+@enderror
+</div>
 </div>
 
 <div class="pf-field" x-data="{ valid: false, touched: false }" :class="{ 'has-error': touched && !valid && content.length > 0, 'has-success': valid }">
