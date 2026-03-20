@@ -1,60 +1,136 @@
-═══════════════════════════════════════════════════════════
-COPY & PASTE THESE COMMANDS
-═══════════════════════════════════════════════════════════
+╔══════════════════════════════════════════════════════════════════════╗
+║                  COPY & PASTE SERVER COMMANDS                        ║
+║                      JobOne.in - SEO Fix                             ║
+╚══════════════════════════════════════════════════════════════════════╝
 
-═══════════════════════════════════════════════════════════
-STEP 1: LOCAL MACHINE (Windows) - Push to GitHub
-═══════════════════════════════════════════════════════════
+✅ All changes pushed to GitHub successfully!
 
-cd C:\xampp\htdocs\job\govt-job-portal-new
+═══════════════════════════════════════════════════════════════════════
+🚀 AUTOMATED DEPLOYMENT (EASIEST - RECOMMENDED)
+═══════════════════════════════════════════════════════════════════════
 
-git add .
+Copy and paste this ONE command on your server:
 
-git commit -m "Add tejasfoodie.store domain with landing page"
+ssh user@your-server-ip "cd /var/www/jobone.in && git pull origin main && chmod +x deploy-server.sh && ./deploy-server.sh"
 
-git push origin main
+Replace:
+  - user@your-server-ip  → Your actual SSH credentials
+  - /var/www/jobone.in   → Your actual project path
 
 
-═══════════════════════════════════════════════════════════
-STEP 2: SERVER (Linux) - Deploy
-═══════════════════════════════════════════════════════════
+═══════════════════════════════════════════════════════════════════════
+📋 STEP-BY-STEP COMMANDS (IF YOU PREFER MANUAL)
+═══════════════════════════════════════════════════════════════════════
 
-ssh root@YOUR_SERVER_IP
+# 1. SSH into server
+ssh user@your-server-ip
 
-cd /var/www/govt-job-portal-new
+# 2. Go to project directory
+cd /var/www/jobone.in
 
+# 3. Pull latest code
 git pull origin main
 
-sudo bash setup-tejasfoodie.sh
+# 4. Update .env (IMPORTANT!)
+nano .env
+# Change: APP_URL=http://localhost:8000
+# To:     APP_URL=https://jobone.in
+# Save: Ctrl+X, Y, Enter
+
+# 5. Set permissions
+chmod 644 public/images/og-image.jpg
+
+# 6. Clear caches
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
+
+# 7. Done! Test it
 
 
-═══════════════════════════════════════════════════════════
-THAT'S IT! 
-═══════════════════════════════════════════════════════════
+═══════════════════════════════════════════════════════════════════════
+🧪 TESTING COMMANDS
+═══════════════════════════════════════════════════════════════════════
 
-After running the server commands, you'll be prompted for:
-1. Email address (for SSL certificate)
-2. Agree to terms (press Y)
-3. Redirect HTTP to HTTPS (press 2 for Yes)
+# Verify APP_URL
+php artisan config:show app.url
 
-Then visit: https://tejasfoodie.store
+# Test og-image exists
+curl -I https://jobone.in/images/og-image.jpg
 
+# Test meta tags
+curl -s https://jobone.in | grep "og:image"
 
-═══════════════════════════════════════════════════════════
-IF YOU NEED TO UPDATE HTML LATER
-═══════════════════════════════════════════════════════════
-
-LOCAL:
-cd C:\xampp\htdocs\job\govt-job-portal-new
-git add public/tejasfoodie.html
-git commit -m "Update landing page"
-git push origin main
-
-SERVER:
-ssh root@YOUR_SERVER_IP
-cd /var/www/govt-job-portal-new
-git pull origin main
-sudo systemctl reload nginx
+# Check for localhost (should return nothing)
+curl -s https://jobone.in | grep -i localhost
 
 
-═══════════════════════════════════════════════════════════
+═══════════════════════════════════════════════════════════════════════
+🌐 BROWSER TESTING
+═══════════════════════════════════════════════════════════════════════
+
+1. Facebook/WhatsApp Debugger:
+   https://developers.facebook.com/tools/debug/
+   
+   → Enter: https://jobone.in
+   → Click "Debug"
+   → Click "Scrape Again"
+   → ✅ Should show image and description
+
+2. Test in WhatsApp:
+   → Share: https://jobone.in
+   → ✅ Should show preview with image
+
+3. Test in Telegram:
+   → Share: https://jobone.in
+   → ✅ Should show preview with image
+
+
+═══════════════════════════════════════════════════════════════════════
+⚠️  IMPORTANT NOTES
+═══════════════════════════════════════════════════════════════════════
+
+1. You MUST update APP_URL in .env from localhost to https://jobone.in
+2. After updating .env, ALWAYS run: php artisan config:clear
+3. Use Facebook Debugger to clear WhatsApp/Telegram cache
+
+
+═══════════════════════════════════════════════════════════════════════
+🐛 TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════════
+
+Problem: Still showing localhost
+Fix: nano .env (update APP_URL) → php artisan config:clear
+
+Problem: Image not showing
+Fix: chmod 644 public/images/og-image.jpg
+
+Problem: Old preview cached
+Fix: Use Facebook Debugger "Scrape Again" button
+
+
+═══════════════════════════════════════════════════════════════════════
+📞 NEED HELP?
+═══════════════════════════════════════════════════════════════════════
+
+See documentation:
+  - SERVER_COMMANDS.txt (detailed commands)
+  - DEPLOY_TO_SERVER.md (full guide)
+  - POST_DEPLOYMENT_TEST.md (testing guide)
+
+
+═══════════════════════════════════════════════════════════════════════
+✅ WHAT WAS CHANGED
+═══════════════════════════════════════════════════════════════════════
+
+GitHub Repository: jobone2026/jobone-portal
+Branch: main
+Latest Commit: 395e0b4
+
+Files Changed:
+  ✅ app/Services/SeoService.php
+  ✅ resources/views/components/seo-head.blade.php
+  ✅ public/images/og-image.jpg (NEW)
+  ✅ deploy-server.sh (NEW - automated deployment)
+
+═══════════════════════════════════════════════════════════════════════
