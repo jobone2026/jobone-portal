@@ -129,21 +129,6 @@
             </div>
         @endif
 
-        <!-- Short Description -->
-        <div class="bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 p-5 rounded-xl mb-4 border-2 border-indigo-200 shadow-sm">
-            <div class="flex items-start gap-3">
-                <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                </div>
-                <div class="flex-1">
-                    <h3 class="font-bold text-indigo-900 mb-2 text-sm">Quick Overview</h3>
-                    <p class="text-gray-700 text-sm leading-relaxed">{{ $post->short_description }}</p>
-                </div>
-            </div>
-        </div>
-
         <!-- Main Content -->
         <div class="prose prose-sm max-w-none mb-4 text-sm post-content-wrapper bg-white rounded-lg p-5 border border-gray-200">
             <div class="post-content-isolated">
