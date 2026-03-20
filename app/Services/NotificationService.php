@@ -78,13 +78,7 @@ class NotificationService
             $message .= "\n➡️ *Apply Here:* [Click Here](" . $postUrl . ")\n";
             
             // Add hashtags
-            $message .= "\n#" . str_replace(' ', '', ucwords(str_replace('_', ' ', $post->type)));
-            if ($post->state) {
-                $message .= " #" . str_replace(' ', '', $post->state->name);
-            }
-            if ($post->category) {
-                $message .= " #" . str_replace(' ', '', $post->category->name);
-            }
+            $message .= "\n#jobone2026 #jobone";
             
             $response = Http::post("https://api.telegram.org/bot{$botToken}/sendMessage", [
                 'chat_id' => $channelId,
