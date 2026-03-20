@@ -84,7 +84,7 @@ class NotificationService
                 'chat_id' => $channelId,
                 'text' => $message,
                 'parse_mode' => 'Markdown',
-                'disable_web_page_preview' => false,
+                'disable_web_page_preview' => true,  // Disable preview to show only formatted text
             ]);
             
             if ($response->successful()) {
