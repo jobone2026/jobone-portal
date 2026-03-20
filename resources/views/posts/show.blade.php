@@ -9,6 +9,9 @@
 @section('og_url', route('posts.show', [$post->type, $post->slug]))
 
 @section('content')
+    <!-- Quick Apply Button Component -->
+    <x-quick-apply-button :post="$post" />
+    
     <style>
         /* Post content wrapper - basic isolation */
         .post-content-wrapper {
@@ -41,60 +44,108 @@
         ['label' => $post->title, 'url' => '#']
     ]" />
 
-    <article class="bg-white rounded-lg shadow-md p-3 md:p-8 mb-4 md:mb-8">
-        <div class="mb-3">
-            <div class="flex justify-between items-start mb-2 flex-wrap gap-2">
-                <h1 class="font-bold text-gray-800 flex-1" style="font-size: 15px;">{{ $post->title }}</h1>
+    <article class="bg-white rounded-xl shadow-lg p-4 md:p-8 mb-4 md:mb-8 border border-gray-200">
+        <div class="mb-4">
+            <div class="flex justify-between items-start mb-3 flex-wrap gap-3">
+                <h1 class="font-bold text-gray-900 flex-1 leading-tight" style="font-size: 18px; line-height: 1.4;">{{ $post->title }}</h1>
                 @if ($post->isNew())
-                    <span class="bg-red-500 text-white px-3 py-1 rounded text-xs font-bold">NEW</span>
+                    <span class="bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-md animate-pulse flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        NEW
+                    </span>
                 @endif
             </div>
 
-            <div class="flex flex-wrap gap-2 mb-2">
-                <span class="text-xs bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-medium"><i class="fas fa-tag"></i> {{ ucfirst(str_replace('_', ' ', $post->type)) }}</span>
+            <div class="flex flex-wrap gap-2 mb-3">
+                <span class="text-xs bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 py-1.5 rounded-full font-semibold shadow-sm">
+                    <i class="fas fa-tag"></i> {{ ucfirst(str_replace('_', ' ', $post->type)) }}
+                </span>
                 @if ($post->category)
-                    <a href="{{ route('categories.show', $post->category) }}" class="text-xs bg-gray-100 text-gray-800 px-3 py-1 rounded-full hover:bg-gray-200 transition font-medium">
+                    <a href="{{ route('categories.show', $post->category) }}" class="text-xs bg-gradient-to-r from-gray-600 to-gray-700 text-white px-3 py-1.5 rounded-full hover:from-gray-700 hover:to-gray-800 transition font-semibold shadow-sm">
                         <i class="fas fa-folder"></i> {{ $post->category->name }}
                     </a>
                 @endif
                 @if ($post->state)
-                    <a href="{{ route('states.show', $post->state) }}" class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full hover:bg-green-200 transition font-medium">
+                    <a href="{{ route('states.show', $post->state) }}" class="text-xs bg-gradient-to-r from-green-600 to-green-700 text-white px-3 py-1.5 rounded-full hover:from-green-700 hover:to-green-800 transition font-semibold shadow-sm">
                         <i class="fas fa-map-marker-alt"></i> {{ $post->state->name }}
                     </a>
                 @endif
             </div>
 
-            <div class="flex justify-between items-center text-2xs text-gray-600 border-t border-b border-gray-200 py-2">
-                <span><i class="fas fa-calendar"></i> Published: {{ $post->created_at->format('M d, Y') }}</span>
-                <span><i class="fas fa-eye"></i> {{ $post->view_count }} views</span>
+            <div class="flex justify-between items-center text-xs text-gray-600 border-t border-b border-gray-200 py-3 bg-gray-50 rounded px-3">
+                <span class="flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    Published: {{ $post->created_at->format('M d, Y') }}
+                </span>
+                <span class="flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                    </svg>
+                    {{ number_format($post->view_count) }} views
+                </span>
             </div>
         </div>
 
         <!-- Important Dates -->
-        @if ($post->last_date || $post->notification_date || $post->total_posts)
-            <div class="bg-gradient-to-r from-blue-50 to-blue-100 border-l-4 border-blue-600 p-4 mb-3 rounded-r-lg">
-                <h3 class="font-bold text-blue-900 mb-2 text-sm"><i class="fas fa-info-circle"></i> Important Information</h3>
-                <ul class="text-xs text-blue-800 space-y-1">
+        @if ($post->last_date || $post->notification_date || $post->total_posts || $post->organization)
+            <div class="bg-gradient-to-r from-blue-50 via-blue-100 to-blue-50 border-l-4 border-blue-600 p-5 mb-4 rounded-r-xl shadow-sm">
+                <h3 class="font-bold text-blue-900 mb-3 text-base flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                    </svg>
+                    Important Information
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    @if ($post->organization)
+                        <div class="bg-white rounded-lg p-3 shadow-sm border border-blue-200">
+                            <div class="text-xs text-blue-600 font-semibold mb-1">Organization</div>
+                            <div class="text-sm text-blue-900 font-bold">{{ $post->organization }}</div>
+                        </div>
+                    @endif
                     @if ($post->notification_date)
-                        <li><strong>Notification Date:</strong> {{ $post->notification_date->format('M d, Y') }}</li>
+                        <div class="bg-white rounded-lg p-3 shadow-sm border border-blue-200">
+                            <div class="text-xs text-blue-600 font-semibold mb-1">Notification Date</div>
+                            <div class="text-sm text-blue-900 font-bold">{{ $post->notification_date->format('M d, Y') }}</div>
+                        </div>
                     @endif
                     @if ($post->last_date)
-                        <li><strong>Last Date:</strong> {{ $post->last_date->format('M d, Y') }}</li>
+                        <div class="bg-white rounded-lg p-3 shadow-sm border border-red-200">
+                            <div class="text-xs text-red-600 font-semibold mb-1">Last Date to Apply</div>
+                            <div class="text-sm text-red-900 font-bold">{{ $post->last_date->format('M d, Y') }}</div>
+                        </div>
                     @endif
                     @if ($post->total_posts)
-                        <li><strong>Total Posts:</strong> {{ $post->total_posts }}</li>
+                        <div class="bg-white rounded-lg p-3 shadow-sm border border-blue-200">
+                            <div class="text-xs text-blue-600 font-semibold mb-1">Total Vacancies</div>
+                            <div class="text-sm text-blue-900 font-bold">{{ number_format($post->total_posts) }}</div>
+                        </div>
                     @endif
-                </ul>
+                </div>
             </div>
         @endif
 
         <!-- Short Description -->
-        <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-lg mb-3 border border-gray-200">
-            <p class="text-gray-700 text-sm leading-relaxed">{{ $post->short_description }}</p>
+        <div class="bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 p-5 rounded-xl mb-4 border-2 border-indigo-200 shadow-sm">
+            <div class="flex items-start gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <h3 class="font-bold text-indigo-900 mb-2 text-sm">Quick Overview</h3>
+                    <p class="text-gray-700 text-sm leading-relaxed">{{ $post->short_description }}</p>
+                </div>
+            </div>
         </div>
 
         <!-- Main Content -->
-        <div class="prose prose-sm max-w-none mb-3 text-sm post-content-wrapper">
+        <div class="prose prose-sm max-w-none mb-4 text-sm post-content-wrapper bg-white rounded-lg p-5 border border-gray-200">
             <div class="post-content-isolated">
                 {!! $post->content !!}
             </div>
@@ -113,27 +164,54 @@
             }
         @endphp
         @if (count($importantLinks) > 0)
-            <div class="bg-gradient-to-r from-green-50 to-green-100 border-l-4 border-green-600 p-4 mb-3 rounded-r-lg">
-                <h3 class="font-bold text-green-900 mb-3 text-sm"><i class="fas fa-link"></i> Important Links</h3>
-                <ul class="space-y-2">
+            <div class="bg-gradient-to-r from-green-50 via-green-100 to-green-50 border-l-4 border-green-600 p-5 mb-4 rounded-r-xl shadow-sm">
+                <h3 class="font-bold text-green-900 mb-4 text-base flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd"></path>
+                    </svg>
+                    Important Links
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     @foreach ($importantLinks as $key => $value)
                         @if (is_array($value) && isset($value['url']))
                             {{-- Old format: array with 'label' and 'url' --}}
-                            <li>
-                                <a href="{{ $value['url'] }}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800 font-semibold text-xs transition">
-                                    <i class="fas fa-external-link-alt"></i> {{ $value['label'] ?? ucwords(str_replace('_', ' ', $key)) }}
-                                </a>
-                            </li>
+                            <a href="{{ $value['url'] }}" target="_blank" rel="noopener noreferrer" 
+                               class="flex items-center justify-between gap-3 bg-white hover:bg-green-50 border-2 border-green-200 hover:border-green-400 rounded-lg p-4 transition-all duration-200 shadow-sm hover:shadow-md group">
+                                <div class="flex items-center gap-3 flex-1 min-w-0">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm group-hover:scale-110 transition-transform">
+                                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                        </svg>
+                                    </div>
+                                    <span class="text-sm font-bold text-green-800 group-hover:text-green-900 truncate">
+                                        {{ $value['label'] ?? ucwords(str_replace('_', ' ', $key)) }}
+                                    </span>
+                                </div>
+                                <svg class="w-5 h-5 text-green-600 group-hover:translate-x-1 transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                </svg>
+                            </a>
                         @else
                             {{-- New format: simple key-value pairs --}}
-                            <li>
-                                <a href="{{ $value }}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800 font-semibold text-xs transition">
-                                    <i class="fas fa-external-link-alt"></i> {{ ucwords(str_replace('_', ' ', $key)) }}
-                                </a>
-                            </li>
+                            <a href="{{ $value }}" target="_blank" rel="noopener noreferrer" 
+                               class="flex items-center justify-between gap-3 bg-white hover:bg-green-50 border-2 border-green-200 hover:border-green-400 rounded-lg p-4 transition-all duration-200 shadow-sm hover:shadow-md group">
+                                <div class="flex items-center gap-3 flex-1 min-w-0">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm group-hover:scale-110 transition-transform">
+                                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                        </svg>
+                                    </div>
+                                    <span class="text-sm font-bold text-green-800 group-hover:text-green-900 truncate">
+                                        {{ ucwords(str_replace('_', ' ', $key)) }}
+                                    </span>
+                                </div>
+                                <svg class="w-5 h-5 text-green-600 group-hover:translate-x-1 transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                </svg>
+                            </a>
                         @endif
                     @endforeach
-                </ul>
+                </div>
             </div>
         @endif
 

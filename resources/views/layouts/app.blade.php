@@ -985,5 +985,11 @@
             }
         });
     </script>
+    
+    <!-- Toast Notification Component -->
+    <x-toast-notification />
+    
+    <!-- Back to Top Button -->
+    <x-back-to-top />
 </body>
 </html>
