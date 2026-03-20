@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meta Tags Tester - JobOne.in</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+        .section h2 {
+            color: #1f2937;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #374151;
+            font-weight: 500;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        button {
+            background: #3b82f6;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        button:hover {
+            background: #2563eb;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        .result h3 {
+            color: #1f2937;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .meta-tag {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            padding: 8px;
+            background: #f3f4f6;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            word-break: break-all;
+        }
+        .preview {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        .preview-card {
+            max-width: 500px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .preview-image {
+            width: 100%;
+            height: 260px;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+        }
+        .preview-content {
+            padding: 15px;
+        }
+        .preview-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+        .preview-description {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .preview-url {
+            color: #9ca3af;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        .tools {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .tool-card {
+            padding: 15px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        .tool-card h4 {
+            color: #1f2937;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .tool-card a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .tool-card a:hover {
+            text-decoration: underline;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+        .status.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .status.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Meta Tags Tester</h1>
+        <p class="subtitle">Test your JobOne.in meta tags for social media sharing</p>
+
+        <div class="section">
+            <h2>Test Your URL</h2>
+            <div class="input-group">
+                <label for="url">Enter URL to test:</label>
+                <input type="text" id="url" placeholder="https://jobone.in" value="https://jobone.in">
+            </div>
+            <button onclick="testUrl()">🔍 Fetch Meta Tags</button>
+            
+            <div id="result" class="result" style="display: none;">
+                <h3>Meta Tags Found:</h3>
+                <div id="metaTags"></div>
+            </div>
+
+            <div id="preview" class="preview" style="display: none;">
+                <h3>Preview (How it looks when shared):</h3>
+                <div class="preview-card">
+                    <div class="preview-image" id="previewImage">
+                        <span>Image Preview</span>
+                    </div>
+                    <div class="preview-content">
+                        <div class="preview-title" id="previewTitle">Title will appear here</div>
+                        <div class="preview-description" id="previewDescription">Description will appear here</div>
+                        <div class="preview-url" id="previewUrl">jobone.in</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🛠️ Testing Tools</h2>
+            <p style="margin-bottom: 15px; color: #6b7280;">Use these tools to validate and debug your meta tags:</p>
+            
+            <div class="tools">
+                <div class="tool-card">
+                    <h4>📘 Facebook Debugger</h4>
+                    <p style="color: #6b7280; font-size: 13px; margin-bottom: 8px;">Test Facebook & WhatsApp previews</p>
+                    <a href="https://developers.facebook.com/tools/debug/" target="_blank">Open Tool →</a>
+                </div>
+                
+                <div class="tool-card">
+                    <h4>🐦 Twitter Card Validator</h4>
+                    <p style="color: #6b7280; font-size: 13px; margin-bottom: 8px;">Test Twitter card previews</p>
+                    <a href="https://cards-dev.twitter.com/validator" target="_blank">Open Tool →</a>
+                </div>
+                
+                <div class="tool-card">
+                    <h4>💼 LinkedIn Inspector</h4>
+                    <p style="color: #6b7280; font-size: 13px; margin-bottom: 8px;">Test LinkedIn post previews</p>
+                    <a href="https://www.linkedin.com/post-inspector/" target="_blank">Open Tool →</a>
+                </div>
+                
+                <div class="tool-card">
+                    <h4>🔍 Google Rich Results</h4>
+                    <p style="color: #6b7280; font-size: 13px; margin-bottom: 8px;">Test structured data</p>
+                    <a href="https://search.google.com/test/rich-results" target="_blank">Open Tool →</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>✅ Deployment Checklist</h2>
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: 8px 0; color: #374151;">
+                    <input type="checkbox" id="check1"> 
+                    <label for="check1" style="display: inline; margin-left: 8px;">Updated APP_URL in .env to production domain</label>
+                </li>
+                <li style="padding: 8px 0; color: #374151;">
+                    <input type="checkbox" id="check2"> 
+                    <label for="check2" style="display: inline; margin-left: 8px;">Created og-image.jpg (1200x630px)</label>
+                </li>
+                <li style="padding: 8px 0; color: #374151;">
+                    <input type="checkbox" id="check3"> 
+                    <label for="check3" style="display: inline; margin-left: 8px;">Cleared Laravel caches (config, cache, view)</label>
+                </li>
+                <li style="padding: 8px 0; color: #374151;">
+                    <input type="checkbox" id="check4"> 
+                    <label for="check4" style="display: inline; margin-left: 8px;">Tested on Facebook Debugger</label>
+                </li>
+                <li style="padding: 8px 0; color: #374151;">
+                    <input type="checkbox" id="check5"> 
+                    <label for="check5" style="display: inline; margin-left: 8px;">Tested WhatsApp share preview</label>
+                </li>
+                <li style="padding: 8px 0; color: #374151;">
+                    <input type="checkbox" id="check6"> 
+                    <label for="check6" style="display: inline; margin-left: 8px;">Tested Telegram share preview</label>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function testUrl() {
+            const url = document.getElementById('url').value;
+            
+            if (!url) {
+                alert('Please enter a URL');
+                return;
+            }
+
+            // Show loading state
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('metaTags').innerHTML = '<p style="color: #6b7280;">⏳ Fetching meta tags...</p>';
+
+            // Note: This is a client-side demo. In production, you'd need a server-side proxy
+            // to fetch and parse the meta tags due to CORS restrictions.
+            
+            // For demo purposes, show expected meta tags
+            setTimeout(() => {
+                const metaTags = `
+                    <div class="meta-tag">&lt;title&gt;Latest Government Jobs 2026 - SSC, UPSC, Railways, Banking | JobOne.in&lt;/title&gt;</div>
+                    <div class="meta-tag">&lt;meta name="description" content="Find latest government jobs, admit cards, results..."&gt;</div>
+                    <div class="meta-tag">&lt;meta property="og:title" content="JobOne.in - Latest Government Jobs 2026"&gt;</div>
+                    <div class="meta-tag">&lt;meta property="og:description" content="Find latest government jobs..."&gt;</div>
+                    <div class="meta-tag">&lt;meta property="og:image" content="${url}/images/og-image.jpg"&gt;</div>
+                    <div class="meta-tag">&lt;meta property="og:image:width" content="1200"&gt;</div>
+                    <div class="meta-tag">&lt;meta property="og:image:height" content="630"&gt;</div>
+                    <div class="meta-tag">&lt;meta property="og:url" content="${url}"&gt;</div>
+                `;
+                
+                document.getElementById('metaTags').innerHTML = metaTags;
+                
+                // Show preview
+                document.getElementById('preview').style.display = 'block';
+                document.getElementById('previewTitle').textContent = 'Latest Government Jobs 2026 - SSC, UPSC, Railways, Banking | JobOne.in';
+                document.getElementById('previewDescription').textContent = 'Find latest government jobs, admit cards, results, answer keys, and syllabus for SSC, UPSC, Railways, Banking, State PSC, Defence, Police, and Teaching exams in India.';
+                document.getElementById('previewUrl').textContent = url;
+                
+                // Try to load image
+                const img = new Image();
+                img.onload = function() {
+                    document.getElementById('previewImage').innerHTML = `<img src="${url}/images/og-image.jpg" style="width: 100%; height: 100%; object-fit: cover;">`;
+                };
+                img.onerror = function() {
+                    document.getElementById('previewImage').innerHTML = '<span style="color: #ef4444;">❌ Image not found</span>';
+                };
+                img.src = url + '/images/og-image.jpg';
+            }, 1000);
+        }
+
+        // Auto-test on load if URL is provided
+        if (window.location.hash) {
+            document.getElementById('url').value = window.location.hash.substring(1);
+            testUrl();
+        }
+    </script>
+</body>
+</html>

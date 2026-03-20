@@ -37,13 +37,19 @@
 <meta property="og:title" content="{{ $seo['og_title'] }}">
 <meta property="og:description" content="{{ $seo['og_description'] }}">
 <meta property="og:image" content="{{ $seo['og_image'] }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{{ $seo['og_title'] }}">
 <meta property="og:url" content="{{ $seo['og_url'] }}">
+<meta property="og:locale" content="en_IN">
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@JobOneIn">
 <meta name="twitter:title" content="{{ $seo['og_title'] }}">
 <meta name="twitter:description" content="{{ $seo['og_description'] }}">
 <meta name="twitter:image" content="{{ $seo['og_image'] }}">
+<meta name="twitter:image:alt" content="{{ $seo['og_title'] }}">
 
 <!-- Preconnect -->
 <link rel="preconnect" href="https://fonts.googleapis.com">

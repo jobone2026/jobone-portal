@@ -165,8 +165,24 @@ class SeoService
 
     private function generatePostDescription($post): string
     {
-        $description = $post->meta_description ?? $post->short_description ?? strip_tags($post->content);
-        return Str::limit($description, 155, '...');
+        // Priority: meta_description > short_description > content excerpt
+        if (!empty($post->meta_description)) {
+            $description = $post->meta_description;
+        } elseif (!empty($post->short_description)) {
+            $description = $post->short_description;
+        } else {
+            // Extract text from content, remove HTML tags
+            $description = strip_tags($post->content);
+            // Remove extra whitespace
+            $description = preg_replace('/\s+/', ' ', $description);
+        }
+        
+        // Ensure description is not empty
+        if (empty(trim($description))) {
+            $description = "Latest {$post->category->name} notification for {$post->title}. Check details, eligibility, application process, and important dates.";
+        }
+        
+        return Str::limit(trim($description), 155, '...');
     }
 
     public function generateKeywords($page, $data = null): string
@@ -210,6 +226,12 @@ class SeoService
 
     public function generateOgTags($page, $data = null): array
     {
+        // Use post image if available, otherwise default OG image
+        $ogImage = asset('images/og-image.jpg');
+        if ($page === 'post' && $data && !empty($data->image)) {
+            $ogImage = $data->image;
+        }
+        
         return [
             'og:title' => $this->generateTitle($page, $data),
             'og:description' => $this->generateDescription($page, $data),
@@ -217,7 +239,7 @@ class SeoService
             'og:type' => $page === 'post' ? 'article' : 'website',
             'og:site_name' => 'JobOne.in',
             'og:locale' => 'en_IN',
-            'og:image' => asset('images/og-image.jpg'),
+            'og:image' => $ogImage,
         ];
     }
 
@@ -289,6 +311,15 @@ class SeoService
 
     public function generatePostSeo(Post $post): array
     {
+        // Ensure we have a valid OG image URL (absolute URL)
+        $ogImage = asset('images/og-image.jpg');
+        if (!empty($post->image)) {
+            // If post image is relative, make it absolute
+            $ogImage = str_starts_with($post->image, 'http') 
+                ? $post->image 
+                : asset($post->image);
+        }
+        
         return [
             'title' => $this->generatePostTitle($post),
             'description' => $this->generatePostDescription($post),
@@ -296,7 +327,7 @@ class SeoService
             'canonical' => url()->current(),
             'og_title' => $this->generatePostTitle($post),
             'og_description' => $this->generatePostDescription($post),
-            'og_image' => $post->image ?? asset('images/og-image.jpg'),
+            'og_image' => $ogImage,
             'og_url' => url()->current(),
         ];
     }
