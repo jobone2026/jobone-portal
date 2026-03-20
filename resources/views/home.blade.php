@@ -7,47 +7,53 @@
     <style>
         .modern-card {
             background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-            border: 1px solid #e9ecef;
+            border: 2px solid #e9ecef;
             transition: all 0.3s ease;
             min-height: 200px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-radius: 12px;
         }
         .modern-card:hover {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transform: translateY(-4px);
+            border-color: #cbd5e1;
         }
         .modern-card-header {
-            padding: 12px 16px;
-            font-size: 14px;
-            font-weight: 600;
+            padding: 14px 18px;
+            font-size: 15px;
+            font-weight: 700;
             color: white;
-            border-radius: 8px 8px 0 0;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         .modern-card-item {
-            padding: 10px 16px;
+            padding: 12px 18px;
             border-bottom: 1px solid #f0f0f0;
             font-size: 13px;
-            line-height: 1.4;
-            transition: all 0.2s ease;
+            line-height: 1.5;
+            transition: all 0.3s ease;
         }
         .modern-card-item:last-child {
             border-bottom: none;
         }
         .modern-card-item:hover {
-            background: #f8f9fa;
-            padding-left: 20px;
+            background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding-left: 24px;
+            border-left: 3px solid #3b82f6;
         }
         .modern-card-item a {
-            color: #0066cc;
+            color: #2563eb;
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
             display: block;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            transition: color 0.2s ease;
         }
         .modern-card-item a:hover {
-            color: #0052a3;
-            text-decoration: underline;
+            color: #1d4ed8;
+            text-decoration: none;
         }
         
         /* Mobile optimizations */
@@ -120,28 +126,44 @@
             color: #e65100;
         }
         .modern-card-item-badge.new {
-            background: #e8f5e9;
-            color: #2e7d32;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
             animation: pulse 2s infinite;
+            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
         }
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+            0%, 100% { 
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.8;
+                transform: scale(1.05);
+            }
         }
         .modern-card-footer {
-            padding: 10px 16px;
-            background: #f8f9fa;
+            padding: 12px 18px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             text-align: center;
-            border-radius: 0 0 8px 8px;
-            font-size: 12px;
+            border-radius: 0 0 10px 10px;
+            font-size: 13px;
+            border-top: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        .modern-card-footer:hover {
+            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
         }
         .modern-card-footer a {
             color: inherit;
-            font-weight: 600;
+            font-weight: 700;
             text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: transform 0.2s ease;
         }
         .modern-card-footer a:hover {
-            text-decoration: underline;
+            transform: translateX(4px);
         }
         
         /* Consistent color for all job cards */
