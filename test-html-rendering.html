@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Content Rendering Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* Post content wrapper - basic isolation */
+        .post-content-wrapper {
+            isolation: isolate;
+            position: relative;
+        }
+        
+        /* Allow content to have its own styles */
+        .post-content-isolated {
+            display: block;
+            position: relative;
+            line-height: 1.75;
+            color: #374151;
+        }
+        
+        /* Typography styles for post content */
+        .post-content-isolated h1,
+        .post-content-isolated h2,
+        .post-content-isolated h3,
+        .post-content-isolated h4,
+        .post-content-isolated h5,
+        .post-content-isolated h6 {
+            font-weight: 700;
+            color: #111827;
+            margin-top: 1.5em;
+            margin-bottom: 0.75em;
+            line-height: 1.3;
+        }
+        
+        .post-content-isolated h1 { font-size: 1.875rem; }
+        .post-content-isolated h2 { font-size: 1.5rem; }
+        .post-content-isolated h3 { font-size: 1.25rem; }
+        .post-content-isolated h4 { font-size: 1.125rem; }
+        .post-content-isolated h5 { font-size: 1rem; }
+        .post-content-isolated h6 { font-size: 0.875rem; }
+        
+        .post-content-isolated p {
+            margin-bottom: 1.25em;
+            line-height: 1.75;
+        }
+        
+        .post-content-isolated ul,
+        .post-content-isolated ol {
+            margin-bottom: 1.25em;
+            padding-left: 1.75em;
+        }
+        
+        .post-content-isolated ul {
+            list-style-type: disc;
+        }
+        
+        .post-content-isolated ol {
+            list-style-type: decimal;
+        }
+        
+        .post-content-isolated li {
+            margin-bottom: 0.5em;
+            line-height: 1.75;
+        }
+        
+        .post-content-isolated li > ul,
+        .post-content-isolated li > ol {
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+        }
+        
+        .post-content-isolated a {
+            color: #2563eb;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+        
+        .post-content-isolated a:hover {
+            color: #1d4ed8;
+        }
+        
+        .post-content-isolated strong,
+        .post-content-isolated b {
+            font-weight: 700;
+            color: #111827;
+        }
+        
+        .post-content-isolated em,
+        .post-content-isolated i {
+            font-style: italic;
+        }
+        
+        .post-content-isolated blockquote {
+            border-left: 4px solid #e5e7eb;
+            padding-left: 1em;
+            margin: 1.5em 0;
+            font-style: italic;
+            color: #6b7280;
+        }
+        
+        /* Table wrapper for horizontal scroll on mobile */
+        .post-content-isolated > table {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            margin: 1.5em 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .post-content-isolated table {
+            width: 100%;
+            border-collapse: collapse;
+            display: table;
+            min-width: 100%;
+        }
+        
+        .post-content-isolated table thead {
+            background-color: #f3f4f6;
+        }
+        
+        .post-content-isolated table tbody {
+            display: table-row-group;
+        }
+        
+        .post-content-isolated table tr {
+            display: table-row;
+        }
+        
+        .post-content-isolated table th,
+        .post-content-isolated table td {
+            display: table-cell;
+            border: 1px solid #d1d5db;
+            padding: 0.75em 1em;
+            text-align: left;
+            vertical-align: top;
+        }
+        
+        .post-content-isolated table th {
+            font-weight: 700;
+            color: #111827;
+            background-color: #f3f4f6;
+        }
+        
+        .post-content-isolated table tbody tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        
+        .post-content-isolated table tbody tr:hover {
+            background-color: #f0f9ff;
+        }
+        
+        .post-content-isolated img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            margin: 1.5em 0;
+        }
+        
+        .post-content-isolated code {
+            background-color: #f3f4f6;
+            padding: 0.2em 0.4em;
+            border-radius: 0.25rem;
+            font-size: 0.875em;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .post-content-isolated pre {
+            background-color: #1f2937;
+            color: #f9fafb;
+            padding: 1em;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1.5em 0;
+        }
+        
+        .post-content-isolated pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        .post-content-isolated hr {
+            border: none;
+            border-top: 2px solid #e5e7eb;
+            margin: 2em 0;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .post-content-isolated h1 { font-size: 1.5rem; }
+            .post-content-isolated h2 { font-size: 1.25rem; }
+            .post-content-isolated h3 { font-size: 1.125rem; }
+            .post-content-isolated h4 { font-size: 1rem; }
+            
+            .post-content-isolated table {
+                font-size: 0.875rem;
+            }
+            
+            .post-content-isolated table th,
+            .post-content-isolated table td {
+                padding: 0.5em 0.75em;
+            }
+        }
+        
+        /* Additional content enhancements */
+        .post-content-isolated h2:first-child,
+        .post-content-isolated h3:first-child {
+            margin-top: 0;
+        }
+        
+        /* Better link styling in tables */
+        .post-content-isolated table a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+        
+        .post-content-isolated table a:hover {
+            border-bottom-color: #2563eb;
+        }
+        
+        /* Ensure proper spacing between sections */
+        .post-content-isolated > *:first-child {
+            margin-top: 0;
+        }
+        
+        .post-content-isolated > *:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="post-content-wrapper">
+            <div class="post-content-isolated">
+                <p>Jawaharlal Nehru Centre For Advanced Scientific Research (JNCASR) Recruitment 2026: Jawaharlal Nehru Centre For Advanced Scientific Research has released the official notification for 1 Research Associate posts, inviting applications from eligible candidates. This recruitment provides an excellent opportunity for candidates seeking research jobs.</p>
+                
+                <p>Candidates can apply by sending their complete application along with required documents via email. The last date to submit the email application is 09-04-2026. Below, you can find complete details of Research Associate Recruitment 2026, including vacancy breakdown, eligibility, age limit, salary, selection process, application procedure, and important links.</p>
+                
+                <h2>JNCASR Research Associate Recruitment 2026 - Overview</h2>
+                
+                <table border="1" cellpadding="8" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td><strong>Company Name</strong></td>
+                            <td>Jawaharlal Nehru Centre For Advanced Scientific Research (JNCASR)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Post Name</strong></td>
+                            <td>Research Associate</td>
+                        </tr>
+                        <tr>
+                            <td><strong>No of Posts</strong></td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Advt No</strong></td>
+                            <td>NCU-EMR-166</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Salary</strong></td>
+                            <td>Rs. 58,000 plus applicable HRA</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Qualification</strong></td>
+                            <td>PhD in Chemistry with at least one research paper in Science Citation Index (SCI) Journal.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Age Limit</strong></td>
+                            <td>Max: 35 years</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Last Date</strong></td>
+                            <td>09-04-2026</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Apply Mode</strong></td>
+                            <td>Email</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Job Type</strong></td>
+                            <td>Temporary</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h2>JNCASR Research Associate Vacancy 2026 Notification PDF</h2>
+                
+                <p>Candidates should download and read the JNCASR Jobs 2026 notification PDF carefully to check vacancy details, eligibility, age limit, and application instructions. The notification also includes important dates and selection process details. The direct download link is available in the Important Links section below.</p>
+                
+                <p><strong><a href="https://www.jncasr.ac.in/sites/default/files/Join_Us/Opportunities/2026-04/NCU-EMR-166.pdf" rel="noopener" target="_blank">Download JNCASR Research Associate Job 2026 Notification PDF</a></strong></p>
+                
+                <h2>JNCASR Research Associate Recruitment 2026 - Vacancy Details</h2>
+                
+                <table border="1" cellpadding="8" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td><strong>Post Name</strong></td>
+                            <td><strong>Total Posts</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Research Associate</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total</strong></td>
+                            <td><strong>1</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h2>JNCASR Research Associate Recruitment 2026 - Eligibility Criteria</h2>
+                
+                <ul>
+                    <li><strong>Research Associate:</strong> PhD in Chemistry with at least one research paper in Science Citation Index (SCI) Journal. Prior knowledge in spectroscopy and photophysics, and good hands-on experience in Synthetic Organic Chemistry are desirable.</li>
+                </ul>
+                
+                <h2>JNCASR Research Associate Recruitment 2026 - Application Fee</h2>
+                
+                <p>No application fee is mentioned in the official notification.</p>
+                
+                <h2>JNCASR Research Associate Recruitment 2026 - Age Limit</h2>
+                
+                <ul>
+                    <li>Maximum Age Limit: 35 years</li>
+                </ul>
+                
+                <h2>JNCASR Research Associate Recruitment 2026 - Salary</h2>
+                
+                <ul>
+                    <li>Rs. 58,000 plus applicable HRA</li>
+                </ul>
+                
+                <h2>JNCASR Research Associate Recruitment 2026 - Important Dates</h2>
+                
+                <table border="1" cellpadding="8" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td><strong>Event</strong></td>
+                            <td><strong>Date</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Last Date to Apply</td>
+                            <td>9 April 2026</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h2>JNCASR Research Associate Recruitment 2026 - Selection Process</h2>
+                
+                <ul>
+                    <li>Shortlisted candidates will be invited for an online interview.</li>
+                    <li>Candidates will be selected based on his/her performance in the interview by a selection committee.</li>
+                </ul>
+                
+                <h2>How to Apply</h2>
+                
+                <p>Candidates who wish to apply for JNCASR Research Associate Recruitment 2026 via email should follow the steps below.</p>
+                
+                <ul>
+                    <li>Read the official notification carefully before applying.</li>
+                    <li>Prepare your application with complete bio-data including personal details, educational qualifications, and experience.</li>
+                    <li>Attach self-attested copies of all required documents such as educational certificates, experience certificates, ID proof, and recent passport-size photographs.</li>
+                    <li>Clearly mention the post applied for in the subject line of the email.</li>
+                    <li>Send the complete application to the official email address mentioned in the notification.</li>
+                    <li>Ensure the email is sent before the last date: 09-04-2026.</li>
+                    <li>Keep a copy of the sent email for future reference.</li>
+                </ul>
+                
+                <h2>JNCASR Research Associate Recruitment 2026 - Important Links</h2>
+                
+                <table border="1" cellpadding="8" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td><strong>Link Description</strong></td>
+                            <td><strong>Link</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Official Notification PDF</td>
+                            <td><a href="https://www.jncasr.ac.in/sites/default/files/Join_Us/Opportunities/2026-04/NCU-EMR-166.pdf" target="_blank" rel="noopener">Click here</a></td>
+                        </tr>
+                        <tr>
+                            <td>Official Website</td>
+                            <td><a href="https://www.jncasr.ac.in" rel="noopener">Click here</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

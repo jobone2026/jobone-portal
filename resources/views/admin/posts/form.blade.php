@@ -217,7 +217,7 @@ placeholder="e.g., SSC, UPSC, Indian Railways">
 </div>
 </div>
 
-<div class="pf-grid-2">
+<div class="pf-grid-3">
 <div class="pf-field">
 <label class="pf-label">Total Vacancies</label>
 <input type="number" name="total_posts" class="pf-input @error('total_posts') error @enderror"
@@ -225,6 +225,16 @@ value="{{ old('total_posts', $post->total_posts ?? '') }}"
 placeholder="e.g., 500" min="1">
 <span class="pf-hint">Number of available positions</span>
 @error('total_posts')
+<span class="pf-error-msg"><i class="fas fa-exclamation-circle"></i>{{ $message }}</span>
+@enderror
+</div>
+
+<div class="pf-field">
+<label class="pf-label">Notification Date</label>
+<input type="date" name="notification_date" class="pf-input @error('notification_date') error @enderror"
+value="{{ old('notification_date', isset($post->notification_date) ? $post->notification_date->format('Y-m-d') : '') }}">
+<span class="pf-hint">When notification was released</span>
+@error('notification_date')
 <span class="pf-error-msg"><i class="fas fa-exclamation-circle"></i>{{ $message }}</span>
 @enderror
 </div>

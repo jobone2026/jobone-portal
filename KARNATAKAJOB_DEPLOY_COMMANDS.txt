@@ -1,0 +1,113 @@
+=== Deploy Optimized Nginx Config for karnatakajob.online ===
+
+CURRENT SCORE: 74/100 (was 67)
+TARGET: 75-80+
+
+QUICK DEPLOY (Copy & Paste):
+────────────────────────────────────────────────────────────────
+
+cd /var/www/jobone
+
+# Upload the optimized config file first, then run:
+
+sudo cp /etc/nginx/sites-available/karnatakajob.online /etc/nginx/sites-available/karnatakajob.online.backup.$(date +%Y%m%d_%H%M%S)
+
+sudo tee /etc/nginx/sites-available/karnatakajob.online > /dev/null << 'ENDOFFILE'
+server {
+    listen 80;
+    listen [::]:80;
+    server_name karnatakajob.online www.karnatakajob.online;
+    return 301 https://$server_name$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name karnatakajob.online www.karnatakajob.online;
+
+    root /var/www/jobone/public;
+    index index.php index.html;
+
+    ssl_certificate /etc/letsencrypt/live/jobone.in/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/jobone.in/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
+
+    gzip on;
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_types text/plain text/css text/xml text/javascript application/json application/javascript application/xml+rss application/rss+xml font/truetype font/opentype application/vnd.ms-fontobject image/svg+xml;
+    gzip_disable "msie6";
+
+    location ^~ /build/ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        access_log off;
+        try_files $uri =404;
+    }
+
+    location ~* \.(css|js|jpg|jpeg|png|gif|ico|svg|woff|woff2|ttf|eot|webp)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        access_log off;
+    }
+
+    location ~* \.(html)$ {
+        expires 1h;
+        add_header Cache-Control "public, must-revalidate";
+    }
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+        fastcgi_hide_header X-Powered-By;
+    }
+
+    location ~ /\. {
+        deny all;
+    }
+
+    access_log /var/log/nginx/karnatakajob.online-access.log;
+    error_log /var/log/nginx/karnatakajob.online-error.log;
+}
+ENDOFFILE
+
+# Test config
+sudo nginx -t
+
+# If test passes, reload
+sudo service nginx reload
+
+# Verify
+curl -I https://karnatakajob.online/images/jobone-logo.webp 2>/dev/null | grep -i "cache-control"
+
+────────────────────────────────────────────────────────────────
+
+WHAT THIS DOES:
+✓ Fixes SSL certificate path (was causing error)
+✓ Adds cache headers for static assets (1 year)
+✓ Adds security headers (X-Frame-Options, etc.)
+✓ Enables gzip compression
+✓ Caches /build/ directory properly
+
+EXPECTED RESULT:
+- Score should improve to 75-80+
+- Cache headers will work properly
+- Security headers added
+
+TEST AFTER DEPLOY:
+https://pagespeed.web.dev/analysis?url=https://karnatakajob.online/

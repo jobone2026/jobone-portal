@@ -69,6 +69,10 @@ class PostController extends Controller
             'category_id' => 'required|exists:categories,id',
             'state_id' => 'nullable|exists:states,id',
             'content' => 'required|string',
+            'organization' => 'nullable|string|max:255',
+            'total_posts' => 'nullable|integer|min:1',
+            'last_date' => 'nullable|date',
+            'notification_date' => 'nullable|date',
             'meta_title' => 'nullable|string|max:60',
             'meta_description' => 'nullable|string|max:160',
             'meta_keywords' => 'nullable|string|max:1000',
@@ -79,9 +83,6 @@ class PostController extends Controller
         $validated['slug'] = Str::slug($validated['title']);
         $validated['admin_id'] = auth('admin')->id();
         $validated['short_description'] = '';
-        $validated['total_posts'] = null;
-        $validated['last_date'] = null;
-        $validated['notification_date'] = null;
         $validated['important_links'] = null;
 
         $post = Post::create($validated);
@@ -140,6 +141,10 @@ class PostController extends Controller
             'category_id' => 'required|exists:categories,id',
             'state_id' => 'nullable|exists:states,id',
             'content' => 'required|string',
+            'organization' => 'nullable|string|max:255',
+            'total_posts' => 'nullable|integer|min:1',
+            'last_date' => 'nullable|date',
+            'notification_date' => 'nullable|date',
             'meta_title' => 'nullable|string|max:60',
             'meta_description' => 'nullable|string|max:160',
             'meta_keywords' => 'nullable|string|max:1000',
@@ -149,9 +154,6 @@ class PostController extends Controller
 
         $validated['slug'] = Str::slug($validated['title']);
         $validated['short_description'] = '';
-        $validated['total_posts'] = null;
-        $validated['last_date'] = null;
-        $validated['notification_date'] = null;
         $validated['important_links'] = $post->important_links; // Keep existing value
 
         $wasPublished = $post->is_published;

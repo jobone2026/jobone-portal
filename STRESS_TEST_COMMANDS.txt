@@ -1,0 +1,165 @@
+=== Quick Stress Testing & Rate Limiting Commands ===
+
+📊 INSTALL STRESS TESTING TOOLS
+────────────────────────────────────────────────────────────────
+sudo apt-get update && sudo apt-get install -y apache2-utils wrk siege
+
+
+🧪 BASIC STRESS TESTS (Start Here)
+────────────────────────────────────────────────────────────────
+
+# Light test: 100 requests, 10 concurrent users
+ab -n 100 -c 10 https://jobone.in/
+
+# Medium test: 500 requests, 25 concurrent users
+ab -n 500 -c 25 https://jobone.in/
+
+# Heavy test: 1000 requests, 50 concurrent users
+ab -n 1000 -c 50 https://jobone.in/
+
+# Test specific page
+ab -n 200 -c 20 https://jobone.in/posts/latest-govt-jobs
+
+
+🛡️ APPLY RATE LIMITING (Protect Your Site)
+────────────────────────────────────────────────────────────────
+
+# Quick manual setup - Add to /etc/nginx/nginx.conf in http block:
+sudo nano /etc/nginx/nginx.conf
+
+# Add these lines before the last closing brace:
+limit_req_zone $binary_remote_addr zone=public:10m rate=10r/s;
+limit_req_zone $binary_remote_addr zone=search:10m rate=5r/s;
+limit_req_zone $binary_remote_addr zone=api:10m rate=5r/s;
+limit_req_zone $binary_remote_addr zone=admin:10m rate=2r/s;
+limit_conn_zone $binary_remote_addr zone=addr:10m;
+
+# Then add to /etc/nginx/sites-available/jobone.in in server block:
+sudo nano /etc/nginx/sites-available/jobone.in
+
+# Add after server_name line:
+    limit_req zone=public burst=20 nodelay;
+    limit_conn addr 15;
+
+# Test and reload:
+sudo nginx -t && sudo service nginx reload
+
+
+📈 MONITOR DURING TEST
+────────────────────────────────────────────────────────────────
+
+# Watch server load (open in separate terminal)
+htop
+
+# Watch Nginx logs for rate limiting
+sudo tail -f /var/log/nginx/error.log | grep limiting
+
+# Count active connections
+watch -n 1 'sudo netstat -an | grep :443 | wc -l'
+
+# Check blocked IPs
+sudo tail -100 /var/log/nginx/error.log | grep limiting | awk '{print $11}' | sort | uniq -c | sort -rn
+
+
+🚀 ADVANCED STRESS TESTS
+────────────────────────────────────────────────────────────────
+
+# wrk: 30 seconds, 50 connections
+wrk -t8 -c50 -d30s https://jobone.in/
+
+# siege: 100 users for 1 minute
+siege -c100 -t1M https://jobone.in/
+
+# Test rate limiting (should see 429 errors)
+ab -n 1000 -c 100 https://jobone.in/
+
+
+🚨 EMERGENCY: BLOCK ATTACKER IP
+────────────────────────────────────────────────────────────────
+
+# Block specific IP
+sudo iptables -A INPUT -s ATTACKER_IP -j DROP
+
+# List blocked IPs
+sudo iptables -L INPUT -n
+
+# Unblock IP
+sudo iptables -D INPUT -s ATTACKER_IP -j DROP
+
+
+✅ RECOMMENDED WORKFLOW
+────────────────────────────────────────────────────────────────
+
+1. Install tools:
+   sudo apt-get install -y apache2-utils
+
+2. Run light test:
+   ab -n 100 -c 10 https://jobone.in/
+
+3. Monitor in another terminal:
+   htop
+
+4. If site handles well, apply rate limiting:
+   sudo nano /etc/nginx/nginx.conf
+   (add rate limit zones)
+
+5. Test rate limiting works:
+   ab -n 500 -c 100 https://jobone.in/
+   (should see some 503 errors = rate limiting working)
+
+6. Monitor blocked requests:
+   sudo tail -f /var/log/nginx/error.log | grep limiting
+
+
+📊 INTERPRETING RESULTS
+────────────────────────────────────────────────────────────────
+
+GOOD:
+- Requests per second: > 50
+- Time per request: < 200ms
+- Failed requests: 0%
+- Server load: < 2.0
+
+WARNING:
+- Requests per second: < 20
+- Time per request: > 500ms
+- Failed requests: > 1%
+- Server load: > 4.0
+
+CRITICAL:
+- Requests per second: < 10
+- Time per request: > 2000ms
+- Failed requests: > 5%
+- Server load: > 8.0
+
+
+🎯 RATE LIMIT SETTINGS EXPLAINED
+────────────────────────────────────────────────────────────────
+
+rate=10r/s = 10 requests per second per IP
+burst=20 = Allow up to 20 requests in a burst
+nodelay = Process burst requests immediately
+
+Example:
+- Normal user: 10 req/sec = OK
+- Fast user: 30 req/sec = First 20 OK, rest blocked
+- Attacker: 100 req/sec = Mostly blocked, see 503 errors
+
+
+📝 QUICK COPY-PASTE RATE LIMITING
+────────────────────────────────────────────────────────────────
+
+# Add to /etc/nginx/nginx.conf (in http block, before last }):
+limit_req_zone $binary_remote_addr zone=public:10m rate=10r/s;
+limit_conn_zone $binary_remote_addr zone=addr:10m;
+
+# Add to /etc/nginx/sites-available/jobone.in (in server block):
+limit_req zone=public burst=20 nodelay;
+limit_conn addr 15;
+
+# Test and reload:
+sudo nginx -t && sudo service nginx reload
+
+# Verify it's working:
+ab -n 200 -c 50 https://jobone.in/
+# Should see some "Non-2xx responses" = rate limiting active

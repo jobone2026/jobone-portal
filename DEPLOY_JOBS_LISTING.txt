@@ -1,0 +1,36 @@
+═══════════════════════════════════════════════════════════════
+  DEPLOY IMPROVED JOBS LISTING PAGE
+═══════════════════════════════════════════════════════════════
+
+✅ COMMITTED: Commit 414e33a - "Improve jobs listing page with enhanced post-card component"
+
+📋 COPY AND PASTE THESE COMMANDS ON SERVER:
+───────────────────────────────────────────────────────────────
+
+cd /var/www/jobone && git pull origin main && sudo php artisan view:clear && sudo php artisan cache:clear && sudo php artisan config:clear && sudo chown -R www-data:www-data storage bootstrap/cache && sudo service php8.2-fpm restart && sudo service nginx restart
+
+───────────────────────────────────────────────────────────────
+
+🌐 TEST THESE PAGES AFTER DEPLOYMENT:
+───────────────────────────────────────────────────────────────
+• https://jobone.in/jobs
+• https://jobone.in/admit-cards  
+• https://jobone.in/results
+
+💡 WHAT CHANGED:
+───────────────────────────────────────────────────────────────
+✓ Jobs listing page now uses the enhanced <x-post-card> component
+✓ Better visual design with urgency indicators
+✓ Improved hover effects and shadows
+✓ Animated badges with pulse effects
+✓ Better organization and vacancy display
+✓ Larger, more readable titles
+✓ Grid layout (1 column mobile, 2 columns tablet, 3 columns desktop)
+
+🔧 IF CHANGES DON'T APPEAR:
+───────────────────────────────────────────────────────────────
+1. Clear browser cache: Ctrl+Shift+R (or Cmd+Shift+R on Mac)
+2. Or use F12 → Right-click refresh → "Empty Cache and Hard Reload"
+3. The PageCache middleware caches HTML for 60 minutes
+
+═══════════════════════════════════════════════════════════════
