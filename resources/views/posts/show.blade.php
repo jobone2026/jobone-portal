@@ -343,7 +343,7 @@
         <!-- Main Content -->
         <div class="max-w-none mb-4 post-content-wrapper bg-white rounded-lg p-5 border border-gray-200">
             <div class="post-content-isolated">
-                {!! $post->content !!}
+                {!! preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', '', $post->content) !!}
             </div>
         </div>
 
