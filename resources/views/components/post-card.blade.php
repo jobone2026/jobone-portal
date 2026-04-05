@@ -17,7 +17,7 @@
         
         <!-- TITLE -->
         <div class="flex-1">
-            <h3 class="text-lg font-bold text-gray-800 hover:text-blue-600">
+            <h3 class="text-base font-bold text-gray-800 hover:text-blue-600">
                 <a href="{{ route('posts.show', [$post->type, $post->slug]) }}">{{ $post->title }}</a>
             </h3>
             @if ($post->organization)
@@ -49,7 +49,7 @@
         @endif
         @if ($post->total_posts)
             <div class="flex items-center gap-2 text-gray-800 font-semibold">
-                💼 ₹ {{ number_format($post->total_posts) }}
+                � {{ number_format($post->total_posts) }}
             </div>
         @endif
         <div class="flex items-center gap-2 text-gray-600">
