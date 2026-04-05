@@ -219,12 +219,12 @@
                 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-2">
-                    <a href="{{ route('home') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 text-sm font-medium"><i class="fas fa-home"></i> Home</a>
-                    <a href="{{ route('posts.jobs') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 text-sm font-medium"><i class="fas fa-briefcase"></i> Jobs</a>
-                    <a href="{{ route('posts.admit-cards') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 text-sm font-medium"><i class="fas fa-id-card"></i> Admit</a>
-                    <a href="{{ route('posts.results') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 text-sm font-medium"><i class="fas fa-chart-bar"></i> Results</a>
-                    <a href="{{ route('posts.syllabus') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 text-sm font-medium"><i class="fas fa-book"></i> Syllabus</a>
-                    <a href="{{ route('posts.blogs') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 text-sm font-medium"><i class="fas fa-pen-fancy"></i> Blogs</a>
+                    <a href="{{ route('home') }}" class="px-5 py-3 text-gray-700 hover:text-blue-600 text-lg font-semibold"><i class="fas fa-home"></i> Home</a>
+                    <a href="{{ route('posts.jobs') }}" class="px-5 py-3 text-gray-700 hover:text-blue-600 text-lg font-semibold"><i class="fas fa-briefcase"></i> Jobs</a>
+                    <a href="{{ route('posts.admit-cards') }}" class="px-5 py-3 text-gray-700 hover:text-blue-600 text-lg font-semibold"><i class="fas fa-id-card"></i> Admit</a>
+                    <a href="{{ route('posts.results') }}" class="px-5 py-3 text-gray-700 hover:text-blue-600 text-lg font-semibold"><i class="fas fa-chart-bar"></i> Results</a>
+                    <a href="{{ route('posts.syllabus') }}" class="px-5 py-3 text-gray-700 hover:text-blue-600 text-lg font-semibold"><i class="fas fa-book"></i> Syllabus</a>
+                    <a href="{{ route('posts.blogs') }}" class="px-5 py-3 text-gray-700 hover:text-blue-600 text-lg font-semibold"><i class="fas fa-pen-fancy"></i> Blogs</a>
                 </div>
                 
                 <!-- Search Bar -->
@@ -245,18 +245,18 @@
                     selectResult(post) {
                         window.location.href = `/${post.type}/${post.slug}`;
                     }
-                }" class="relative w-64 md:w-80">
-                    <form action="{{ route('search') }}" method="GET" class="flex items-center gap-1">
+                }" class="relative w-80 md:w-96">
+                    <form action="{{ route('search') }}" method="GET" class="flex items-center gap-2">
                         <input 
                             type="text" 
                             name="q" 
                             x-model="query"
                             @input.debounce.300ms="search()"
                             @click.away="showResults = false"
-                            placeholder="Search..." 
-                            class="px-2 py-1.5 bg-blue-100 border border-blue-300 rounded-lg focus:outline-none focus:border-blue-500 focus:bg-white w-full text-xs"
+                            placeholder="Search jobs, results..." 
+                            class="px-4 py-3 bg-blue-100 border-2 border-blue-300 rounded-lg focus:outline-none focus:border-blue-500 focus:bg-white w-full text-base font-medium"
                             autocomplete="off">
-                        <button type="submit" class="px-2.5 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 font-medium text-xs shadow-md flex-shrink-0"><i class="fas fa-search"></i></button>
+                        <button type="submit" class="px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 font-semibold text-base shadow-md flex-shrink-0"><i class="fas fa-search"></i></button>
                     </form>
                     
                     <!-- Autocomplete Results -->
