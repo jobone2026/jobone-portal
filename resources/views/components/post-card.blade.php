@@ -17,7 +17,7 @@
         
         <!-- TITLE -->
         <div class="flex-1">
-            <h3 class="font-bold text-gray-800 hover:text-blue-600" style="font-size: 20px; line-height: 1.3;">
+            <h3 class="font-bold hover:text-blue-600" style="font-size: 18px; line-height: 1.3; color: #1e40af;">
                 <a href="{{ route('posts.show', [$post->type, $post->slug]) }}">{{ $post->title }}</a>
             </h3>
             @if ($post->organization)
@@ -49,7 +49,10 @@
         @endif
         @if ($post->total_posts)
             <div class="flex items-center gap-2 text-gray-800 font-semibold">
-                � {{ number_format($post->total_posts) }}
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
+                </svg>
+                {{ number_format($post->total_posts) }}
             </div>
         @endif
         <div class="flex items-center gap-2 text-gray-600">
