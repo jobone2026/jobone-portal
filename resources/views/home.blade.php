@@ -9,28 +9,28 @@
             background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
             border: 2px solid #e9ecef;
             transition: all 0.3s ease;
-            min-height: 200px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            border-radius: 12px;
+            min-height: 250px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-radius: 16px;
         }
         .modern-card:hover {
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            transform: translateY(-4px);
-            border-color: #cbd5e1;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+            transform: translateY(-6px);
+            border-color: #3b82f6;
         }
         .modern-card-header {
-            padding: 14px 18px;
-            font-size: 15px;
+            padding: 16px 20px;
+            font-size: 16px;
             font-weight: 700;
             color: white;
-            border-radius: 10px 10px 0 0;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 14px 14px 0 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
         .modern-card-item {
-            padding: 12px 18px;
+            padding: 14px 20px;
             border-bottom: 1px solid #f0f0f0;
-            font-size: 13px;
-            line-height: 1.5;
+            font-size: 14px;
+            line-height: 1.6;
             transition: all 0.3s ease;
         }
         .modern-card-item:last-child {
@@ -38,18 +38,19 @@
         }
         .modern-card-item:hover {
             background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%);
-            padding-left: 24px;
-            border-left: 3px solid #3b82f6;
+            padding-left: 26px;
+            border-left: 4px solid #3b82f6;
         }
         .modern-card-item a {
             color: #2563eb;
             text-decoration: none;
             font-weight: 600;
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             word-wrap: break-word;
             overflow-wrap: break-word;
             transition: color 0.2s ease;
+            font-size: 14px;
         }
         .modern-card-item a:hover {
             color: #1d4ed8;
@@ -171,7 +172,7 @@
     </style>
 
     <!-- Six Column Layout - Different Post Types -->
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
         <!-- Left Column: Jobs -->
         <div class="modern-card rounded-lg overflow-hidden">
             <div class="modern-card-header" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
