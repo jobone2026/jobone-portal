@@ -23,6 +23,220 @@
         .post-content-isolated {
             display: block;
             position: relative;
+            line-height: 1.75;
+            color: #374151;
+        }
+        
+        /* Typography styles for post content */
+        .post-content-isolated h1,
+        .post-content-isolated h2,
+        .post-content-isolated h3,
+        .post-content-isolated h4,
+        .post-content-isolated h5,
+        .post-content-isolated h6 {
+            font-weight: 700;
+            color: #111827;
+            margin-top: 1.5em;
+            margin-bottom: 0.75em;
+            line-height: 1.3;
+        }
+        
+        .post-content-isolated h1 { font-size: 1.875rem; }
+        .post-content-isolated h2 { font-size: 1.5rem; }
+        .post-content-isolated h3 { font-size: 1.25rem; }
+        .post-content-isolated h4 { font-size: 1.125rem; }
+        .post-content-isolated h5 { font-size: 1rem; }
+        .post-content-isolated h6 { font-size: 0.875rem; }
+        
+        .post-content-isolated p {
+            margin-bottom: 1.25em;
+            line-height: 1.75;
+        }
+        
+        .post-content-isolated ul,
+        .post-content-isolated ol {
+            margin-bottom: 1.25em;
+            padding-left: 1.75em;
+        }
+        
+        .post-content-isolated ul {
+            list-style-type: disc;
+        }
+        
+        .post-content-isolated ol {
+            list-style-type: decimal;
+        }
+        
+        .post-content-isolated li {
+            margin-bottom: 0.5em;
+            line-height: 1.75;
+        }
+        
+        .post-content-isolated li > ul,
+        .post-content-isolated li > ol {
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+        }
+        
+        .post-content-isolated a {
+            color: #2563eb;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+        
+        .post-content-isolated a:hover {
+            color: #1d4ed8;
+        }
+        
+        .post-content-isolated strong,
+        .post-content-isolated b {
+            font-weight: 700;
+            color: #111827;
+        }
+        
+        .post-content-isolated em,
+        .post-content-isolated i {
+            font-style: italic;
+        }
+        
+        .post-content-isolated blockquote {
+            border-left: 4px solid #e5e7eb;
+            padding-left: 1em;
+            margin: 1.5em 0;
+            font-style: italic;
+            color: #6b7280;
+        }
+        
+        /* Table wrapper for horizontal scroll on mobile */
+        .post-content-isolated > table {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            margin: 1.5em 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .post-content-isolated table {
+            width: 100%;
+            border-collapse: collapse;
+            display: table;
+            min-width: 100%;
+        }
+        
+        .post-content-isolated table thead {
+            background-color: #f3f4f6;
+        }
+        
+        .post-content-isolated table tbody {
+            display: table-row-group;
+        }
+        
+        .post-content-isolated table tr {
+            display: table-row;
+        }
+        
+        .post-content-isolated table th,
+        .post-content-isolated table td {
+            display: table-cell;
+            border: 1px solid #d1d5db;
+            padding: 0.75em 1em;
+            text-align: left;
+            vertical-align: top;
+        }
+        
+        .post-content-isolated table th {
+            font-weight: 700;
+            color: #111827;
+            background-color: #f3f4f6;
+        }
+        
+        .post-content-isolated table tbody tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        
+        .post-content-isolated table tbody tr:hover {
+            background-color: #f0f9ff;
+        }
+        
+        .post-content-isolated img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            margin: 1.5em 0;
+        }
+        
+        .post-content-isolated code {
+            background-color: #f3f4f6;
+            padding: 0.2em 0.4em;
+            border-radius: 0.25rem;
+            font-size: 0.875em;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .post-content-isolated pre {
+            background-color: #1f2937;
+            color: #f9fafb;
+            padding: 1em;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1.5em 0;
+        }
+        
+        .post-content-isolated pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        .post-content-isolated hr {
+            border: none;
+            border-top: 2px solid #e5e7eb;
+            margin: 2em 0;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .post-content-isolated h1 { font-size: 1.5rem; }
+            .post-content-isolated h2 { font-size: 1.25rem; }
+            .post-content-isolated h3 { font-size: 1.125rem; }
+            .post-content-isolated h4 { font-size: 1rem; }
+            
+            .post-content-isolated table {
+                font-size: 0.875rem;
+            }
+            
+            .post-content-isolated table th,
+            .post-content-isolated table td {
+                padding: 0.5em 0.75em;
+            }
+        }
+        
+        /* Additional content enhancements */
+        .post-content-isolated h2:first-child,
+        .post-content-isolated h3:first-child {
+            margin-top: 0;
+        }
+        
+        /* Better link styling in tables */
+        .post-content-isolated table a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+        
+        .post-content-isolated table a:hover {
+            border-bottom-color: #2563eb;
+        }
+        
+        /* Ensure proper spacing between sections */
+        .post-content-isolated > *:first-child {
+            margin-top: 0;
+        }
+        
+        .post-content-isolated > *:last-child {
+            margin-bottom: 0;
         }
     </style>
 
@@ -130,7 +344,7 @@
         @endif
 
         <!-- Main Content -->
-        <div class="prose prose-sm max-w-none mb-4 text-sm post-content-wrapper bg-white rounded-lg p-5 border border-gray-200">
+        <div class="max-w-none mb-4 post-content-wrapper bg-white rounded-lg p-5 border border-gray-200">
             <div class="post-content-isolated">
                 {!! $post->content !!}
             </div>

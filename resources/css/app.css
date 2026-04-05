@@ -699,3 +699,34 @@ button {
 .animate-slide-in-down {
   animation: slideInDown 0.5s ease-out;
 }
+
+/* Post Content Rendering - Ensure HTML displays correctly */
+.post-content-wrapper * {
+  box-sizing: border-box;
+}
+
+.post-content-isolated > * {
+  display: block;
+  visibility: visible;
+  opacity: 1;
+}
+
+.post-content-isolated img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.post-content-isolated table {
+  display: table;
+  width: 100%;
+}
+
+.post-content-isolated ul,
+.post-content-isolated ol {
+  display: block;
+}
+
+.post-content-isolated li {
+  display: list-item;
+}
