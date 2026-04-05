@@ -9,9 +9,6 @@
 @section('og_url', route('posts.show', [$post->type, $post->slug]))
 
 @section('content')
-    <!-- Quick Apply Button Component -->
-    <x-quick-apply-button :post="$post" />
-    
     <style>
         /* Post content wrapper - basic isolation */
         .post-content-wrapper {
