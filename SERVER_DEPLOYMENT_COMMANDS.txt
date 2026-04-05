@@ -1,42 +1,124 @@
-DEPLOYMENT COMMANDS FOR SERVER
-================================
+========================================
+SERVER DEPLOYMENT COMMANDS
+HTML Content Fix
+========================================
 
-Run these commands on the server to deploy the domain filtering feature:
+OPTION 1: Quick Commands (Copy & Paste)
+----------------------------------------
 
+# Navigate to your project directory
 cd /var/www/jobone
 
-# Stash any local changes
-git stash
-
-# Pull latest code from GitHub
+# Pull latest changes
 git pull origin main
 
-# Clear all caches
-php artisan config:clear
+# Install dependencies
+npm install
+
+# Build assets
+npm run build
+
+# Clear caches
 php artisan cache:clear
 php artisan view:clear
-php artisan route:clear
+php artisan config:clear
+
+# Optimize
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# Set permissions
+chmod -R 755 storage bootstrap/cache
+chown -R www-data:www-data storage bootstrap/cache
 
 # Restart PHP-FPM
-sudo systemctl restart php8.2-fpm
-
-# Test karnatakajob.online (should show ONLY Karnataka)
-curl -s https://karnatakajob.online | grep -o 'state-box">[^<]*</a' | head -5
-
-# Test jobone.in (should show ALL states)
-curl -s https://jobone.in | grep -o 'state-box">[^<]*</a' | head -5
+sudo systemctl restart php8.3-fpm
 
 
-WHAT THIS DOES:
-===============
-1. Stashes any local changes on the server
-2. Pulls the latest code from GitHub (commit d12eab9)
-3. Clears all Laravel caches
-4. Restarts PHP-FPM to apply changes
-5. Tests both domains to verify filtering works
+OPTION 2: One-Line Command
+---------------------------
+
+cd /var/www/jobone && git pull origin main && npm install && npm run build && php artisan cache:clear && php artisan view:clear && php artisan config:clear && php artisan config:cache && php artisan route:cache && php artisan view:cache && chmod -R 755 storage bootstrap/cache && sudo systemctl restart php8.3-fpm
 
 
-EXPECTED RESULTS:
-=================
-- karnatakajob.online: Should show ONLY "Karnataka" state box
-- jobone.in: Should show "All India" + all state boxes (Karnataka, Maharashtra, etc.)
+OPTION 3: Use Deployment Script
+--------------------------------
+
+# Make script executable
+chmod +x deploy-html-fix-server.sh
+
+# Run the script
+bash deploy-html-fix-server.sh
+
+
+========================================
+VERIFICATION STEPS
+========================================
+
+After deployment, verify:
+
+1. Visit any post page on your website
+2. Check if tables display with borders
+3. Check if headings are properly sized
+4. Check if lists show bullets/numbers
+5. Check if links are blue and clickable
+6. Test on mobile device
+
+Example post to test:
+https://your-domain.com/job/jncasr-research-associate-recruitment-2026
+
+
+========================================
+TROUBLESHOOTING
+========================================
+
+If content still doesn't display correctly:
+
+1. Check if build was successful:
+   ls -la public/build/assets/
+
+2. Check Laravel logs:
+   tail -f storage/logs/laravel.log
+
+3. Check PHP-FPM status:
+   sudo systemctl status php8.3-fpm
+
+4. Clear browser cache:
+   Press Ctrl+Shift+R (or Cmd+Shift+R on Mac)
+
+5. Check file permissions:
+   ls -la storage/
+   ls -la bootstrap/cache/
+
+
+========================================
+ROLLBACK (If Needed)
+========================================
+
+If something goes wrong:
+
+# Revert to previous commit
+git reset --hard HEAD~1
+
+# Rebuild assets
+npm run build
+
+# Clear caches
+php artisan cache:clear
+php artisan view:clear
+
+# Restart PHP-FPM
+sudo systemctl restart php8.3-fpm
+
+
+========================================
+NOTES
+========================================
+
+- Replace /var/www/jobone with your actual project path
+- Replace php8.3-fpm with your PHP version (php8.2-fpm, php-fpm, etc.)
+- Replace www-data with your web server user if different
+- Make sure you have sudo access for restarting PHP-FPM
+
+========================================
