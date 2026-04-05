@@ -17,7 +17,7 @@
         
         <!-- TITLE -->
         <div class="flex-1">
-            <h3 class="text-base font-bold text-gray-800 hover:text-blue-600">
+            <h3 class="font-bold text-gray-800 hover:text-blue-600" style="font-size: 20px; line-height: 1.3;">
                 <a href="{{ route('posts.show', [$post->type, $post->slug]) }}">{{ $post->title }}</a>
             </h3>
             @if ($post->organization)
