@@ -573,7 +573,7 @@
                 
                 <!-- Police -->
                 <a href="{{ route('categories.show', 'police') }}" class="category-card" title="Police Jobs">
-                    <i class="fa-solid fa-user-police category-icon"></i>
+                    <i class="fas fa-shield-alt category-icon"></i>
                     <span class="category-label">Police</span>
                 </a>
                 
