@@ -32,9 +32,7 @@
         <!-- Grid of Post Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach ($posts as $post)
-                <div class="transform hover:-translate-y-1 transition-all duration-300 h-full">
-                    <x-post-card :post="$post" />
-                </div>
+                <x-post-card :post="$post" />
             @endforeach
         </div>
 
