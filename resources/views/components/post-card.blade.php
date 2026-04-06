@@ -34,8 +34,8 @@
     <!-- Main Content -->
     <div class="p-4">
         <!-- Title -->
-        <h3 class="font-bold text-gray-900 mb-3 hover:text-blue-600 transition-colors" style="font-size: 16px; line-height: 1.4;">
-            <a href="{{ route('posts.show', [$post->type, $post->slug]) }}" class="block">
+        <h3 class="font-bold mb-3 transition-colors" style="font-size: 16px; line-height: 1.4; color: #1f2937;">
+            <a href="{{ route('posts.show', [$post->type, $post->slug]) }}" class="block hover:text-blue-600" style="color: inherit; text-decoration: none;">
                 {{ $post->title }}
             </a>
         </h3>
@@ -88,12 +88,18 @@
         <!-- Action Buttons -->
         <div class="flex gap-2 pt-3 border-t border-gray-100">
             <a href="{{ route('posts.show', [$post->type, $post->slug]) }}" 
-               class="flex-1 px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white text-sm font-bold rounded-lg shadow-md hover:shadow-lg transition-all text-center flex items-center justify-center gap-2">
+               class="flex-1 px-4 py-2.5 text-white text-sm font-bold rounded-lg shadow-md hover:shadow-lg transition-all text-center flex items-center justify-center gap-2"
+               style="background: #3b82f6; text-decoration: none;"
+               onmouseover="this.style.background='#2563eb'" 
+               onmouseout="this.style.background='#3b82f6'">
                 <i class="fa-solid fa-info-circle"></i>
                 View Details
             </a>
             <a href="{{ route('posts.show', [$post->type, $post->slug]) }}#apply" 
-               class="flex-1 px-4 py-2.5 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white text-sm font-bold rounded-lg shadow-md hover:shadow-lg transition-all text-center flex items-center justify-center gap-2">
+               class="flex-1 px-4 py-2.5 text-white text-sm font-bold rounded-lg shadow-md hover:shadow-lg transition-all text-center flex items-center justify-center gap-2"
+               style="background: #10b981; text-decoration: none;"
+               onmouseover="this.style.background='#059669'" 
+               onmouseout="this.style.background='#10b981'">
                 <i class="fa-solid fa-paper-plane"></i>
                 Apply Now
             </a>
