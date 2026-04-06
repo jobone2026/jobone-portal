@@ -178,7 +178,7 @@
             <div class="flex justify-between items-center gap-2">
                 <!-- Logo -->
                 <a href="{{ route('home') }}" class="flex items-center gap-3 flex-shrink-0 transform hover:scale-105 transition-transform">
-                    <img src="{{ asset('images/jobone-logo.png') }}" alt="JobOne.in" class="h-12 md:h-20 w-auto object-contain drop-shadow-lg">
+                    <img src="{{ asset('images/jobone-logo.png') }}" alt="JobOne.in" class="h-12 md:h-20 w-auto object-contain drop-shadow-lg" loading="eager">
                 </a>
                 </a>
                 
@@ -987,7 +987,7 @@
                     @endif
                     @if($androidAppUrl)
                         <a href="{{ $androidAppUrl }}" target="_blank" class="inline-block transform hover:scale-105 transition-transform">
-                            <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" style="height: 50px; width: auto;">
+                            <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" style="height: 50px; width: auto;" loading="lazy">
                         </a>
                     @endif
                 </div>
