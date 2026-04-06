@@ -89,17 +89,17 @@
         <div class="flex gap-2 pt-2.5 border-t border-gray-100">
             <a href="{{ route('posts.show', [$post->type, $post->slug]) }}" 
                class="flex-1 px-3 py-2 text-white text-xs font-bold rounded shadow-sm hover:shadow-md transition-all text-center flex items-center justify-center gap-1"
-               style="background: #3b82f6 !important; color: #ffffff !important; text-decoration: none !important;"
-               onmouseover="this.style.background='#2563eb'" 
-               onmouseout="this.style.background='#3b82f6'">
+               style="background: #97BBC4 !important; color: #ffffff !important; text-decoration: none !important;"
+               onmouseover="this.style.background='#7FA9B5'" 
+               onmouseout="this.style.background='#97BBC4'">
                 <i class="fa-solid fa-info-circle text-xs"></i>
                 View Details
             </a>
             <a href="{{ route('posts.show', [$post->type, $post->slug]) }}#apply" 
                class="flex-1 px-3 py-2 text-white text-xs font-bold rounded shadow-sm hover:shadow-md transition-all text-center flex items-center justify-center gap-1"
-               style="background: #10b981 !important; color: #ffffff !important; text-decoration: none !important;"
-               onmouseover="this.style.background='#059669'" 
-               onmouseout="this.style.background='#10b981'">
+               style="background: #7FE3A5 !important; color: #ffffff !important; text-decoration: none !important;"
+               onmouseover="this.style.background='#5FD18A'" 
+               onmouseout="this.style.background='#7FE3A5'">
                 <i class="fa-solid fa-paper-plane text-xs"></i>
                 Apply Now
             </a>
