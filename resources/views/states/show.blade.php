@@ -15,7 +15,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <!-- Jobs Column -->
         <div>
-            <div class="bg-gradient-to-r from-green-500 to-green-600 px-4 py-3 text-white font-bold flex items-center justify-between rounded-t-lg mb-4">
+            <div class="bg-white border border-gray-300 px-4 py-3 text-gray-800 font-bold flex items-center justify-between rounded-lg mb-4">
                 <span><i class="fa-solid fa-briefcase"></i> Jobs in {{ $state->name }}</span>
             </div>
             <div class="space-y-4">
@@ -32,7 +32,7 @@
 
         <!-- Results Column -->
         <div>
-            <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-4 py-3 text-white font-bold flex items-center justify-between rounded-t-lg mb-4">
+            <div class="bg-white border border-gray-300 px-4 py-3 text-gray-800 font-bold flex items-center justify-between rounded-lg mb-4">
                 <span><i class="fa-solid fa-chart-bar"></i> Results in {{ $state->name }}</span>
             </div>
             <div class="space-y-4">
@@ -49,7 +49,7 @@
 
         <!-- Admit Cards Column -->
         <div>
-            <div class="bg-gradient-to-r from-cyan-500 to-cyan-600 px-4 py-3 text-white font-bold flex items-center justify-between rounded-t-lg mb-4">
+            <div class="bg-white border border-gray-300 px-4 py-3 text-gray-800 font-bold flex items-center justify-between rounded-lg mb-4">
                 <span><i class="fa-solid fa-id-card"></i> Admit Cards in {{ $state->name }}</span>
             </div>
             <div class="space-y-4">
@@ -66,7 +66,7 @@
 
         <!-- Answer Keys Column -->
         <div>
-            <div class="bg-gradient-to-r from-indigo-500 to-indigo-600 px-4 py-3 text-white font-bold flex items-center justify-between rounded-t-lg mb-4">
+            <div class="bg-white border border-gray-300 px-4 py-3 text-gray-800 font-bold flex items-center justify-between rounded-lg mb-4">
                 <span><i class="fa-solid fa-key"></i> Answer Keys in {{ $state->name }}</span>
             </div>
             <div class="space-y-4">
@@ -83,7 +83,7 @@
 
         <!-- Syllabus Column -->
         <div>
-            <div class="bg-gradient-to-r from-purple-500 to-purple-600 px-4 py-3 text-white font-bold flex items-center justify-between rounded-t-lg mb-4">
+            <div class="bg-white border border-gray-300 px-4 py-3 text-gray-800 font-bold flex items-center justify-between rounded-lg mb-4">
                 <span><i class="fa-solid fa-book"></i> Syllabus in {{ $state->name }}</span>
             </div>
             <div class="space-y-4">
@@ -100,7 +100,7 @@
 
         <!-- Blogs Column -->
         <div>
-            <div class="bg-gradient-to-r from-orange-500 to-orange-600 px-4 py-3 text-white font-bold flex items-center justify-between rounded-t-lg mb-4">
+            <div class="bg-white border border-gray-300 px-4 py-3 text-gray-800 font-bold flex items-center justify-between rounded-lg mb-4">
                 <span><i class="fa-solid fa-pen-fancy"></i> Blogs in {{ $state->name }}</span>
             </div>
             <div class="space-y-4">
