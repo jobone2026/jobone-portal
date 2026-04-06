@@ -567,13 +567,13 @@
                 
                 <!-- Defence -->
                 <a href="{{ route('categories.show', 'defence') }}" class="category-card" title="Defence Jobs">
-                    <i class="fas fa-shield-alt category-icon"></i>
+                    <i class="fas fa-fighter-jet category-icon"></i>
                     <span class="category-label">Defence</span>
                 </a>
                 
                 <!-- Police -->
                 <a href="{{ route('categories.show', 'police') }}" class="category-card" title="Police Jobs">
-                    <i class="fas fa-shield-alt category-icon"></i>
+                    <i class="fas fa-user-shield category-icon"></i>
                     <span class="category-label">Police</span>
                 </a>
                 
