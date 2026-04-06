@@ -4,34 +4,6 @@
 @section('description', 'Find latest government jobs, admit cards, results, syllabus, answer keys and more')
 
 @section('content')
-    <!-- Latest Posts - Card Grid Layout -->
-    <div class="mb-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-            <i class="fa-solid fa-fire text-orange-500"></i>
-            Latest Updates
-        </h2>
-        
-        <!-- All Posts in Card Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            @php
-                $allPosts = collect();
-                foreach ($sections as $type => $posts) {
-                    $allPosts = $allPosts->merge($posts);
-                }
-                $allPosts = $allPosts->sortByDesc('created_at')->take(12);
-            @endphp
-            
-            @forelse ($allPosts as $post)
-                <x-post-card :post="$post" />
-            @empty
-                <div class="col-span-full text-center py-12 text-gray-500">
-                    <i class="fa-solid fa-inbox text-6xl mb-4 opacity-50"></i>
-                    <p class="text-lg">No posts available</p>
-                </div>
-            @endforelse
-        </div>
-    </div>
-
     <!-- View More Buttons by Type -->
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
         <a href="{{ route('posts.jobs') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all">
