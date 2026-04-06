@@ -15,7 +15,10 @@ class SearchController extends Controller
         $postsQuery = Post::published()
             ->where(function($q) use ($query) {
                 $q->where('title', 'like', "%{$query}%")
-                  ->orWhere('short_description', 'like', "%{$query}%");
+                  ->orWhere('short_description', 'like', "%{$query}%")
+                  ->orWhereHas('category', function($categoryQuery) use ($query) {
+                      $categoryQuery->where('name', 'like', "%{$query}%");
+                  });
             })
             ->with('category', 'state');
         
@@ -36,19 +39,26 @@ class SearchController extends Controller
         $query = $request->input('q', '');
         $stateId = config('app.domain_state_id');
 
-        if (strlen($query) < 3) {
+        if (strlen($query) < 2) {
             return response()->json([]);
         }
 
         $postsQuery = Post::published()
-            ->where('title', 'like', "%{$query}%")
-            ->select('id', 'title', 'slug', 'type');
+            ->where(function($q) use ($query) {
+                $q->where('title', 'like', "%{$query}%")
+                  ->orWhere('short_description', 'like', "%{$query}%")
+                  ->orWhereHas('category', function($categoryQuery) use ($query) {
+                      $categoryQuery->where('name', 'like', "%{$query}%");
+                  });
+            })
+            ->with('category')
+            ->select('id', 'title', 'slug', 'type', 'category_id');
         
         if ($stateId) {
             $postsQuery->where('state_id', $stateId);
         }
         
-        $posts = $postsQuery->limit(8)->get();
+        $posts = $postsQuery->limit(10)->get();
 
         return response()->json($posts);
     }
