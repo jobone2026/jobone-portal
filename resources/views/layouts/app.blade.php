@@ -173,12 +173,13 @@
     </style>
 
     <!-- Header -->
-    <header class="bg-gradient-to-r from-emerald-50 to-teal-50 shadow-sm sticky top-0 z-50 border-b border-emerald-100">
-        <nav class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-3 md:py-4">
+    <header class="bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900 shadow-xl sticky top-0 z-50 border-b-4 border-yellow-400">
+        <nav class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 md:py-5">
             <div class="flex justify-between items-center gap-2">
                 <!-- Logo -->
-                <a href="{{ route('home') }}" class="flex items-center gap-3 flex-shrink-0">
-                    <img src="{{ asset('images/jobone-logo.png') }}" alt="JobOne.in" class="h-10 md:h-16 w-auto object-contain">
+                <a href="{{ route('home') }}" class="flex items-center gap-3 flex-shrink-0 transform hover:scale-105 transition-transform">
+                    <img src="{{ asset('images/jobone-logo.png') }}" alt="JobOne.in" class="h-12 md:h-20 w-auto object-contain drop-shadow-lg">
+                </a>
                 </a>
                 
                 <!-- Custom Language Selector - Hidden -->
@@ -212,19 +213,19 @@
                 
                 <!-- Mobile Menu Button -->
                 <div class="md:hidden">
-                    <button id="mobile-menu-button" class="p-2 text-gray-700 hover:text-blue-600 focus:outline-none">
-                        <i id="mobile-menu-icon" class="fas fa-bars text-lg"></i>
+                    <button id="mobile-menu-button" class="p-3 text-white hover:text-yellow-400 focus:outline-none bg-white bg-opacity-10 rounded-lg">
+                        <i id="mobile-menu-icon" class="fas fa-bars text-xl"></i>
                     </button>
                 </div>
                 
                 <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-2">
-                    <a href="{{ route('home') }}" class="px-5 py-3 text-blue-700 hover:text-white hover:bg-blue-600 rounded-lg text-lg font-bold transition-all"><i class="fas fa-home"></i> Home</a>
-                    <a href="{{ route('posts.jobs') }}" class="px-5 py-3 text-green-700 hover:text-white hover:bg-green-600 rounded-lg text-lg font-bold transition-all"><i class="fas fa-briefcase"></i> Jobs</a>
-                    <a href="{{ route('posts.admit-cards') }}" class="px-5 py-3 text-purple-700 hover:text-white hover:bg-purple-600 rounded-lg text-lg font-bold transition-all"><i class="fas fa-id-card"></i> Admit</a>
-                    <a href="{{ route('posts.results') }}" class="px-5 py-3 text-orange-700 hover:text-white hover:bg-orange-600 rounded-lg text-lg font-bold transition-all"><i class="fas fa-chart-bar"></i> Results</a>
-                    <a href="{{ route('posts.syllabus') }}" class="px-5 py-3 text-indigo-700 hover:text-white hover:bg-indigo-600 rounded-lg text-lg font-bold transition-all"><i class="fas fa-book"></i> Syllabus</a>
-                    <a href="{{ route('posts.blogs') }}" class="px-5 py-3 text-pink-700 hover:text-white hover:bg-pink-600 rounded-lg text-lg font-bold transition-all"><i class="fas fa-pen-fancy"></i> Blogs</a>
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="{{ route('home') }}" class="px-6 py-3 text-white hover:text-yellow-400 hover:bg-white hover:bg-opacity-20 rounded-xl text-lg font-black transition-all shadow-lg hover:shadow-2xl transform hover:scale-105" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.3);"><i class="fas fa-home"></i> Home</a>
+                    <a href="{{ route('posts.jobs') }}" class="px-6 py-3 text-white hover:text-green-400 hover:bg-white hover:bg-opacity-20 rounded-xl text-lg font-black transition-all shadow-lg hover:shadow-2xl transform hover:scale-105" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.3);"><i class="fas fa-briefcase"></i> Jobs</a>
+                    <a href="{{ route('posts.admit-cards') }}" class="px-6 py-3 text-white hover:text-purple-400 hover:bg-white hover:bg-opacity-20 rounded-xl text-lg font-black transition-all shadow-lg hover:shadow-2xl transform hover:scale-105" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.3);"><i class="fas fa-id-card"></i> Admit</a>
+                    <a href="{{ route('posts.results') }}" class="px-6 py-3 text-white hover:text-orange-400 hover:bg-white hover:bg-opacity-20 rounded-xl text-lg font-black transition-all shadow-lg hover:shadow-2xl transform hover:scale-105" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.3);"><i class="fas fa-chart-bar"></i> Results</a>
+                    <a href="{{ route('posts.syllabus') }}" class="px-6 py-3 text-white hover:text-blue-400 hover:bg-white hover:bg-opacity-20 rounded-xl text-lg font-black transition-all shadow-lg hover:shadow-2xl transform hover:scale-105" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.3);"><i class="fas fa-book"></i> Syllabus</a>
+                    <a href="{{ route('posts.blogs') }}" class="px-6 py-3 text-white hover:text-pink-400 hover:bg-white hover:bg-opacity-20 rounded-xl text-lg font-black transition-all shadow-lg hover:shadow-2xl transform hover:scale-105" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.3);"><i class="fas fa-pen-fancy"></i> Blogs</a>
                 </div>
                 
                 <!-- Search Bar -->
@@ -234,42 +235,42 @@
                             type="text" 
                             name="q" 
                             placeholder="Search jobs, results..." 
-                            class="px-4 py-3 bg-blue-100 border-2 border-blue-300 rounded-lg focus:outline-none focus:border-blue-500 focus:bg-white w-full text-base font-medium"
+                            class="px-5 py-3 bg-white border-3 border-yellow-400 rounded-xl focus:outline-none focus:border-yellow-300 focus:ring-2 focus:ring-yellow-400 w-full text-base font-bold shadow-lg"
                             autocomplete="off">
-                        <button type="submit" class="px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 font-semibold text-base shadow-md flex-shrink-0"><i class="fas fa-search"></i></button>
+                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 rounded-xl hover:from-yellow-500 hover:to-orange-600 font-black text-base shadow-xl flex-shrink-0 transform hover:scale-105 transition-all"><i class="fas fa-search"></i></button>
                     </form>
                 </div>
             </div>
         </nav>
         
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="md:hidden bg-white border-t border-gray-200 shadow-lg hidden">
+        <div id="mobile-menu" class="md:hidden bg-gradient-to-r from-blue-900 to-purple-900 border-t-2 border-yellow-400 shadow-2xl hidden">
             <div class="px-4 py-3 space-y-2">
-                <a href="{{ route('home') }}" class="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded text-sm font-medium">
-                    <i class="fas fa-home w-4"></i> Home
+                <a href="{{ route('home') }}" class="block px-4 py-3 text-white hover:text-yellow-400 hover:bg-white hover:bg-opacity-10 rounded-lg text-base font-bold">
+                    <i class="fas fa-home w-5"></i> Home
                 </a>
-                <a href="{{ route('posts.jobs') }}" class="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded text-sm font-medium">
-                    <i class="fas fa-briefcase w-4"></i> Jobs
+                <a href="{{ route('posts.jobs') }}" class="block px-4 py-3 text-white hover:text-green-400 hover:bg-white hover:bg-opacity-10 rounded-lg text-base font-bold">
+                    <i class="fas fa-briefcase w-5"></i> Jobs
                 </a>
-                <a href="{{ route('posts.admit-cards') }}" class="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded text-sm font-medium">
-                    <i class="fas fa-id-card w-4"></i> Admit Cards
+                <a href="{{ route('posts.admit-cards') }}" class="block px-4 py-3 text-white hover:text-purple-400 hover:bg-white hover:bg-opacity-10 rounded-lg text-base font-bold">
+                    <i class="fas fa-id-card w-5"></i> Admit Cards
                 </a>
-                <a href="{{ route('posts.results') }}" class="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded text-sm font-medium">
-                    <i class="fas fa-chart-bar w-4"></i> Results
+                <a href="{{ route('posts.results') }}" class="block px-4 py-3 text-white hover:text-orange-400 hover:bg-white hover:bg-opacity-10 rounded-lg text-base font-bold">
+                    <i class="fas fa-chart-bar w-5"></i> Results
                 </a>
-                <a href="{{ route('posts.syllabus') }}" class="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded text-sm font-medium">
-                    <i class="fas fa-book w-4"></i> Syllabus
+                <a href="{{ route('posts.syllabus') }}" class="block px-4 py-3 text-white hover:text-blue-400 hover:bg-white hover:bg-opacity-10 rounded-lg text-base font-bold">
+                    <i class="fas fa-book w-5"></i> Syllabus
                 </a>
-                <a href="{{ route('posts.blogs') }}" class="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded text-sm font-medium">
-                    <i class="fas fa-pen-fancy w-4"></i> Blogs
+                <a href="{{ route('posts.blogs') }}" class="block px-4 py-3 text-white hover:text-pink-400 hover:bg-white hover:bg-opacity-10 rounded-lg text-base font-bold">
+                    <i class="fas fa-pen-fancy w-5"></i> Blogs
                 </a>
                 
                 <!-- Mobile Search -->
-                <div class="pt-3 border-t border-gray-200">
+                <div class="pt-3 border-t-2 border-yellow-400">
                     <form action="{{ route('search') }}" method="GET" class="flex gap-2">
                         <input type="text" name="q" placeholder="Search..." 
-                               class="flex-1 px-3 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-sm">
-                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                               class="flex-1 px-4 py-3 bg-white border-2 border-yellow-400 rounded-lg focus:outline-none focus:border-yellow-300 text-sm font-bold">
+                        <button type="submit" class="px-5 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 rounded-lg hover:from-yellow-500 hover:to-orange-600 text-sm font-black">
                             <i class="fas fa-search"></i>
                         </button>
                     </form>
