@@ -799,58 +799,58 @@
     <x-ad-slot position="footer" />
 
     <!-- Footer -->
-    <footer class="bg-gradient-to-r from-emerald-50 to-teal-50 text-gray-700 mt-0 border-t border-emerald-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
+    <footer class="bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900 text-white mt-0 border-t-4 border-blue-500" style="background: linear-gradient(135deg, #1f2937 0%, #1e3a8a 50%, #312e81 100%) !important;">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <!-- Main Footer Content -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
                 <!-- About Section -->
                 <div>
-                    <h4 class="text-gray-900 font-bold mb-3 text-base flex items-center gap-2">
-                        <i class="fas fa-info-circle text-blue-600"></i> About
+                    <h4 class="text-white font-black mb-4 text-lg flex items-center gap-2" style="color: white !important; font-weight: 900 !important;">
+                        <i class="fas fa-info-circle text-blue-400"></i> About JobOne
                     </h4>
-                    <ul class="space-y-1.5">
-                        <li><a href="{{ route('pages.about') }}" class="text-gray-600 hover:text-blue-600 text-sm font-semibold transition"><i class="fas fa-chevron-right text-xs"></i> About Us</a></li>
-                        <li><a href="{{ route('pages.contact') }}" class="text-gray-600 hover:text-blue-600 text-sm font-semibold transition"><i class="fas fa-chevron-right text-xs"></i> Contact</a></li>
+                    <p class="text-gray-300 text-sm mb-4 leading-relaxed">Your trusted source for latest government job notifications, results, admit cards, and exam updates across India.</p>
+                    <ul class="space-y-2">
+                        <li><a href="{{ route('pages.about') }}" class="text-gray-300 hover:text-blue-400 text-sm font-semibold transition-colors flex items-center gap-2" style="color: #d1d5db !important;"><i class="fas fa-angle-right"></i> About Us</a></li>
+                        <li><a href="{{ route('pages.contact') }}" class="text-gray-300 hover:text-blue-400 text-sm font-semibold transition-colors flex items-center gap-2" style="color: #d1d5db !important;"><i class="fas fa-angle-right"></i> Contact Us</a></li>
                     </ul>
                 </div>
                 
-                <!-- Legal Section -->
+                <!-- Quick Links Section -->
                 <div>
-                    <h4 class="text-gray-900 font-bold mb-3 text-base flex items-center gap-2">
-                        <i class="fas fa-shield-alt text-emerald-600"></i> Legal
+                    <h4 class="text-white font-black mb-4 text-lg flex items-center gap-2" style="color: white !important; font-weight: 900 !important;">
+                        <i class="fas fa-link text-green-400"></i> Quick Links
                     </h4>
-                    <ul class="space-y-1.5">
-                        <li><a href="{{ route('pages.privacy') }}" class="text-gray-600 hover:text-emerald-600 text-sm font-semibold transition"><i class="fas fa-chevron-right text-xs"></i> Privacy Policy</a></li>
-                        <li><a href="{{ route('pages.disclaimer') }}" class="text-gray-600 hover:text-emerald-600 text-sm font-semibold transition"><i class="fas fa-chevron-right text-xs"></i> Disclaimer</a></li>
+                    <ul class="space-y-2">
+                        <li><a href="{{ route('posts.jobs') }}" class="text-gray-300 hover:text-green-400 text-sm font-semibold transition-colors flex items-center gap-2" style="color: #d1d5db !important;"><i class="fas fa-briefcase text-xs"></i> Latest Jobs</a></li>
+                        <li><a href="{{ route('posts.results') }}" class="text-gray-300 hover:text-green-400 text-sm font-semibold transition-colors flex items-center gap-2" style="color: #d1d5db !important;"><i class="fas fa-chart-bar text-xs"></i> Results</a></li>
+                        <li><a href="{{ route('posts.admit-cards') }}" class="text-gray-300 hover:text-green-400 text-sm font-semibold transition-colors flex items-center gap-2" style="color: #d1d5db !important;"><i class="fas fa-id-card text-xs"></i> Admit Cards</a></li>
+                        <li><a href="{{ route('posts.syllabus') }}" class="text-gray-300 hover:text-green-400 text-sm font-semibold transition-colors flex items-center gap-2" style="color: #d1d5db !important;"><i class="fas fa-book text-xs"></i> Syllabus</a></li>
                     </ul>
                 </div>
                 
-                <!-- Social Section -->
+                <!-- Legal & Social Section -->
                 <div>
-                    <h4 class="text-gray-900 font-bold mb-3 text-base flex items-center gap-2">
-                        <i class="fas fa-share-alt text-purple-600"></i> Follow Us
+                    <h4 class="text-white font-black mb-4 text-lg flex items-center gap-2" style="color: white !important; font-weight: 900 !important;">
+                        <i class="fas fa-shield-alt text-purple-400"></i> Legal & Social
                     </h4>
-                    <ul class="space-y-1.5">
-                        @php
-                            $facebookUrl = \App\Models\SiteSetting::where('key', 'facebook_url')->value('value');
-                            $twitterUrl = \App\Models\SiteSetting::where('key', 'twitter_url')->value('value');
-                            $telegramUrl = \App\Models\SiteSetting::where('key', 'telegram_url')->value('value');
-                        @endphp
-                        @if($facebookUrl)
-                            <li><a href="{{ $facebookUrl }}" target="_blank" class="text-gray-600 hover:text-purple-600 text-sm font-semibold transition"><i class="fab fa-facebook"></i> Facebook</a></li>
-                        @endif
-                        @if($twitterUrl)
-                            <li><a href="{{ $twitterUrl }}" target="_blank" class="text-gray-600 hover:text-purple-600 text-sm font-semibold transition"><i class="fab fa-twitter"></i> Twitter</a></li>
-                        @endif
-                        @if($telegramUrl)
-                            <li><a href="{{ $telegramUrl }}" target="_blank" class="text-gray-600 hover:text-purple-600 text-sm font-semibold transition"><i class="fab fa-telegram"></i> Telegram</a></li>
-                        @endif
+                    <ul class="space-y-2 mb-4">
+                        <li><a href="{{ route('pages.privacy') }}" class="text-gray-300 hover:text-purple-400 text-sm font-semibold transition-colors flex items-center gap-2" style="color: #d1d5db !important;"><i class="fas fa-lock text-xs"></i> Privacy Policy</a></li>
+                        <li><a href="{{ route('pages.disclaimer') }}" class="text-gray-300 hover:text-purple-400 text-sm font-semibold transition-colors flex items-center gap-2" style="color: #d1d5db !important;"><i class="fas fa-exclamation-triangle text-xs"></i> Disclaimer</a></li>
                     </ul>
+                    <div class="flex gap-3 mt-4">
+                        <a href="https://t.me/jobone2026" target="_blank" class="w-10 h-10 bg-blue-500 hover:bg-blue-600 rounded-full flex items-center justify-center transition-all transform hover:scale-110" style="background-color: #0088cc !important;">
+                            <i class="fab fa-telegram-plane text-white text-lg"></i>
+                        </a>
+                        <a href="https://whatsapp.com/channel/0029VbD9cau2P59hFZ1nwh22" target="_blank" class="w-10 h-10 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center transition-all transform hover:scale-110" style="background-color: #25D366 !important;">
+                            <i class="fab fa-whatsapp text-white text-lg"></i>
+                        </a>
+                    </div>
                 </div>
                 
                 <!-- Contact Section -->
                 <div>
-                    <h4 class="text-gray-900 font-bold mb-3 text-base flex items-center gap-2">
-                        <i class="fas fa-envelope text-orange-600"></i> Contact
+                    <h4 class="text-white font-black mb-4 text-lg flex items-center gap-2" style="color: white !important; font-weight: 900 !important;">
+                        <i class="fas fa-envelope text-yellow-400"></i> Get In Touch
                     </h4>
                     @php
                         $contactEmail = \App\Models\SiteSetting::where('key', 'contact_email')->value('value');
@@ -858,22 +858,29 @@
                         $androidAppUrl = \App\Models\SiteSetting::where('key', 'android_app_url')->value('value');
                     @endphp
                     @if($contactEmail)
-                        <p class="mb-1.5 text-gray-600 text-sm font-semibold"><i class="fas fa-envelope text-xs"></i> {{ $contactEmail }}</p>
+                        <p class="mb-3 text-gray-300 text-sm font-semibold flex items-center gap-2" style="color: #d1d5db !important;"><i class="fas fa-envelope text-yellow-400"></i> {{ $contactEmail }}</p>
                     @endif
                     @if($phone)
-                        <p class="mb-3 text-gray-600 text-sm font-semibold"><i class="fas fa-phone text-xs"></i> {{ $phone }}</p>
+                        <p class="mb-4 text-gray-300 text-sm font-semibold flex items-center gap-2" style="color: #d1d5db !important;"><i class="fas fa-phone text-yellow-400"></i> {{ $phone }}</p>
                     @endif
                     @if($androidAppUrl)
-                        <a href="{{ $androidAppUrl }}" target="_blank" class="inline-block">
+                        <a href="{{ $androidAppUrl }}" target="_blank" class="inline-block transform hover:scale-105 transition-transform">
                             <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" style="height: 50px; width: auto;">
                         </a>
                     @endif
                 </div>
             </div>
             
-            <!-- Divider -->
-            <div class="border-t border-emerald-200 pt-6 text-center">
-                <p class="text-gray-600 text-sm font-semibold">&copy; 2026 JobOne.in. All rights reserved. | Designed with <i class="fas fa-heart text-red-500"></i> for Job Seekers</p>
+            <!-- Bottom Bar -->
+            <div class="border-t border-gray-700 pt-6 mt-6">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <p class="text-gray-400 text-sm font-semibold text-center md:text-left" style="color: #9ca3af !important;">
+                        &copy; 2026 JobOne.in. All rights reserved.
+                    </p>
+                    <p class="text-gray-400 text-sm font-semibold flex items-center gap-2" style="color: #9ca3af !important;">
+                        Made with <i class="fas fa-heart text-red-500 animate-pulse"></i> for Job Seekers
+                    </p>
+                </div>
             </div>
         </div>
     </footer>
