@@ -45,9 +45,6 @@
     <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Alpine.js - Load early for search functionality -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
     <style>
         /* RTL Support */
         html[dir="rtl"] {
@@ -231,49 +228,16 @@
                 </div>
                 
                 <!-- Search Bar -->
-                <div x-data="{
-                    query: '',
-                    results: [],
-                    showResults: false,
-                    async search() {
-                        if (this.query.length < 2) {
-                            this.results = [];
-                            this.showResults = false;
-                            return;
-                        }
-                        const response = await fetch(`/search/autocomplete?q=${encodeURIComponent(this.query)}`);
-                        this.results = await response.json();
-                        this.showResults = this.results.length > 0;
-                    },
-                    selectResult(post) {
-                        window.location.href = `/${post.type}/${post.slug}`;
-                    }
-                }" class="relative w-80 md:w-96">
+                <div class="relative w-80 md:w-96">
                     <form action="{{ route('search') }}" method="GET" class="flex items-center gap-2">
                         <input 
                             type="text" 
                             name="q" 
-                            x-model="query"
-                            @input.debounce.300ms="search()"
-                            @click.away="showResults = false"
                             placeholder="Search jobs, results..." 
                             class="px-4 py-3 bg-blue-100 border-2 border-blue-300 rounded-lg focus:outline-none focus:border-blue-500 focus:bg-white w-full text-base font-medium"
                             autocomplete="off">
                         <button type="submit" class="px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 font-semibold text-base shadow-md flex-shrink-0"><i class="fas fa-search"></i></button>
                     </form>
-                    
-                    <!-- Autocomplete Results -->
-                    <div x-show="showResults" 
-                         x-transition
-                         class="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-blue-300 rounded-lg shadow-xl max-h-96 overflow-y-auto z-50">
-                        <template x-for="post in results" :key="post.id">
-                            <div @click="selectResult(post)" 
-                                 class="px-4 py-3 hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors">
-                                <p class="text-sm text-gray-900 font-semibold leading-snug" x-text="post.title"></p>
-                                <p class="text-xs text-blue-600 mt-1 font-medium" x-text="post.type.replace('_', ' ').toUpperCase()"></p>
-                            </div>
-                        </template>
-                    </div>
                 </div>
             </div>
         </nav>
@@ -808,6 +772,23 @@
             </div>
         </div>
     </main>
+
+    <!-- Floating Social Buttons - Right Side Middle -->
+    <div class="fixed right-0 top-1/2 transform -translate-y-1/2 z-40 flex flex-col gap-3">
+        <!-- WhatsApp Button -->
+        <a href="https://whatsapp.com/channel/0029VajhCMu4dTnKfzjdWg0j" target="_blank" rel="noopener noreferrer" 
+           class="bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-l-lg shadow-lg transition-all duration-300 hover:px-6 flex items-center gap-2 group">
+            <i class="fab fa-whatsapp text-2xl"></i>
+            <span class="hidden group-hover:inline-block text-sm font-semibold whitespace-nowrap">Join WhatsApp</span>
+        </a>
+        
+        <!-- Telegram Button -->
+        <a href="https://t.me/jobone_in" target="_blank" rel="noopener noreferrer" 
+           class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-l-lg shadow-lg transition-all duration-300 hover:px-6 flex items-center gap-2 group">
+            <i class="fab fa-telegram text-2xl"></i>
+            <span class="hidden group-hover:inline-block text-sm font-semibold whitespace-nowrap">Join Telegram</span>
+        </a>
+    </div>
 
     <!-- Ad Slot - Footer -->
     <x-ad-slot position="footer" />

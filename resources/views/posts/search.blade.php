@@ -18,48 +18,13 @@
         </p>
         
         <!-- Search Form -->
-        <form action="{{ route('search') }}" method="GET" class="relative max-w-xl" x-data="{
-            query: '{{ $query }}',
-            results: [],
-            showResults: false,
-            async search() {
-                if (this.query.length < 3) {
-                    this.results = [];
-                    this.showResults = false;
-                    return;
-                }
-                const response = await fetch(`/search/autocomplete?q=${encodeURIComponent(this.query)}`);
-                this.results = await response.json();
-                this.showResults = this.results.length > 0;
-            },
-            selectResult(post) {
-                window.location.href = `/${post.type}/${post.slug}`;
-            }
-        }">
-            <input type="text" name="q" placeholder="Search jobs, results, admit cards..." 
-                   x-model="query"
-                   @input.debounce.300ms="search()"
-                   @click.away="showResults = false"
-                   value="{{ $query }}" 
-                   class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
-                   autocomplete="off">
+        <form action="{{ route('search') }}" method="GET" class="relative max-w-xl">
+            <input type="text" name="q" placeholder="Search jobs, results, admit cards..." value="{{ $query }}" 
+                   class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
             <i class="fas fa-search text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2"></i>
             <button type="submit" class="absolute right-2 top-1/2 transform -translate-y-1/2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all">
                 Search
             </button>
-            
-            <!-- Autocomplete Results -->
-            <div x-show="showResults" 
-                 x-transition
-                 class="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-blue-300 rounded-lg shadow-xl max-h-96 overflow-y-auto z-50">
-                <template x-for="post in results" :key="post.id">
-                    <div @click="selectResult(post)" 
-                         class="px-4 py-3 hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors">
-                        <p class="text-sm text-gray-900 font-semibold leading-snug" x-text="post.title"></p>
-                        <p class="text-xs text-blue-600 mt-1 font-medium" x-text="post.type.replace('_', ' ').toUpperCase()"></p>
-                    </div>
-                </template>
-            </div>
         </form>
     </div>
 
