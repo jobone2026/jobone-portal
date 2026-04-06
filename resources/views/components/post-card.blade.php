@@ -16,15 +16,15 @@
                     <i class="fa-solid fa-exclamation-circle text-xs"></i> URGENT
                 </span>
             @endif
-            <span class="bg-green-500 text-white px-2 py-0.5 rounded text-xs font-bold flex items-center gap-1">
+            <span class="text-white px-2 py-0.5 rounded text-xs font-bold flex items-center gap-1" style="background: #7FE3A5 !important;">
                 <i class="fa-solid fa-star text-xs"></i> NEW
             </span>
             @if ($post->state)
-                <span class="bg-blue-500 text-white px-2 py-0.5 rounded text-xs font-bold flex items-center gap-1">
+                <span class="text-white px-2 py-0.5 rounded text-xs font-bold flex items-center gap-1" style="background: #97BBC4 !important;">
                     <i class="fa-solid fa-map-marker-alt text-xs"></i> {{ $post->state->name }}
                 </span>
             @else
-                <span class="bg-purple-500 text-white px-2 py-0.5 rounded text-xs font-bold flex items-center gap-1">
+                <span class="text-white px-2 py-0.5 rounded text-xs font-bold flex items-center gap-1" style="background: #B8A4E8 !important;">
                     <i class="fa-solid fa-globe text-xs"></i> All India
                 </span>
             @endif

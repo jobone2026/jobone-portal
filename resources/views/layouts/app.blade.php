@@ -332,14 +332,75 @@
                 
                 <!-- Mobile Search -->
                 <div class="pt-3 border-t-2 border-blue-300" style="border-top: 2px solid #93c5fd !important;">
-                    <form action="{{ route('search') }}" method="GET" class="flex gap-2">
-                        <input type="text" name="q" placeholder="Search..." 
-                               class="flex-1 px-4 py-3 bg-gray-50 border-2 border-blue-300 rounded-lg focus:outline-none focus:border-blue-500 text-sm font-bold"
-                               style="background-color: #f9fafb !important; border: 2px solid #93c5fd !important; font-weight: 700 !important;">
-                        <button type="submit" class="px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 text-sm font-black" style="background: linear-gradient(to right, #2563eb, #4f46e5) !important; color: white !important; font-weight: 900 !important;">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </form>
+                    <div class="relative" id="mobile-search-container">
+                        <form action="{{ route('search') }}" method="GET" class="flex gap-2">
+                            <input type="text" name="q" id="mobile-search-input" placeholder="Search..." 
+                                   class="flex-1 px-4 py-3 bg-gray-50 border-2 border-blue-300 rounded-lg focus:outline-none focus:border-blue-500 text-sm font-bold"
+                                   style="background-color: #f9fafb !important; border: 2px solid #93c5fd !important; font-weight: 700 !important;"
+                                   autocomplete="off">
+                            <button type="submit" class="px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 text-sm font-black" style="background: linear-gradient(to right, #2563eb, #4f46e5) !important; color: white !important; font-weight: 900 !important;">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </form>
+                        
+                        <!-- Mobile Autocomplete Dropdown -->
+                        <div id="mobile-search-results" class="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-blue-300 rounded-lg shadow-xl max-h-64 overflow-y-auto z-50 hidden" style="background: white !important; border: 2px solid #93c5fd !important;"></div>
+                    </div>
+                    
+                    <script>
+                    (function() {
+                        const mobileInput = document.getElementById('mobile-search-input');
+                        const mobileResults = document.getElementById('mobile-search-results');
+                        const mobileContainer = document.getElementById('mobile-search-container');
+                        let mobileTimer;
+                        
+                        if (!mobileInput) return;
+                        
+                        mobileInput.addEventListener('input', function() {
+                            clearTimeout(mobileTimer);
+                            const query = this.value.trim();
+                            
+                            if (query.length < 2) {
+                                mobileResults.classList.add('hidden');
+                                mobileResults.innerHTML = '';
+                                return;
+                            }
+                            
+                            mobileTimer = setTimeout(() => {
+                                fetch('/search/autocomplete?q=' + encodeURIComponent(query))
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data && data.length > 0) {
+                                            let html = '';
+                                            data.forEach(post => {
+                                                const typeLabel = post.type.replace('_', ' ').toUpperCase();
+                                                html += `
+                                                    <div class="px-3 py-2 hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-b-0" onclick="window.location.href='/${post.type}/${post.slug}'">
+                                                        <p class="text-xs text-gray-900 font-semibold">${post.title}</p>
+                                                        <p class="text-xs text-blue-600 mt-0.5 font-medium">${typeLabel}</p>
+                                                    </div>
+                                                `;
+                                            });
+                                            mobileResults.innerHTML = html;
+                                            mobileResults.classList.remove('hidden');
+                                        } else {
+                                            mobileResults.classList.add('hidden');
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Mobile search error:', error);
+                                        mobileResults.classList.add('hidden');
+                                    });
+                            }, 300);
+                        });
+                        
+                        document.addEventListener('click', function(e) {
+                            if (!mobileContainer.contains(e.target)) {
+                                mobileResults.classList.add('hidden');
+                            }
+                        });
+                    })();
+                    </script>
                 </div>
             </div>
         </div>
