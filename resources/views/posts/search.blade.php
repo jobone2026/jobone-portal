@@ -4,56 +4,28 @@
 @section('description', 'Search results for: ' . $query)
 
 @section('content')
-    <!-- Premium Header Section -->
-    <div class="mb-8 bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70 transform translate-x-1/2 -translate-y-1/2"></div>
-        <div class="absolute bottom-0 left-0 w-64 h-64 bg-indigo-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70 transform -translate-x-1/2 translate-y-1/2"></div>
+    <!-- Header Section -->
+    <div class="mb-6">
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+            <i class="fas fa-search text-blue-600"></i> Search Results
+        </h1>
+        <p class="text-gray-600 text-sm mb-4">
+            @if ($query)
+                Found <span class="font-bold text-blue-600">{{ $posts->total() }}</span> results for "<strong class="text-gray-800">{{ $query }}</strong>"
+            @else
+                Please enter a search query
+            @endif
+        </p>
         
-        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div>
-                <nav class="flex mb-3" aria-label="Breadcrumb">
-                    <ol class="inline-flex items-center space-x-1 md:space-x-3">
-                        <li class="inline-flex items-center">
-                            <a href="{{ route('home') }}" class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors">
-                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-                                </svg>
-                                Home
-                            </a>
-                        </li>
-                        <li aria-current="page">
-                            <div class="flex items-center">
-                                <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-                                </svg>
-                                <span class="ml-1 text-sm font-medium text-gray-400 md:ml-2">Search Results</span>
-                            </div>
-                        </li>
-                    </ol>
-                </nav>
-                
-                <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight mb-2">
-                    Search Results
-                </h1>
-                <p class="text-gray-500 text-sm md:text-base flex items-center gap-2">
-                    @if ($query)
-                        Found <span class="font-bold text-gray-800 bg-gray-100 px-2 py-0.5 rounded">{{ $posts->total() }}</span> results for "<strong class="text-gray-800">{{ $query }}</strong>"
-                    @else
-                        Please enter a search query
-                    @endif
-                </p>
-            </div>
-            
-            <div class="flex items-center gap-3 bg-gray-50 p-2 rounded-xl border border-gray-100 w-full md:w-auto">
-                <form action="{{ route('search') }}" method="GET" class="relative w-full">
-                    <input type="text" name="q" placeholder="Search again..." value="{{ $query }}" 
-                           class="w-full md:w-64 pl-10 pr-4 py-2 border-none bg-white rounded-lg focus:ring-2 focus:ring-blue-500 text-sm shadow-sm ring-1 ring-gray-200">
-                    <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                </form>
-            </div>
-        </div>
+        <!-- Search Form -->
+        <form action="{{ route('search') }}" method="GET" class="relative max-w-xl">
+            <input type="text" name="q" placeholder="Search jobs, results, admit cards..." value="{{ $query }}" 
+                   class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+            <i class="fas fa-search text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2"></i>
+            <button type="submit" class="absolute right-2 top-1/2 transform -translate-y-1/2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all">
+                Search
+            </button>
+        </form>
     </div>
 
     @if ($posts->count() > 0)
@@ -68,21 +40,29 @@
 
         <!-- Pagination -->
         @if($posts->hasPages())
-        <div class="mt-12 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex justify-between items-center px-6">
+        <div class="mt-8 flex justify-between items-center">
             @if ($posts->onFirstPage())
-                <span class="text-gray-400 flex items-center font-medium opacity-50"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> Previous</span>
+                <span class="text-gray-400 flex items-center font-medium opacity-50">
+                    <i class="fas fa-arrow-left mr-2"></i> Previous
+                </span>
             @else
-                <a href="{{ $posts->previousPageUrl() }}" class="text-blue-600 hover:text-blue-800 flex items-center font-medium transition-colors"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> Previous</a>
+                <a href="{{ $posts->previousPageUrl() }}" class="text-blue-600 hover:text-blue-800 flex items-center font-medium transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i> Previous
+                </a>
             @endif
 
-            <div class="text-gray-600 font-medium bg-gray-50 px-3 py-1 rounded-lg text-sm border border-gray-100">
+            <div class="text-gray-600 font-medium bg-white border border-gray-300 px-4 py-2 rounded-lg text-sm">
                 Page {{ $posts->currentPage() }} of {{ $posts->lastPage() }}
             </div>
 
             @if ($posts->hasMorePages())
-                <a href="{{ $posts->nextPageUrl() }}" class="text-blue-600 hover:text-blue-800 flex items-center font-medium transition-colors">Next <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
+                <a href="{{ $posts->nextPageUrl() }}" class="text-blue-600 hover:text-blue-800 flex items-center font-medium transition-colors">
+                    Next <i class="fas fa-arrow-right ml-2"></i>
+                </a>
             @else
-                <span class="text-gray-400 flex items-center font-medium opacity-50">Next <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></span>
+                <span class="text-gray-400 flex items-center font-medium opacity-50">
+                    Next <i class="fas fa-arrow-right ml-2"></i>
+                </span>
             @endif
         </div>
         @endif
