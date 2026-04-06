@@ -9,22 +9,22 @@
     @endphp
     
     <!-- Header with Badges -->
-    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 px-2 py-1 border-b border-blue-100">
-        <div class="flex items-center gap-1 flex-wrap">
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-1.5 border-b border-blue-100">
+        <div class="flex items-center gap-1.5 flex-wrap">
             @if($isUrgent)
-                <span class="bg-red-500 text-white px-1.5 py-0.5 rounded text-xs font-bold flex items-center gap-0.5">
+                <span class="bg-red-500 text-white px-2 py-0.5 rounded text-xs font-bold flex items-center gap-1">
                     <i class="fa-solid fa-exclamation-circle text-xs"></i> URGENT
                 </span>
             @endif
-            <span class="bg-green-500 text-white px-1.5 py-0.5 rounded text-xs font-bold flex items-center gap-0.5">
+            <span class="bg-green-500 text-white px-2 py-0.5 rounded text-xs font-bold flex items-center gap-1">
                 <i class="fa-solid fa-star text-xs"></i> NEW
             </span>
             @if ($post->state)
-                <span class="bg-blue-500 text-white px-1.5 py-0.5 rounded text-xs font-bold flex items-center gap-0.5">
+                <span class="bg-blue-500 text-white px-2 py-0.5 rounded text-xs font-bold flex items-center gap-1">
                     <i class="fa-solid fa-map-marker-alt text-xs"></i> {{ $post->state->name }}
                 </span>
             @else
-                <span class="bg-purple-500 text-white px-1.5 py-0.5 rounded text-xs font-bold flex items-center gap-0.5">
+                <span class="bg-purple-500 text-white px-2 py-0.5 rounded text-xs font-bold flex items-center gap-1">
                     <i class="fa-solid fa-globe text-xs"></i> All India
                 </span>
             @endif
@@ -32,18 +32,18 @@
     </div>
     
     <!-- Main Content -->
-    <div class="p-2.5">
+    <div class="p-3">
         <!-- Title -->
-        <h3 class="font-bold mb-2 transition-colors" style="font-size: 13px; line-height: 1.3; color: #1f2937;">
+        <h3 class="font-bold mb-2.5 transition-colors" style="font-size: 13px; line-height: 1.4; color: #1f2937;">
             <a href="{{ route('posts.show', [$post->type, $post->slug]) }}" class="block hover:text-blue-600" style="color: inherit; text-decoration: none;">
                 {{ $post->title }}
             </a>
         </h3>
         
         <!-- Info Grid -->
-        <div class="grid grid-cols-2 gap-1.5 mb-2">
+        <div class="grid grid-cols-2 gap-2 mb-2.5">
             <!-- Posted Date -->
-            <div class="flex items-center gap-1 text-xs text-gray-600">
+            <div class="flex items-center gap-1.5 text-xs text-gray-600">
                 <i class="fa-solid fa-calendar text-blue-500 text-xs"></i>
                 <div>
                     <div class="text-xs text-gray-500">Posted</div>
@@ -53,7 +53,7 @@
             
             <!-- Last Date -->
             @if ($post->last_date)
-                <div class="flex items-center gap-1 text-xs {{ $isUrgent ? 'text-red-600' : 'text-orange-600' }}">
+                <div class="flex items-center gap-1.5 text-xs {{ $isUrgent ? 'text-red-600' : 'text-orange-600' }}">
                     <i class="fa-solid fa-clock text-xs {{ $isUrgent ? 'animate-pulse' : '' }}"></i>
                     <div>
                         <div class="text-xs">Last Date</div>
@@ -64,7 +64,7 @@
             
             <!-- Vacancies -->
             @if ($post->total_posts)
-                <div class="flex items-center gap-1 text-xs text-green-700">
+                <div class="flex items-center gap-1.5 text-xs text-green-700">
                     <i class="fa-solid fa-briefcase text-green-600 text-xs"></i>
                     <div>
                         <div class="text-xs text-gray-500">Vacancies</div>
@@ -75,7 +75,7 @@
             
             <!-- Category -->
             @if ($post->category)
-                <div class="flex items-center gap-1 text-xs text-purple-700">
+                <div class="flex items-center gap-1.5 text-xs text-purple-700">
                     <i class="fa-solid fa-tag text-purple-600 text-xs"></i>
                     <div>
                         <div class="text-xs text-gray-500">Category</div>
@@ -86,9 +86,9 @@
         </div>
         
         <!-- Action Buttons -->
-        <div class="flex gap-1.5 pt-2 border-t border-gray-100">
+        <div class="flex gap-2 pt-2.5 border-t border-gray-100">
             <a href="{{ route('posts.show', [$post->type, $post->slug]) }}" 
-               class="flex-1 px-2 py-1.5 text-white text-xs font-bold rounded shadow-sm hover:shadow-md transition-all text-center flex items-center justify-center gap-1"
+               class="flex-1 px-3 py-2 text-white text-xs font-bold rounded shadow-sm hover:shadow-md transition-all text-center flex items-center justify-center gap-1"
                style="background: #3b82f6 !important; color: #ffffff !important; text-decoration: none !important;"
                onmouseover="this.style.background='#2563eb'" 
                onmouseout="this.style.background='#3b82f6'">
@@ -96,7 +96,7 @@
                 View Details
             </a>
             <a href="{{ route('posts.show', [$post->type, $post->slug]) }}#apply" 
-               class="flex-1 px-2 py-1.5 text-white text-xs font-bold rounded shadow-sm hover:shadow-md transition-all text-center flex items-center justify-center gap-1"
+               class="flex-1 px-3 py-2 text-white text-xs font-bold rounded shadow-sm hover:shadow-md transition-all text-center flex items-center justify-center gap-1"
                style="background: #10b981 !important; color: #ffffff !important; text-decoration: none !important;"
                onmouseover="this.style.background='#059669'" 
                onmouseout="this.style.background='#10b981'">
