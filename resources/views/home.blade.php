@@ -17,6 +17,13 @@
                     <x-post-card :post="$post" />
                 @endforeach
             </div>
+            @if(($sections['jobs'] ?? [])->count() > 25)
+            <div class="mt-4">
+                <a href="{{ route('posts.jobs') }}" class="block text-center px-4 py-3 bg-white border border-gray-300 hover:border-blue-500 hover:bg-blue-50 text-gray-700 hover:text-blue-600 font-semibold rounded-lg transition-all">
+                    View All Jobs <i class="fa-solid fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+            @endif
         </div>
 
         <!-- Results Column -->
@@ -30,6 +37,13 @@
                     <x-post-card :post="$post" />
                 @endforeach
             </div>
+            @if(($sections['results'] ?? [])->count() > 25)
+            <div class="mt-4">
+                <a href="{{ route('posts.results') }}" class="block text-center px-4 py-3 bg-white border border-gray-300 hover:border-blue-500 hover:bg-blue-50 text-gray-700 hover:text-blue-600 font-semibold rounded-lg transition-all">
+                    View All Results <i class="fa-solid fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+            @endif
         </div>
 
         <!-- Admit Cards Column -->
@@ -43,6 +57,13 @@
                     <x-post-card :post="$post" />
                 @endforeach
             </div>
+            @if(($sections['admit_cards'] ?? [])->count() > 25)
+            <div class="mt-4">
+                <a href="{{ route('posts.admit-cards') }}" class="block text-center px-4 py-3 bg-white border border-gray-300 hover:border-blue-500 hover:bg-blue-50 text-gray-700 hover:text-blue-600 font-semibold rounded-lg transition-all">
+                    View All Admit Cards <i class="fa-solid fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+            @endif
         </div>
 
         <!-- Answer Keys Column -->
@@ -56,6 +77,13 @@
                     <x-post-card :post="$post" />
                 @endforeach
             </div>
+            @if(($sections['answer_keys'] ?? [])->count() > 25)
+            <div class="mt-4">
+                <a href="{{ route('posts.answer-keys') }}" class="block text-center px-4 py-3 bg-white border border-gray-300 hover:border-blue-500 hover:bg-blue-50 text-gray-700 hover:text-blue-600 font-semibold rounded-lg transition-all">
+                    View All Answer Keys <i class="fa-solid fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+            @endif
         </div>
 
         <!-- Syllabus Column -->
@@ -69,6 +97,13 @@
                     <x-post-card :post="$post" />
                 @endforeach
             </div>
+            @if(($sections['syllabus'] ?? [])->count() > 25)
+            <div class="mt-4">
+                <a href="{{ route('posts.syllabus') }}" class="block text-center px-4 py-3 bg-white border border-gray-300 hover:border-blue-500 hover:bg-blue-50 text-gray-700 hover:text-blue-600 font-semibold rounded-lg transition-all">
+                    View All Syllabus <i class="fa-solid fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+            @endif
         </div>
 
         <!-- Blogs Column -->
@@ -82,6 +117,13 @@
                     <x-post-card :post="$post" />
                 @endforeach
             </div>
+            @if(($sections['blogs'] ?? [])->count() > 25)
+            <div class="mt-4">
+                <a href="{{ route('posts.blogs') }}" class="block text-center px-4 py-3 bg-white border border-gray-300 hover:border-blue-500 hover:bg-blue-50 text-gray-700 hover:text-blue-600 font-semibold rounded-lg transition-all">
+                    View All Blogs <i class="fa-solid fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+            @endif
         </div>
     </div>
 
