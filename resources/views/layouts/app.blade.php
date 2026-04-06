@@ -262,12 +262,12 @@
                     <!-- Autocomplete Results -->
                     <div x-show="showResults" 
                          x-transition
-                         class="absolute top-full right-0 mt-1 w-48 md:w-80 bg-white border border-gray-200 rounded-lg shadow-lg max-h-64 overflow-y-auto z-50">
+                         class="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-blue-300 rounded-lg shadow-xl max-h-96 overflow-y-auto z-50">
                         <template x-for="post in results" :key="post.id">
                             <div @click="selectResult(post)" 
-                                 class="px-3 py-2 hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-b-0">
-                                <p class="text-xs text-gray-800 font-medium" x-text="post.title"></p>
-                                <p class="text-xs text-gray-500 mt-0.5" x-text="post.type.replace('_', ' ').toUpperCase()"></p>
+                                 class="px-4 py-3 hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors">
+                                <p class="text-sm text-gray-900 font-semibold leading-snug" x-text="post.title"></p>
+                                <p class="text-xs text-blue-600 mt-1 font-medium" x-text="post.type.replace('_', ' ').toUpperCase()"></p>
                             </div>
                         </template>
                     </div>
