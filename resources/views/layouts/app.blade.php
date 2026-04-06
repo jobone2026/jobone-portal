@@ -476,19 +476,19 @@
             color: white;
         }
         
-        /* Blog - Rose */
+        /* SSB - Gray/Slate */
         .category-card:nth-child(8) {
-            background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
-            border-color: #ec4899;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            border-color: #64748b;
         }
         .category-card:nth-child(8) .category-icon {
-            color: #db2777;
+            color: #475569;
         }
         .category-card:nth-child(8) .category-label {
-            color: #9f1239;
+            color: #334155;
         }
         .category-card:nth-child(8):hover {
-            background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+            background: linear-gradient(135deg, #64748b 0%, #475569 100%);
         }
         .category-card:nth-child(8):hover .category-icon,
         .category-card:nth-child(8):hover .category-label {
@@ -577,10 +577,10 @@
                     <span class="category-label">Police</span>
                 </a>
                 
-                <!-- Blog -->
-                <a href="{{ route('posts.blogs') }}" class="category-card" title="Blog">
-                    <i class="fas fa-blog category-icon"></i>
-                    <span class="category-label">Blog</span>
+                <!-- SSB -->
+                <a href="{{ route('categories.show', 'ssb') }}" class="category-card" title="SSB Jobs">
+                    <i class="fas fa-user-shield category-icon"></i>
+                    <span class="category-label">SSB</span>
                 </a>
             </div>
         </div>
