@@ -352,28 +352,6 @@
                     </div>
                 </div>
                 @empty
-                        <span class="modern-card-item-badge category">
-                            <i class="fas fa-tag"></i> {{ $post->category->name }}
-                        </span>
-                        @endif
-                        @if($post->state)
-                        <span class="modern-card-item-badge state">
-                            <i class="fas fa-map-marker-alt"></i> {{ $post->state->name }}
-                        </span>
-                        @endif
-                        @if($post->view_count > 0)
-                        <span class="modern-card-item-badge views">
-                            <i class="fas fa-eye"></i> {{ number_format($post->view_count) }}
-                        </span>
-                        @endif
-                        @if($post->created_at->diffInDays(now()) <= 3)
-                        <span class="modern-card-item-badge new">
-                            <i class="fas fa-star"></i> NEW
-                        </span>
-                        @endif
-                    </div>
-                </div>
-                @empty
                 <div class="modern-card-item text-gray-500">
                     No results found
                 </div>
