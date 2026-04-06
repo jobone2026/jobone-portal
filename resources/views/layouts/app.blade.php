@@ -229,15 +229,79 @@
                 </div>
                 
                 <!-- Search Bar -->
-                <div class="relative w-80 md:w-96">
+                <div class="relative w-80 md:w-96" id="search-container">
                     <form action="{{ route('search') }}" method="GET" class="flex items-center gap-2">
                         <input 
                             type="text" 
-                            name="q" 
+                            name="q"
+                            id="search-input"
                             placeholder="Search jobs, results..." 
                             class="px-5 py-3 bg-gray-50 border-3 border-blue-300 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-400 w-full text-base font-bold shadow-md"
                             style="background-color: #f9fafb !important; border: 3px solid #93c5fd !important; font-weight: 700 !important;"
                             autocomplete="off">
+                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 font-black text-base shadow-lg flex-shrink-0 transform hover:scale-105 transition-all" style="background: linear-gradient(to right, #2563eb, #4f46e5) !important; color: white !important; font-weight: 900 !important;"><i class="fas fa-search"></i></button>
+                    </form>
+                    
+                    <!-- Autocomplete Dropdown -->
+                    <div id="search-results" class="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-blue-300 rounded-lg shadow-xl max-h-96 overflow-y-auto z-50 hidden" style="background: white !important; border: 2px solid #93c5fd !important;"></div>
+                </div>
+                
+                <script>
+                (function() {
+                    const searchInput = document.getElementById('search-input');
+                    const searchResults = document.getElementById('search-results');
+                    const searchContainer = document.getElementById('search-container');
+                    let debounceTimer;
+                    
+                    if (!searchInput) return;
+                    
+                    searchInput.addEventListener('input', function() {
+                        clearTimeout(debounceTimer);
+                        const query = this.value.trim();
+                        
+                        if (query.length < 2) {
+                            searchResults.classList.add('hidden');
+                            searchResults.innerHTML = '';
+                            return;
+                        }
+                        
+                        debounceTimer = setTimeout(() => {
+                            fetch('/search/autocomplete?q=' + encodeURIComponent(query))
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data && data.length > 0) {
+                                        let html = '';
+                                        data.forEach(post => {
+                                            const typeLabel = post.type.replace('_', ' ').toUpperCase();
+                                            html += `
+                                                <div class="px-4 py-3 hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors" onclick="window.location.href='/${post.type}/${post.slug}'">
+                                                    <p class="text-sm text-gray-900 font-semibold leading-snug">${post.title}</p>
+                                                    <p class="text-xs text-blue-600 mt-1 font-medium">${typeLabel}</p>
+                                                </div>
+                                            `;
+                                        });
+                                        searchResults.innerHTML = html;
+                                        searchResults.classList.remove('hidden');
+                                    } else {
+                                        searchResults.classList.add('hidden');
+                                        searchResults.innerHTML = '';
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Search error:', error);
+                                    searchResults.classList.add('hidden');
+                                });
+                        }, 300);
+                    });
+                    
+                    // Close dropdown when clicking outside
+                    document.addEventListener('click', function(e) {
+                        if (!searchContainer.contains(e.target)) {
+                            searchResults.classList.add('hidden');
+                        }
+                    });
+                })();
+                </script>
                         <button type="submit" class="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 font-black text-base shadow-lg flex-shrink-0 transform hover:scale-105 transition-all" style="background: linear-gradient(to right, #2563eb, #4f46e5) !important; color: white !important; font-weight: 900 !important;"><i class="fas fa-search"></i></button>
                     </form>
                 </div>
