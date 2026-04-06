@@ -18,7 +18,9 @@ class CategorySeeder extends Seeder
             ['name' => 'SSC', 'slug' => 'ssc', 'icon' => 'briefcase', 'color' => '#059669'],
             ['name' => 'UPSC', 'slug' => 'upsc', 'icon' => 'graduation-cap', 'color' => '#7c3aed'],
             ['name' => 'State PSC', 'slug' => 'state-psc', 'icon' => 'building', 'color' => '#f59e0b'],
-            ['name' => 'Defence', 'slug' => 'defence', 'icon' => 'shield', 'color' => '#0891b2'],
+            ['name' => 'Defence', 'slug' => 'defence', 'icon' => 'fighter-jet', 'color' => '#0891b2'],
+            ['name' => 'Police', 'slug' => 'police', 'icon' => 'user-shield', 'color' => '#dc2626'],
+            ['name' => 'SSB', 'slug' => 'ssb', 'icon' => 'user-shield', 'color' => '#64748b'],
         ];
 
         foreach ($categories as $category) {

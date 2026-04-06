@@ -233,7 +233,7 @@
                     results: [],
                     showResults: false,
                     async search() {
-                        if (this.query.length < 3) {
+                        if (this.query.length < 2) {
                             this.results = [];
                             this.showResults = false;
                             return;
