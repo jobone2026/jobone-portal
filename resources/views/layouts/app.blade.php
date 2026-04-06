@@ -218,13 +218,13 @@
                 </div>
                 
                 <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-2">
-                    <a href="{{ route('home') }}" class="px-5 py-3 text-gray-700 hover:text-blue-600 text-lg font-semibold"><i class="fas fa-home"></i> Home</a>
-                    <a href="{{ route('posts.jobs') }}" class="px-5 py-3 text-gray-700 hover:text-blue-600 text-lg font-semibold"><i class="fas fa-briefcase"></i> Jobs</a>
-                    <a href="{{ route('posts.admit-cards') }}" class="px-5 py-3 text-gray-700 hover:text-blue-600 text-lg font-semibold"><i class="fas fa-id-card"></i> Admit</a>
-                    <a href="{{ route('posts.results') }}" class="px-5 py-3 text-gray-700 hover:text-blue-600 text-lg font-semibold"><i class="fas fa-chart-bar"></i> Results</a>
-                    <a href="{{ route('posts.syllabus') }}" class="px-5 py-3 text-gray-700 hover:text-blue-600 text-lg font-semibold"><i class="fas fa-book"></i> Syllabus</a>
-                    <a href="{{ route('posts.blogs') }}" class="px-5 py-3 text-gray-700 hover:text-blue-600 text-lg font-semibold"><i class="fas fa-pen-fancy"></i> Blogs</a>
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="{{ route('home') }}" class="px-4 py-2 text-gray-800 hover:text-blue-600 hover:bg-blue-50 rounded-lg text-sm font-bold transition-all"><i class="fas fa-home"></i> Home</a>
+                    <a href="{{ route('posts.jobs') }}" class="px-4 py-2 text-gray-800 hover:text-blue-600 hover:bg-blue-50 rounded-lg text-sm font-bold transition-all"><i class="fas fa-briefcase"></i> Jobs</a>
+                    <a href="{{ route('posts.admit-cards') }}" class="px-4 py-2 text-gray-800 hover:text-blue-600 hover:bg-blue-50 rounded-lg text-sm font-bold transition-all"><i class="fas fa-id-card"></i> Admit</a>
+                    <a href="{{ route('posts.results') }}" class="px-4 py-2 text-gray-800 hover:text-blue-600 hover:bg-blue-50 rounded-lg text-sm font-bold transition-all"><i class="fas fa-chart-bar"></i> Results</a>
+                    <a href="{{ route('posts.syllabus') }}" class="px-4 py-2 text-gray-800 hover:text-blue-600 hover:bg-blue-50 rounded-lg text-sm font-bold transition-all"><i class="fas fa-book"></i> Syllabus</a>
+                    <a href="{{ route('posts.blogs') }}" class="px-4 py-2 text-gray-800 hover:text-blue-600 hover:bg-blue-50 rounded-lg text-sm font-bold transition-all"><i class="fas fa-pen-fancy"></i> Blogs</a>
                 </div>
                 
                 <!-- Search Bar -->
