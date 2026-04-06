@@ -181,7 +181,11 @@
         <!-- All Posts in Card Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @php
-                $allPosts = collect($sections)->flatten(1)->sortByDesc('created_at')->take(12);
+                $allPosts = collect();
+                foreach ($sections as $type => $posts) {
+                    $allPosts = $allPosts->merge($posts);
+                }
+                $allPosts = $allPosts->sortByDesc('created_at')->take(12);
             @endphp
             
             @forelse ($allPosts as $post)
