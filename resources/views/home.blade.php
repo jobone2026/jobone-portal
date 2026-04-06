@@ -171,63 +171,8 @@
         .modern-card-item a { color: #0066cc !important; } /* Single blue color for all */
     </style>
 
-    <!-- Latest Posts - Card Grid Layout -->
-    <div class="mb-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-            <i class="fa-solid fa-fire text-orange-500"></i>
-            Latest Updates
-        </h2>
-        
-        <!-- All Posts in Card Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            @php
-                $allPosts = collect();
-                foreach ($sections as $type => $posts) {
-                    $allPosts = $allPosts->merge($posts);
-                }
-                $allPosts = $allPosts->sortByDesc('created_at')->take(12);
-            @endphp
-            
-            @forelse ($allPosts as $post)
-                <x-post-card :post="$post" />
-            @empty
-                <div class="col-span-full text-center py-12 text-gray-500">
-                    <i class="fa-solid fa-inbox text-6xl mb-4 opacity-50"></i>
-                    <p class="text-lg">No posts available</p>
-                </div>
-            @endforelse
-        </div>
-    </div>
-
-    <!-- View More Buttons by Type -->
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-        <a href="{{ route('posts.jobs') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all">
-            <i class="fa-solid fa-briefcase"></i>
-            <span>All Jobs</span>
-        </a>
-        <a href="{{ route('posts.results') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all">
-            <i class="fa-solid fa-chart-bar"></i>
-            <span>Results</span>
-        </a>
-        <a href="{{ route('posts.admit-cards') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-600 hover:to-cyan-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all">
-            <i class="fa-solid fa-id-card"></i>
-            <span>Admit Cards</span>
-        </a>
-        <a href="{{ route('posts.answer-keys') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all">
-            <i class="fa-solid fa-key"></i>
-            <span>Answer Keys</span>
-        </a>
-        <a href="{{ route('posts.syllabus') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all">
-            <i class="fa-solid fa-book"></i>
-            <span>Syllabus</span>
-        </a>
-        <a href="{{ route('posts.blogs') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all">
-            <i class="fa-solid fa-pen-fancy"></i>
-            <span>Blogs</span>
-        </a>
-    </div>
-
-    <!-- Old Column Layout Removed -->
+    <!-- Six Column Layout - Different Post Types -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
         <!-- Left Column: Jobs -->
         <div class="modern-card rounded-lg overflow-hidden">
             <div class="modern-card-header" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
@@ -240,54 +185,39 @@
                         {{ $post->title }}
                     </a>
                     
-                    <!-- Info Grid -->
-                    <div class="grid grid-cols-2 gap-2 mt-2 mb-2">
-                        <!-- Vacancies -->
+                    <!-- Vacancies and Last Date -->
+                    @if($post->total_posts || $post->last_date)
+                    <div class="flex gap-2 mt-2 mb-2 flex-wrap">
                         @if($post->total_posts)
-                        <div class="flex items-center gap-1 text-xs bg-green-50 text-green-700 px-2 py-1 rounded font-semibold border border-green-200">
-                            <i class="fa-solid fa-briefcase"></i>
-                            <span>{{ number_format($post->total_posts) }} Posts</span>
+                        <div class="flex items-center gap-1 text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded font-semibold border border-blue-200">
+                            <i class="fas fa-users"></i>
+                            <span>{{ number_format($post->total_posts) }}</span>
                         </div>
                         @endif
-                        
-                        <!-- Last Date -->
                         @if($post->last_date)
                         <div class="flex items-center gap-1 text-xs bg-red-50 text-red-700 px-2 py-1 rounded font-semibold border border-red-200">
-                            <i class="fa-solid fa-clock"></i>
+                            <i class="fas fa-calendar-times"></i>
                             <span>{{ $post->last_date->format('d M') }}</span>
                         </div>
                         @endif
-                        
-                        <!-- Category -->
-                        @if($post->category)
-                        <div class="flex items-center gap-1 text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded font-semibold border border-purple-200">
-                            <i class="fa-solid fa-tag"></i>
-                            <span>{{ $post->category->name }}</span>
-                        </div>
-                        @endif
-                        
-                        <!-- State -->
-                        @if($post->state)
-                        <div class="flex items-center gap-1 text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded font-semibold border border-blue-200">
-                            <i class="fa-solid fa-map-marker-alt"></i>
-                            <span>{{ $post->state->name }}</span>
-                        </div>
-                        @else
-                        <div class="flex items-center gap-1 text-xs bg-indigo-50 text-indigo-700 px-2 py-1 rounded font-semibold border border-indigo-200">
-                            <i class="fa-solid fa-globe"></i>
-                            <span>All India</span>
-                        </div>
-                        @endif
                     </div>
+                    @endif
                     
-                    <!-- Posted Date & NEW Badge -->
-                    <div class="flex items-center gap-2 mt-2">
-                        <span class="text-xs text-gray-500">
-                            <i class="fa-solid fa-calendar"></i> {{ $post->created_at->format('d M Y') }}
+                    <div class="modern-card-item-date">
+                        <span><i class="fas fa-calendar-alt"></i> {{ $post->created_at->format('M d, Y') }}</span>
+                        @if($post->category)
+                        <span class="modern-card-item-badge category">
+                            <i class="fas fa-tag"></i> {{ $post->category->name }}
                         </span>
+                        @endif
+                        @if($post->state)
+                        <span class="modern-card-item-badge state">
+                            <i class="fas fa-map-marker-alt"></i> {{ $post->state->name }}
+                        </span>
+                        @endif
                         @if($post->created_at->diffInDays(now()) <= 3)
-                        <span class="bg-green-500 text-white px-2 py-0.5 rounded-full text-xs font-bold">
-                            <i class="fa-solid fa-star"></i> NEW
+                        <span class="modern-card-item-badge new">
+                            <i class="fas fa-star"></i> NEW
                         </span>
                         @endif
                     </div>
@@ -314,39 +244,26 @@
                     <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
                         {{ $post->title }}
                     </a>
-                    
-                    <!-- Info Grid -->
-                    <div class="grid grid-cols-2 gap-2 mt-2 mb-2">
-                        <!-- Category -->
+                    <div class="modern-card-item-date">
+                        <span><i class="fas fa-calendar-alt"></i> {{ $post->created_at->format('M d, Y') }}</span>
                         @if($post->category)
-                        <div class="flex items-center gap-1 text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded font-semibold border border-purple-200">
-                            <i class="fa-solid fa-tag"></i>
-                            <span>{{ $post->category->name }}</span>
-                        </div>
-                        @endif
-                        
-                        <!-- State -->
-                        @if($post->state)
-                        <div class="flex items-center gap-1 text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded font-semibold border border-blue-200">
-                            <i class="fa-solid fa-map-marker-alt"></i>
-                            <span>{{ $post->state->name }}</span>
-                        </div>
-                        @else
-                        <div class="flex items-center gap-1 text-xs bg-indigo-50 text-indigo-700 px-2 py-1 rounded font-semibold border border-indigo-200">
-                            <i class="fa-solid fa-globe"></i>
-                            <span>All India</span>
-                        </div>
-                        @endif
-                    </div>
-                    
-                    <!-- Posted Date & NEW Badge -->
-                    <div class="flex items-center gap-2 mt-2">
-                        <span class="text-xs text-gray-500">
-                            <i class="fa-solid fa-calendar"></i> {{ $post->created_at->format('d M Y') }}
+                        <span class="modern-card-item-badge category">
+                            <i class="fas fa-tag"></i> {{ $post->category->name }}
                         </span>
+                        @endif
+                        @if($post->state)
+                        <span class="modern-card-item-badge state">
+                            <i class="fas fa-map-marker-alt"></i> {{ $post->state->name }}
+                        </span>
+                        @endif
+                        @if($post->view_count > 0)
+                        <span class="modern-card-item-badge views">
+                            <i class="fas fa-eye"></i> {{ number_format($post->view_count) }}
+                        </span>
+                        @endif
                         @if($post->created_at->diffInDays(now()) <= 3)
-                        <span class="bg-green-500 text-white px-2 py-0.5 rounded-full text-xs font-bold">
-                            <i class="fa-solid fa-star"></i> NEW
+                        <span class="modern-card-item-badge new">
+                            <i class="fas fa-star"></i> NEW
                         </span>
                         @endif
                     </div>
@@ -373,47 +290,26 @@
                     <a href="{{ route('posts.show', ['type' => $post->type, 'post' => $post->slug]) }}">
                         {{ $post->title }}
                     </a>
-                    
-                    <!-- Info Grid -->
-                    <div class="grid grid-cols-2 gap-2 mt-2 mb-2">
-                        <!-- Category -->
+                    <div class="modern-card-item-date">
+                        <span><i class="fas fa-calendar-alt"></i> {{ $post->created_at->format('M d, Y') }}</span>
                         @if($post->category)
-                        <div class="flex items-center gap-1 text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded font-semibold border border-purple-200">
-                            <i class="fa-solid fa-tag"></i>
-                            <span>{{ $post->category->name }}</span>
-                        </div>
-                        @endif
-                        
-                        <!-- State -->
-                        @if($post->state)
-                        <div class="flex items-center gap-1 text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded font-semibold border border-blue-200">
-                            <i class="fa-solid fa-map-marker-alt"></i>
-                            <span>{{ $post->state->name }}</span>
-                        </div>
-                        @else
-                        <div class="flex items-center gap-1 text-xs bg-indigo-50 text-indigo-700 px-2 py-1 rounded font-semibold border border-indigo-200">
-                            <i class="fa-solid fa-globe"></i>
-                            <span>All India</span>
-                        </div>
-                        @endif
-                        
-                        <!-- Views -->
-                        @if($post->view_count > 0)
-                        <div class="flex items-center gap-1 text-xs bg-gray-50 text-gray-700 px-2 py-1 rounded font-semibold border border-gray-200">
-                            <i class="fa-solid fa-eye"></i>
-                            <span>{{ number_format($post->view_count) }}</span>
-                        </div>
-                        @endif
-                    </div>
-                    
-                    <!-- Posted Date & NEW Badge -->
-                    <div class="flex items-center gap-2 mt-2">
-                        <span class="text-xs text-gray-500">
-                            <i class="fa-solid fa-calendar"></i> {{ $post->created_at->format('d M Y') }}
+                        <span class="modern-card-item-badge category">
+                            <i class="fas fa-tag"></i> {{ $post->category->name }}
                         </span>
+                        @endif
+                        @if($post->state)
+                        <span class="modern-card-item-badge state">
+                            <i class="fas fa-map-marker-alt"></i> {{ $post->state->name }}
+                        </span>
+                        @endif
+                        @if($post->view_count > 0)
+                        <span class="modern-card-item-badge views">
+                            <i class="fas fa-eye"></i> {{ number_format($post->view_count) }}
+                        </span>
+                        @endif
                         @if($post->created_at->diffInDays(now()) <= 3)
-                        <span class="bg-green-500 text-white px-2 py-0.5 rounded-full text-xs font-bold">
-                            <i class="fa-solid fa-star"></i> NEW
+                        <span class="modern-card-item-badge new">
+                            <i class="fas fa-star"></i> NEW
                         </span>
                         @endif
                     </div>
