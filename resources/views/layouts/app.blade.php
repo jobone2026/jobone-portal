@@ -419,19 +419,19 @@
             color: white;
         }
         
-        /* State PSC - Violet */
+        /* State PSC - Teal */
         .category-card:nth-child(5) {
-            background: linear-gradient(135deg, #e9d5ff 0%, #d8b4fe 100%);
-            border-color: #8b5cf6;
+            background: linear-gradient(135deg, #ccfbf1 0%, #99f6e4 100%);
+            border-color: #14b8a6;
         }
         .category-card:nth-child(5) .category-icon {
-            color: #7c3aed;
+            color: #0d9488;
         }
         .category-card:nth-child(5) .category-label {
-            color: #5b21b6;
+            color: #115e59;
         }
         .category-card:nth-child(5):hover {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
         }
         .category-card:nth-child(5):hover .category-icon,
         .category-card:nth-child(5):hover .category-label {
@@ -457,19 +457,19 @@
             color: white;
         }
         
-        /* Police - Orange */
+        /* Police - Blue */
         .category-card:nth-child(7) {
-            background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
-            border-color: #ea580c;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-color: #3b82f6;
         }
         .category-card:nth-child(7) .category-icon {
-            color: #dc2626;
+            color: #2563eb;
         }
         .category-card:nth-child(7) .category-label {
-            color: #9a3412;
+            color: #1e40af;
         }
         .category-card:nth-child(7):hover {
-            background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
         }
         .category-card:nth-child(7):hover .category-icon,
         .category-card:nth-child(7):hover .category-label {
@@ -561,7 +561,7 @@
                 
                 <!-- State PSC -->
                 <a href="{{ route('categories.show', 'state-psc') }}" class="category-card" title="State PSC Jobs">
-                    <i class="fas fa-map-marker-alt category-icon"></i>
+                    <i class="fa-solid fa-landmark category-icon"></i>
                     <span class="category-label">State PSC</span>
                 </a>
                 
@@ -573,7 +573,7 @@
                 
                 <!-- Police -->
                 <a href="{{ route('categories.show', 'police') }}" class="category-card" title="Police Jobs">
-                    <i class="fas fa-user-shield category-icon"></i>
+                    <i class="fa-solid fa-user-police category-icon"></i>
                     <span class="category-label">Police</span>
                 </a>
                 

@@ -332,7 +332,10 @@
                     @endif
                     @if ($post->total_posts)
                         <div class="bg-white rounded-lg p-3 shadow-sm border border-blue-200">
-                            <div class="text-xs text-blue-600 font-semibold mb-1">Total Vacancies</div>
+                            <div class="text-xs text-blue-600 font-semibold mb-1 flex items-center gap-1">
+                                <i class="fa-solid fa-briefcase"></i>
+                                Total Vacancies
+                            </div>
                             <div class="text-sm text-blue-900 font-bold">{{ number_format($post->total_posts) }}</div>
                         </div>
                     @endif

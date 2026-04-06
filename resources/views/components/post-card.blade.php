@@ -1,4 +1,4 @@
-<div class="bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-blue-300 p-5">
+<div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 hover:border-blue-400 overflow-hidden">
     @php
         $daysRemaining = null;
         $isUrgent = false;
@@ -8,66 +8,95 @@
         }
     @endphp
     
-    <!-- TOP SECTION -->
-    <div class="flex items-start gap-4 mb-4">
-        <!-- LOGO -->
-        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center shadow">
-            <span class="text-blue-600 text-xl font-bold">{{ strtoupper(substr($post->title, 0, 1)) }}</span>
+    <!-- Header with Badges -->
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-2 border-b border-blue-100">
+        <div class="flex items-center gap-2 flex-wrap">
+            @if($isUrgent)
+                <span class="bg-red-500 text-white px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-1">
+                    <i class="fa-solid fa-exclamation-circle"></i> URGENT
+                </span>
+            @endif
+            <span class="bg-green-500 text-white px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-1">
+                <i class="fa-solid fa-star"></i> NEW
+            </span>
+            @if ($post->state)
+                <span class="bg-blue-500 text-white px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-1">
+                    <i class="fa-solid fa-map-marker-alt"></i> {{ $post->state->name }}
+                </span>
+            @else
+                <span class="bg-purple-500 text-white px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-1">
+                    <i class="fa-solid fa-globe"></i> All India
+                </span>
+            @endif
         </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="p-4">
+        <!-- Title -->
+        <h3 class="font-bold text-gray-900 mb-3 hover:text-blue-600 transition-colors" style="font-size: 16px; line-height: 1.4;">
+            <a href="{{ route('posts.show', [$post->type, $post->slug]) }}" class="block">
+                {{ $post->title }}
+            </a>
+        </h3>
         
-        <!-- TITLE -->
-        <div class="flex-1">
-            <h3 class="font-bold hover:text-blue-600" style="font-size: 18px; line-height: 1.3; color: #1e40af;">
-                <a href="{{ route('posts.show', [$post->type, $post->slug]) }}">{{ $post->title }}</a>
-            </h3>
-            @if ($post->organization)
-                <p class="text-sm text-gray-500">{{ $post->organization }}</p>
+        <!-- Info Grid -->
+        <div class="grid grid-cols-2 gap-3 mb-4">
+            <!-- Posted Date -->
+            <div class="flex items-center gap-2 text-sm text-gray-600">
+                <i class="fa-solid fa-calendar text-blue-500"></i>
+                <div>
+                    <div class="text-xs text-gray-500">Posted</div>
+                    <div class="font-semibold">{{ $post->created_at->format('d M Y') }}</div>
+                </div>
+            </div>
+            
+            <!-- Last Date -->
+            @if ($post->last_date)
+                <div class="flex items-center gap-2 text-sm {{ $isUrgent ? 'text-red-600' : 'text-orange-600' }}">
+                    <i class="fa-solid fa-clock {{ $isUrgent ? 'animate-pulse' : '' }}"></i>
+                    <div>
+                        <div class="text-xs">Last Date</div>
+                        <div class="font-bold">{{ $post->last_date->format('d M Y') }}</div>
+                    </div>
+                </div>
             @endif
             
-            <!-- BADGES -->
-            <div class="flex gap-2 mt-2 flex-wrap">
-                @if($isUrgent)
-                    <span class="bg-red-100 text-red-600 px-2 py-1 rounded text-xs font-bold">URGENT</span>
-                @endif
-                <span class="bg-green-100 text-green-600 px-2 py-1 rounded text-xs font-bold">NEW</span>
-                @if ($post->state)
-                    <span class="bg-blue-100 text-blue-600 px-2 py-1 rounded text-xs font-bold">{{ $post->state->name }}</span>
-                @endif
-            </div>
+            <!-- Vacancies -->
+            @if ($post->total_posts)
+                <div class="flex items-center gap-2 text-sm text-green-700">
+                    <i class="fa-solid fa-briefcase text-green-600"></i>
+                    <div>
+                        <div class="text-xs text-gray-500">Vacancies</div>
+                        <div class="font-bold">{{ number_format($post->total_posts) }}</div>
+                    </div>
+                </div>
+            @endif
+            
+            <!-- Category -->
+            @if ($post->category)
+                <div class="flex items-center gap-2 text-sm text-purple-700">
+                    <i class="fa-solid fa-tag text-purple-600"></i>
+                    <div>
+                        <div class="text-xs text-gray-500">Category</div>
+                        <div class="font-semibold">{{ $post->category->name }}</div>
+                    </div>
+                </div>
+            @endif
         </div>
-    </div>
-    
-    <!-- MIDDLE INFO -->
-    <div class="grid grid-cols-2 gap-3 text-sm mb-4">
-        <div class="flex items-center gap-2 text-gray-600">
-            📅 <span>{{ $post->created_at->format('M d, Y') }}</span>
-        </div>
-        @if ($post->last_date)
-            <div class="flex items-center gap-2 text-red-600 font-semibold">
-                ⏳ <span>{{ $post->last_date->format('M d') }}</span>
-            </div>
-        @endif
-        @if ($post->total_posts)
-            <div class="flex items-center gap-2 text-gray-800 font-semibold">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
-                </svg>
-                {{ number_format($post->total_posts) }}
-            </div>
-        @endif
-        <div class="flex items-center gap-2 text-gray-600">
-            📍 {{ $post->state->name ?? 'All India' }}
-        </div>
-    </div>
-    
-    <!-- BOTTOM -->
-    <div class="flex justify-between items-center border-t pt-4">
-        <span class="text-xs text-gray-500">Last Date: <b>{{ $post->last_date ? $post->last_date->format('M d, Y') : '-' }}</b></span>
-        <div class="flex gap-2">
+        
+        <!-- Action Buttons -->
+        <div class="flex gap-2 pt-3 border-t border-gray-100">
             <a href="{{ route('posts.show', [$post->type, $post->slug]) }}" 
-               class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-sm font-bold rounded-lg shadow">Apply</a>
-            <a href="{{ route('posts.show', [$post->type, $post->slug]) }}" 
-               class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-bold rounded-lg shadow">Details</a>
+               class="flex-1 px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white text-sm font-bold rounded-lg shadow-md hover:shadow-lg transition-all text-center flex items-center justify-center gap-2">
+                <i class="fa-solid fa-info-circle"></i>
+                View Details
+            </a>
+            <a href="{{ route('posts.show', [$post->type, $post->slug]) }}#apply" 
+               class="flex-1 px-4 py-2.5 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white text-sm font-bold rounded-lg shadow-md hover:shadow-lg transition-all text-center flex items-center justify-center gap-2">
+                <i class="fa-solid fa-paper-plane"></i>
+                Apply Now
+            </a>
         </div>
     </div>
 </div>
