@@ -173,7 +173,7 @@
     </style>
 
     <!-- Header -->
-    <header class="bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900 shadow-xl sticky top-0 z-50 border-b-4 border-yellow-400" style="background: linear-gradient(to right, #1e3a8a, #312e81, #581c87) !important; border-bottom: 4px solid #fbbf24 !important;">
+    <header class="bg-white shadow-lg sticky top-0 z-50 border-b-4 border-blue-500" style="background: white !important; border-bottom: 4px solid #3b82f6 !important;">
         <nav class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 md:py-5">
             <div class="flex justify-between items-center gap-2">
                 <!-- Logo -->
@@ -213,19 +213,19 @@
                 
                 <!-- Mobile Menu Button -->
                 <div class="md:hidden">
-                    <button id="mobile-menu-button" class="p-3 text-white hover:text-yellow-400 focus:outline-none bg-white bg-opacity-10 rounded-lg">
+                    <button id="mobile-menu-button" class="p-3 text-gray-700 hover:text-blue-600 focus:outline-none bg-gray-100 rounded-lg" style="color: #374151 !important; background-color: #f3f4f6 !important;">
                         <i id="mobile-menu-icon" class="fas fa-bars text-xl"></i>
                     </button>
                 </div>
                 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-1">
-                    <a href="{{ route('home') }}" class="px-6 py-3 text-white hover:text-yellow-400 hover:bg-white hover:bg-opacity-20 rounded-xl text-lg font-black transition-all shadow-lg hover:shadow-2xl transform hover:scale-105" style="color: white !important; font-weight: 900 !important; text-shadow: 2px 2px 4px rgba(0,0,0,0.3) !important;"><i class="fas fa-home"></i> Home</a>
-                    <a href="{{ route('posts.jobs') }}" class="px-6 py-3 text-white hover:text-green-400 hover:bg-white hover:bg-opacity-20 rounded-xl text-lg font-black transition-all shadow-lg hover:shadow-2xl transform hover:scale-105" style="color: white !important; font-weight: 900 !important; text-shadow: 2px 2px 4px rgba(0,0,0,0.3) !important;"><i class="fas fa-briefcase"></i> Jobs</a>
-                    <a href="{{ route('posts.admit-cards') }}" class="px-6 py-3 text-white hover:text-purple-400 hover:bg-white hover:bg-opacity-20 rounded-xl text-lg font-black transition-all shadow-lg hover:shadow-2xl transform hover:scale-105" style="color: white !important; font-weight: 900 !important; text-shadow: 2px 2px 4px rgba(0,0,0,0.3) !important;"><i class="fas fa-id-card"></i> Admit</a>
-                    <a href="{{ route('posts.results') }}" class="px-6 py-3 text-white hover:text-orange-400 hover:bg-white hover:bg-opacity-20 rounded-xl text-lg font-black transition-all shadow-lg hover:shadow-2xl transform hover:scale-105" style="color: white !important; font-weight: 900 !important; text-shadow: 2px 2px 4px rgba(0,0,0,0.3) !important;"><i class="fas fa-chart-bar"></i> Results</a>
-                    <a href="{{ route('posts.syllabus') }}" class="px-6 py-3 text-white hover:text-blue-400 hover:bg-white hover:bg-opacity-20 rounded-xl text-lg font-black transition-all shadow-lg hover:shadow-2xl transform hover:scale-105" style="color: white !important; font-weight: 900 !important; text-shadow: 2px 2px 4px rgba(0,0,0,0.3) !important;"><i class="fas fa-book"></i> Syllabus</a>
-                    <a href="{{ route('posts.blogs') }}" class="px-6 py-3 text-white hover:text-pink-400 hover:bg-white hover:bg-opacity-20 rounded-xl text-lg font-black transition-all shadow-lg hover:shadow-2xl transform hover:scale-105" style="color: white !important; font-weight: 900 !important; text-shadow: 2px 2px 4px rgba(0,0,0,0.3) !important;"><i class="fas fa-pen-fancy"></i> Blogs</a>
+                    <a href="{{ route('home') }}" class="px-6 py-3 text-blue-700 hover:text-white hover:bg-blue-600 rounded-xl text-lg font-black transition-all shadow-md hover:shadow-xl transform hover:scale-105" style="color: #1d4ed8 !important; font-weight: 900 !important;"><i class="fas fa-home"></i> Home</a>
+                    <a href="{{ route('posts.jobs') }}" class="px-6 py-3 text-green-700 hover:text-white hover:bg-green-600 rounded-xl text-lg font-black transition-all shadow-md hover:shadow-xl transform hover:scale-105" style="color: #15803d !important; font-weight: 900 !important;"><i class="fas fa-briefcase"></i> Jobs</a>
+                    <a href="{{ route('posts.admit-cards') }}" class="px-6 py-3 text-purple-700 hover:text-white hover:bg-purple-600 rounded-xl text-lg font-black transition-all shadow-md hover:shadow-xl transform hover:scale-105" style="color: #7e22ce !important; font-weight: 900 !important;"><i class="fas fa-id-card"></i> Admit</a>
+                    <a href="{{ route('posts.results') }}" class="px-6 py-3 text-orange-700 hover:text-white hover:bg-orange-600 rounded-xl text-lg font-black transition-all shadow-md hover:shadow-xl transform hover:scale-105" style="color: #c2410c !important; font-weight: 900 !important;"><i class="fas fa-chart-bar"></i> Results</a>
+                    <a href="{{ route('posts.syllabus') }}" class="px-6 py-3 text-indigo-700 hover:text-white hover:bg-indigo-600 rounded-xl text-lg font-black transition-all shadow-md hover:shadow-xl transform hover:scale-105" style="color: #4338ca !important; font-weight: 900 !important;"><i class="fas fa-book"></i> Syllabus</a>
+                    <a href="{{ route('posts.blogs') }}" class="px-6 py-3 text-pink-700 hover:text-white hover:bg-pink-600 rounded-xl text-lg font-black transition-all shadow-md hover:shadow-xl transform hover:scale-105" style="color: #be185d !important; font-weight: 900 !important;"><i class="fas fa-pen-fancy"></i> Blogs</a>
                 </div>
                 
                 <!-- Search Bar -->
@@ -235,44 +235,44 @@
                             type="text" 
                             name="q" 
                             placeholder="Search jobs, results..." 
-                            class="px-5 py-3 bg-white border-3 border-yellow-400 rounded-xl focus:outline-none focus:border-yellow-300 focus:ring-2 focus:ring-yellow-400 w-full text-base font-bold shadow-lg"
-                            style="background-color: white !important; border: 3px solid #fbbf24 !important; font-weight: 700 !important;"
+                            class="px-5 py-3 bg-gray-50 border-3 border-blue-300 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-400 w-full text-base font-bold shadow-md"
+                            style="background-color: #f9fafb !important; border: 3px solid #93c5fd !important; font-weight: 700 !important;"
                             autocomplete="off">
-                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 rounded-xl hover:from-yellow-500 hover:to-orange-600 font-black text-base shadow-xl flex-shrink-0 transform hover:scale-105 transition-all" style="background: linear-gradient(to right, #fbbf24, #f97316) !important; color: #111827 !important; font-weight: 900 !important;"><i class="fas fa-search"></i></button>
+                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 font-black text-base shadow-lg flex-shrink-0 transform hover:scale-105 transition-all" style="background: linear-gradient(to right, #2563eb, #4f46e5) !important; color: white !important; font-weight: 900 !important;"><i class="fas fa-search"></i></button>
                     </form>
                 </div>
             </div>
         </nav>
         
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="md:hidden bg-gradient-to-r from-blue-900 to-purple-900 border-t-2 border-yellow-400 shadow-2xl hidden" style="background: linear-gradient(to right, #1e3a8a, #581c87) !important; border-top: 2px solid #fbbf24 !important;">
+        <div id="mobile-menu" class="md:hidden bg-white border-t-2 border-blue-500 shadow-xl hidden" style="background: white !important; border-top: 2px solid #3b82f6 !important;">
             <div class="px-4 py-3 space-y-2">
-                <a href="{{ route('home') }}" class="block px-4 py-3 text-white hover:text-yellow-400 hover:bg-white hover:bg-opacity-10 rounded-lg text-base font-bold" style="color: white !important; font-weight: 700 !important;">
-                    <i class="fas fa-home w-5"></i> Home
+                <a href="{{ route('home') }}" class="block px-4 py-3 text-blue-700 hover:text-white hover:bg-blue-600 rounded-lg text-base font-bold transition-all" style="color: #1d4ed8 !important; font-weight: 700 !important;">
+                    <i class="fas fa-home w-5 mr-2"></i> Home
                 </a>
-                <a href="{{ route('posts.jobs') }}" class="block px-4 py-3 text-white hover:text-green-400 hover:bg-white hover:bg-opacity-10 rounded-lg text-base font-bold" style="color: white !important; font-weight: 700 !important;">
-                    <i class="fas fa-briefcase w-5"></i> Jobs
+                <a href="{{ route('posts.jobs') }}" class="block px-4 py-3 text-green-700 hover:text-white hover:bg-green-600 rounded-lg text-base font-bold transition-all" style="color: #15803d !important; font-weight: 700 !important;">
+                    <i class="fas fa-briefcase w-5 mr-2"></i> Jobs
                 </a>
-                <a href="{{ route('posts.admit-cards') }}" class="block px-4 py-3 text-white hover:text-purple-400 hover:bg-white hover:bg-opacity-10 rounded-lg text-base font-bold" style="color: white !important; font-weight: 700 !important;">
-                    <i class="fas fa-id-card w-5"></i> Admit Cards
+                <a href="{{ route('posts.admit-cards') }}" class="block px-4 py-3 text-purple-700 hover:text-white hover:bg-purple-600 rounded-lg text-base font-bold transition-all" style="color: #7e22ce !important; font-weight: 700 !important;">
+                    <i class="fas fa-id-card w-5 mr-2"></i> Admit Cards
                 </a>
-                <a href="{{ route('posts.results') }}" class="block px-4 py-3 text-white hover:text-orange-400 hover:bg-white hover:bg-opacity-10 rounded-lg text-base font-bold" style="color: white !important; font-weight: 700 !important;">
-                    <i class="fas fa-chart-bar w-5"></i> Results
+                <a href="{{ route('posts.results') }}" class="block px-4 py-3 text-orange-700 hover:text-white hover:bg-orange-600 rounded-lg text-base font-bold transition-all" style="color: #c2410c !important; font-weight: 700 !important;">
+                    <i class="fas fa-chart-bar w-5 mr-2"></i> Results
                 </a>
-                <a href="{{ route('posts.syllabus') }}" class="block px-4 py-3 text-white hover:text-blue-400 hover:bg-white hover:bg-opacity-10 rounded-lg text-base font-bold" style="color: white !important; font-weight: 700 !important;">
-                    <i class="fas fa-book w-5"></i> Syllabus
+                <a href="{{ route('posts.syllabus') }}" class="block px-4 py-3 text-indigo-700 hover:text-white hover:bg-indigo-600 rounded-lg text-base font-bold transition-all" style="color: #4338ca !important; font-weight: 700 !important;">
+                    <i class="fas fa-book w-5 mr-2"></i> Syllabus
                 </a>
-                <a href="{{ route('posts.blogs') }}" class="block px-4 py-3 text-white hover:text-pink-400 hover:bg-white hover:bg-opacity-10 rounded-lg text-base font-bold" style="color: white !important; font-weight: 700 !important;">
-                    <i class="fas fa-pen-fancy w-5"></i> Blogs
+                <a href="{{ route('posts.blogs') }}" class="block px-4 py-3 text-pink-700 hover:text-white hover:bg-pink-600 rounded-lg text-base font-bold transition-all" style="color: #be185d !important; font-weight: 700 !important;">
+                    <i class="fas fa-pen-fancy w-5 mr-2"></i> Blogs
                 </a>
                 
                 <!-- Mobile Search -->
-                <div class="pt-3 border-t-2 border-yellow-400" style="border-top: 2px solid #fbbf24 !important;">
+                <div class="pt-3 border-t-2 border-blue-300" style="border-top: 2px solid #93c5fd !important;">
                     <form action="{{ route('search') }}" method="GET" class="flex gap-2">
                         <input type="text" name="q" placeholder="Search..." 
-                               class="flex-1 px-4 py-3 bg-white border-2 border-yellow-400 rounded-lg focus:outline-none focus:border-yellow-300 text-sm font-bold"
-                               style="background-color: white !important; border: 2px solid #fbbf24 !important; font-weight: 700 !important;">
-                        <button type="submit" class="px-5 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 rounded-lg hover:from-yellow-500 hover:to-orange-600 text-sm font-black" style="background: linear-gradient(to right, #fbbf24, #f97316) !important; color: #111827 !important; font-weight: 900 !important;">
+                               class="flex-1 px-4 py-3 bg-gray-50 border-2 border-blue-300 rounded-lg focus:outline-none focus:border-blue-500 text-sm font-bold"
+                               style="background-color: #f9fafb !important; border: 2px solid #93c5fd !important; font-weight: 700 !important;">
+                        <button type="submit" class="px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 text-sm font-black" style="background: linear-gradient(to right, #2563eb, #4f46e5) !important; color: white !important; font-weight: 900 !important;">
                             <i class="fas fa-search"></i>
                         </button>
                     </form>
