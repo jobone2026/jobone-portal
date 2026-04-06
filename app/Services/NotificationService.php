@@ -48,8 +48,11 @@ class NotificationService
         try {
             $postUrl = route('posts.show', [$post->type, $post]);
             
-            // Format message with your custom style
-            $message = "🔥 *New Vacancy* 🔥\n";
+            // Get type-specific header and emoji
+            $typeInfo = $this->getTypeInfo($post->type);
+            
+            // Format message with type-specific header
+            $message = "{$typeInfo['emoji']} *{$typeInfo['title']}* {$typeInfo['emoji']}\n";
             $message .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
             $message .= "🔥 *" . $this->escapeMarkdown($post->title) . "*\n\n";
             
@@ -58,14 +61,14 @@ class NotificationService
                 $message .= "🏢 *Organization:* " . $this->escapeMarkdown($post->organization) . "\n";
             }
             
-            // Add total posts if available
-            if ($post->total_posts) {
+            // Add total posts if available (only for jobs)
+            if ($post->total_posts && $post->type === 'job') {
                 $message .= "👥 *Total Posts:* " . $post->total_posts . "\n";
             }
             
             // Add notification date if available
             if ($post->notification_date) {
-                $message .= "🟣 *Application Start:* " . $post->notification_date->format('d-m-Y') . "\n";
+                $message .= "🟣 *{$typeInfo['date_label']}:* " . $post->notification_date->format('d-m-Y') . "\n";
             }
             
             // Add last date if available
@@ -75,10 +78,10 @@ class NotificationService
                 $message .= "🟢 *Last Date:* -\n";
             }
             
-            $message .= "\n➡️ *Apply Here:* [Click Here](" . $postUrl . ")\n";
+            $message .= "\n➡️ *{$typeInfo['action']}:* [Click Here](" . $postUrl . ")\n";
             
             // Add hashtags
-            $message .= "\n#jobone2026 #jobone";
+            $message .= "\n#jobone2026 #jobone #{$post->type}";
             
             $response = Http::post("https://api.telegram.org/bot{$botToken}/sendMessage", [
                 'chat_id' => $channelId,
@@ -98,6 +101,57 @@ class NotificationService
             Log::error('Telegram notification failed: ' . $e->getMessage());
             return false;
         }
+    }
+    
+    /**
+     * Get type-specific information for notifications
+     */
+    protected function getTypeInfo($type)
+    {
+        return match($type) {
+            'job' => [
+                'emoji' => '💼',
+                'title' => 'New Job Vacancy',
+                'date_label' => 'Application Start',
+                'action' => 'Apply Here'
+            ],
+            'admit_card' => [
+                'emoji' => '🎫',
+                'title' => 'New Admit Card',
+                'date_label' => 'Release Date',
+                'action' => 'Download Here'
+            ],
+            'result' => [
+                'emoji' => '📊',
+                'title' => 'New Result',
+                'date_label' => 'Result Date',
+                'action' => 'Check Here'
+            ],
+            'answer_key' => [
+                'emoji' => '🔑',
+                'title' => 'New Answer Key',
+                'date_label' => 'Release Date',
+                'action' => 'Download Here'
+            ],
+            'syllabus' => [
+                'emoji' => '📚',
+                'title' => 'New Syllabus',
+                'date_label' => 'Release Date',
+                'action' => 'Download Here'
+            ],
+            'blog' => [
+                'emoji' => '📝',
+                'title' => 'New Article',
+                'date_label' => 'Published Date',
+                'action' => 'Read Here'
+            ],
+            default => [
+                'emoji' => '📢',
+                'title' => 'New Update',
+                'date_label' => 'Date',
+                'action' => 'View Here'
+            ],
+        };
     }
     
     /**
