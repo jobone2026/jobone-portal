@@ -4,34 +4,6 @@
 @section('description', 'Find latest government jobs, admit cards, results, syllabus, answer keys and more')
 
 @section('content')
-    <!-- View More Buttons by Type -->
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-        <a href="{{ route('posts.jobs') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-white border border-gray-300 hover:border-gray-400 text-gray-700 font-bold rounded-lg transition-all">
-            <i class="fa-solid fa-briefcase"></i>
-            <span>All Jobs</span>
-        </a>
-        <a href="{{ route('posts.results') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-white border border-gray-300 hover:border-gray-400 text-gray-700 font-bold rounded-lg transition-all">
-            <i class="fa-solid fa-chart-bar"></i>
-            <span>Results</span>
-        </a>
-        <a href="{{ route('posts.admit-cards') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-white border border-gray-300 hover:border-gray-400 text-gray-700 font-bold rounded-lg transition-all">
-            <i class="fa-solid fa-id-card"></i>
-            <span>Admit Cards</span>
-        </a>
-        <a href="{{ route('posts.answer-keys') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-white border border-gray-300 hover:border-gray-400 text-gray-700 font-bold rounded-lg transition-all">
-            <i class="fa-solid fa-key"></i>
-            <span>Answer Keys</span>
-        </a>
-        <a href="{{ route('posts.syllabus') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-white border border-gray-300 hover:border-gray-400 text-gray-700 font-bold rounded-lg transition-all">
-            <i class="fa-solid fa-book"></i>
-            <span>Syllabus</span>
-        </a>
-        <a href="{{ route('posts.blogs') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-white border border-gray-300 hover:border-gray-400 text-gray-700 font-bold rounded-lg transition-all">
-            <i class="fa-solid fa-pen-fancy"></i>
-            <span>Blogs</span>
-        </a>
-    </div>
-
     <!-- Column Sections for Each Type -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <!-- Jobs Column -->
