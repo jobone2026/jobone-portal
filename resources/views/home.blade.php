@@ -6,27 +6,27 @@
 @section('content')
     <!-- View More Buttons by Type -->
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-        <a href="{{ route('posts.jobs') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all">
+        <a href="{{ route('posts.jobs') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-white border border-gray-300 hover:border-gray-400 text-gray-700 font-bold rounded-lg transition-all">
             <i class="fa-solid fa-briefcase"></i>
             <span>All Jobs</span>
         </a>
-        <a href="{{ route('posts.results') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all">
+        <a href="{{ route('posts.results') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-white border border-gray-300 hover:border-gray-400 text-gray-700 font-bold rounded-lg transition-all">
             <i class="fa-solid fa-chart-bar"></i>
             <span>Results</span>
         </a>
-        <a href="{{ route('posts.admit-cards') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-600 hover:to-cyan-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all">
+        <a href="{{ route('posts.admit-cards') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-white border border-gray-300 hover:border-gray-400 text-gray-700 font-bold rounded-lg transition-all">
             <i class="fa-solid fa-id-card"></i>
             <span>Admit Cards</span>
         </a>
-        <a href="{{ route('posts.answer-keys') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all">
+        <a href="{{ route('posts.answer-keys') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-white border border-gray-300 hover:border-gray-400 text-gray-700 font-bold rounded-lg transition-all">
             <i class="fa-solid fa-key"></i>
             <span>Answer Keys</span>
         </a>
-        <a href="{{ route('posts.syllabus') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all">
+        <a href="{{ route('posts.syllabus') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-white border border-gray-300 hover:border-gray-400 text-gray-700 font-bold rounded-lg transition-all">
             <i class="fa-solid fa-book"></i>
             <span>Syllabus</span>
         </a>
-        <a href="{{ route('posts.blogs') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all">
+        <a href="{{ route('posts.blogs') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-white border border-gray-300 hover:border-gray-400 text-gray-700 font-bold rounded-lg transition-all">
             <i class="fa-solid fa-pen-fancy"></i>
             <span>Blogs</span>
         </a>
