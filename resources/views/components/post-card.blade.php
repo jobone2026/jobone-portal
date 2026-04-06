@@ -89,7 +89,7 @@
         <div class="flex gap-2 pt-3 border-t border-gray-100">
             <a href="{{ route('posts.show', [$post->type, $post->slug]) }}" 
                class="flex-1 px-4 py-2.5 text-white text-sm font-bold rounded-lg shadow-md hover:shadow-lg transition-all text-center flex items-center justify-center gap-2"
-               style="background: #3b82f6; text-decoration: none;"
+               style="background: #3b82f6 !important; color: #ffffff !important; text-decoration: none !important;"
                onmouseover="this.style.background='#2563eb'" 
                onmouseout="this.style.background='#3b82f6'">
                 <i class="fa-solid fa-info-circle"></i>
@@ -97,7 +97,7 @@
             </a>
             <a href="{{ route('posts.show', [$post->type, $post->slug]) }}#apply" 
                class="flex-1 px-4 py-2.5 text-white text-sm font-bold rounded-lg shadow-md hover:shadow-lg transition-all text-center flex items-center justify-center gap-2"
-               style="background: #10b981; text-decoration: none;"
+               style="background: #10b981 !important; color: #ffffff !important; text-decoration: none !important;"
                onmouseover="this.style.background='#059669'" 
                onmouseout="this.style.background='#10b981'">
                 <i class="fa-solid fa-paper-plane"></i>
