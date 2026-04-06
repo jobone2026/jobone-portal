@@ -777,16 +777,18 @@
     <div class="fixed right-0 top-1/2 transform -translate-y-1/2 z-40 flex flex-col gap-3">
         <!-- WhatsApp Button -->
         <a href="https://whatsapp.com/channel/0029VajhCMu4dTnKfzjdWg0j" target="_blank" rel="noopener noreferrer" 
-           class="bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-l-lg shadow-lg transition-all duration-300 hover:px-6 flex items-center gap-2 group">
-            <i class="fab fa-whatsapp text-2xl"></i>
-            <span class="hidden group-hover:inline-block text-sm font-semibold whitespace-nowrap">Join WhatsApp</span>
+           class="bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-l-lg shadow-lg transition-all duration-300 hover:px-6 flex items-center gap-2 group"
+           style="background-color: #25D366 !important; color: white !important; text-decoration: none !important;">
+            <i class="fab fa-whatsapp" style="font-size: 24px !important; color: white !important;"></i>
+            <span class="hidden group-hover:inline-block text-sm font-semibold whitespace-nowrap" style="color: white !important;">Join WhatsApp</span>
         </a>
         
         <!-- Telegram Button -->
         <a href="https://t.me/jobone_in" target="_blank" rel="noopener noreferrer" 
-           class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-l-lg shadow-lg transition-all duration-300 hover:px-6 flex items-center gap-2 group">
-            <i class="fab fa-telegram text-2xl"></i>
-            <span class="hidden group-hover:inline-block text-sm font-semibold whitespace-nowrap">Join Telegram</span>
+           class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-l-lg shadow-lg transition-all duration-300 hover:px-6 flex items-center gap-2 group"
+           style="background-color: #0088cc !important; color: white !important; text-decoration: none !important;">
+            <i class="fab fa-telegram-plane" style="font-size: 24px !important; color: white !important;"></i>
+            <span class="hidden group-hover:inline-block text-sm font-semibold whitespace-nowrap" style="color: white !important;">Join Telegram</span>
         </a>
     </div>
 
