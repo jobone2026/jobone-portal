@@ -302,9 +302,6 @@
                     });
                 })();
                 </script>
-                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 font-black text-base shadow-lg flex-shrink-0 transform hover:scale-105 transition-all" style="background: linear-gradient(to right, #2563eb, #4f46e5) !important; color: white !important; font-weight: 900 !important;"><i class="fas fa-search"></i></button>
-                    </form>
-                </div>
             </div>
         </nav>
         
