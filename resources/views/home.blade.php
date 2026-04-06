@@ -35,112 +35,79 @@
     <!-- Column Sections for Each Type -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <!-- Jobs Column -->
-        <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
-            <div class="bg-gradient-to-r from-green-500 to-green-600 px-4 py-3 text-white font-bold flex items-center justify-between">
+        <div>
+            <div class="bg-gradient-to-r from-green-500 to-green-600 px-4 py-3 text-white font-bold flex items-center justify-between rounded-t-lg mb-4">
                 <span><i class="fa-solid fa-briefcase"></i> Latest Jobs</span>
                 <a href="{{ route('posts.jobs') }}" class="text-white hover:text-gray-200 text-sm"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
-            <div class="divide-y divide-gray-100">
+            <div class="space-y-4">
                 @foreach(($sections['jobs'] ?? [])->take(25) as $post)
-                <a href="{{ route('posts.show', [$post->type, $post->slug]) }}" class="block px-4 py-3 hover:bg-blue-50 transition-colors">
-                    <div class="text-sm font-semibold text-gray-800 mb-1 line-clamp-2">{{ $post->title }}</div>
-                    <div class="flex items-center gap-2 text-xs text-gray-500">
-                        <span><i class="fa-solid fa-calendar"></i> {{ $post->created_at->format('d M') }}</span>
-                        @if($post->last_date)
-                        <span><i class="fa-solid fa-clock text-red-500"></i> {{ $post->last_date->format('d M') }}</span>
-                        @endif
-                    </div>
-                </a>
+                    <x-post-card :post="$post" />
                 @endforeach
             </div>
         </div>
 
         <!-- Results Column -->
-        <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
-            <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-4 py-3 text-white font-bold flex items-center justify-between">
+        <div>
+            <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-4 py-3 text-white font-bold flex items-center justify-between rounded-t-lg mb-4">
                 <span><i class="fa-solid fa-chart-bar"></i> Exam Results</span>
                 <a href="{{ route('posts.results') }}" class="text-white hover:text-gray-200 text-sm"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
-            <div class="divide-y divide-gray-100">
+            <div class="space-y-4">
                 @foreach(($sections['results'] ?? [])->take(25) as $post)
-                <a href="{{ route('posts.show', [$post->type, $post->slug]) }}" class="block px-4 py-3 hover:bg-blue-50 transition-colors">
-                    <div class="text-sm font-semibold text-gray-800 mb-1 line-clamp-2">{{ $post->title }}</div>
-                    <div class="flex items-center gap-2 text-xs text-gray-500">
-                        <span><i class="fa-solid fa-calendar"></i> {{ $post->created_at->format('d M') }}</span>
-                    </div>
-                </a>
+                    <x-post-card :post="$post" />
                 @endforeach
             </div>
         </div>
 
         <!-- Admit Cards Column -->
-        <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
-            <div class="bg-gradient-to-r from-cyan-500 to-cyan-600 px-4 py-3 text-white font-bold flex items-center justify-between">
+        <div>
+            <div class="bg-gradient-to-r from-cyan-500 to-cyan-600 px-4 py-3 text-white font-bold flex items-center justify-between rounded-t-lg mb-4">
                 <span><i class="fa-solid fa-id-card"></i> Admit Cards</span>
                 <a href="{{ route('posts.admit-cards') }}" class="text-white hover:text-gray-200 text-sm"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
-            <div class="divide-y divide-gray-100">
+            <div class="space-y-4">
                 @foreach(($sections['admit_cards'] ?? [])->take(25) as $post)
-                <a href="{{ route('posts.show', [$post->type, $post->slug]) }}" class="block px-4 py-3 hover:bg-blue-50 transition-colors">
-                    <div class="text-sm font-semibold text-gray-800 mb-1 line-clamp-2">{{ $post->title }}</div>
-                    <div class="flex items-center gap-2 text-xs text-gray-500">
-                        <span><i class="fa-solid fa-calendar"></i> {{ $post->created_at->format('d M') }}</span>
-                    </div>
-                </a>
+                    <x-post-card :post="$post" />
                 @endforeach
             </div>
         </div>
 
         <!-- Answer Keys Column -->
-        <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
-            <div class="bg-gradient-to-r from-indigo-500 to-indigo-600 px-4 py-3 text-white font-bold flex items-center justify-between">
+        <div>
+            <div class="bg-gradient-to-r from-indigo-500 to-indigo-600 px-4 py-3 text-white font-bold flex items-center justify-between rounded-t-lg mb-4">
                 <span><i class="fa-solid fa-key"></i> Answer Keys</span>
                 <a href="{{ route('posts.answer-keys') }}" class="text-white hover:text-gray-200 text-sm"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
-            <div class="divide-y divide-gray-100">
+            <div class="space-y-4">
                 @foreach(($sections['answer_keys'] ?? [])->take(25) as $post)
-                <a href="{{ route('posts.show', [$post->type, $post->slug]) }}" class="block px-4 py-3 hover:bg-blue-50 transition-colors">
-                    <div class="text-sm font-semibold text-gray-800 mb-1 line-clamp-2">{{ $post->title }}</div>
-                    <div class="flex items-center gap-2 text-xs text-gray-500">
-                        <span><i class="fa-solid fa-calendar"></i> {{ $post->created_at->format('d M') }}</span>
-                    </div>
-                </a>
+                    <x-post-card :post="$post" />
                 @endforeach
             </div>
         </div>
 
         <!-- Syllabus Column -->
-        <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
-            <div class="bg-gradient-to-r from-purple-500 to-purple-600 px-4 py-3 text-white font-bold flex items-center justify-between">
+        <div>
+            <div class="bg-gradient-to-r from-purple-500 to-purple-600 px-4 py-3 text-white font-bold flex items-center justify-between rounded-t-lg mb-4">
                 <span><i class="fa-solid fa-book"></i> Syllabus</span>
                 <a href="{{ route('posts.syllabus') }}" class="text-white hover:text-gray-200 text-sm"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
-            <div class="divide-y divide-gray-100">
+            <div class="space-y-4">
                 @foreach(($sections['syllabus'] ?? [])->take(25) as $post)
-                <a href="{{ route('posts.show', [$post->type, $post->slug]) }}" class="block px-4 py-3 hover:bg-blue-50 transition-colors">
-                    <div class="text-sm font-semibold text-gray-800 mb-1 line-clamp-2">{{ $post->title }}</div>
-                    <div class="flex items-center gap-2 text-xs text-gray-500">
-                        <span><i class="fa-solid fa-calendar"></i> {{ $post->created_at->format('d M') }}</span>
-                    </div>
-                </a>
+                    <x-post-card :post="$post" />
                 @endforeach
             </div>
         </div>
 
         <!-- Blogs Column -->
-        <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
-            <div class="bg-gradient-to-r from-orange-500 to-orange-600 px-4 py-3 text-white font-bold flex items-center justify-between">
+        <div>
+            <div class="bg-gradient-to-r from-orange-500 to-orange-600 px-4 py-3 text-white font-bold flex items-center justify-between rounded-t-lg mb-4">
                 <span><i class="fa-solid fa-pen-fancy"></i> Blogs</span>
                 <a href="{{ route('posts.blogs') }}" class="text-white hover:text-gray-200 text-sm"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
-            <div class="divide-y divide-gray-100">
+            <div class="space-y-4">
                 @foreach(($sections['blogs'] ?? [])->take(25) as $post)
-                <a href="{{ route('posts.show', [$post->type, $post->slug]) }}" class="block px-4 py-3 hover:bg-blue-50 transition-colors">
-                    <div class="text-sm font-semibold text-gray-800 mb-1 line-clamp-2">{{ $post->title }}</div>
-                    <div class="flex items-center gap-2 text-xs text-gray-500">
-                        <span><i class="fa-solid fa-calendar"></i> {{ $post->created_at->format('d M') }}</span>
-                    </div>
-                </a>
+                    <x-post-card :post="$post" />
                 @endforeach
             </div>
         </div>
