@@ -35,7 +35,7 @@ class PostApiController extends Controller
         $category_id = $request->get('category_id');
         $state_id = $request->get('state_id');
 
-        $query = Post::query();
+        $query = Post::with(['category', 'state']);
 
         if ($type) {
             $query->where('type', $type);
@@ -52,12 +52,69 @@ class PostApiController extends Controller
         return response()->json([
             'success' => true,
             'data' => $posts->items(),
-            'pagination' => [
+            'meta' => [
                 'total' => $posts->total(),
                 'per_page' => $posts->perPage(),
                 'current_page' => $posts->currentPage(),
                 'last_page' => $posts->lastPage(),
             ]
+        ]);
+    }
+
+    /**
+     * Search posts
+     * GET /api/posts/search
+     */
+    public function search(Request $request)
+    {
+        $token = $request->bearerToken();
+        if (!$this->verifyToken($token)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $query = $request->get('q');
+        $page = $request->get('page', 1);
+        $limit = $request->get('limit', 15);
+
+        $posts = Post::with(['category', 'state'])
+            ->where('title', 'like', "%{$query}%")
+            ->orWhere('short_description', 'like', "%{$query}%")
+            ->orWhere('content', 'like', "%{$query}%")
+            ->paginate($limit, ['*'], 'page', $page);
+
+        return response()->json([
+            'success' => true,
+            'data' => $posts->items(),
+            'meta' => [
+                'total' => $posts->total(),
+                'per_page' => $posts->perPage(),
+                'current_page' => $posts->currentPage(),
+                'last_page' => $posts->lastPage(),
+            ]
+        ]);
+    }
+
+    /**
+     * Get featured posts
+     * GET /api/posts/featured
+     */
+    public function featured(Request $request)
+    {
+        $token = $request->bearerToken();
+        if (!$this->verifyToken($token)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $limit = $request->get('limit', 10);
+        $posts = Post::with(['category', 'state'])
+            ->featured()
+            ->recent(30)
+            ->limit($limit)
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $posts
         ]);
     }
 
@@ -72,7 +129,7 @@ class PostApiController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $post = Post::find($id);
+        $post = Post::with(['category', 'state'])->find($id);
         if (!$post) {
             return response()->json(['error' => 'Post not found'], 404);
         }
@@ -157,7 +214,7 @@ class PostApiController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $post = Post::find($id);
+        $post = Post::with(['category', 'state'])->find($id);
         if (!$post) {
             return response()->json(['error' => 'Post not found'], 404);
         }
@@ -208,7 +265,7 @@ class PostApiController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $post = Post::find($id);
+        $post = Post::with(['category', 'state'])->find($id);
         if (!$post) {
             return response()->json(['error' => 'Post not found'], 404);
         }
@@ -235,7 +292,7 @@ class PostApiController extends Controller
      */
     public function categories()
     {
-        $categories = Category::orderBy('name', 'asc')->get(['id', 'name', 'slug']);
+        $categories = Category::withCount('posts')->orderBy('name', 'asc')->get();
         
         return response()->json([
             'success' => true,
@@ -250,7 +307,7 @@ class PostApiController extends Controller
      */
     public function states()
     {
-        $states = State::orderBy('name', 'asc')->get(['id', 'name', 'slug']);
+        $states = State::withCount('posts')->orderBy('name', 'asc')->get();
         
         return response()->json([
             'success' => true,

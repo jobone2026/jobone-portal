@@ -17,6 +17,8 @@ use App\Http\Controllers\Api\PostApiController;
 
 // Public API endpoints (with Bearer token authentication)
 Route::get('/posts', [PostApiController::class, 'list']);
+Route::get('/posts/search', [PostApiController::class, 'search']);
+Route::get('/posts/featured', [PostApiController::class, 'featured']);
 Route::get('/posts/{id}', [PostApiController::class, 'get']);
 Route::post('/posts', [PostApiController::class, 'create']);
 Route::put('/posts/{id}', [PostApiController::class, 'update']);
