@@ -45,3 +45,10 @@ jobone-firebase-adminsdk.json
 
 # Server information (local only, do not push)
 SERVER_INFO.md
+
+# SSH Keys (NEVER commit these)
+.ssh/
+*.pem
+*.key
+id_rsa
+id_rsa.pub

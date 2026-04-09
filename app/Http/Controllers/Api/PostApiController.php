@@ -15,7 +15,7 @@ class PostApiController extends Controller
      */
     private function verifyToken($token)
     {
-        return $token === env('API_TOKEN');
+        return $token === config('api.token');
     }
 
     /**

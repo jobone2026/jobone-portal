@@ -37,8 +37,8 @@ class NotificationService
      */
     protected function sendToTelegram(Post $post)
     {
-        $botToken = env('TELEGRAM_BOT_TOKEN');
-        $channelId = env('TELEGRAM_CHANNEL_ID'); // e.g., @yourchannel or -1001234567890
+        $botToken = config('notifications.telegram.bot_token');
+        $channelId = config('notifications.telegram.channel_id'); // e.g., @yourchannel or -1001234567890
         
         if (!$botToken || !$channelId) {
             Log::warning('Telegram credentials not configured');
@@ -159,9 +159,9 @@ class NotificationService
      */
     protected function sendToWhatsApp(Post $post)
     {
-        $accessToken = env('WHATSAPP_ACCESS_TOKEN');
-        $phoneNumberId = env('WHATSAPP_PHONE_NUMBER_ID');
-        $channelId = env('WHATSAPP_CHANNEL_ID'); // Your WhatsApp Channel ID
+        $accessToken = config('notifications.whatsapp.access_token');
+        $phoneNumberId = config('notifications.whatsapp.phone_number_id');
+        $channelId = config('notifications.whatsapp.channel_id'); // Your WhatsApp Channel ID
         
         if (!$accessToken || !$phoneNumberId || !$channelId) {
             Log::warning('WhatsApp credentials not configured');
@@ -218,7 +218,7 @@ class NotificationService
      */
     protected function sendAndroidPushNotification(Post $post)
     {
-        $firebaseCredentials = env('FIREBASE_CREDENTIALS');
+        $firebaseCredentials = config('notifications.firebase.credentials');
         
         if (!$firebaseCredentials || !file_exists(base_path($firebaseCredentials))) {
             Log::warning('Firebase credentials not configured');
@@ -279,7 +279,7 @@ class NotificationService
      */
     protected function sendWebPushNotification(Post $post)
     {
-        $firebaseCredentials = env('FIREBASE_CREDENTIALS');
+        $firebaseCredentials = config('notifications.firebase.credentials');
         
         if (!$firebaseCredentials || !file_exists(base_path($firebaseCredentials))) {
             Log::warning('Firebase credentials not configured');

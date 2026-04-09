@@ -1,59 +1,117 @@
-@extends('layouts.app')
-
-@section('content')
-<div class="min-h-screen flex items-center justify-center px-4 py-12">
-    <div class="max-w-2xl w-full text-center">
-        <!-- Maintenance Icon -->
-        <div class="mb-8">
-            <div class="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full">
-                <i class="fas fa-tools text-6xl text-blue-600"></i>
-            </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Under Maintenance - {{ config('app.name') }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 60px 40px;
+            max-width: 600px;
+            text-align: center;
+        }
+        .icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #666;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .status {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .status strong {
+            color: #667eea;
+        }
+        .refresh-btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        .refresh-btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .timer {
+            color: #999;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">🔧</div>
+        <h1>We'll Be Right Back!</h1>
+        <p>Our site is currently undergoing scheduled maintenance to improve your experience.</p>
+        
+        <div class="status">
+            <strong>Status:</strong> Maintenance in Progress<br>
+            <strong>Expected Duration:</strong> A few minutes
         </div>
 
-        <!-- Maintenance Message -->
-        <h1 class="text-6xl font-bold text-gray-800 mb-4">503</h1>
-        <h2 class="text-2xl font-semibold text-gray-700 mb-4">Service Unavailable</h2>
-        <p class="text-gray-600 mb-8">
-            We're currently performing scheduled maintenance to improve your experience. 
-            We'll be back shortly!
-        </p>
+        <p>We apologize for any inconvenience. Please check back shortly.</p>
 
-        <!-- Estimated Time -->
-        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8 max-w-md mx-auto">
-            <i class="fas fa-clock text-blue-600 text-2xl mb-3"></i>
-            <p class="text-blue-800 font-semibold">Estimated Downtime</p>
-            <p class="text-blue-600 text-sm mt-2">We expect to be back online within 15-30 minutes</p>
-        </div>
+        <a href="javascript:location.reload()" class="refresh-btn">Refresh Page</a>
 
-        <!-- What You Can Do -->
-        <div class="text-left max-w-md mx-auto mb-8">
-            <h3 class="font-semibold text-gray-800 mb-4">What you can do:</h3>
-            <ul class="space-y-2 text-gray-600">
-                <li class="flex items-start gap-2">
-                    <i class="fas fa-check-circle text-green-600 mt-1"></i>
-                    <span>Refresh this page in a few minutes</span>
-                </li>
-                <li class="flex items-start gap-2">
-                    <i class="fas fa-check-circle text-green-600 mt-1"></i>
-                    <span>Follow us on social media for updates</span>
-                </li>
-                <li class="flex items-start gap-2">
-                    <i class="fas fa-check-circle text-green-600 mt-1"></i>
-                    <span>Check back later for the latest job notifications</span>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Refresh Button -->
-        <button onclick="window.location.reload()" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
-            <i class="fas fa-sync-alt"></i> Refresh Page
-        </button>
-
-        <!-- Contact Info -->
-        <div class="mt-8 text-sm text-gray-500">
-            For urgent queries, email us at 
-            <a href="mailto:jobone2026@gmail.com" class="text-blue-600 hover:text-blue-700">jobone2026@gmail.com</a>
+        <div class="timer">
+            <small>Auto-refresh in <span id="countdown">60</span> seconds</small>
         </div>
     </div>
-</div>
-@endsection
+
+    <script>
+        let seconds = 60;
+        const countdown = document.getElementById('countdown');
+        
+        setInterval(() => {
+            seconds--;
+            countdown.textContent = seconds;
+            
+            if (seconds <= 0) {
+                location.reload();
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

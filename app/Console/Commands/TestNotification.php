@@ -30,14 +30,14 @@ class TestNotification extends Command
         
         // Test Telegram
         $this->info('📱 Testing Telegram...');
-        if (env('TELEGRAM_BOT_TOKEN') && env('TELEGRAM_CHANNEL_ID')) {
+        if (config('notifications.telegram.bot_token') && config('notifications.telegram.channel_id')) {
             try {
                 $notificationService = app(NotificationService::class);
                 $result = $notificationService->sendNewPostNotifications($post);
                 
                 if ($result) {
                     $this->info('✅ Telegram notification sent successfully!');
-                    $this->info('   Check your Telegram channel: ' . env('TELEGRAM_CHANNEL_ID'));
+                    $this->info('   Check your Telegram channel: ' . config('notifications.telegram.channel_id'));
                 } else {
                     $this->warn('⚠️  Telegram notification failed. Check logs.');
                 }
@@ -53,8 +53,8 @@ class TestNotification extends Command
         
         // Test Firebase (Android Push)
         $this->info('📱 Testing Firebase (Android Push)...');
-        if (env('FIREBASE_CREDENTIALS')) {
-            $credPath = base_path(env('FIREBASE_CREDENTIALS'));
+        if (config('notifications.firebase.credentials')) {
+            $credPath = base_path(config('notifications.firebase.credentials'));
             if (file_exists($credPath)) {
                 $this->info('✅ Firebase credentials found');
                 
@@ -92,7 +92,7 @@ class TestNotification extends Command
         
         // Test WhatsApp
         $this->info('💬 Testing WhatsApp...');
-        if (env('WHATSAPP_ACCESS_TOKEN')) {
+        if (config('notifications.whatsapp.access_token')) {
             $this->info('✅ WhatsApp configured');
         } else {
             $this->warn('⚠️  WhatsApp not configured (optional)');
@@ -104,9 +104,9 @@ class TestNotification extends Command
         $this->table(
             ['Service', 'Status', 'Action'],
             [
-                ['Telegram', env('TELEGRAM_BOT_TOKEN') ? '✅ Ready' : '❌ Not configured', 'Check channel'],
-                ['Firebase', env('FIREBASE_CREDENTIALS') ? '✅ Ready' : '❌ Not configured', 'Check Android app'],
-                ['WhatsApp', env('WHATSAPP_ACCESS_TOKEN') ? '✅ Ready' : '⚠️  Optional', 'Manual or API'],
+                ['Telegram', config('notifications.telegram.bot_token') ? '✅ Ready' : '❌ Not configured', 'Check channel'],
+                ['Firebase', config('notifications.firebase.credentials') ? '✅ Ready' : '❌ Not configured', 'Check Android app'],
+                ['WhatsApp', config('notifications.whatsapp.access_token') ? '✅ Ready' : '⚠️  Optional', 'Manual or API'],
             ]
         );
         

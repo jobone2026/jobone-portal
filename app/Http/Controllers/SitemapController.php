@@ -13,11 +13,11 @@ class SitemapController extends Controller
     {
         $xml = Cache::remember('sitemap:index', 3600, function () {
             $sitemaps = [
-                ['loc' => url('/sitemap-posts.xml'), 'lastmod' => Post::max('updated_at')],
-                ['loc' => url('/sitemap-categories.xml'), 'lastmod' => Category::max('updated_at')],
-                ['loc' => url('/sitemap-states.xml'), 'lastmod' => State::max('updated_at')],
+                ['loc' => url('/sitemap-posts.xml'), 'lastmod' => Post::max('updated_at') ? \Carbon\Carbon::parse(Post::max('updated_at')) : now()],
+                ['loc' => url('/sitemap-categories.xml'), 'lastmod' => Category::max('updated_at') ? \Carbon\Carbon::parse(Category::max('updated_at')) : now()],
+                ['loc' => url('/sitemap-states.xml'), 'lastmod' => State::max('updated_at') ? \Carbon\Carbon::parse(State::max('updated_at')) : now()],
                 ['loc' => url('/sitemap-static.xml'), 'lastmod' => now()],
-                ['loc' => url('/sitemap-news.xml'), 'lastmod' => Post::where('created_at', '>=', now()->subDays(2))->max('created_at')],
+                ['loc' => url('/sitemap-news.xml'), 'lastmod' => Post::where('created_at', '>=', now()->subDays(2))->max('created_at') ? \Carbon\Carbon::parse(Post::where('created_at', '>=', now()->subDays(2))->max('created_at')) : now()],
             ];
 
             return view('sitemap.index', compact('sitemaps'))->render();
