@@ -362,8 +362,8 @@
                         $content = $matches[1];
                     }
                     
-                    // Remove style tags (they're already in the extracted body or standalone)
-                    $content = preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', '', $content);
+                    // DON'T remove style tags - keep them for content styling
+                    // $content = preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', '', $content);
                     
                     // Remove any remaining meta tags, title tags, etc.
                     $content = preg_replace('/<(meta|title|link)[^>]*>/i', '', $content);
