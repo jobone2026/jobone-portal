@@ -357,37 +357,13 @@
                     // Remove script tags for security
                     $content = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $content);
                     
-                    // Extract styles from head if they exist and scope them
+                    // Extract styles and scope them properly
                     $styles = '';
                     if (preg_match('/<style\b[^>]*>(.*?)<\/style>/is', $content, $styleMatches)) {
                         $cssContent = $styleMatches[1];
                         
-                        // Scope all CSS rules to .post-html-content to prevent global conflicts
-                        // Replace universal selector * with scoped version
-                        $cssContent = preg_replace('/^\s*\*\s*\{/m', '.post-html-content * {', $cssContent);
-                        
-                        // Scope :root to .post-html-content
-                        $cssContent = preg_replace('/^\s*:root\s*\{/m', '.post-html-content {', $cssContent);
-                        
-                        // Scope body to .post-html-content
-                        $cssContent = preg_replace('/^\s*body\s*\{/m', '.post-html-content {', $cssContent);
-                        
-                        // Scope all other selectors (but not @media, @keyframes, etc.)
-                        $cssContent = preg_replace_callback(
-                            '/^(?!.*[@\s*:root|body])([^{@]+)\{/m',
-                            function($matches) {
-                                $selector = trim($matches[1]);
-                                // Don't scope if it's already scoped or is a special rule
-                                if (strpos($selector, '.post-html-content') === false && 
-                                    strpos($selector, '@') === false) {
-                                    return '.post-html-content ' . $selector . ' {';
-                                }
-                                return $matches[0];
-                            },
-                            $cssContent
-                        );
-                        
-                        $styles = '<style>' . $cssContent . '</style>';
+                        // Wrap all CSS in a scoping rule
+                        $styles = '<style>.post-html-content {' . $cssContent . '}</style>';
                     }
                     
                     // If content contains full HTML document, extract body content
