@@ -38,6 +38,64 @@ class Post extends Model
         return $this->belongsTo(Admin::class);
     }
 
+    /**
+     * The "booted" method of the model.
+     * Automatically sanitize content on saving.
+     */
+    protected static function booted()
+    {
+        static::saving(function ($post) {
+            if ($post->isDirty('content')) {
+                $post->content = static::sanitizeContent($post->content);
+            }
+        });
+    }
+
+    /**
+     * Sanitize content by removing embedded CSS/Style blocks.
+     */
+    public static function sanitizeContent($content)
+    {
+        if (empty($content)) return $content;
+
+        // 1. Remove entire <style>...</style> blocks (including those matching our known patterns)
+        $content = preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', '', $content);
+
+        // 2. Remove any text starting with .puc-result or .puc-blog that looks like leaked CSS
+        // This handles cases where raw CSS is pasted without <style> tags
+        $leakedPatterns = [
+            '/\.puc-result\s*{[^}]*}/is',
+            '/\.puc-blog\s*{[^}]*}/is',
+            '/\.stream-icon\s*{[^}]*}/is',
+            '/\.puc-result\s+\.stream-name\s*{[^}]*}/is',
+            '/\.banner\s*{[^}]*}/is',
+            '/\*\s*{\s*box-sizing\s*:\s*border-box[^}]*}/is'
+        ];
+
+        foreach ($leakedPatterns as $pattern) {
+            $content = preg_replace($pattern, '', $content);
+        }
+
+        // 3. Remove leading junk: if the content contains a known container start, 
+        // remove everything before it.
+        $validStarts = ['<div class="puc-result">', '<div class="puc-blog">', '<div class="hero">'];
+        foreach ($validStarts as $start) {
+            $pos = strpos($content, $start);
+            if ($pos !== false && $pos > 0) {
+                // Peek at what we are removing - if it looks like CSS rules, remove it
+                $leading = substr($content, 0, $pos);
+                if (str_contains($leading, '{') && str_contains($leading, ':')) {
+                    $content = substr($content, $pos);
+                }
+            }
+        }
+
+        // 4. Remove stray </style> tags if they were left over
+        $content = str_replace('</style>', '', $content);
+
+        return trim($content);
+    }
+
     // Query Scopes
     public function scopePublished($query)
     {
