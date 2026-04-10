@@ -88,7 +88,7 @@
                     <div class="p-4">
                         <!-- Title -->
                         <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 hover:text-blue-600">
-                            <a href="{{ route('posts.show', $post->slug) }}">{{ $post->title }}</a>
+                            <a href="{{ route('posts.show', [$post->type, $post->slug]) }}">{{ $post->title }}</a>
                         </h3>
 
                         <!-- Description -->
@@ -111,7 +111,7 @@
                         </div>
 
                         <!-- Action Button -->
-                        <a href="{{ route('posts.show', $post->slug) }}" class="block w-full text-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors">
+                        <a href="{{ route('posts.show', [$post->type, $post->slug]) }}" class="block w-full text-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors">
                             View Details <i class="fa-solid fa-arrow-right ml-1"></i>
                         </a>
                     </div>
