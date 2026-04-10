@@ -351,7 +351,30 @@
         <!-- Main Content -->
         <div class="max-w-none mb-4 post-content-wrapper bg-white rounded-lg p-5 border border-gray-200">
             <div class="post-content-isolated">
-                {!! preg_replace(['/<style\b[^>]*>(.*?)<\/style>/is', '/<script\b[^>]*>(.*?)<\/script>/is'], '', $post->content) !!}
+                @php
+                    $content = $post->content;
+                    
+                    // Remove script tags for security
+                    $content = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $content);
+                    
+                    // If content contains full HTML document, extract body content
+                    if (preg_match('/<body[^>]*>(.*?)<\/body>/is', $content, $matches)) {
+                        $content = $matches[1];
+                    }
+                    
+                    // Remove style tags (they're already in the extracted body or standalone)
+                    $content = preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', '', $content);
+                    
+                    // Remove any remaining meta tags, title tags, etc.
+                    $content = preg_replace('/<(meta|title|link)[^>]*>/i', '', $content);
+                    $content = preg_replace('/<\/(meta|title|link)>/i', '', $content);
+                    
+                    // Remove DOCTYPE, html, head tags
+                    $content = preg_replace('/<!DOCTYPE[^>]*>/i', '', $content);
+                    $content = preg_replace('/<\/?html[^>]*>/i', '', $content);
+                    $content = preg_replace('/<\/?head[^>]*>/i', '', $content);
+                @endphp
+                {!! $content !!}
             </div>
         </div>
 
