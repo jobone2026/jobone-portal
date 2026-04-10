@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'modal' => [
+        'token_id' => env('MODAL_TOKEN_ID'),
+        'token_secret' => env('MODAL_TOKEN_SECRET'),
+        'base_url' => env('MODAL_BASE_URL', 'https://api.modal.com'),
+    ],
+
 ];
