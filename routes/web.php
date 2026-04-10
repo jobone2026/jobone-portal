@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FilterController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SearchController;
@@ -39,6 +40,11 @@ require __DIR__.'/admin.php';
 // Category and state filtering
 Route::get('/category/{category:slug}', [CategoryController::class, 'show'])->name('categories.show')->middleware('page.cache:1800');
 Route::get('/state/{state:slug}', [StateController::class, 'show'])->name('states.show')->middleware('page.cache:1800');
+
+// Combined filtering routes
+Route::get('/filter/{type}/{param1}/{param2}', [FilterController::class, 'filter'])->name('filter.combined');
+Route::get('/filter/{type}/{param1}', [FilterController::class, 'filter'])->name('filter.double');
+Route::get('/filter/{type}', [FilterController::class, 'filter'])->name('filter.single');
 
 // Search
 Route::get('/search', [SearchController::class, 'index'])->name('search');

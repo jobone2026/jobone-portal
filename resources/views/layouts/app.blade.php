@@ -624,59 +624,10 @@
             }
         }
     </style>
-    <div class="bg-gray-50 border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="category-grid">
-                <!-- Banking -->
-                <a href="{{ route('categories.show', 'banking') }}" class="category-card" title="Banking Jobs">
-                    <i class="fas fa-university category-icon"></i>
-                    <span class="category-label">Banking</span>
-                </a>
-                
-                <!-- Railways -->
-                <a href="{{ route('categories.show', 'railways') }}" class="category-card" title="Railways Jobs">
-                    <i class="fas fa-train category-icon"></i>
-                    <span class="category-label">Railways</span>
-                </a>
-                
-                <!-- SSC -->
-                <a href="{{ route('categories.show', 'ssc') }}" class="category-card" title="SSC Jobs">
-                    <i class="fas fa-file-alt category-icon"></i>
-                    <span class="category-label">SSC</span>
-                </a>
-                
-                <!-- UPSC -->
-                <a href="{{ route('categories.show', 'upsc') }}" class="category-card" title="UPSC Jobs">
-                    <i class="fas fa-graduation-cap category-icon"></i>
-                    <span class="category-label">UPSC</span>
-                </a>
-                
-                <!-- State PSC -->
-                <a href="{{ route('categories.show', 'state-psc') }}" class="category-card" title="State PSC Jobs">
-                    <i class="fa-solid fa-landmark category-icon"></i>
-                    <span class="category-label">State PSC</span>
-                </a>
-                
-                <!-- Defence -->
-                <a href="{{ route('categories.show', 'defence') }}" class="category-card" title="Defence Jobs">
-                    <i class="fas fa-fighter-jet category-icon"></i>
-                    <span class="category-label">Defence</span>
-                </a>
-                
-                <!-- Police -->
-                <a href="{{ route('categories.show', 'police') }}" class="category-card" title="Police Jobs">
-                    <i class="fas fa-user-shield category-icon"></i>
-                    <span class="category-label">Police</span>
-                </a>
-                
-                <!-- SSB -->
-                <a href="{{ route('categories.show', 'ssb') }}" class="category-card" title="SSB Jobs">
-                    <i class="fas fa-user-shield category-icon"></i>
-                    <span class="category-label">SSB</span>
-                </a>
-            </div>
-        </div>
-    </div>
+    
+    <!-- Category Menu - Horizontal Scroll Below Header -->
+    <x-category-menu />
+    
 <!-- States Navigation Bar -->
     <style>
         .states-grid {
@@ -869,6 +820,7 @@
             </div>
         </div>
     </div>
+    
     <!-- Ad Slot - Header -->
     <x-ad-slot position="header" />
 

@@ -20,6 +20,14 @@
 @section('description', 'Browse all ' . strtolower($title) . ' on Government Job Portal')
 
 @section('content')
+    <!-- Filter Bar -->
+    <x-filter-bar 
+        :currentCategory="$category ?? null" 
+        :currentState="$state ?? null" 
+        :currentType="$type ?? 'all'" 
+        :showTypeFilter="true" 
+    />
+
     <!-- Premium Header Section -->
     <div class="mb-8 bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 relative overflow-hidden">
         <div class="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70 transform translate-x-1/2 -translate-y-1/2"></div>

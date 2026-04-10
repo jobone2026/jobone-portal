@@ -16,6 +16,98 @@
             position: relative;
         }
         
+        /* PUC Blog Styles - for custom HTML content */
+        .puc-blog * { box-sizing: border-box; margin: 0; padding: 0; }
+        .puc-blog { font-family: 'DM Sans', -apple-system, sans-serif; color: #1A1A1A; background: #fff; font-size: 15px; line-height: 1.7; }
+        .pb-hero { background: linear-gradient(135deg, #0D2137 0%, #1B3A5C 60%, #1565C0 100%); color: #fff; padding: 48px 20px 40px; text-align: center; position: relative; overflow: hidden; border-radius: 12px; margin-bottom: 24px; }
+        .pb-hero-badge { display: inline-block; background: #C9A84C; color: #1A1A1A; font-size: 11px; font-weight: 600; padding: 4px 14px; border-radius: 20px; margin-bottom: 16px; letter-spacing: 0.06em; text-transform: uppercase; }
+        .pb-h1 { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(22px, 5vw, 36px); line-height: 1.25; margin-bottom: 12px; color: #fff; }
+        .pb-h1 span { color: #C9A84C; }
+        .pb-hero-meta { font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 24px; }
+        .pb-stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 540px; margin: 0 auto; }
+        .pb-stat-box { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 12px 8px; text-align: center; }
+        .pb-stat-num { font-size: 22px; font-weight: 600; color: #C9A84C; display: block; }
+        .pb-stat-label { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+        .pb-banner { background: #E8F5EE; border: 1px solid #A8D5BE; border-radius: 10px; padding: 14px 16px; margin: 24px 0; display: flex; align-items: center; gap: 12px; }
+        .pb-banner-icon { font-size: 24px; flex-shrink: 0; }
+        .pb-banner p { font-size: 13px; color: #145235; line-height: 1.5; }
+        .pb-section { padding: 32px 0 0; }
+        .pb-h2 { font-family: 'Playfair Display', Georgia, serif; font-size: 20px; font-weight: 700; margin-bottom: 4px; color: #1A1A1A; }
+        .pb-sub { font-size: 13px; color: #666; margin-bottom: 20px; }
+        .pb-stream-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
+        .pb-stream-card { border-radius: 10px; padding: 16px; text-align: center; border: 1px solid transparent; }
+        .pb-stream-card.sc { background: #E8F0FE; border-color: #BBDEFB; }
+        .pb-stream-card.co { background: #FFF8E1; border-color: #FFE082; }
+        .pb-stream-card.ar { background: #F3E5F5; border-color: #CE93D8; }
+        .pb-stream-icon { font-size: 22px; margin-bottom: 6px; display: block; }
+        .pb-stream-name { font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 4px; display: block; }
+        .pb-stream-card.sc .pb-stream-name { color: #1565C0; }
+        .pb-stream-card.co .pb-stream-name { color: #795548; }
+        .pb-stream-card.ar .pb-stream-name { color: #6A1B9A; }
+        .pb-stream-pct { font-size: 28px; font-weight: 700; display: block; }
+        .pb-stream-card.sc .pb-stream-pct { color: #1565C0; }
+        .pb-stream-card.co .pb-stream-pct { color: #5D4037; }
+        .pb-stream-card.ar .pb-stream-pct { color: #6A1B9A; }
+        .pb-stream-appeared { font-size: 11px; color: #666; margin-top: 3px; display: block; }
+        .pb-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .pb-info-box { background: #FAFAFA; border: 1px solid #E5E5E5; border-radius: 8px; padding: 12px 14px; }
+        .pb-info-label { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; display: block; }
+        .pb-info-val { font-size: 14px; font-weight: 600; color: #1A1A1A; display: block; }
+        .pb-divider { border: none; border-top: 1px solid #E5E5E5; margin: 32px 0; }
+        .pb-topper-section { margin-bottom: 24px; }
+        .pb-stream-hdr { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px 8px 0 0; border: 1px solid transparent; }
+        .pb-stream-hdr.sc { background: #E8F0FE; border-color: #BBDEFB; }
+        .pb-stream-hdr.co { background: #FFF8E1; border-color: #FFE082; }
+        .pb-stream-hdr.ar { background: #F3E5F5; border-color: #CE93D8; }
+        .pb-stitle { font-size: 14px; font-weight: 600; }
+        .pb-stream-hdr.sc .pb-stitle { color: #1565C0; }
+        .pb-stream-hdr.co .pb-stitle { color: #5D4037; }
+        .pb-stream-hdr.ar .pb-stitle { color: #6A1B9A; }
+        .pb-stotal { font-size: 12px; color: #666; margin-left: auto; }
+        .pb-toppers { width: 100%; border-collapse: collapse; border: 1px solid #E5E5E5; border-top: none; border-radius: 0 0 8px 8px; overflow: hidden; }
+        .pb-toppers thead { background: #FAFAFA; }
+        .pb-toppers th { padding: 9px 12px; font-size: 11px; font-weight: 600; color: #666; text-align: left; text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid #E5E5E5; }
+        .pb-toppers td { padding: 10px 12px; font-size: 13px; border-bottom: 1px solid #E5E5E5; }
+        .pb-toppers tr:last-child td { border-bottom: none; }
+        .pb-toppers tr:hover { background: #FAFAFA; }
+        
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .pb-stream-grid, .pb-info-grid { grid-template-columns: 1fr; }
+            .pb-hero { padding: 32px 16px 28px; }
+            .pb-h1 { font-size: 20px; }
+            .pb-stat-row { grid-template-columns: 1fr; gap: 8px; }
+            .pb-stat-box { padding: 10px; }
+            .pb-stat-num { font-size: 18px; }
+            .pb-banner { flex-direction: column; text-align: center; padding: 12px; }
+            .pb-banner-icon { font-size: 20px; }
+            .pb-section { padding: 20px 0 0; }
+            .pb-h2 { font-size: 18px; }
+            .pb-stream-card { padding: 12px; }
+            .pb-stream-pct { font-size: 24px; }
+            .pb-info-box { padding: 10px 12px; }
+            .pb-stream-hdr { flex-direction: column; align-items: flex-start; gap: 4px; padding: 8px 12px; }
+            .pb-stotal { margin-left: 0; font-size: 11px; }
+            .pb-toppers { font-size: 12px; display: block; overflow-x: auto; }
+            .pb-toppers thead, .pb-toppers tbody, .pb-toppers tr { display: block; }
+            .pb-toppers th, .pb-toppers td { padding: 8px 10px; font-size: 11px; }
+        }
+        
+        /* Ensure content doesn't overflow */
+        .post-content-wrapper { 
+            max-width: 100%; 
+            overflow-x: hidden; 
+        }
+        .puc-blog { 
+            max-width: 100%; 
+            overflow-x: hidden; 
+        }
+        .puc-blog table {
+            width: 100%;
+            display: block;
+            overflow-x: auto;
+        }
+        
         /* Allow content to have its own styles */
         .post-content-isolated {
             display: block;
@@ -346,7 +438,7 @@
         <!-- Main Content -->
         <div class="max-w-none mb-4 post-content-wrapper bg-white rounded-lg p-5 border border-gray-200">
             <div class="post-content-isolated">
-                {!! preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', '', $post->content) !!}
+                {!! $post->content !!}
             </div>
         </div>
 
@@ -489,7 +581,7 @@
             <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4"><i class="fas fa-link"></i> Related Posts</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 @foreach ($related as $relatedPost)
-                    <div class="bg-white rounded-lg p-4 border border-gray-200">
+                    <div class="bg-white rounded-lg p-4 border border-gray-200 hover:shadow-lg transition-shadow">
                         <a href="{{ route('posts.show', ['type' => $relatedPost->type, 'post' => $relatedPost->slug]) }}" class="text-sm font-medium text-blue-600 hover:text-blue-800">
                             {{ $relatedPost->title }}
                         </a>
