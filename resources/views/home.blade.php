@@ -4,6 +4,126 @@
 @section('description', 'Find latest government jobs, admit cards, results, syllabus, answer keys and more')
 
 @section('content')
+    <!-- Featured Jobs Section with Category Badges -->
+    <div class="mb-12">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h2 class="text-3xl font-bold text-gray-900">🔥 Featured Jobs</h2>
+                <p class="text-gray-600 mt-1">Latest opportunities across categories</p>
+            </div>
+            <a href="{{ route('posts.jobs') }}" class="text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-2">
+                View All <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <!-- Category Filter Tabs -->
+        <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
+            <button class="filter-btn active" onclick="filterJobsByCategory('all')">
+                <span class="badge-icon">📋</span> All Jobs
+            </button>
+            <button class="filter-btn" onclick="filterJobsByCategory('new')">
+                <span class="badge-icon">🆕</span> New
+            </button>
+            <button class="filter-btn" onclick="filterJobsByCategory('urgent')">
+                <span class="badge-icon">⚡</span> Urgent
+            </button>
+            <button class="filter-btn" onclick="filterJobsByCategory('banking')">
+                <span class="badge-icon">🏦</span> Banking
+            </button>
+            <button class="filter-btn" onclick="filterJobsByCategory('railway')">
+                <span class="badge-icon">🚂</span> Railway
+            </button>
+            <button class="filter-btn" onclick="filterJobsByCategory('ssc')">
+                <span class="badge-icon">📝</span> SSC
+            </button>
+            <button class="filter-btn" onclick="filterJobsByCategory('upsc')">
+                <span class="badge-icon">🎓</span> UPSC
+            </button>
+            <button class="filter-btn" onclick="filterJobsByCategory('allindia')">
+                <span class="badge-icon">🇮🇳</span> All India
+            </button>
+        </div>
+
+        <!-- Job Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="featuredJobsGrid">
+            @forelse(($sections['jobs'] ?? [])->take(6) as $post)
+                @php
+                    $isNew = $post->created_at->diffInDays(now()) <= 7;
+                    $isUrgent = $post->last_date && $post->last_date->diffInDays(now()) <= 7;
+                @endphp
+                <div class="job-card-featured bg-white rounded-lg border border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all overflow-hidden"
+                     data-is-new="{{ $isNew ? 'true' : 'false' }}"
+                     data-is-urgent="{{ $isUrgent ? 'true' : 'false' }}"
+                     data-category="{{ $post->category ? strtolower($post->category->name) : '' }}"
+                     data-state="{{ $post->state ? strtolower($post->state->name) : '' }}">
+                    <!-- Category Badge -->
+                    <div class="flex gap-2 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-100">
+                        @if($isNew)
+                            <span class="inline-block px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
+                                🆕 New
+                            </span>
+                        @endif
+                        @if($isUrgent)
+                            <span class="inline-block px-3 py-1 bg-red-100 text-red-700 text-xs font-semibold rounded-full">
+                                ⚡ Urgent
+                            </span>
+                        @endif
+                        @if($post->category)
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">
+                                {{ $post->category->name }}
+                            </span>
+                        @endif
+                        @if($post->state && $post->state->name !== 'All India')
+                            <span class="inline-block px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
+                                {{ $post->state->name }}
+                            </span>
+                        @else
+                            <span class="inline-block px-3 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded-full">
+                                🇮🇳 All India
+                            </span>
+                        @endif
+                    </div>
+
+                    <!-- Card Content -->
+                    <div class="p-4">
+                        <!-- Title -->
+                        <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 hover:text-blue-600">
+                            <a href="{{ route('posts.show', $post->slug) }}">{{ $post->title }}</a>
+                        </h3>
+
+                        <!-- Description -->
+                        <p class="text-gray-600 text-sm mb-3 line-clamp-2">
+                            {{ $post->short_description ?? substr(strip_tags($post->content), 0, 100) }}
+                        </p>
+
+                        <!-- Meta Info -->
+                        <div class="flex items-center justify-between text-xs text-gray-500 mb-3 pb-3 border-b border-gray-100">
+                            <span>
+                                <i class="fa-solid fa-calendar-days"></i>
+                                {{ $post->created_at->format('M d, Y') }}
+                            </span>
+                            @if($post->last_date)
+                                <span class="text-red-600 font-semibold">
+                                    <i class="fa-solid fa-hourglass-end"></i>
+                                    {{ $post->last_date->format('M d') }}
+                                </span>
+                            @endif
+                        </div>
+
+                        <!-- Action Button -->
+                        <a href="{{ route('posts.show', $post->slug) }}" class="block w-full text-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors">
+                            View Details <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            @empty
+                <div class="col-span-full text-center py-12">
+                    <p class="text-gray-500 text-lg">No jobs available yet</p>
+                </div>
+            @endforelse
+        </div>
+    </div>
+
     <!-- Column Sections for Each Type -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <!-- Jobs Column -->
