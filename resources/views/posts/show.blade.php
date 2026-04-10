@@ -357,15 +357,18 @@
                     // Remove script tags for security
                     $content = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $content);
                     
+                    // Extract styles from head if they exist
+                    $styles = '';
+                    if (preg_match('/<style\b[^>]*>(.*?)<\/style>/is', $content, $styleMatches)) {
+                        $styles = '<style>' . $styleMatches[1] . '</style>';
+                    }
+                    
                     // If content contains full HTML document, extract body content
                     if (preg_match('/<body[^>]*>(.*?)<\/body>/is', $content, $matches)) {
                         $content = $matches[1];
                     }
                     
-                    // DON'T remove style tags - keep them for content styling
-                    // $content = preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', '', $content);
-                    
-                    // Remove any remaining meta tags, title tags, etc.
+                    // Remove any remaining meta tags, title tags, link tags
                     $content = preg_replace('/<(meta|title|link)[^>]*>/i', '', $content);
                     $content = preg_replace('/<\/(meta|title|link)>/i', '', $content);
                     
@@ -373,6 +376,9 @@
                     $content = preg_replace('/<!DOCTYPE[^>]*>/i', '', $content);
                     $content = preg_replace('/<\/?html[^>]*>/i', '', $content);
                     $content = preg_replace('/<\/?head[^>]*>/i', '', $content);
+                    
+                    // Combine styles with content
+                    $content = $styles . $content;
                 @endphp
                 {!! $content !!}
             </div>
