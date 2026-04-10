@@ -10,23 +10,18 @@
 
 @section('content')
     <style>
-        /* Post content wrapper - CSS isolation without breaking HTML rendering */
+        /* Post content wrapper - basic isolation */
         .post-content-wrapper {
             isolation: isolate;
             position: relative;
         }
         
-        /* Content container with proper styling */
+        /* Allow content to have its own styles */
         .post-content-isolated {
             display: block;
             position: relative;
             line-height: 1.75;
             color: #374151;
-        }
-        
-        /* Prevent external CSS from leaking but allow HTML to render */
-        .post-content-isolated > * {
-            max-width: 100%;
         }
         
         /* Typography styles for post content */
@@ -351,42 +346,7 @@
         <!-- Main Content -->
         <div class="max-w-none mb-4 post-content-wrapper bg-white rounded-lg p-5 border border-gray-200">
             <div class="post-content-isolated">
-                @php
-                    $content = $post->content;
-                    
-                    // Remove script tags for security
-                    $content = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $content);
-                    
-                    // Extract styles and scope them properly
-                    $styles = '';
-                    if (preg_match('/<style\b[^>]*>(.*?)<\/style>/is', $content, $styleMatches)) {
-                        $cssContent = $styleMatches[1];
-                        
-                        // Wrap all CSS in a scoping rule
-                        $styles = '<style>.post-html-content {' . $cssContent . '}</style>';
-                    }
-                    
-                    // If content contains full HTML document, extract body content
-                    if (preg_match('/<body[^>]*>(.*?)<\/body>/is', $content, $matches)) {
-                        $content = $matches[1];
-                    }
-                    
-                    // Remove any remaining meta tags, title tags, link tags
-                    $content = preg_replace('/<(meta|title|link)[^>]*>/i', '', $content);
-                    $content = preg_replace('/<\/(meta|title|link)>/i', '', $content);
-                    
-                    // Remove DOCTYPE, html, head tags
-                    $content = preg_replace('/<!DOCTYPE[^>]*>/i', '', $content);
-                    $content = preg_replace('/<\/?html[^>]*>/i', '', $content);
-                    $content = preg_replace('/<\/?head[^>]*>/i', '', $content);
-                    
-                    // Wrap content in scoped container
-                    $content = '<div class="post-html-content">' . $content . '</div>';
-                    
-                    // Combine styles with content
-                    $content = $styles . $content;
-                @endphp
-                {!! $content !!}
+                {!! preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', '', $post->content) !!}
             </div>
         </div>
 
