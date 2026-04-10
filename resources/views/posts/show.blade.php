@@ -10,18 +10,28 @@
 
 @section('content')
     <style>
-        /* Post content wrapper - basic isolation */
+        /* Post content wrapper - strong isolation */
         .post-content-wrapper {
             isolation: isolate;
             position: relative;
+            all: initial;
+            display: block;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         
-        /* Allow content to have its own styles */
+        /* Allow content to have its own styles but prevent external CSS leakage */
         .post-content-isolated {
+            all: revert;
             display: block;
             position: relative;
             line-height: 1.75;
             color: #374151;
+            font-family: inherit;
+        }
+        
+        /* Reset any external styles that might leak in */
+        .post-content-isolated * {
+            all: revert;
         }
         
         /* Typography styles for post content */
@@ -346,7 +356,7 @@
         <!-- Main Content -->
         <div class="max-w-none mb-4 post-content-wrapper bg-white rounded-lg p-5 border border-gray-200">
             <div class="post-content-isolated">
-                {!! preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', '', $post->content) !!}
+                {!! preg_replace(['/<style\b[^>]*>(.*?)<\/style>/is', '/<script\b[^>]*>(.*?)<\/script>/is'], '', $post->content) !!}
             </div>
         </div>
 
