@@ -10,28 +10,23 @@
 
 @section('content')
     <style>
-        /* Post content wrapper - strong isolation */
+        /* Post content wrapper - CSS isolation without breaking HTML rendering */
         .post-content-wrapper {
             isolation: isolate;
             position: relative;
-            all: initial;
-            display: block;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         
-        /* Allow content to have its own styles but prevent external CSS leakage */
+        /* Content container with proper styling */
         .post-content-isolated {
-            all: revert;
             display: block;
             position: relative;
             line-height: 1.75;
             color: #374151;
-            font-family: inherit;
         }
         
-        /* Reset any external styles that might leak in */
-        .post-content-isolated * {
-            all: revert;
+        /* Prevent external CSS from leaking but allow HTML to render */
+        .post-content-isolated > * {
+            max-width: 100%;
         }
         
         /* Typography styles for post content */
