@@ -42,9 +42,9 @@
                         
                         // Check if this category is currently active
                         $isActive = false;
-                        if (request()->route()->getName() === 'categories.show') {
+                        if (request()->route() && request()->route()->getName() === 'categories.show') {
                             $routeCategory = request()->route('category');
-                            $isActive = $routeCategory && $routeCategory->id === $category->id;
+                            $isActive = $routeCategory && is_object($routeCategory) && $routeCategory->id === $category->id;
                         }
                     @endphp
                     <a href="{{ route('categories.show', $category) }}" 

@@ -9,13 +9,15 @@ class Post extends Model
     protected $fillable = [
         'title', 'slug', 'type', 'category_id', 'state_id', 'organization',
         'short_description', 'content', 'total_posts',
-        'last_date', 'notification_date', 'important_links',
+        'last_date', 'notification_date', 'important_links', 'tags', 'education',
         'meta_title', 'meta_description', 'meta_keywords',
         'is_featured', 'is_published', 'view_count', 'admin_id'
     ];
 
     protected $casts = [
         'important_links' => 'array',
+        'tags' => 'array',
+        'education' => 'array',
         'is_featured' => 'boolean',
         'is_published' => 'boolean',
         'last_date' => 'datetime',

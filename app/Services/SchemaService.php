@@ -11,11 +11,17 @@ class SchemaService
 {
     public function generateJobPosting(Post $post): array
     {
+        // Remove style tags and their content before stripping other tags
+        $cleanContent = preg_replace('/<style\b[^>]*>.*?<\/style>/is', '', $post->content);
+        $cleanContent = strip_tags($cleanContent);
+        // Limit description to 5000 characters for schema
+        $description = Str::limit($cleanContent, 5000);
+        
         return [
             '@context' => 'https://schema.org',
             '@type' => 'JobPosting',
             'title' => $post->title,
-            'description' => strip_tags($post->content),
+            'description' => $description,
             'datePosted' => $post->notification_date ?? $post->created_at->toIso8601String(),
             'validThrough' => $post->last_date?->toIso8601String(),
             'hiringOrganization' => [
@@ -118,8 +124,11 @@ class SchemaService
 
     public function generateFAQ(string $content): ?array
     {
+        // Remove style tags and their content first
+        $cleanContent = preg_replace('/<style\b[^>]*>.*?<\/style>/is', '', $content);
+        
         // Extract H3 + P pairs as FAQ
-        preg_match_all('/<h3[^>]*>(.*?)<\/h3>\s*<p[^>]*>(.*?)<\/p>/is', $content, $matches, PREG_SET_ORDER);
+        preg_match_all('/<h3[^>]*>(.*?)<\/h3>\s*<p[^>]*>(.*?)<\/p>/is', $cleanContent, $matches, PREG_SET_ORDER);
         
         if (count($matches) < 2) {
             return null;

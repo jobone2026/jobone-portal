@@ -10,6 +10,135 @@
 
 @section('content')
     <style>
+        /* Fallback styles for jobone-premium-ui in case inline styles are missing or truncated */
+        .jobone-premium-ui { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            color: #334155; 
+            font-size: 16px; 
+            line-height: 1.7; 
+        }
+        .jobone-premium-ui p { margin: 16px 0; word-break: break-word; }
+        .jobone-premium-ui a { 
+            color: #2563eb; 
+            text-decoration: none; 
+            font-weight: 600; 
+            border-bottom: 2px solid #e2e8f0; 
+            transition: all 0.2s; 
+        }
+        .jobone-premium-ui a:hover { color: #1d4ed8; border-color: #2563eb; }
+        .jobone-premium-ui strong, 
+        .jobone-premium-ui b { color: #0f172a; font-weight: 700; }
+
+        .jobone-premium-ui ul { padding: 0; margin: 20px 0; list-style: none; }
+        .jobone-premium-ui li { 
+            position: relative; 
+            padding: 12px 16px; 
+            margin: 10px 0; 
+            background: #ffffff; 
+            border-radius: 8px; 
+            border: 1px solid #e2e8f0; 
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05); 
+            display: flex; 
+            align-items: start; 
+        }
+        .jobone-premium-ui li span { margin-right: 10px; }
+
+        .jobone-premium-ui ol { padding-left: 24px; margin: 20px 0; }
+        .jobone-premium-ui ol li { 
+            padding: 8px 0; 
+            background: transparent; 
+            border: none; 
+            list-style-type: decimal; 
+            box-shadow: none; 
+            display: list-item; 
+        }
+
+        /* Headings */
+        .jobone-premium-ui h2 { 
+            margin: 36px 0 20px; 
+            padding: 14px 20px; 
+            background: #eff6ff; 
+            border-left: 6px solid #2563eb; 
+            border-radius: 4px; 
+            color: #1e3a8a; 
+            font-size: 24px; 
+            font-weight: 800; 
+        }
+        .jobone-premium-ui h3 { 
+            margin: 32px 0 16px; 
+            padding: 12px 18px; 
+            background: #f8fafc; 
+            border-left: 5px solid #3b82f6; 
+            border-radius: 4px; 
+            color: #1e40af; 
+            font-size: 21px; 
+            font-weight: 700; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
+        }
+        .jobone-premium-ui h4 { 
+            margin: 24px 0 12px; 
+            padding: 10px 14px; 
+            background: #f8fafc; 
+            border-left: 4px solid #64748b; 
+            border-radius: 4px; 
+            color: #1e293b; 
+            font-size: 19px; 
+            font-weight: 700; 
+        }
+
+        /* Tables */
+        .jobone-table-wrapper { 
+            width: 100%; 
+            overflow-x: auto; 
+            -webkit-overflow-scrolling: touch; 
+            margin: 24px 0; 
+            border-radius: 12px; 
+            border: 1px solid #e2e8f0; 
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); 
+        }
+        .jobone-premium-ui table { 
+            width: 100%; 
+            min-width: 500px; 
+            border-collapse: collapse; 
+            font-size: 15px; 
+            background: #ffffff; 
+        }
+        .jobone-premium-ui th { 
+            background: #1e3a8a; 
+            color: #ffffff !important; 
+            font-weight: 700; 
+            padding: 16px; 
+            text-align: left; 
+            border-bottom: 3px solid #1e40af; 
+        }
+        .jobone-premium-ui td { 
+            padding: 14px 16px; 
+            border-bottom: 1px solid #f1f5f9; 
+            line-height: 1.6; 
+            vertical-align: middle; 
+        }
+        .jobone-premium-ui tr:last-child td { border-bottom: none; }
+        .jobone-premium-ui tr:nth-child(even) td { background: #f9fafb; }
+        .jobone-premium-ui tr:hover td { background: #f1f5f9; }
+
+        /* Color Boxes */
+        .box-info, .box-success, .box-warning, .box-danger { 
+            margin: 24px 0; 
+            padding: 20px; 
+            border-radius: 12px; 
+            border: 1px solid; 
+            display: flex; 
+            align-items: start; 
+        }
+        .box-info { background: #eff6ff; border-color: #bfdbfe; color: #1e40af; }
+        .box-info::before { content: "ℹ️"; margin-right: 12px; font-size: 20px; }
+        .box-success { background: #f0fdf4; border-color: #bbf7d0; color: #166534; }
+        .box-success::before { content: "✅"; margin-right: 12px; font-size: 20px; }
+        .box-warning { background: #fffbeb; border-color: #fef3c7; color: #92400e; }
+        .box-warning::before { content: "⚠️"; margin-right: 12px; font-size: 20px; }
+        .box-danger { background: #fef2f2; border-color: #fee2e2; color: #991b1b; }
+        .box-danger::before { content: "🚨"; margin-right: 12px; font-size: 20px; }
+
         /* Post content wrapper - basic isolation */
         .post-content-wrapper {
             isolation: isolate;
@@ -400,6 +529,17 @@
             }
         }
         
+        /* Mobile Responsive for jobone-premium-ui */
+        @media (max-width: 640px) {
+            .jobone-premium-ui { font-size: 14px; }
+            .jobone-premium-ui h2 { font-size: 18px; margin: 24px 0 12px; padding: 12px 14px; }
+            .jobone-premium-ui h3 { font-size: 17px; margin: 20px 0 10px; padding: 10px 12px; }
+            .jobone-premium-ui h4 { font-size: 16px; margin: 18px 0 8px; padding: 10px 12px; }
+            .jobone-premium-ui table { font-size: 13px; min-width: 380px; }
+            .jobone-premium-ui th { padding: 12px 10px; }
+            .jobone-premium-ui td { padding: 10px 12px; }
+        }
+        
         /* Additional content enhancements */
         .post-content-isolated h2:first-child,
         .post-content-isolated h3:first-child {
@@ -474,6 +614,31 @@
                     <a href="{{ route('states.show', $post->state) }}" class="text-xs bg-gradient-to-r from-green-600 to-green-700 text-white px-3 py-1.5 rounded-full hover:from-green-700 hover:to-green-800 transition font-semibold shadow-sm">
                         <i class="fas fa-map-marker-alt"></i> {{ $post->state->name }}
                     </a>
+                @endif
+                @if ($post->tags && count($post->tags) > 0)
+                    @foreach ($post->tags as $tag)
+                        <span class="text-xs bg-gradient-to-r from-purple-500 to-purple-600 text-white px-3 py-1.5 rounded-full font-semibold shadow-sm">
+                            <i class="fas fa-bookmark"></i> {{ ucfirst(str_replace('_', ' ', $tag)) }}
+                        </span>
+                    @endforeach
+                @endif
+                @if ($post->education && count($post->education) > 0)
+                    @foreach ($post->education as $edu)
+                        @php
+                            $eduLabels = [
+                                '10th_pass' => '10th Pass',
+                                '12th_pass' => '12th Pass',
+                                'graduate' => 'Graduate',
+                                'post_graduate' => 'Post Graduate',
+                                'diploma' => 'Diploma',
+                                'iti' => 'ITI',
+                                'any_qualification' => 'Any Qualification'
+                            ];
+                        @endphp
+                        <span class="text-xs bg-gradient-to-r from-green-500 to-green-600 text-white px-3 py-1.5 rounded-full font-semibold shadow-sm">
+                            <i class="fas fa-graduation-cap"></i> {{ $eduLabels[$edu] ?? ucfirst(str_replace('_', ' ', $edu)) }}
+                        </span>
+                    @endforeach
                 @endif
             </div>
 

@@ -76,6 +76,10 @@ class PostController extends Controller
             'meta_title' => 'nullable|string|max:60',
             'meta_description' => 'nullable|string|max:160',
             'meta_keywords' => 'nullable|string|max:1000',
+            'tags' => 'nullable|array',
+            'tags.*' => 'string|in:cutoff,merit_list,selection_list,final_result,provisional_result,revised_result,scorecard,marks',
+            'education' => 'nullable|array',
+            'education.*' => 'string|in:10th,12th,graduate,post_graduate,diploma,iti,any',
             'is_featured' => 'boolean',
             'is_published' => 'boolean'
         ]);
@@ -84,6 +88,8 @@ class PostController extends Controller
         $validated['admin_id'] = auth('admin')->id();
         $validated['short_description'] = '';
         $validated['important_links'] = null;
+        $validated['tags'] = $request->has('tags') ? ($validated['tags'] ?? []) : [];
+        $validated['education'] = $request->has('education') ? ($validated['education'] ?? []) : [];
 
         $post = Post::create($validated);
         
@@ -148,6 +154,10 @@ class PostController extends Controller
             'meta_title' => 'nullable|string|max:60',
             'meta_description' => 'nullable|string|max:160',
             'meta_keywords' => 'nullable|string|max:1000',
+            'tags' => 'nullable|array',
+            'tags.*' => 'string|in:cutoff,merit_list,selection_list,final_result,provisional_result,revised_result,scorecard,marks',
+            'education' => 'nullable|array',
+            'education.*' => 'string|in:10th,12th,graduate,post_graduate,diploma,iti,any',
             'is_featured' => 'boolean',
             'is_published' => 'boolean'
         ]);
@@ -155,6 +165,8 @@ class PostController extends Controller
         $validated['slug'] = Str::slug($validated['title']);
         $validated['short_description'] = '';
         $validated['important_links'] = $post->important_links; // Keep existing value
+        $validated['tags'] = $request->has('tags') ? ($validated['tags'] ?? []) : [];
+        $validated['education'] = $request->has('education') ? ($validated['education'] ?? []) : [];
 
         $wasPublished = $post->is_published;
         

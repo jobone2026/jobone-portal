@@ -178,13 +178,15 @@ Clear
 <th style="width:40px">
 <input type="checkbox" class="pm-checkbox" @change="selectAll = !selectAll; selectedPosts = selectAll ? {{ json_encode($posts->pluck('id')->toArray()) }} : []">
 </th>
-<th style="width:35%">Post</th>
-<th style="width:12%">Type</th>
-<th style="width:12%">Category</th>
-<th style="width:12%">State</th>
-<th style="width:10%">Status</th>
-<th style="width:8%">Views</th>
-<th style="width:11%">Actions</th>
+<th style="width:30%">Post</th>
+<th style="width:10%">Type</th>
+<th style="width:10%">Category</th>
+<th style="width:10%">State</th>
+<th style="width:12%">Tags</th>
+<th style="width:12%">Education</th>
+<th style="width:9%">Status</th>
+<th style="width:7%">Views</th>
+<th style="width:12%">Actions</th>
 </tr>
 </thead>
 <tbody>
@@ -208,6 +210,43 @@ Clear
 </td>
 <td>{{ $post->category->name ?? 'N/A' }}</td>
 <td>{{ $post->state->name ?? 'N/A' }}</td>
+<td>
+@if($post->tags && count($post->tags) > 0)
+<div style="display:flex;flex-wrap:wrap;gap:4px;">
+@foreach($post->tags as $tag)
+<span style="display:inline-block;padding:2px 8px;background:#f3e8ff;color:#6b21a8;border-radius:10px;font-size:10px;font-weight:600;">
+{{ ucfirst(str_replace('_', ' ', $tag)) }}
+</span>
+@endforeach
+</div>
+@else
+<span style="color:var(--t3);font-size:12px;">—</span>
+@endif
+</td>
+<td>
+@if($post->education && count($post->education) > 0)
+<div style="display:flex;flex-wrap:wrap;gap:4px;">
+@foreach($post->education as $edu)
+@php
+$eduLabels = [
+'10th_pass' => '10th',
+'12th_pass' => '12th',
+'graduate' => 'Graduate',
+'post_graduate' => 'PG',
+'diploma' => 'Diploma',
+'iti' => 'ITI',
+'any_qualification' => 'Any'
+];
+@endphp
+<span style="display:inline-block;padding:2px 8px;background:#d1fae5;color:#065f46;border-radius:10px;font-size:10px;font-weight:600;">
+{{ $eduLabels[$edu] ?? ucfirst(str_replace('_', ' ', $edu)) }}
+</span>
+@endforeach
+</div>
+@else
+<span style="color:var(--t3);font-size:12px;">—</span>
+@endif
+</td>
 <td>
 @if ($post->is_published)
 <span class="pm-badge published">

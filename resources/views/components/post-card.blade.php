@@ -28,6 +28,31 @@
                     <i class="fa-solid fa-globe text-xs"></i> All India
                 </span>
             @endif
+            @if($post->tags && count($post->tags) > 0)
+                @foreach($post->tags as $tag)
+                    <span class="text-white px-2 py-0.5 rounded text-xs font-bold flex items-center gap-1" style="background: #F59E0B !important;">
+                        <i class="fa-solid fa-bookmark text-xs"></i> {{ ucfirst(str_replace('_', ' ', $tag)) }}
+                    </span>
+                @endforeach
+            @endif
+            @if($post->education && count($post->education) > 0)
+                @foreach($post->education as $edu)
+                    @php
+                        $eduLabels = [
+                            '10th_pass' => '10th Pass',
+                            '12th_pass' => '12th Pass',
+                            'graduate' => 'Graduate',
+                            'post_graduate' => 'Post Graduate',
+                            'diploma' => 'Diploma',
+                            'iti' => 'ITI',
+                            'any_qualification' => 'Any Qualification'
+                        ];
+                    @endphp
+                    <span class="text-white px-2 py-0.5 rounded text-xs font-bold flex items-center gap-1" style="background: #10B981 !important;">
+                        <i class="fa-solid fa-graduation-cap text-xs"></i> {{ $eduLabels[$edu] ?? ucfirst(str_replace('_', ' ', $edu)) }}
+                    </span>
+                @endforeach
+            @endif
         </div>
     </div>
     

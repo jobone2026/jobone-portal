@@ -250,6 +250,83 @@ value="{{ old('last_date', isset($post->last_date) ? $post->last_date->format('Y
 </div>
 </div>
 
+<div class="pf-field">
+<label class="pf-label">Tags</label>
+<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">
+@php
+$availableTags = [
+    'cutoff' => '📊 Cutoff',
+    'merit_list' => '🏆 Merit List',
+    'selection_list' => '✅ Selection List',
+    'final_result' => '🎯 Final Result',
+    'provisional_result' => '📋 Provisional Result',
+    'revised_result' => '🔄 Revised Result',
+    'scorecard' => '📝 Scorecard',
+    'marks' => '💯 Marks'
+];
+$postTags = isset($post) && $post->tags ? (is_array($post->tags) ? $post->tags : json_decode($post->tags, true) ?? []) : [];
+$selectedTags = old('tags', $postTags);
+if (!is_array($selectedTags)) {
+    $selectedTags = [];
+}
+@endphp
+@foreach($availableTags as $value => $label)
+@php
+$isChecked = in_array($value, $selectedTags);
+@endphp
+<label style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:{{ $isChecked ? 'var(--purple-l)' : 'var(--off)' }};border:1px solid {{ $isChecked ? 'var(--purple)' : 'var(--border)' }};border-radius:var(--rs);cursor:pointer;transition:all .15s;user-select:none;" 
+onchange="this.style.background = this.querySelector('input').checked ? 'var(--purple-l)' : 'var(--off)'; this.style.borderColor = this.querySelector('input').checked ? 'var(--purple)' : 'var(--border)';">
+<input type="checkbox" name="tags[]" value="{{ $value }}" 
+{{ $isChecked ? 'checked' : '' }}
+style="width:16px;height:16px;accent-color:var(--purple);">
+<span style="font-size:13px;font-weight:500;color:var(--t1);">{{ $label }}</span>
+</label>
+@endforeach
+</div>
+<span class="pf-hint">Select tags that apply to this post (e.g., Cutoff, Merit List)</span>
+@error('tags')
+<span class="pf-error-msg"><i class="fas fa-exclamation-circle"></i>{{ $message }}</span>
+@enderror
+</div>
+
+<div class="pf-field">
+<label class="pf-label">Education Qualification</label>
+<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">
+@php
+$availableEducation = [
+    '10th' => '📚 10th Pass',
+    '12th' => '📖 12th Pass',
+    'graduate' => '🎓 Graduate',
+    'post_graduate' => '🎓 Post Graduate',
+    'diploma' => '📜 Diploma',
+    'iti' => '🔧 ITI',
+    'any' => '✅ Any Qualification'
+];
+$postEducation = isset($post) && $post->education ? (is_array($post->education) ? $post->education : json_decode($post->education, true) ?? []) : [];
+$selectedEducation = old('education', $postEducation);
+if (!is_array($selectedEducation)) {
+    $selectedEducation = [];
+}
+@endphp
+@foreach($availableEducation as $value => $label)
+@php
+$isChecked = in_array($value, $selectedEducation);
+@endphp
+<label style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:{{ $isChecked ? 'var(--blue-l)' : 'var(--off)' }};border:1px solid {{ $isChecked ? 'var(--blue)' : 'var(--border)' }};border-radius:var(--rs);cursor:pointer;transition:all .15s;user-select:none;" 
+onchange="this.style.background = this.querySelector('input').checked ? 'var(--blue-l)' : 'var(--off)'; this.style.borderColor = this.querySelector('input').checked ? 'var(--blue)' : 'var(--border)';">
+<input type="checkbox" name="education[]" value="{{ $value }}" 
+{{ $isChecked ? 'checked' : '' }}
+style="width:16px;height:16px;accent-color:var(--blue);">
+<span style="font-size:13px;font-weight:500;color:var(--t1);">{{ $label }}</span>
+</label>
+@endforeach
+</div>
+<span class="pf-hint">Select education qualifications required for this post</span>
+@error('education')
+<span class="pf-error-msg"><i class="fas fa-exclamation-circle"></i>{{ $message }}</span>
+@enderror
+</div>
+
 <div class="pf-field" x-data="{ valid: false, touched: false }" :class="{ 'has-error': touched && !valid && content.length > 0, 'has-success': valid }">
 <label class="pf-label">Content <span class="req">*</span></label>
 <textarea name="content" class="pf-textarea @error('content') error @enderror" required
