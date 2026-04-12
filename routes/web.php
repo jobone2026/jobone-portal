@@ -50,6 +50,12 @@ Route::get('/filter/{type}', [FilterController::class, 'filter'])->name('filter.
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/search/autocomplete', [SearchController::class, 'autocomplete'])->name('search.autocomplete');
 
+// Web Notifications
+Route::post('/notifications/subscribe', [\App\Http\Controllers\NotificationController::class, 'subscribe'])->name('notifications.subscribe');
+Route::post('/notifications/unsubscribe', [\App\Http\Controllers\NotificationController::class, 'unsubscribe'])->name('notifications.unsubscribe');
+Route::post('/notifications/status', [\App\Http\Controllers\NotificationController::class, 'status'])->name('notifications.status');
+Route::post('/feedback', [\App\Http\Controllers\NotificationController::class, 'feedback'])->name('feedback.submit');
+
 // Sitemap
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/sitemap-posts.xml', [SitemapController::class, 'posts'])->name('sitemap.posts');

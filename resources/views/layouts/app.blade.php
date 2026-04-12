@@ -1059,5 +1059,10 @@
     
     <!-- Back to Top Button -->
     <x-back-to-top />
+    <!-- Web Notification & Feedback Controls -->
+    <x-notification-controls />
+    
+    <!-- Web Notifications Script -->
+    <script src="{{ asset('js/web-notifications.js') }}"></script>
 </body>
 </html>
