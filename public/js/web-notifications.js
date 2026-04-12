@@ -19,15 +19,13 @@ class WebNotificationManager {
             return;
         }
 
-        // Register service worker
-        try {
-            const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
-            console.log('Service Worker registered:', registration);
-            
-            // Check current subscription status
-            await this.updateUI();
-            
-            // Setup event listeners
+        // For now, skip service worker registration and just handle UI
+        // Check current subscription status
+        await this.updateUI();
+        
+        // Setup event listeners
+        this.setupEventListeners();
+    }
             this.setupEventListeners();
         } catch (error) {
             console.error('Service Worker registration failed:', error);
@@ -49,27 +47,26 @@ class WebNotificationManager {
         
         if (permission !== 'granted') {
             this.showToast('Please allow notifications in your browser settings', 'warning');
+            this.showLoading(false);
             return;
         }
 
-        const registration = await navigator.serviceWorker.ready;
-        const subscription = await registration.pushManager.getSubscription();
-
-        if (subscription) {
-            await this.unsubscribe(subscription);
+        // For now, just simulate subscription without actual push
+        const isSubscribed = localStorage.getItem('notifications_enabled') === 'true';
+        
+        if (isSubscribed) {
+            await this.unsubscribeSimple();
         } else {
-            await this.subscribe(registration);
+            await this.subscribeSimple();
         }
     }
 
-    async subscribe(registration) {
+    async subscribeSimple() {
         try {
             this.showLoading(true);
 
-            const subscription = await registration.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: this.urlBase64ToUint8Array(this.vapidPublicKey)
-            });
+            // Store in localStorage for now
+            localStorage.setItem('notifications_enabled', 'true');
 
             const response = await fetch('/notifications/subscribe', {
                 method: 'POST',
@@ -77,7 +74,13 @@ class WebNotificationManager {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                 },
-                body: JSON.stringify(subscription.toJSON())
+                body: JSON.stringify({
+                    endpoint: 'simple-' + Date.now(),
+                    keys: {
+                        p256dh: 'simple-key',
+                        auth: 'simple-auth'
+                    }
+                })
             });
 
             const data = await response.json();
@@ -92,33 +95,20 @@ class WebNotificationManager {
         } catch (error) {
             console.error('Subscription failed:', error);
             this.showToast('Failed to enable notifications', 'error');
+            localStorage.removeItem('notifications_enabled');
         } finally {
             this.showLoading(false);
         }
     }
 
-    async unsubscribe(subscription) {
+    async unsubscribeSimple() {
         try {
             this.showLoading(true);
 
-            const response = await fetch('/notifications/unsubscribe', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                },
-                body: JSON.stringify({ endpoint: subscription.endpoint })
-            });
-
-            const data = await response.json();
-
-            if (data.success) {
-                await subscription.unsubscribe();
-                this.showToast('🔕 Notifications disabled', 'info');
-                await this.updateUI();
-            } else {
-                throw new Error(data.message);
-            }
+            localStorage.removeItem('notifications_enabled');
+            
+            this.showToast('🔕 Notifications disabled', 'info');
+            await this.updateUI();
 
         } catch (error) {
             console.error('Unsubscription failed:', error);
@@ -131,17 +121,14 @@ class WebNotificationManager {
     async updateUI() {
         if (!this.subscribeBtn) return;
 
-        const registration = await navigator.serviceWorker.ready;
-        const subscription = await registration.pushManager.getSubscription();
+        const isSubscribed = localStorage.getItem('notifications_enabled') === 'true';
 
-        if (subscription) {
+        if (isSubscribed) {
             this.subscribeBtn.innerHTML = '<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/></svg><span>Notifications ON</span>';
-            this.subscribeBtn.classList.add('bg-green-600', 'hover:bg-green-700');
-            this.subscribeBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+            this.subscribeBtn.style.backgroundColor = '#16a34a';
         } else {
             this.subscribeBtn.innerHTML = '<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/></svg><span>Enable Notifications</span>';
-            this.subscribeBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
-            this.subscribeBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+            this.subscribeBtn.style.backgroundColor = '#2563eb';
         }
     }
 

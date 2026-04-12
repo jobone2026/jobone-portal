@@ -98,17 +98,19 @@
             </div>
 
             <!-- Submit Button -->
-            <div class="flex gap-3 pt-2">
+            <div class="flex gap-3 pt-2" style="display: flex !important; gap: 0.75rem !important; padding-top: 0.5rem !important;">
                 <button 
                     type="button"
                     onclick="window.notificationManager?.hideFeedbackModal()"
                     class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                    style="flex: 1 !important; padding: 0.5rem 1rem !important; border: 1px solid #d1d5db !important; color: #374151 !important; border-radius: 0.5rem !important; background-color: white !important; cursor: pointer !important;"
                 >
                     Cancel
                 </button>
                 <button 
                     type="submit"
                     class="flex-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
+                    style="flex: 1 !important; padding: 0.5rem 1rem !important; background-color: #9333ea !important; color: white !important; border-radius: 0.5rem !important; font-weight: 500 !important; cursor: pointer !important; border: none !important;"
                 >
                     Send Feedback
                 </button>
