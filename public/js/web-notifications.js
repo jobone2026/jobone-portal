@@ -19,12 +19,10 @@ class WebNotificationManager {
             return;
         }
 
-        // For now, skip service worker registration and just handle UI
+        console.log('WebNotificationManager initialized successfully');
+        
         // Check current subscription status
         await this.updateUI();
-        
-        // Setup event listeners
-        this.setupEventListeners();
     }
             this.setupEventListeners();
         } catch (error) {

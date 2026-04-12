@@ -3,6 +3,7 @@
     <!-- Enable Notifications Button -->
     <button 
         id="notificationToggle"
+        onclick="if(window.notificationManager){window.notificationManager.toggleSubscription()}else{alert('Notification system loading...')}"
         class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-full shadow-lg transition-all duration-300 hover:scale-105"
         title="Enable push notifications for new jobs"
         style="z-index: 9999 !important; display: flex !important; align-items: center !important; gap: 0.5rem !important; background-color: #2563eb !important; color: white !important; padding: 0.75rem 1rem !important; border-radius: 9999px !important; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1) !important; cursor: pointer !important; border: none !important;"
@@ -16,6 +17,7 @@
     <!-- Feedback Button -->
     <button 
         id="feedbackBtn"
+        onclick="if(window.notificationManager){window.notificationManager.showFeedbackModal()}else{alert('Feedback system loading...')}"
         class="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded-full shadow-lg transition-all duration-300 hover:scale-105"
         title="Send us your feedback"
         style="z-index: 9999 !important; display: flex !important; align-items: center !important; gap: 0.5rem !important; background-color: #9333ea !important; color: white !important; padding: 0.75rem 1rem !important; border-radius: 9999px !important; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1) !important; cursor: pointer !important; border: none !important;"
