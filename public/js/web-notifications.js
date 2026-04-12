@@ -34,30 +34,50 @@ class WebNotificationManager {
 
     setupEventListeners() {
         if (this.subscribeBtn) {
-            this.subscribeBtn.addEventListener('click', () => this.toggleSubscription());
+            this.subscribeBtn.addEventListener('click', () => {
+                console.log('Notification button clicked');
+                this.toggleSubscription();
+            });
+        } else {
+            console.error('Notification button not found');
         }
 
         if (this.feedbackBtn) {
-            this.feedbackBtn.addEventListener('click', () => this.showFeedbackModal());
+            this.feedbackBtn.addEventListener('click', () => {
+                console.log('Feedback button clicked');
+                this.showFeedbackModal();
+            });
+        } else {
+            console.error('Feedback button not found');
         }
     }
 
     async toggleSubscription() {
-        const permission = await Notification.requestPermission();
+        console.log('Toggle subscription called');
         
-        if (permission !== 'granted') {
-            this.showToast('Please allow notifications in your browser settings', 'warning');
-            this.showLoading(false);
-            return;
-        }
+        try {
+            const permission = await Notification.requestPermission();
+            console.log('Permission:', permission);
+            
+            if (permission !== 'granted') {
+                this.showToast('Please allow notifications in your browser settings', 'warning');
+                this.showLoading(false);
+                return;
+            }
 
-        // For now, just simulate subscription without actual push
-        const isSubscribed = localStorage.getItem('notifications_enabled') === 'true';
-        
-        if (isSubscribed) {
-            await this.unsubscribeSimple();
-        } else {
-            await this.subscribeSimple();
+            // For now, just simulate subscription without actual push
+            const isSubscribed = localStorage.getItem('notifications_enabled') === 'true';
+            console.log('Currently subscribed:', isSubscribed);
+            
+            if (isSubscribed) {
+                await this.unsubscribeSimple();
+            } else {
+                await this.subscribeSimple();
+            }
+        } catch (error) {
+            console.error('Toggle subscription error:', error);
+            this.showToast('Error: ' + error.message, 'error');
+            this.showLoading(false);
         }
     }
 
@@ -197,7 +217,7 @@ class WebNotificationManager {
         if (this.subscribeBtn) {
             this.subscribeBtn.disabled = show;
             if (show) {
-                this.subscribeBtn.innerHTML = '<svg class="animate-spin h-5 w-5" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Loading...</span>';
+                this.subscribeBtn.innerHTML = '<svg class="animate-spin h-5 w-5" viewBox="0 0 24 24" style="display: inline-block; width: 1.25rem; height: 1.25rem;"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span style="margin-left: 0.5rem;">Loading...</span>';
             }
         }
     }
@@ -223,18 +243,25 @@ class WebNotificationManager {
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
+        console.log('Initializing WebNotificationManager...');
         window.notificationManager = new WebNotificationManager();
+        console.log('WebNotificationManager initialized');
     });
 } else {
+    console.log('Initializing WebNotificationManager (already loaded)...');
     window.notificationManager = new WebNotificationManager();
+    console.log('WebNotificationManager initialized');
 }
 
 // Handle feedback form submission
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('Setting up feedback form...');
     const feedbackForm = document.getElementById('feedbackForm');
     if (feedbackForm) {
+        console.log('Feedback form found');
         feedbackForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            console.log('Feedback form submitted');
             
             const formData = {
                 type: document.getElementById('feedbackType').value,
@@ -243,19 +270,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 page_url: window.location.href
             };
 
+            console.log('Feedback data:', formData);
+
             if (window.notificationManager) {
                 await window.notificationManager.submitFeedback(formData);
             }
         });
+    } else {
+        console.log('Feedback form not found');
     }
 
     // Close modal on outside click
     const modal = document.getElementById('feedbackModal');
     if (modal) {
+        console.log('Feedback modal found');
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 window.notificationManager?.hideFeedbackModal();
             }
         });
+    } else {
+        console.log('Feedback modal not found');
     }
 });
+
+console.log('web-notifications.js loaded successfully');
