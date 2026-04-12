@@ -39,13 +39,36 @@
                 @foreach($post->education as $edu)
                     @php
                         $eduLabels = [
-                            '10th_pass' => '10th Pass',
-                            '12th_pass' => '12th Pass',
+                            '10th_pass' => '10th',
+                            '12th_pass' => '12th',
                             'graduate' => 'Graduate',
-                            'post_graduate' => 'Post Graduate',
+                            'post_graduate' => 'PG',
                             'diploma' => 'Diploma',
                             'iti' => 'ITI',
-                            'any_qualification' => 'Any Qualification'
+                            'btech' => 'B.Tech',
+                            'mtech' => 'M.Tech',
+                            'bsc' => 'B.Sc',
+                            'msc' => 'M.Sc',
+                            'bcom' => 'B.Com',
+                            'mcom' => 'M.Com',
+                            'ba' => 'B.A',
+                            'ma' => 'M.A',
+                            'bba' => 'BBA',
+                            'mba' => 'MBA',
+                            'ca' => 'CA',
+                            'cs' => 'CS',
+                            'cma' => 'CMA',
+                            'llb' => 'LLB',
+                            'llm' => 'LLM',
+                            'mbbs' => 'MBBS',
+                            'bds' => 'BDS',
+                            'bpharm' => 'B.Pharm',
+                            'mpharm' => 'M.Pharm',
+                            'nursing' => 'Nursing',
+                            'bed' => 'B.Ed',
+                            'med' => 'M.Ed',
+                            'phd' => 'PhD',
+                            'any_qualification' => 'Any'
                         ];
                     @endphp
                     <span class="text-white px-2 py-0.5 rounded text-xs font-bold flex items-center gap-1" style="background: #10B981 !important;">
