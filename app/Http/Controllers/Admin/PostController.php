@@ -79,7 +79,7 @@ class PostController extends Controller
             'tags' => 'nullable|array',
             'tags.*' => 'string|in:cutoff,merit_list,selection_list,final_result,provisional_result,revised_result,scorecard,marks',
             'education' => 'nullable|array',
-            'education.*' => 'string|in:10th,12th,graduate,post_graduate,diploma,iti,any',
+            'education.*' => 'string|in:10th_pass,12th_pass,graduate,post_graduate,diploma,iti,btech,mtech,bsc,msc,bcom,mcom,ba,ma,bba,mba,ca,cs,cma,llb,llm,mbbs,bds,bpharm,mpharm,nursing,bed,med,phd,any_qualification',
             'is_featured' => 'boolean',
             'is_published' => 'boolean'
         ]);
@@ -157,7 +157,7 @@ class PostController extends Controller
             'tags' => 'nullable|array',
             'tags.*' => 'string|in:cutoff,merit_list,selection_list,final_result,provisional_result,revised_result,scorecard,marks',
             'education' => 'nullable|array',
-            'education.*' => 'string|in:10th,12th,graduate,post_graduate,diploma,iti,any',
+            'education.*' => 'string|in:10th_pass,12th_pass,graduate,post_graduate,diploma,iti,btech,mtech,bsc,msc,bcom,mcom,ba,ma,bba,mba,ca,cs,cma,llb,llm,mbbs,bds,bpharm,mpharm,nursing,bed,med,phd,any_qualification',
             'is_featured' => 'boolean',
             'is_published' => 'boolean'
         ]);
