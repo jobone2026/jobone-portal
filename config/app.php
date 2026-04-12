@@ -123,4 +123,17 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Domain State Mapping
+    |--------------------------------------------------------------------------
+    |
+    | This configuration maps specific domains to state filters. When a user
+    | visits a mapped domain, only posts from that state will be displayed.
+    | Format: 'domain' => 'state_slug'
+    |
+    */
+
+    'domain_state_map' => env('DOMAIN_STATE_MAP', ''),
+
 ];

@@ -41,7 +41,7 @@ class DomainStateFilter
     private function getDomainStateMap(): array
     {
         $map = [];
-        $envMap = env('DOMAIN_STATE_MAP', '');
+        $envMap = config('app.domain_state_map', '');
         
         if (empty($envMap)) {
             return $map;
