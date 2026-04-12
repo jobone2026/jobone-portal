@@ -14,6 +14,11 @@ class NotificationService
     public function sendNewPostNotifications(Post $post)
     {
         try {
+            // Load state relationship if not already loaded
+            if (!$post->relationLoaded('state')) {
+                $post->load('state');
+            }
+            
             // Send to Telegram
             $this->sendToTelegram($post);
             
@@ -53,8 +58,15 @@ class NotificationService
             
             // Format message with type-specific header
             $message = "{$typeInfo['emoji']} *{$typeInfo['title']}* {$typeInfo['emoji']}\n";
-            $message .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
+            $message .= "━━━━━━━━━━━━━━━━\n\n";
             $message .= "🔥 *" . $this->escapeMarkdown($post->title) . "*\n\n";
+            
+            // Add state or All India
+            if ($post->state) {
+                $message .= "📍 *State:* " . $this->escapeMarkdown($post->state->name) . "\n";
+            } else {
+                $message .= "📍 *State:* All India\n";
+            }
             
             // Add organization if available
             if ($post->organization) {
@@ -76,6 +88,14 @@ class NotificationService
                 $message .= "🟢 *Last Date:* " . $post->last_date->format('d-m-Y') . "\n";
             } else {
                 $message .= "🟢 *Last Date:* -\n";
+            }
+            
+            // Add education qualifications if available
+            if (!empty($post->education) && is_array($post->education)) {
+                $educationLabels = $this->getEducationLabels($post->education);
+                if (!empty($educationLabels)) {
+                    $message .= "🎓 *Education:* " . $this->escapeMarkdown(implode(', ', $educationLabels)) . "\n";
+                }
             }
             
             $message .= "\n➡️ *{$typeInfo['action']}:* [Click Here](" . $postUrl . ")\n";
@@ -179,12 +199,27 @@ class NotificationService
                 $message .= $post->short_description . "\n\n";
             }
             
+            // Add state or All India
+            if ($post->state) {
+                $message .= "📍 State: " . $post->state->name . "\n";
+            } else {
+                $message .= "📍 State: All India\n";
+            }
+            
             if ($post->last_date) {
                 $message .= "📅 Last Date: " . $post->last_date->format('d M Y') . "\n";
             }
             
             if ($post->total_posts) {
                 $message .= "📊 Total Posts: " . $post->total_posts . "\n";
+            }
+            
+            // Add education qualifications if available
+            if (!empty($post->education) && is_array($post->education)) {
+                $educationLabels = $this->getEducationLabels($post->education);
+                if (!empty($educationLabels)) {
+                    $message .= "🎓 Education: " . implode(', ', $educationLabels) . "\n";
+                }
             }
             
             $message .= "\n🔗 Apply Now: " . $postUrl;
@@ -344,5 +379,53 @@ class NotificationService
             $text = str_replace($char, '\\' . $char, $text);
         }
         return $text;
+    }
+    
+    /**
+     * Get readable education labels from education codes
+     */
+    protected function getEducationLabels($educationArray)
+    {
+        $labels = [
+            '10th_pass' => '10th Pass',
+            '12th_pass' => '12th Pass',
+            'graduate' => 'Graduate',
+            'post_graduate' => 'Post Graduate',
+            'diploma' => 'Diploma',
+            'iti' => 'ITI',
+            'btech' => 'B.Tech/B.E',
+            'mtech' => 'M.Tech/M.E',
+            'bsc' => 'B.Sc',
+            'msc' => 'M.Sc',
+            'bcom' => 'B.Com',
+            'mcom' => 'M.Com',
+            'ba' => 'B.A',
+            'ma' => 'M.A',
+            'bba' => 'BBA',
+            'mba' => 'MBA',
+            'ca' => 'CA',
+            'cs' => 'CS',
+            'cma' => 'CMA',
+            'llb' => 'LLB',
+            'llm' => 'LLM',
+            'mbbs' => 'MBBS',
+            'bds' => 'BDS',
+            'bpharm' => 'B.Pharm',
+            'mpharm' => 'M.Pharm',
+            'nursing' => 'Nursing',
+            'bed' => 'B.Ed',
+            'med' => 'M.Ed',
+            'phd' => 'PhD',
+            'any_qualification' => 'Any Qualification',
+        ];
+        
+        $result = [];
+        foreach ($educationArray as $code) {
+            if (isset($labels[$code])) {
+                $result[] = $labels[$code];
+            }
+        }
+        
+        return $result;
     }
 }
