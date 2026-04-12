@@ -471,6 +471,12 @@ class="nav-item {{ request()->routeIs('admin.notifications.*') ? 'active' : '' }
 <span>Notifications</span>
 </a>
 
+<a href="{{ route('admin.feedback') }}"
+class="nav-item {{ request()->routeIs('admin.feedback') ? 'active' : '' }}">
+<span class="nav-icon"><i class="fas fa-comments"></i></span>
+<span>User Feedback</span>
+</a>
+
 <div class="nav-group-label">Settings</div>
 
 <a href="{{ route('admin.settings.index') }}"

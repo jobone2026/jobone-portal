@@ -87,5 +87,9 @@ Route::prefix('admin')->group(function () {
         // Notifications management
         Route::get('/notifications', [NotificationController::class, 'index'])->name('admin.notifications.index');
         Route::post('/notifications/send', [NotificationController::class, 'send'])->name('admin.notifications.send');
+        
+        // Feedback management
+        Route::get('/feedback', [\App\Http\Controllers\NotificationController::class, 'feedbackPage'])->name('admin.feedback');
+        Route::get('/feedback/list', [\App\Http\Controllers\NotificationController::class, 'feedbackList'])->name('admin.feedback.list');
     });
 });

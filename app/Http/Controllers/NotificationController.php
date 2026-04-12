@@ -154,6 +154,50 @@ class NotificationController extends Controller
     }
 
     /**
+     * Get feedback list from log file (for admin)
+     */
+    public function feedbackList()
+    {
+        try {
+            $logFile = storage_path('logs/laravel.log');
+            
+            if (!file_exists($logFile)) {
+                return response()->json([]);
+            }
+            
+            $content = file_get_contents($logFile);
+            $feedbackEntries = [];
+            
+            // Parse log entries for "User Feedback Received"
+            preg_match_all('/\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\].*User Feedback Received.*?({.*?})\s*$/m', $content, $matches, PREG_SET_ORDER);
+            
+            foreach ($matches as $match) {
+                $timestamp = $match[1];
+                $jsonData = json_decode($match[2], true);
+                
+                if ($jsonData) {
+                    $feedbackEntries[] = array_merge($jsonData, ['timestamp' => $timestamp]);
+                }
+            }
+            
+            // Return most recent first
+            return response()->json(array_reverse($feedbackEntries));
+            
+        } catch (\Exception $e) {
+            Log::error('Failed to read feedback: ' . $e->getMessage());
+            return response()->json([]);
+        }
+    }
+
+    /**
+     * View feedback page (admin)
+     */
+    public function feedbackPage()
+    {
+        return view('admin.feedback');
+    }
+
+    /**
      * Get notification statistics (for admin)
      */
     public function stats()

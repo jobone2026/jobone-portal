@@ -21,12 +21,57 @@ class WebNotificationManager {
 
         console.log('WebNotificationManager initialized successfully');
         
+        // Setup event listeners
+        this.setupEventListeners();
+        
         // Check current subscription status
         await this.updateUI();
+        
+        // Auto-request permission on first visit
+        await this.autoRequestPermission();
     }
-            this.setupEventListeners();
-        } catch (error) {
-            console.error('Service Worker registration failed:', error);
+    
+    async autoRequestPermission() {
+        console.log('autoRequestPermission called');
+        console.log('Current permission:', Notification.permission);
+        
+        // If already granted, auto-subscribe
+        if (Notification.permission === 'granted') {
+            const isSubscribed = localStorage.getItem('notifications_enabled') === 'true';
+            if (!isSubscribed) {
+                console.log('Permission already granted, auto-subscribing...');
+                await this.subscribeSimple();
+            }
+            return;
+        }
+        
+        // If denied, skip (browser won't show dialog anyway)
+        if (Notification.permission === 'denied') {
+            console.log('Notifications are blocked. User needs to enable in browser settings.');
+            return;
+        }
+        
+        // Always ask if permission is default (not decided yet)
+        if (Notification.permission === 'default') {
+            console.log('Will request permission in 2 seconds...');
+            // Wait 2 seconds after page load, then ask
+            setTimeout(async () => {
+                try {
+                    console.log('Requesting notification permission now...');
+                    const permission = await Notification.requestPermission();
+                    console.log('Permission result:', permission);
+                    
+                    if (permission === 'granted') {
+                        console.log('Permission granted! Auto-subscribing...');
+                        // Auto-subscribe
+                        await this.subscribeSimple();
+                    } else {
+                        console.log('Permission denied or dismissed');
+                    }
+                } catch (error) {
+                    console.error('Auto permission request failed:', error);
+                }
+            }, 2000);
         }
     }
 
@@ -167,29 +212,42 @@ class WebNotificationManager {
     }
 
     async submitFeedback(formData) {
+        console.log('submitFeedback called with:', formData);
+        
         try {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]');
+            console.log('CSRF token element:', csrfToken);
+            console.log('CSRF token value:', csrfToken?.content);
+            
+            if (!csrfToken) {
+                throw new Error('CSRF token not found. Please refresh the page.');
+            }
+            
+            console.log('Sending feedback to /feedback...');
             const response = await fetch('/feedback', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    'X-CSRF-TOKEN': csrfToken.content
                 },
                 body: JSON.stringify(formData)
             });
 
+            console.log('Response status:', response.status);
             const data = await response.json();
+            console.log('Response data:', data);
 
             if (data.success) {
                 this.showToast(data.message, 'success');
                 this.hideFeedbackModal();
                 document.getElementById('feedbackForm').reset();
             } else {
-                throw new Error(data.message);
+                throw new Error(data.message || 'Unknown error');
             }
 
         } catch (error) {
             console.error('Feedback submission failed:', error);
-            this.showToast('Failed to submit feedback', 'error');
+            this.showToast('Failed to submit feedback: ' + error.message, 'error');
         }
     }
 
@@ -201,14 +259,25 @@ class WebNotificationManager {
             warning: 'bg-yellow-500',
             info: 'bg-blue-500'
         };
+        
+        const icons = {
+            success: '✓',
+            error: '✗',
+            warning: '⚠',
+            info: 'ℹ'
+        };
 
-        toast.className = `fixed bottom-4 right-4 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slide-up`;
-        toast.textContent = message;
+        toast.className = `fixed bottom-20 right-4 ${colors[type]} text-white px-6 py-4 rounded-lg shadow-2xl z-[10001] animate-slide-up`;
+        toast.style.cssText = 'z-index: 10001 !important; min-width: 300px; font-size: 16px; font-weight: 600;';
+        toast.innerHTML = `<div style="display: flex; align-items: center; gap: 12px;"><span style="font-size: 24px;">${icons[type]}</span><span>${message}</span></div>`;
         document.body.appendChild(toast);
 
         setTimeout(() => {
-            toast.remove();
-        }, 4000);
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(20px)';
+            toast.style.transition = 'all 0.3s ease-out';
+            setTimeout(() => toast.remove(), 300);
+        }, 5000);
     }
 
     showLoading(show) {
@@ -238,58 +307,29 @@ class WebNotificationManager {
     }
 }
 
-// Initialize when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        console.log('Initializing WebNotificationManager...');
-        window.notificationManager = new WebNotificationManager();
-        console.log('WebNotificationManager initialized');
-    });
-} else {
-    console.log('Initializing WebNotificationManager (already loaded)...');
+// Initialize immediately - no waiting for DOM
+console.log('web-notifications.js starting...');
+
+try {
     window.notificationManager = new WebNotificationManager();
-    console.log('WebNotificationManager initialized');
+    console.log('WebNotificationManager created immediately');
+} catch (error) {
+    console.error('Failed to create WebNotificationManager:', error);
 }
 
-// Handle feedback form submission
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('Setting up feedback form...');
-    const feedbackForm = document.getElementById('feedbackForm');
-    if (feedbackForm) {
-        console.log('Feedback form found');
-        feedbackForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            console.log('Feedback form submitted');
-            
-            const formData = {
-                type: document.getElementById('feedbackType').value,
-                message: document.getElementById('feedbackMessage').value,
-                email: document.getElementById('feedbackEmail').value,
-                page_url: window.location.href
-            };
-
-            console.log('Feedback data:', formData);
-
-            if (window.notificationManager) {
-                await window.notificationManager.submitFeedback(formData);
+// Also try after DOM loads as backup
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM loaded, initializing WebNotificationManager...');
+        if (!window.notificationManager) {
+            try {
+                window.notificationManager = new WebNotificationManager();
+                console.log('WebNotificationManager initialized on DOM ready');
+            } catch (error) {
+                console.error('Failed on DOM ready:', error);
             }
-        });
-    } else {
-        console.log('Feedback form not found');
-    }
-
-    // Close modal on outside click
-    const modal = document.getElementById('feedbackModal');
-    if (modal) {
-        console.log('Feedback modal found');
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                window.notificationManager?.hideFeedbackModal();
-            }
-        });
-    } else {
-        console.log('Feedback modal not found');
-    }
-});
+        }
+    });
+}
 
 console.log('web-notifications.js loaded successfully');
