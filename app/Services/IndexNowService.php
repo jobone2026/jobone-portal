@@ -118,6 +118,8 @@ class IndexNowService
 
     /**
      * Ensure API key file exists in public directory
+     * Note: IndexNow API requires this file to be publicly accessible
+     * for domain ownership verification. This is by design, not a security issue.
      */
     private function ensureApiKeyFile(): void
     {
@@ -125,7 +127,7 @@ class IndexNowService
         
         if (!file_exists($filePath)) {
             file_put_contents($filePath, $this->apiKey);
-            Log::info('IndexNow: API key file created', ['path' => $filePath]);
+            Log::info('IndexNow: API key file created for domain verification');
         }
     }
 

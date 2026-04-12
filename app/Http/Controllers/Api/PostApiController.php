@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PostResource;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\State;
@@ -51,7 +52,7 @@ class PostApiController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $posts->items(),
+            'data' => PostResource::collection($posts->items()),
             'meta' => [
                 'total' => $posts->total(),
                 'per_page' => $posts->perPage(),
@@ -84,7 +85,7 @@ class PostApiController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $posts->items(),
+            'data' => PostResource::collection($posts->items()),
             'meta' => [
                 'total' => $posts->total(),
                 'per_page' => $posts->perPage(),
@@ -114,7 +115,7 @@ class PostApiController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $posts
+            'data' => PostResource::collection($posts)
         ]);
     }
 
@@ -136,7 +137,7 @@ class PostApiController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $post
+            'data' => new PostResource($post)
         ]);
     }
 
@@ -196,7 +197,7 @@ class PostApiController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Post created successfully',
-                'data' => $post
+                'data' => new PostResource($post)
             ], 201);
 
         } catch (\Exception $e) {
@@ -247,7 +248,7 @@ class PostApiController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Post updated successfully',
-                'data' => $post
+                'data' => new PostResource($post)
             ]);
 
         } catch (\Exception $e) {

@@ -15,7 +15,7 @@ class TestModalApi extends Command
         $scrapeService = new JobScrapeService();
         
         $this->info('Testing Modal.com API Connection...');
-        $this->info('Token ID: ' . config('services.modal.token_id'));
+        $this->info('Token ID: ' . substr(config('services.modal.token_id'), 0, 8) . '...');
         $this->info('Base URL: ' . config('services.modal.base_url'));
         $this->newLine();
 
