@@ -49,6 +49,12 @@ class FixBlogContent extends Command
             $content = preg_replace('/<html[^>]*>/i', '', $content);
             $content = preg_replace('/<\/html>/i', '', $content);
             $content = preg_replace('/<head[^>]*>.*?<\/head>/is', '', $content);
+            
+            // Remove style tags and their content
+            $content = preg_replace('/<style[^>]*>.*?<\/style>/is', '', $content);
+            
+            // Remove script tags and their content
+            $content = preg_replace('/<script[^>]*>.*?<\/script>/is', '', $content);
 
             // Clean up extra whitespace
             $content = trim($content);
