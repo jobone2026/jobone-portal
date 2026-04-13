@@ -477,6 +477,12 @@ class="nav-item {{ request()->routeIs('admin.feedback') ? 'active' : '' }}">
 <span>User Feedback</span>
 </a>
 
+<a href="{{ route('admin.whatsapp.index') }}"
+class="nav-item {{ request()->routeIs('admin.whatsapp.*') ? 'active' : '' }}">
+<span class="nav-icon"><i class="fab fa-whatsapp"></i></span>
+<span>WhatsApp Share</span>
+</a>
+
 <div class="nav-group-label">Settings</div>
 
 <a href="{{ route('admin.settings.index') }}"

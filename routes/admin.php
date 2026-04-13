@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\StateController;
+use App\Http\Controllers\Admin\WhatsAppController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->group(function () {
@@ -91,5 +92,9 @@ Route::prefix('admin')->group(function () {
         // Feedback management
         Route::get('/feedback', [\App\Http\Controllers\NotificationController::class, 'feedbackPage'])->name('admin.feedback');
         Route::get('/feedback/list', [\App\Http\Controllers\NotificationController::class, 'feedbackList'])->name('admin.feedback.list');
+        
+        // WhatsApp Share
+        Route::get('/whatsapp', [WhatsAppController::class, 'index'])->name('admin.whatsapp.index');
+        Route::get('/whatsapp/generate/{post}', [WhatsAppController::class, 'generateMessage'])->name('admin.whatsapp.generate');
     });
 });
