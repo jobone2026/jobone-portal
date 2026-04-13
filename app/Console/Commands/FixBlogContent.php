@@ -44,18 +44,14 @@ class FixBlogContent extends Command
                 $this->line("  ✓ Extracted body content from: {$post->title}");
             }
 
-            // Remove DOCTYPE and html/head tags
+            // Remove DOCTYPE and html/head tags ONLY
             $content = preg_replace('/<\?xml[^>]*\?>/i', '', $content);
             $content = preg_replace('/<!DOCTYPE[^>]*>/i', '', $content);
             $content = preg_replace('/<html[^>]*>/i', '', $content);
             $content = preg_replace('/<\/html>/i', '', $content);
             $content = preg_replace('/<head[^>]*>.*?<\/head>/is', '', $content);
             
-            // Remove style tags and their content
-            $content = preg_replace('/<style[^>]*>.*?<\/style>/is', '', $content);
-            
-            // Remove script tags and their content
-            $content = preg_replace('/<script[^>]*>.*?<\/script>/is', '', $content);
+            // DO NOT remove style or script tags - they contain the styling for the content!
 
             // Clean up extra whitespace
             $content = trim($content);
