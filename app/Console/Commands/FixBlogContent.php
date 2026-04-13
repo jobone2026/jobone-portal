@@ -24,7 +24,8 @@ class FixBlogContent extends Command
         $posts = $query->where(function ($q) {
             $q->where('content', 'like', '<!DOCTYPE%')
               ->orWhere('content', 'like', '<html%')
-              ->orWhere('content', 'like', '<style%');
+              ->orWhere('content', 'like', '<style%')
+              ->orWhere('content', 'like', '%<style%');
         })->get();
 
         if ($posts->isEmpty()) {
