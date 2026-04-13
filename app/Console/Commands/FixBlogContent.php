@@ -7,26 +7,34 @@ use Illuminate\Console\Command;
 
 class FixBlogContent extends Command
 {
-    protected $signature = 'fix:blog-content';
-    protected $description = 'Fix blog posts with full HTML document structure';
+    protected $signature = 'fix:blog-content {--type=all : Post type to fix (all, blog, job, etc.)}';
+    protected $description = 'Fix posts with full HTML document structure';
 
     public function handle()
     {
-        $this->info('🔧 Fixing blog post content...');
+        $type = $this->option('type');
+        $this->info('🔧 Fixing post content...');
 
-        $blogPosts = Post::where('type', 'blog')
-            ->where('content', 'like', '<!DOCTYPE%')
-            ->orWhere('content', 'like', '<html%')
-            ->get();
+        $query = Post::query();
 
-        if ($blogPosts->isEmpty()) {
-            $this->info('✅ No blog posts need fixing');
+        if ($type !== 'all') {
+            $query->where('type', $type);
+        }
+
+        $posts = $query->where(function ($q) {
+            $q->where('content', 'like', '<!DOCTYPE%')
+              ->orWhere('content', 'like', '<html%')
+              ->orWhere('content', 'like', '<style%');
+        })->get();
+
+        if ($posts->isEmpty()) {
+            $this->info('✅ No posts need fixing');
             return 0;
         }
 
-        $this->warn("Found {$blogPosts->count()} blog posts to fix");
+        $this->warn("Found {$posts->count()} posts to fix");
 
-        foreach ($blogPosts as $post) {
+        foreach ($posts as $post) {
             $content = $post->content;
 
             // Extract content from body tag
@@ -47,10 +55,10 @@ class FixBlogContent extends Command
 
             // Update the post
             $post->update(['content' => $content]);
-            $this->line("  ✅ Fixed: {$post->title}");
+            $this->line("  ✅ Fixed: {$post->title} (Type: {$post->type})");
         }
 
-        $this->info('✅ All blog posts fixed successfully!');
+        $this->info('✅ All posts fixed successfully!');
         return 0;
     }
 }
