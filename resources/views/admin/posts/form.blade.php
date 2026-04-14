@@ -53,6 +53,22 @@
 .pf-btn-outline{background:var(--white);color:var(--t2);border:1px solid var(--border);}
 .pf-btn-outline:hover{background:var(--off);}
 .pf-error-msg{color:var(--red);font-size:11.5px;margin-top:4px;display:flex;align-items:center;gap:4px;}
+.pf-preview-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+.pf-preview-toggle{display:flex;gap:8px;}
+.pf-preview-btn{padding:7px 12px;border:1px solid var(--border);background:var(--off);border-radius:var(--rs);font-size:12px;font-weight:600;color:var(--t2);cursor:pointer;}
+.pf-preview-btn.active{background:var(--blue-l);color:var(--blue);border-color:var(--blue-b);}
+.pf-preview-status{font-size:12px;color:var(--t3);}
+.pf-preview-frame-wrap{display:flex;justify-content:center;background:#eef2ff;border:1px solid var(--border);padding:16px;border-radius:var(--rs);}
+.pf-preview-frame-wrap.desktop iframe{width:100%;max-width:980px;height:560px;}
+.pf-preview-frame-wrap.mobile iframe{width:390px;height:700px;border-radius:24px;border:10px solid #111827;box-shadow:0 10px 30px rgba(15,23,42,.25);}
+.pf-preview-frame{background:#fff;border:1px solid #d1d5db;border-radius:8px;}
+@media(max-width:768px){.pf-preview-frame-wrap.mobile iframe{width:320px;height:620px;}}
+.pf-diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;}
+.pf-diff-box{border:1px solid var(--border);border-radius:var(--rs);background:#fff;}
+.pf-diff-head{padding:8px 10px;background:var(--off);border-bottom:1px solid var(--border);font-size:12px;font-weight:700;color:var(--t2);}
+.pf-diff-content{padding:10px;font-size:12px;line-height:1.5;max-height:160px;overflow:auto;white-space:pre-wrap;word-break:break-word;}
+.pf-diff-metrics{margin-top:10px;font-size:12px;color:var(--t2);}
+@media(max-width:768px){.pf-diff-grid{grid-template-columns:1fr;}}
 </style>
 
 <div class="pf-wrap" x-data="seoAnalyzer()">
@@ -353,7 +369,7 @@ style="width:16px;height:16px;accent-color:var(--blue);">
 <div class="pf-field" x-data="{ valid: false, touched: false }" :class="{ 'has-error': touched && !valid && content.length > 0, 'has-success': valid }">
 <label class="pf-label">Content <span class="req">*</span></label>
 <textarea name="content" class="pf-textarea @error('content') error @enderror" required
-x-model="content" @input="analyze(); touched = true; valid = content.length >= 50" @blur="touched = true">{!! old('content', $post->content ?? '') !!}</textarea>
+x-model="content" @input="analyze(); touched = true; valid = content.length >= 50; updatePreviewDoc()" @blur="touched = true">{!! old('content', $post->content ?? '') !!}</textarea>
 <span class="pf-hint">You can paste HTML content here. It will be preserved exactly as entered.</span>
 @error('content')
 <span class="pf-error-msg"><i class="fas fa-exclamation-circle"></i>{{ $message }}</span>
@@ -361,6 +377,45 @@ x-model="content" @input="analyze(); touched = true; valid = content.length >= 5
 <template x-if="touched && !valid && content.length > 0">
 <span class="pf-hint" style="color:var(--red);">Content must be at least 50 characters (currently <span x-text="content.length"></span>)</span>
 </template>
+</div>
+</div>
+
+<div class="pf-card">
+<div class="pf-section-title">
+<i class="fas fa-mobile-alt"></i>
+Live Preview
+</div>
+<div class="pf-preview-toolbar">
+<span class="pf-hint" style="margin:0;">Preview uses sanitized output (same as public page).</span>
+<div class="pf-preview-toggle">
+<button type="button" class="pf-preview-btn" :class="{ 'active': previewMode === 'desktop' }" @click="previewMode = 'desktop'">Desktop</button>
+<button type="button" class="pf-preview-btn" :class="{ 'active': previewMode === 'mobile' }" @click="previewMode = 'mobile'">Mobile</button>
+</div>
+<div class="pf-preview-toggle">
+<button type="button" class="pf-preview-btn" :class="{ 'active': previewWidth === 320 }" @click="setPreviewWidth(320)">320</button>
+<button type="button" class="pf-preview-btn" :class="{ 'active': previewWidth === 360 }" @click="setPreviewWidth(360)">360</button>
+<button type="button" class="pf-preview-btn" :class="{ 'active': previewWidth === 390 }" @click="setPreviewWidth(390)">390</button>
+<button type="button" class="pf-preview-btn" :class="{ 'active': previewWidth === 430 }" @click="setPreviewWidth(430)">430</button>
+</div>
+</div>
+<div class="pf-preview-status" x-show="isPreviewLoading">Updating preview...</div>
+<div class="pf-preview-frame-wrap" :class="previewMode">
+<iframe class="pf-preview-frame" title="Post Preview" sandbox="allow-same-origin" :style="previewFrameStyle()" :srcdoc="previewDocument"></iframe>
+</div>
+<div class="pf-diff-metrics">
+Raw: <strong x-text="diffMetrics.rawLength"></strong> chars |
+Sanitized: <strong x-text="diffMetrics.sanitizedLength"></strong> chars |
+Removed lines: <strong x-text="diffMetrics.removedLineCount"></strong>
+</div>
+<div class="pf-diff-grid">
+<div class="pf-diff-box">
+<div class="pf-diff-head">Removed / Changed (Raw)</div>
+<div class="pf-diff-content" x-text="diffRemovedText"></div>
+</div>
+<div class="pf-diff-box">
+<div class="pf-diff-head">Sanitized Output</div>
+<div class="pf-diff-content" x-text="sanitizedPreviewText"></div>
+</div>
 </div>
 </div>
 
@@ -453,6 +508,20 @@ descLength: 0,
 wordCount: 0,
 linksCount: 0,
 totalScore: 0,
+previewMode: 'mobile',
+previewWidth: 390,
+previewDocument: '',
+previewTimer: null,
+isPreviewLoading: false,
+previewRequestId: 0,
+previewAbortController: null,
+diffRemovedText: 'No removed lines.',
+sanitizedPreviewText: '',
+diffMetrics: {
+rawLength: 0,
+sanitizedLength: 0,
+removedLineCount: 0
+},
 titleLengthColor: 'bg-gray-400',
 descLengthColor: 'bg-gray-400',
 keywordInTitleColor: 'bg-gray-400',
@@ -462,6 +531,7 @@ linksCountColor: 'bg-gray-400',
 scoreColor: 'text-gray-600',
 init() {
 this.analyze();
+this.updatePreviewDoc();
 },
 analyze() {
 this.$nextTick(() => {
@@ -576,6 +646,103 @@ stripHtml(html) {
 const tmp = document.createElement('div');
 tmp.innerHTML = html;
 return tmp.textContent || tmp.innerText || '';
+},
+escapeHtml(text) {
+const div = document.createElement('div');
+div.innerText = text || '';
+return div.innerHTML;
+},
+updatePreviewDoc() {
+window.clearTimeout(this.previewTimer);
+this.previewTimer = window.setTimeout(() => this.fetchPreviewDoc(), 250);
+},
+setPreviewWidth(width) {
+this.previewWidth = width;
+},
+previewFrameStyle() {
+if (this.previewMode === 'desktop') {
+return 'width:100%;max-width:980px;height:560px;';
+}
+return `width:${this.previewWidth}px;height:700px;border-radius:24px;border:10px solid #111827;box-shadow:0 10px 30px rgba(15,23,42,.25);`;
+},
+fetchPreviewDoc() {
+const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+this.previewRequestId += 1;
+const requestId = this.previewRequestId;
+if (this.previewAbortController) {
+this.previewAbortController.abort();
+}
+this.previewAbortController = new AbortController();
+this.isPreviewLoading = true;
+fetch('{{ route('admin.posts.preview-sanitized') }}', {
+method: 'POST',
+signal: this.previewAbortController.signal,
+headers: {
+'Content-Type': 'application/json',
+'X-CSRF-TOKEN': csrfToken,
+'Accept': 'application/json'
+},
+body: JSON.stringify({
+title: this.title || 'Preview Title',
+content: this.content || '<p>Start typing content to preview here.</p>'
+})
+})
+.then((response) => response.ok ? response.json() : Promise.reject(new Error('preview_failed')))
+.then((data) => {
+if (requestId !== this.previewRequestId) return;
+const safeTitle = this.escapeHtml(data.title || 'Preview Title');
+const safeContent = data.content || '<p>Start typing content to preview here.</p>';
+this.sanitizedPreviewText = safeContent;
+this.diffMetrics.rawLength = data.diff?.raw_length || this.content.length;
+this.diffMetrics.sanitizedLength = data.diff?.sanitized_length || safeContent.length;
+this.diffMetrics.removedLineCount = data.diff?.removed_line_count || 0;
+this.diffRemovedText = (data.diff?.removed_lines && data.diff.removed_lines.length)
+? data.diff.removed_lines.join('\n')
+: 'No removed lines.';
+this.previewDocument = `<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f8fafc;margin:0;padding:0;color:#1f2937}
+.wrap{max-width:760px;margin:0 auto;padding:16px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:16px}
+h1{font-size:20px;line-height:1.4;margin:0 0 12px;color:#111827}
+.content{font-size:16px;line-height:1.75;word-break:break-word}
+.content img,.content iframe,.content video,.content table{max-width:100%}
+.content .post-table-scroll{overflow-x:auto}
+.content table{border-collapse:collapse;width:100%;display:table}
+.content th,.content td{border:1px solid #d1d5db;padding:8px}
+.content iframe{width:100%;min-height:240px;border:0}
+@media(max-width:640px){.wrap{padding:10px}.card{padding:12px}h1{font-size:18px}.content{font-size:15px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<article class="card">
+<h1>${safeTitle}</h1>
+<div class="content">${safeContent}</div>
+</article>
+</div>
+</body>
+</html>`;
+})
+.catch(() => {
+if (requestId !== this.previewRequestId) return;
+const safeTitle = this.escapeHtml(this.title || 'Preview Title');
+const fallbackContent = this.escapeHtml(this.stripHtml(this.content)).replace(/\n/g, '<br>');
+this.sanitizedPreviewText = this.stripHtml(this.content);
+this.diffMetrics.rawLength = this.content.length;
+this.diffMetrics.sanitizedLength = this.stripHtml(this.content).length;
+this.diffMetrics.removedLineCount = 0;
+this.diffRemovedText = 'Preview API unavailable.';
+this.previewDocument = `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><style>body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f8fafc;margin:0;padding:16px;color:#1f2937}article{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:16px}h1{font-size:20px;margin:0 0 12px}p{font-size:15px;line-height:1.7}</style></head><body><article><h1>${safeTitle}</h1><p>${fallbackContent || 'Preview unavailable. Check content.'}</p></article></body></html>`;
+})
+.finally(() => {
+if (requestId !== this.previewRequestId) return;
+this.isPreviewLoading = false;
+});
 }
 };
 }

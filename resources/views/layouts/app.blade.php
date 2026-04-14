@@ -855,18 +855,16 @@
     <div class="fixed right-4 top-1/2 transform -translate-y-1/2 z-40 flex flex-col gap-4">
         <!-- WhatsApp Button -->
         <a href="https://whatsapp.com/channel/0029VbD9cau2P59hFZ1nwh22" target="_blank" rel="noopener noreferrer" 
-           class="group relative flex items-center justify-center w-14 h-14 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-2xl transition-all duration-300 hover:scale-110 hover:shadow-green-500/50"
+           class="flex items-center justify-center w-14 h-14 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-2xl transition-all duration-300 hover:scale-110 hover:shadow-green-500/50"
            style="background-color: #25D366 !important; color: white !important; text-decoration: none !important;">
             <i class="fab fa-whatsapp" style="font-size: 28px !important; color: white !important;"></i>
-            <span class="absolute right-16 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg" style="background-color: #25D366 !important; color: white !important;">Join WhatsApp</span>
         </a>
         
         <!-- Telegram Button -->
         <a href="https://t.me/jobone2026" target="_blank" rel="noopener noreferrer" 
-           class="group relative flex items-center justify-center w-14 h-14 bg-blue-500 hover:bg-blue-600 text-white rounded-full shadow-2xl transition-all duration-300 hover:scale-110 hover:shadow-blue-500/50"
+           class="flex items-center justify-center w-14 h-14 bg-blue-500 hover:bg-blue-600 text-white rounded-full shadow-2xl transition-all duration-300 hover:scale-110 hover:shadow-blue-500/50"
            style="background-color: #0088cc !important; color: white !important; text-decoration: none !important;">
             <i class="fab fa-telegram-plane" style="font-size: 28px !important; color: white !important;"></i>
-            <span class="absolute right-16 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg" style="background-color: #0088cc !important; color: white !important;">Join Telegram</span>
         </a>
     </div>
 

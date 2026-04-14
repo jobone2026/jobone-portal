@@ -39,6 +39,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/posts/load-more', [PostController::class, 'loadMore'])->name('admin.posts.load-more');
         Route::get('/posts/create', [PostController::class, 'create'])->name('admin.posts.create');
         Route::post('/posts', [PostController::class, 'store'])->name('admin.posts.store');
+        Route::post('/posts/preview-sanitized', [PostController::class, 'previewSanitized'])->name('admin.posts.preview-sanitized');
         Route::post('/posts/bulk-action', [PostController::class, 'bulkAction'])->name('admin.posts.bulk-action');
         Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('admin.posts.edit');
         Route::put('/posts/{post}', [PostController::class, 'update'])->name('admin.posts.update');

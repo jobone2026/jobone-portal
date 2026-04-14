@@ -343,6 +343,16 @@
             position: relative;
             line-height: 1.75;
             color: #374151;
+            overflow-wrap: anywhere;
+        }
+
+        .post-content-isolated * {
+            max-width: 100% !important;
+        }
+
+        .post-content-isolated [style*="position:fixed"],
+        .post-content-isolated [style*="position: fixed"] {
+            position: static !important;
         }
         
         /* Typography styles for post content */
@@ -482,6 +492,38 @@
             border-radius: 0.5rem;
             margin: 1.5em 0;
         }
+
+        .post-content-isolated iframe,
+        .post-content-isolated video {
+            width: 100% !important;
+            max-width: 100% !important;
+            border: 0;
+        }
+
+        .post-content-isolated .post-table-scroll {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 1rem 0;
+        }
+
+        .post-content-isolated .post-embed-responsive {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            background: #111827;
+        }
+
+        .post-content-isolated .post-embed-responsive iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100% !important;
+            height: 100% !important;
+        }
         
         .post-content-isolated code {
             background-color: #f3f4f6;
@@ -566,6 +608,11 @@
         
         .post-content-isolated > *:last-child {
             margin-bottom: 0;
+        }
+
+        .seo-support-content p {
+            margin-bottom: 0.75rem;
+            line-height: 1.75;
         }
     </style>
 
@@ -726,9 +773,19 @@
         <!-- Main Content -->
         <div class="max-w-none mb-4 post-content-wrapper bg-white rounded-lg p-5 border border-gray-200">
             <div class="post-content-isolated">
-                {!! $post->content !!}
+                {!! $renderedContent !!}
             </div>
         </div>
+
+        <!-- SEO Support Content -->
+        <section class="seo-support-content bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+            <h2 class="text-base md:text-lg font-bold text-blue-900 mb-2">
+                {{ $seoSupportContent['title'] }}
+            </h2>
+            @foreach (($seoSupportContent['paragraphs'] ?? []) as $paragraph)
+                <p class="text-sm text-blue-800">{{ $paragraph }}</p>
+            @endforeach
+        </section>
 
         <!-- Important Links -->
         @php
