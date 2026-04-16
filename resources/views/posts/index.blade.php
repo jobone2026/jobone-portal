@@ -20,13 +20,6 @@
 @section('description', 'Browse all ' . strtolower($title) . ' on Government Job Portal')
 
 @section('content')
-    <!-- Filter Bar -->
-    <x-filter-bar 
-        :currentCategory="$category ?? null" 
-        :currentState="$state ?? null" 
-        :currentType="$type ?? 'all'" 
-        :showTypeFilter="true" 
-    />
 
     <!-- Premium Header Section -->
     <div class="mb-8 bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 relative overflow-hidden">
@@ -85,7 +78,7 @@
 
     @if ($posts->count() > 0)
         <!-- Grid of Post Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             @foreach ($posts as $post)
                 <div class="transform hover:-translate-y-1 transition-all duration-300 h-full">
                     <x-post-card :post="$post" />

@@ -1,156 +1,234 @@
-<div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-gray-200 hover:border-blue-400 overflow-hidden">
-    @php
-        $daysRemaining = null;
-        $isUrgent = false;
-        if ($post->last_date) {
-            $daysRemaining = now()->diffInDays($post->last_date, false);
-            $isUrgent = $daysRemaining <= 5 && $daysRemaining >= 0;
-        }
-    @endphp
-    
-    <!-- Header with Badges -->
-    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-1.5 border-b border-blue-100">
-        <div class="flex items-center gap-1.5 flex-wrap">
-            @if($isUrgent)
-                <span class="bg-red-500 text-white px-2 py-0.5 rounded text-xs font-bold flex items-center gap-1">
-                    <i class="fa-solid fa-exclamation-circle text-xs"></i> URGENT
-                </span>
-            @endif
-            <span class="text-white px-2 py-0.5 rounded text-xs font-bold flex items-center gap-1" style="background: #7FE3A5 !important;">
-                <i class="fa-solid fa-star text-xs"></i> NEW
+@php
+    $daysRemaining = null;
+    $isUrgent = false;
+    if ($post->last_date) {
+        $daysRemaining = now()->diffInDays($post->last_date, false);
+        $isUrgent = $daysRemaining <= 5 && $daysRemaining >= 0;
+    }
+
+    $eduLabels = [
+        '10th_pass' => '10th', '12th_pass' => '12th', 'graduate' => 'Graduate',
+        'post_graduate' => 'PG', 'diploma' => 'Diploma', 'iti' => 'ITI',
+        'btech' => 'B.Tech', 'mtech' => 'M.Tech', 'bsc' => 'B.Sc',
+        'msc' => 'M.Sc', 'bcom' => 'B.Com', 'mcom' => 'M.Com',
+        'ba' => 'B.A', 'ma' => 'M.A', 'bba' => 'BBA', 'mba' => 'MBA',
+        'ca' => 'CA', 'cs' => 'CS', 'cma' => 'CMA', 'llb' => 'LLB',
+        'llm' => 'LLM', 'mbbs' => 'MBBS', 'bds' => 'BDS',
+        'bpharm' => 'B.Pharm', 'mpharm' => 'M.Pharm', 'nursing' => 'Nursing',
+        'bed' => 'B.Ed', 'med' => 'M.Ed', 'phd' => 'PhD', 'any_qualification' => 'Any',
+    ];
+
+    $typeColors = [
+        'job'        => '#2563eb',
+        'result'     => '#ea580c',
+        'admit_card' => '#9333ea',
+        'answer_key' => '#ca8a04',
+        'syllabus'   => '#4f46e5',
+        'blog'       => '#db2777',
+        'scholarship'=> '#0d9488',
+    ];
+    $typeLightBg = [
+        'job'        => '#eff6ff',
+        'result'     => '#fff7ed',
+        'admit_card' => '#faf5ff',
+        'answer_key' => '#fefce8',
+        'syllabus'   => '#eef2ff',
+        'blog'       => '#fdf2f8',
+        'scholarship'=> '#f0fdfa',
+    ];
+    $typeLightBorder = [
+        'job'        => '#bfdbfe',
+        'result'     => '#fed7aa',
+        'admit_card' => '#e9d5ff',
+        'answer_key' => '#fde68a',
+        'syllabus'   => '#c7d2fe',
+        'blog'       => '#fbcfe8',
+        'scholarship'=> '#99f6e4',
+    ];
+    $typeIcons = [
+        'job'        => 'fa-briefcase',
+        'result'     => 'fa-chart-bar',
+        'admit_card' => 'fa-id-card',
+        'answer_key' => 'fa-key',
+        'syllabus'   => 'fa-book',
+        'blog'       => 'fa-pen-fancy',
+        'scholarship'=> 'fa-graduation-cap',
+    ];
+    $typeLabels = [
+        'job'        => 'Job',
+        'result'     => 'Result',
+        'admit_card' => 'Admit Card',
+        'answer_key' => 'Answer Key',
+        'syllabus'   => 'Syllabus',
+        'blog'       => 'Blog',
+        'scholarship'=> 'Scholarship',
+    ];
+    $borderColor   = $typeColors[$post->type]     ?? '#6b7280';
+    $headerBg      = $typeLightBg[$post->type]    ?? '#f9fafb';
+    $headerBorder  = $typeLightBorder[$post->type] ?? '#e5e7eb';
+    $typeIcon      = $typeIcons[$post->type]       ?? 'fa-file';
+    $typeLabel     = $typeLabels[$post->type]      ?? ucfirst($post->type);
+@endphp
+
+<div class="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-200 relative cursor-pointer"
+     style="border-left: 4px solid {{ $borderColor }};">
+
+    {{-- Full-card clickable overlay (goes to detail page) --}}
+    <a href="{{ route('posts.show', [$post->type, $post->slug]) }}"
+       style="position:absolute;inset:0;z-index:0;" aria-label="{{ $post->title }}"></a>
+
+    {{-- Colored Header Band --}}
+    <div style="background:{{ $headerBg }};border-bottom:1px solid {{ $headerBorder }};padding:8px 12px;
+                display:flex;align-items:center;justify-content:space-between;gap:6px;">
+
+        {{-- Type pill with icon --}}
+        <span style="display:inline-flex;align-items:center;gap:5px;
+                     background:{{ $borderColor }};color:#fff;
+                     padding:3px 9px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:.3px;">
+            <i class="fas {{ $typeIcon }}" style="font-size:10px;"></i>
+            {{ $typeLabel }}
+        </span>
+
+        {{-- Right badges --}}
+        <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
+            {{-- NEW badge --}}
+            <span style="display:inline-flex;align-items:center;gap:3px;padding:2px 7px;
+                         border-radius:5px;font-size:9px;font-weight:700;
+                         background:#dcfce7;color:#15803d;border:1px solid #86efac;">
+                <i class="fa-solid fa-star" style="font-size:8px;"></i> NEW
             </span>
-            @if ($post->state)
-                <span class="text-white px-2 py-0.5 rounded text-xs font-bold flex items-center gap-1" style="background: #97BBC4 !important;">
-                    <i class="fa-solid fa-map-marker-alt text-xs"></i> {{ $post->state->name }}
-                </span>
+
+            @if($isUrgent)
+            <span style="display:inline-flex;align-items:center;gap:3px;padding:2px 7px;
+                         border-radius:5px;font-size:9px;font-weight:700;
+                         background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5;">
+                <i class="fa-solid fa-fire" style="font-size:8px;"></i> URGENT
+            </span>
+            @endif
+
+            @if($post->state)
+            <span style="display:inline-flex;align-items:center;gap:3px;padding:2px 7px;
+                         border-radius:5px;font-size:9px;font-weight:700;
+                         background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;">
+                <i class="fa-solid fa-location-dot" style="font-size:8px;"></i> {{ Str::limit($post->state->name, 12) }}
+            </span>
             @else
-                <span class="text-white px-2 py-0.5 rounded text-xs font-bold flex items-center gap-1" style="background: #B8A4E8 !important;">
-                    <i class="fa-solid fa-globe text-xs"></i> All India
-                </span>
-            @endif
-            @if($post->tags && count($post->tags) > 0)
-                @foreach($post->tags as $tag)
-                    <span class="text-white px-2 py-0.5 rounded text-xs font-bold flex items-center gap-1" style="background: #F59E0B !important;">
-                        <i class="fa-solid fa-bookmark text-xs"></i> {{ ucfirst(str_replace('_', ' ', $tag)) }}
-                    </span>
-                @endforeach
-            @endif
-            @if($post->education && count($post->education) > 0)
-                @foreach($post->education as $edu)
-                    @php
-                        $eduLabels = [
-                            '10th_pass' => '10th',
-                            '12th_pass' => '12th',
-                            'graduate' => 'Graduate',
-                            'post_graduate' => 'PG',
-                            'diploma' => 'Diploma',
-                            'iti' => 'ITI',
-                            'btech' => 'B.Tech',
-                            'mtech' => 'M.Tech',
-                            'bsc' => 'B.Sc',
-                            'msc' => 'M.Sc',
-                            'bcom' => 'B.Com',
-                            'mcom' => 'M.Com',
-                            'ba' => 'B.A',
-                            'ma' => 'M.A',
-                            'bba' => 'BBA',
-                            'mba' => 'MBA',
-                            'ca' => 'CA',
-                            'cs' => 'CS',
-                            'cma' => 'CMA',
-                            'llb' => 'LLB',
-                            'llm' => 'LLM',
-                            'mbbs' => 'MBBS',
-                            'bds' => 'BDS',
-                            'bpharm' => 'B.Pharm',
-                            'mpharm' => 'M.Pharm',
-                            'nursing' => 'Nursing',
-                            'bed' => 'B.Ed',
-                            'med' => 'M.Ed',
-                            'phd' => 'PhD',
-                            'any_qualification' => 'Any'
-                        ];
-                    @endphp
-                    <span class="text-white px-2 py-0.5 rounded text-xs font-bold flex items-center gap-1" style="background: #10B981 !important;">
-                        <i class="fa-solid fa-graduation-cap text-xs"></i> {{ $eduLabels[$edu] ?? ucfirst(str_replace('_', ' ', $edu)) }}
-                    </span>
-                @endforeach
+            <span style="display:inline-flex;align-items:center;gap:3px;padding:2px 7px;
+                         border-radius:5px;font-size:9px;font-weight:700;
+                         background:#faf5ff;color:#7e22ce;border:1px solid #ddd6fe;">
+                <i class="fa-solid fa-globe" style="font-size:8px;"></i> All India
+            </span>
             @endif
         </div>
     </div>
-    
-    <!-- Main Content -->
-    <div class="p-3">
-        <!-- Title -->
-        <h3 class="font-bold mb-2.5 transition-colors" style="font-size: 13px; line-height: 1.4; color: #1f2937;">
-            <a href="{{ route('posts.show', [$post->type, $post->slug]) }}" class="block hover:text-blue-600" style="color: inherit; text-decoration: none;">
+
+    {{-- Body --}}
+    <div class="p-3.5">
+
+        {{-- Title --}}
+        <div class="text-sm font-semibold leading-snug mb-3 text-gray-900">
+            <a href="{{ route('posts.show', [$post->type, $post->slug]) }}"
+               class="hover:text-blue-600 transition-colors"
+               style="color: #111827; text-decoration: none;">
                 {{ $post->title }}
             </a>
-        </h3>
-        
-        <!-- Info Grid -->
-        <div class="grid grid-cols-2 gap-2 mb-2.5">
-            <!-- Posted Date -->
-            <div class="flex items-center gap-1.5 text-xs text-gray-600">
-                <i class="fa-solid fa-calendar text-blue-500 text-xs"></i>
+        </div>
+
+        {{-- Info Grid --}}
+        <div class="grid grid-cols-2 gap-2 mb-3">
+
+            {{-- Posted --}}
+            <div class="flex items-start gap-2">
+                <div class="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0" style="background:#dbeafe;color:#2563eb;">
+                    <i class="fa-solid fa-calendar text-[11px]"></i>
+                </div>
                 <div>
-                    <div class="text-xs text-gray-500">Posted</div>
-                    <div class="font-semibold text-xs">{{ $post->created_at->format('d M Y') }}</div>
+                    <p class="text-[10px] text-gray-400 leading-tight">Posted</p>
+                    <p class="text-xs font-medium text-gray-800">{{ $post->created_at->format('d M Y') }}</p>
                 </div>
             </div>
-            
-            <!-- Last Date -->
-            @if ($post->last_date)
-                <div class="flex items-center gap-1.5 text-xs {{ $isUrgent ? 'text-red-600' : 'text-orange-600' }}">
-                    <i class="fa-solid fa-clock text-xs {{ $isUrgent ? 'animate-pulse' : '' }}"></i>
-                    <div>
-                        <div class="text-xs">Last Date</div>
-                        <div class="font-bold text-xs">{{ $post->last_date->format('d M Y') }}</div>
-                    </div>
+
+            {{-- Last Date --}}
+            @if($post->last_date)
+            <div class="flex items-start gap-2">
+                @if($isUrgent)
+                <div class="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0" style="background:#fee2e2;color:#dc2626;">
+                    <i class="fa-solid fa-clock text-[11px] animate-pulse"></i>
                 </div>
-            @endif
-            
-            <!-- Vacancies -->
-            @if ($post->total_posts)
-                <div class="flex items-center gap-1.5 text-xs text-green-700">
-                    <i class="fa-solid fa-briefcase text-green-600 text-xs"></i>
-                    <div>
-                        <div class="text-xs text-gray-500">Vacancies</div>
-                        <div class="font-bold text-xs">{{ number_format($post->total_posts) }}</div>
-                    </div>
+                @else
+                <div class="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0" style="background:#fef3c7;color:#d97706;">
+                    <i class="fa-solid fa-clock text-[11px]"></i>
                 </div>
-            @endif
-            
-            <!-- Category -->
-            @if ($post->category)
-                <div class="flex items-center gap-1.5 text-xs text-purple-700">
-                    <i class="fa-solid fa-tag text-purple-600 text-xs"></i>
-                    <div>
-                        <div class="text-xs text-gray-500">Category</div>
-                        <div class="font-semibold text-xs">{{ $post->category->name }}</div>
-                    </div>
+                @endif
+                <div>
+                    <p class="text-[10px] text-gray-400 leading-tight">Last date</p>
+                    @if($isUrgent)
+                    <p class="text-xs font-medium text-red-700">{{ $post->last_date->format('d M Y') }}</p>
+                    @else
+                    <p class="text-xs font-medium text-gray-800">{{ $post->last_date->format('d M Y') }}</p>
+                    @endif
                 </div>
+            </div>
             @endif
+
+            {{-- Vacancies --}}
+            @if($post->total_posts)
+            <div class="flex items-start gap-2">
+                <div class="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0" style="background:#dcfce7;color:#16a34a;">
+                    <i class="fa-solid fa-briefcase text-[11px]"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] text-gray-400 leading-tight">Vacancies</p>
+                    <p class="text-xs font-medium text-gray-800">{{ number_format($post->total_posts) }} posts</p>
+                </div>
+            </div>
+            @endif
+
+            {{-- Category --}}
+            @if($post->category)
+            <div class="flex items-start gap-2">
+                <div class="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0" style="background:#f3e8ff;color:#9333ea;">
+                    <i class="fa-solid fa-tag text-[11px]"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] text-gray-400 leading-tight">Category</p>
+                    <p class="text-xs font-medium text-gray-800">{{ $post->category->name }}</p>
+                </div>
+            </div>
+            @endif
+
+            {{-- Education (spans full width) --}}
+            @if($post->education && count($post->education) > 0)
+            <div class="col-span-2 flex items-start gap-2">
+                <div class="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0" style="background:#ccfbf1;color:#0d9488;">
+                    <i class="fa-solid fa-graduation-cap text-[11px]"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] text-gray-400 leading-tight">Education</p>
+                    <p class="text-xs font-medium text-gray-800">
+                        {{ implode(' · ', array_map(fn($e) => $eduLabels[$e] ?? ucfirst(str_replace('_', ' ', $e)), $post->education)) }}
+                    </p>
+                </div>
+            </div>
+            @endif
+
         </div>
-        
-        <!-- Action Buttons -->
-        <div class="flex gap-2 pt-2.5 border-t border-gray-100">
-            <a href="{{ route('posts.show', [$post->type, $post->slug]) }}" 
-               class="flex-1 px-3 py-2 text-white text-xs font-bold rounded shadow-sm hover:shadow-md transition-all text-center flex items-center justify-center gap-1"
-               style="background: #97BBC4 !important; color: #ffffff !important; text-decoration: none !important;"
-               onmouseover="this.style.background='#7FA9B5'" 
-               onmouseout="this.style.background='#97BBC4'">
-                <i class="fa-solid fa-info-circle text-xs"></i>
-                View Details
+
+        {{-- Actions --}}
+        <div class="flex gap-2 pt-2.5 border-t border-gray-100 relative z-10">
+            <a href="{{ route('posts.show', [$post->type, $post->slug]) }}"
+               class="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg transition-all"
+               style="background:{{ $borderColor }};color:#fff;text-decoration:none;opacity:1;"
+               onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+                <i class="fa-solid fa-eye text-[11px]"></i> View Details
             </a>
-            <a href="{{ route('posts.show', [$post->type, $post->slug]) }}#apply" 
-               class="flex-1 px-3 py-2 text-white text-xs font-bold rounded shadow-sm hover:shadow-md transition-all text-center flex items-center justify-center gap-1"
-               style="background: #7FE3A5 !important; color: #ffffff !important; text-decoration: none !important;"
-               onmouseover="this.style.background='#5FD18A'" 
-               onmouseout="this.style.background='#7FE3A5'">
-                <i class="fa-solid fa-paper-plane text-xs"></i>
-                Apply Now
+            <a href="{{ route('posts.show', [$post->type, $post->slug]) }}#apply"
+               class="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-semibold bg-green-600 rounded-lg transition-all"
+               style="background:#16a34a;color:#fff;text-decoration:none;opacity:1;"
+               onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+                <i class="fa-solid fa-paper-plane text-[11px]"></i> Apply Now
             </a>
         </div>
+
     </div>
 </div>

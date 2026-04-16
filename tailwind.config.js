@@ -4,6 +4,17 @@ export default {
     "./resources/views/**/*.blade.php",
     "./resources/js/**/*.js",
   ],
+  safelist: [
+    // Post card badge colors
+    'bg-green-50', 'text-green-800', 'border-green-200', 'bg-green-100',
+    'bg-red-50',   'text-red-800',   'border-red-200',   'text-red-700',
+    'bg-blue-50',  'text-blue-800',  'border-blue-200',  'text-blue-700',
+    'bg-purple-50','text-purple-800','border-purple-200','text-purple-700',
+    'bg-amber-50', 'text-amber-800', 'border-amber-200', 'text-amber-700',
+    'bg-teal-50',  'text-teal-700',
+    'bg-gray-50',  'text-gray-700',  'border-gray-200',  'bg-gray-100',
+    'animate-pulse',
+  ],
   theme: {
     extend: {
       colors: {

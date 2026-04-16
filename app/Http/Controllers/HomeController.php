@@ -28,12 +28,13 @@ class HomeController extends Controller
             };
             
             return [
-                'jobs' => $query('job'),
-                'admit_cards' => $query('admit_card'),
-                'results' => $query('result'),
-                'answer_keys' => $query('answer_key'),
-                'syllabus' => $query('syllabus'),
-                'blogs' => $query('blog'),
+                'jobs'         => $query('job'),
+                'admit_cards'  => $query('admit_card'),
+                'results'      => $query('result'),
+                'answer_keys'  => $query('answer_key'),
+                'syllabus'     => $query('syllabus'),
+                'blogs'        => $query('blog'),
+                'scholarships' => $query('scholarship'),
             ];
         });
 

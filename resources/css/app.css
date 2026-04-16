@@ -6,8 +6,8 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
 /* ============================================
@@ -36,7 +36,12 @@ body {
   color: var(--color-text-primary);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: bold;
   color: var(--color-text-primary);
 }
@@ -572,32 +577,6 @@ button {
   }
 }
 
-/* Sidebar Layout */
-.layout-with-sidebar {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
-}
-
-@media (min-width: 1024px) {
-  .layout-with-sidebar {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-.layout-content {
-  grid-column: span 1;
-}
-
-@media (min-width: 1024px) {
-  .layout-content {
-    grid-column: span 2;
-  }
-}
-
-.layout-sidebar {
-  grid-column: span 1;
-}
 
 /* Loading State */
 .loading {
@@ -661,6 +640,7 @@ button {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -671,6 +651,7 @@ button {
     transform: translateY(20px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -682,6 +663,7 @@ button {
     transform: translateY(-20px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -705,7 +687,7 @@ button {
   box-sizing: border-box;
 }
 
-.post-content-isolated > * {
+.post-content-isolated>* {
   display: block;
   visibility: visible;
   opacity: 1;

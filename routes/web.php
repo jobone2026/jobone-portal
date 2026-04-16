@@ -27,6 +27,8 @@ Route::get('/syllabus', [PostController::class, 'index'])->defaults('type', 'syl
 Route::get('/syllabus/load-more', [PostController::class, 'loadMore'])->defaults('type', 'syllabus')->name('posts.syllabus.load-more');
 Route::get('/blogs', [PostController::class, 'index'])->defaults('type', 'blog')->name('posts.blogs');
 Route::get('/blogs/load-more', [PostController::class, 'loadMore'])->defaults('type', 'blog')->name('posts.blogs.load-more');
+Route::get('/scholarships', [PostController::class, 'index'])->defaults('type', 'scholarship')->name('posts.scholarships');
+Route::get('/scholarships/load-more', [PostController::class, 'loadMore'])->defaults('type', 'scholarship')->name('posts.scholarships.load-more');
 
 // Static pages
 Route::get('/about', [StaticPageController::class, 'about'])->name('pages.about')->middleware('page.cache:3600');

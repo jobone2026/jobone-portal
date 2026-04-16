@@ -154,7 +154,7 @@ class PostApiController extends Controller
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'type' => 'required|in:job,admit_card,result,answer_key,syllabus,blog',
+            'type' => 'required|in:job,admit_card,result,answer_key,syllabus,blog,scholarship',
             'short_description' => 'required|string',
             'content' => 'required|string',
             'category_id' => 'required|exists:categories,id',
@@ -226,7 +226,7 @@ class PostApiController extends Controller
 
         $validated = $request->validate([
             'title' => 'nullable|string|max:255',
-            'type' => 'nullable|in:job,admit_card,result,answer_key,syllabus,blog',
+            'type' => 'nullable|in:job,admit_card,result,answer_key,syllabus,blog,scholarship',
             'short_description' => 'nullable|string',
             'content' => 'nullable|string',
             'category_id' => 'nullable|exists:categories,id',
@@ -373,8 +373,110 @@ class PostApiController extends Controller
 
         return response()->json([
             'success' => true,
-            'token' => $token,
-            'status' => 'active'
+            'token'   => $token,
+            'status'  => 'active'
+        ]);
+    }
+
+    /**
+     * Get scholarships only
+     * GET /api/posts/scholarships
+     */
+    public function scholarships(Request $request)
+    {
+        $token = $request->bearerToken();
+        if (!$this->verifyToken($token)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $page  = $request->get('page', 1);
+        $limit = $request->get('limit', 15);
+        $state_id    = $request->get('state_id');
+        $category_id = $request->get('category_id');
+
+        $query = Post::with(['category', 'state'])
+            ->published()
+            ->ofType('scholarship')
+            ->latest();
+
+        if ($state_id)    $query->where('state_id', $state_id);
+        if ($category_id) $query->where('category_id', $category_id);
+
+        $posts = $query->paginate($limit, ['*'], 'page', $page);
+
+        return response()->json([
+            'success' => true,
+            'data'    => PostResource::collection($posts->items()),
+            'meta'    => [
+                'total'        => $posts->total(),
+                'per_page'     => $posts->perPage(),
+                'current_page' => $posts->currentPage(),
+                'last_page'    => $posts->lastPage(),
+            ]
+        ]);
+    }
+
+    /**
+     * Get home page sections (all types latest posts)
+     * GET /api/home
+     */
+    public function home(Request $request)
+    {
+        $token = $request->bearerToken();
+        if (!$this->verifyToken($token)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $limit    = $request->get('limit', 10);
+        $state_id = $request->get('state_id');
+
+        $types = [
+            'jobs'         => 'job',
+            'admit_cards'  => 'admit_card',
+            'results'      => 'result',
+            'answer_keys'  => 'answer_key',
+            'syllabus'     => 'syllabus',
+            'blogs'        => 'blog',
+            'scholarships' => 'scholarship',
+        ];
+
+        $sections = [];
+        foreach ($types as $key => $type) {
+            $q = Post::with(['category', 'state'])
+                ->published()
+                ->ofType($type)
+                ->latest();
+            if ($state_id) $q->where('state_id', $state_id);
+            $sections[$key] = PostResource::collection($q->limit($limit)->get());
+        }
+
+        return response()->json([
+            'success'  => true,
+            'sections' => $sections,
+        ]);
+    }
+
+    /**
+     * Post counts by type (dashboard stats)
+     * GET /api/stats
+     */
+    public function stats(Request $request)
+    {
+        $token = $request->bearerToken();
+        if (!$this->verifyToken($token)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $types = ['job', 'admit_card', 'result', 'answer_key', 'syllabus', 'blog', 'scholarship'];
+        $stats = [];
+        foreach ($types as $type) {
+            $stats[$type] = Post::published()->ofType($type)->count();
+        }
+        $stats['total'] = Post::published()->count();
+
+        return response()->json([
+            'success' => true,
+            'data'    => $stats,
         ]);
     }
 }

@@ -65,7 +65,7 @@ class PostController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'type' => 'required|in:job,admit_card,syllabus,result,answer_key,blog',
+            'type' => 'required|in:job,admit_card,syllabus,result,answer_key,blog,scholarship',
             'category_id' => 'required|exists:categories,id',
             'state_id' => 'nullable|exists:states,id',
             'content' => 'required|string',
@@ -143,7 +143,7 @@ class PostController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'type' => 'required|in:job,admit_card,syllabus,result,answer_key,blog',
+            'type' => 'required|in:job,admit_card,syllabus,result,answer_key,blog,scholarship',
             'category_id' => 'required|exists:categories,id',
             'state_id' => 'nullable|exists:states,id',
             'content' => 'required|string',

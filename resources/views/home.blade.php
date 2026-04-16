@@ -7,12 +7,12 @@
     <!-- India Map with State Job Counts -->
 
     <!-- Column Sections for Each Type -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
         <!-- Jobs Column -->
         <div>
-            <div class="bg-white border border-gray-300 px-4 py-3 text-gray-800 font-bold flex items-center justify-between rounded-lg mb-4">
-                <span><i class="fa-solid fa-briefcase"></i> Latest Jobs</span>
-                <a href="{{ route('posts.jobs') }}" class="text-gray-600 hover:text-gray-800 text-sm"><i class="fa-solid fa-arrow-right"></i></a>
+            <div class="px-4 py-3 font-bold flex items-center justify-between rounded-lg mb-3" style="background:#eff6ff;border-left:4px solid #2563eb;border:1px solid #bfdbfe;">
+                <span style="color:#1d4ed8;"><i class="fa-solid fa-briefcase"></i> Latest Jobs</span>
+                <a href="{{ route('posts.jobs') }}" style="color:#2563eb;" class="text-sm"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
             <div class="space-y-4">
                 @foreach(($sections['jobs'] ?? [])->take(25) as $post)
@@ -30,9 +30,9 @@
 
         <!-- Results Column -->
         <div>
-            <div class="bg-white border border-gray-300 px-4 py-3 text-gray-800 font-bold flex items-center justify-between rounded-lg mb-4">
-                <span><i class="fa-solid fa-chart-bar"></i> Exam Results</span>
-                <a href="{{ route('posts.results') }}" class="text-gray-600 hover:text-gray-800 text-sm"><i class="fa-solid fa-arrow-right"></i></a>
+            <div class="px-4 py-3 font-bold flex items-center justify-between rounded-lg mb-3" style="background:#fff7ed;border:1px solid #fed7aa;">
+                <span style="color:#c2410c;"><i class="fa-solid fa-chart-bar"></i> Exam Results</span>
+                <a href="{{ route('posts.results') }}" style="color:#ea580c;" class="text-sm"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
             <div class="space-y-4">
                 @foreach(($sections['results'] ?? [])->take(25) as $post)
@@ -50,9 +50,9 @@
 
         <!-- Admit Cards Column -->
         <div>
-            <div class="bg-white border border-gray-300 px-4 py-3 text-gray-800 font-bold flex items-center justify-between rounded-lg mb-4">
-                <span><i class="fa-solid fa-id-card"></i> Admit Cards</span>
-                <a href="{{ route('posts.admit-cards') }}" class="text-gray-600 hover:text-gray-800 text-sm"><i class="fa-solid fa-arrow-right"></i></a>
+            <div class="px-4 py-3 font-bold flex items-center justify-between rounded-lg mb-3" style="background:#faf5ff;border:1px solid #e9d5ff;">
+                <span style="color:#7e22ce;"><i class="fa-solid fa-id-card"></i> Admit Cards</span>
+                <a href="{{ route('posts.admit-cards') }}" style="color:#9333ea;" class="text-sm"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
             <div class="space-y-4">
                 @foreach(($sections['admit_cards'] ?? [])->take(25) as $post)
@@ -70,9 +70,9 @@
 
         <!-- Answer Keys Column -->
         <div>
-            <div class="bg-white border border-gray-300 px-4 py-3 text-gray-800 font-bold flex items-center justify-between rounded-lg mb-4">
-                <span><i class="fa-solid fa-key"></i> Answer Keys</span>
-                <a href="{{ route('posts.answer-keys') }}" class="text-gray-600 hover:text-gray-800 text-sm"><i class="fa-solid fa-arrow-right"></i></a>
+            <div class="px-4 py-3 font-bold flex items-center justify-between rounded-lg mb-3" style="background:#fefce8;border:1px solid #fde68a;">
+                <span style="color:#92400e;"><i class="fa-solid fa-key"></i> Answer Keys</span>
+                <a href="{{ route('posts.answer-keys') }}" style="color:#ca8a04;" class="text-sm"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
             <div class="space-y-4">
                 @foreach(($sections['answer_keys'] ?? [])->take(25) as $post)
@@ -90,9 +90,9 @@
 
         <!-- Syllabus Column -->
         <div>
-            <div class="bg-white border border-gray-300 px-4 py-3 text-gray-800 font-bold flex items-center justify-between rounded-lg mb-4">
-                <span><i class="fa-solid fa-book"></i> Syllabus</span>
-                <a href="{{ route('posts.syllabus') }}" class="text-gray-600 hover:text-gray-800 text-sm"><i class="fa-solid fa-arrow-right"></i></a>
+            <div class="px-4 py-3 font-bold flex items-center justify-between rounded-lg mb-3" style="background:#eef2ff;border:1px solid #c7d2fe;">
+                <span style="color:#3730a3;"><i class="fa-solid fa-book"></i> Syllabus</span>
+                <a href="{{ route('posts.syllabus') }}" style="color:#4f46e5;" class="text-sm"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
             <div class="space-y-4">
                 @foreach(($sections['syllabus'] ?? [])->take(25) as $post)
@@ -110,9 +110,9 @@
 
         <!-- Blogs Column -->
         <div>
-            <div class="bg-white border border-gray-300 px-4 py-3 text-gray-800 font-bold flex items-center justify-between rounded-lg mb-4">
-                <span><i class="fa-solid fa-pen-fancy"></i> Blogs</span>
-                <a href="{{ route('posts.blogs') }}" class="text-gray-600 hover:text-gray-800 text-sm"><i class="fa-solid fa-arrow-right"></i></a>
+            <div class="px-4 py-3 font-bold flex items-center justify-between rounded-lg mb-3" style="background:#fdf2f8;border:1px solid #fbcfe8;">
+                <span style="color:#9d174d;"><i class="fa-solid fa-pen-fancy"></i> Blogs</span>
+                <a href="{{ route('posts.blogs') }}" style="color:#db2777;" class="text-sm"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
             <div class="space-y-4">
                 @foreach(($sections['blogs'] ?? [])->take(25) as $post)
@@ -121,8 +121,28 @@
             </div>
             @if(($sections['blogs'] ?? [])->count() > 25)
             <div class="mt-4">
-                <a href="{{ route('posts.blogs') }}" class="block text-center px-4 py-3 bg-white border border-gray-300 hover:border-blue-500 hover:bg-blue-50 text-gray-700 hover:text-blue-600 font-semibold rounded-lg transition-all">
+                <a href="{{ route('posts.blogs') }}" class="block text-center px-4 py-3 bg-white border border-gray-300 hover:border-pink-500 hover:bg-pink-50 text-gray-700 hover:text-pink-600 font-semibold rounded-lg transition-all">
                     View All Blogs <i class="fa-solid fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+            @endif
+        </div>
+
+        <!-- Scholarships Column -->
+        <div>
+            <div class="px-4 py-3 font-bold flex items-center justify-between rounded-lg mb-3" style="background:#f0fdfa;border:1px solid #99f6e4;">
+                <span style="color:#0f766e;"><i class="fa-solid fa-graduation-cap"></i> Scholarships</span>
+                <a href="{{ route('posts.scholarships') }}" style="color:#0d9488;" class="text-sm"><i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div class="space-y-4">
+                @foreach(($sections['scholarships'] ?? [])->take(25) as $post)
+                    <x-post-card :post="$post" />
+                @endforeach
+            </div>
+            @if(($sections['scholarships'] ?? [])->count() > 25)
+            <div class="mt-4">
+                <a href="{{ route('posts.scholarships') }}" class="block text-center px-4 py-3 bg-white border border-gray-300 hover:border-teal-500 hover:bg-teal-50 text-gray-700 hover:text-teal-600 font-semibold rounded-lg transition-all">
+                    View All Scholarships <i class="fa-solid fa-arrow-right ml-1"></i>
                 </a>
             </div>
             @endif
