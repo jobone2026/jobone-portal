@@ -17,8 +17,8 @@
 
             <!-- Clean Header -->
             <div class="pt-8 pb-4 px-6 text-center">
-                <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-blue-100">
-                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 border" style="background-color: #fef2f2; border-color: #fee2e2;">
+                    <svg class="w-8 h-8" style="color: #dc2626;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
                 </div>
                 <h3 class="text-xl font-bold text-gray-900 mb-1">Stay Updated!</h3>
                 <p class="text-gray-500 text-sm">Join our community for instant alerts</p>
@@ -47,8 +47,8 @@
                     </div>
                 </a>
                 
-                <!-- Close option at bottom -->
-                <button onclick="closeJoinModal()" class="w-full text-center mt-3 text-sm font-medium text-gray-400 hover:text-gray-600 no-underline py-2">
+                <!-- Close option at bottom as a clickable box -->
+                <button onclick="closeJoinModal()" class="w-full text-center mt-3 text-sm font-bold p-3 rounded-xl transition-all border" style="background-color: #fff1f2; border-color: #fecdd3; color: #e11d48; text-decoration: none;">
                     Maybe later, continue to site
                 </button>
             </div>
