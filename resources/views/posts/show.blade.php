@@ -61,11 +61,12 @@
 
 <style>
 *{box-sizing:border-box}
-.pg{padding:14px 0;max-width:1000px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
-.breadcrumb{font-size:12px;color:#9ca3af;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:4px;align-items:center}
-.breadcrumb a{color:#2563eb;text-decoration:none}
+.pg{padding:14px 12px;max-width:1000px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;overflow-x:hidden}
+.breadcrumb{font-size:12px;color:#9ca3af;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;line-height:1.5}
+.breadcrumb a{color:#2563eb;text-decoration:none;white-space:nowrap}
 .breadcrumb a:hover{text-decoration:underline}
-.breadcrumb span{opacity:.5}
+.breadcrumb span{opacity:.5;flex-shrink:0}
+.breadcrumb .current-title{color:#374151;word-break:break-word}
 
 /* Layout */
 .layout{display:grid;grid-template-columns:1fr 270px;gap:16px;align-items:start}
@@ -146,7 +147,8 @@
 .post-content-body ul{padding-left:1.5em;margin-bottom:1em;list-style:disc}
 .post-content-body ol{padding-left:1.5em;margin-bottom:1em;list-style:decimal}
 .post-content-body li{margin-bottom:.4em;line-height:1.7}
-.post-content-body table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:13px;display:block;overflow-x:auto}
+.post-content-body table{width:100% !important;max-width:100% !important;border-collapse:collapse;margin:1.2em 0;font-size:13px;display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.post-content-body table tr td, .post-content-body table tr th { border: 1px solid #e2e8f0; padding: 10px; min-width: 120px; word-break: break-word; }
 .post-content-body th{background:#1e3a8a;color:#fff;padding:10px 12px;text-align:left;font-weight:600}
 .post-content-body td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
 .post-content-body tr:nth-child(even) td{background:#f9fafb}
@@ -210,7 +212,7 @@
         <a href="{{ route('states.show', $post->state) }}">{{ $post->state->name }}</a>
         @endif
         <span>›</span>
-        <span style="color:#374151">{{ Str::limit($post->title, 60) }}</span>
+        <span class="current-title">{{ Str::limit($post->title, 65) }}</span>
     </div>
 
 

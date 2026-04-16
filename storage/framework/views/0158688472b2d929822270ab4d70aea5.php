@@ -1,5 +1,13 @@
+<!-- Mobile bottom nav padding -->
+<style>
+    @media(max-width: 639px) {
+        body { padding-bottom: 60px !important; }
+        #feedbackBtn-wrapper { display: none !important; }
+    }
+</style>
+
 <!-- Feedback Control -->
-<div class="fixed bottom-4 right-4 z-[9999]" style="z-index: 9999 !important; position: fixed !important; bottom: 1rem !important; right: 1rem !important;">
+<div id="feedbackBtn-wrapper" class="fixed bottom-4 right-4 z-[9999]" style="z-index: 9999 !important; position: fixed !important; bottom: 1rem !important; right: 1rem !important;">
     <!-- Feedback Button -->
     <button 
         id="feedbackBtn"
