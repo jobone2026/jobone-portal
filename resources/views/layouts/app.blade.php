@@ -118,8 +118,8 @@
     <div
         class="bg-gradient-to-r from-sky-50 via-blue-50 to-indigo-50 border-b border-gray-200 py-3 shadow-sm notranslate">
         <div class="w-full px-2 sm:px-4 lg:px-6">
-            <div class="flex items-center justify-center gap-3 flex-wrap notranslate">
-                <div class="flex items-center gap-2 flex-wrap notranslate">
+            <div class="flex items-center justify-center gap-3 overflow-x-auto hide-scrollbar whitespace-nowrap notranslate">
+                <div class="flex items-center gap-2 notranslate">
                     <button onclick="changeLanguage('')" class="language-btn notranslate" data-lang="">English</button>
 
                     @if (!config('app.domain_state_id'))
@@ -847,15 +847,26 @@
 
         @media (max-width: 768px) {
             .states-grid {
-                grid-template-columns: repeat(auto-fit, minmax(55px, 1fr));
-                gap: 6px;
-                padding: 10px 0;
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none; /* Firefox */
+                -ms-overflow-style: none; /* IE and Edge */
+                gap: 8px;
+                padding: 10px 4px;
+            }
+            .states-grid::-webkit-scrollbar {
+                display: none; /* Chrome, Safari */
             }
 
             .state-box {
-                font-size: 9px;
-                padding: 6px 4px;
-                min-height: 30px;
+                flex: 0 0 auto;
+                font-size: 11px;
+                padding: 8px 12px;
+                min-height: 34px;
+                min-width: max-content;
+                border-radius: 6px;
             }
         }
     </style>
