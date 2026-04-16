@@ -129,9 +129,8 @@
         }
     </style>
 
-</head>
-
-<body class="bg-gray-50" style="padding-bottom: 0;">
+<style>html,body{overflow-x:hidden!important;position:relative;width:100%}</style>
+<body class="bg-gray-50 font-sans leading-normal tracking-normal overflow-x-hidden" style="padding-bottom: 0; overflow-x: hidden !important;">
 
     <!-- Language Chooser Bar -->
     <div
@@ -293,7 +292,7 @@
                 </div>
 
                 <!-- Search Bar -->
-                <div class="relative w-80 md:w-96" id="search-container">
+                <div class="relative flex-1 max-w-[280px] sm:max-w-[320px] md:max-w-none md:w-96" id="search-container">
                     <form action="<?php echo e(route('search')); ?>" method="GET" class="flex items-center gap-2">
                         <input type="text" name="q" id="search-input" placeholder="Search jobs, results..."
                             class="px-4 py-2 bg-gray-50 border-2 border-blue-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 w-full text-base font-bold shadow-sm"
