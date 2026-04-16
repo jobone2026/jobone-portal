@@ -25,10 +25,10 @@
             </div>
             
             <div class="px-6 pb-6 space-y-3">
-                <!-- WhatsApp Option (Inline SVG + Standard Tailwind colors) -->
-                <a href="https://whatsapp.com/channel/..." onclick="this.href='https://whatsapp.com/channel/'" target="_blank" class="flex items-center gap-4 bg-green-50 border border-green-200 hover:bg-green-100 p-3 rounded-2xl transition-all group">
-                    <div class="w-12 h-12 rounded-full bg-green-500 text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform flex-shrink-0">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964.984-3.595c-.607-1.052-.927-2.246-.926-3.468.001-3.825 3.113-6.937 6.937-6.937 1.856.001 3.598.723 4.907 2.034 1.31 1.311 2.031 3.054 2.03 4.908-.001 3.825-3.113 6.938-6.937 6.938z"/></svg>
+                <!-- WhatsApp Option -->
+                <a href="https://www.whatsapp.com/channel/0029VbD9cau2P59hFZ1nwh22" target="_blank" class="flex items-center gap-4 bg-green-50 border border-green-200 hover:bg-green-100 p-3 rounded-2xl transition-all group">
+                    <div class="w-12 h-12 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform flex-shrink-0">
+                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964.984-3.595c-.607-1.052-.927-2.246-.926-3.468.001-3.825 3.113-6.937 6.937-6.937 1.856.001 3.598.723 4.907 2.034 1.31 1.311 2.031 3.054 2.03 4.908-.001 3.825-3.113 6.938-6.937 6.938z"/></svg>
                     </div>
                     <div>
                         <div class="font-bold text-gray-900 text-sm">Join WhatsApp Channel</div>
@@ -36,10 +36,10 @@
                     </div>
                 </a>
                 
-                <!-- Telegram Option (Inline SVG + Standard Tailwind colors) -->
-                <a href="https://t.me/jobone_in" target="_blank" class="flex items-center gap-4 bg-sky-50 border border-sky-200 hover:bg-sky-100 p-3 rounded-2xl transition-all group">
-                    <div class="w-12 h-12 rounded-full bg-sky-500 text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform flex-shrink-0">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.223-.548.223l.188-2.85 5.18-4.686c.223-.195-.054-.304-.346-.11l-6.4 4.024-2.76-.86c-.6-.188-.612-.601.125-.89l10.77-4.148c.5-.183.948.113.805.82z"/></svg>
+                <!-- Telegram Option -->
+                <a href="https://t.me/jobone2026" target="_blank" class="flex items-center gap-4 bg-sky-50 border border-sky-200 hover:bg-sky-100 p-3 rounded-2xl transition-all group">
+                    <div class="w-12 h-12 rounded-full bg-[#0088cc] text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform flex-shrink-0">
+                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0A12 12 0 1 0 24 12 12.013 12.013 0 0 0 12 0Zm5.84 8.24l-1.95 9.21c-.14.63-.51.79-1.04.49l-2.88-2.12-1.39 1.34a.76.76 0 0 1-.54.22l.19-2.92 5.31-4.8c.23-.21-.05-.33-.36-.12L8.6 13.68l-2.83-.88c-.61-.19-.62-.61.13-.9l11.08-4.27c.52-.18.96.11.86.82Z"/></svg>
                     </div>
                     <div>
                         <div class="font-bold text-gray-900 text-sm">Join Telegram Group</div>
