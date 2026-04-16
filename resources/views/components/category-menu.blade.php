@@ -105,24 +105,24 @@
 
                     <a href="{{ route('categories.show', $category) }}"
                        style="display:flex;flex-direction:column;align-items:center;justify-content:center;
-                              min-width:78px;padding:10px 8px;border-radius:12px;
-                              background:{{ $itemBg }};border:2px solid {{ $itemBorder }};
+                              min-width:60px;padding:6px 6px;border-radius:8px;
+                              background:{{ $itemBg }};border:1px solid {{ $itemBorder }};
                               text-decoration:none;transition:all 0.2s;flex-shrink:0;
-                              box-shadow:{{ $isActive ? '0 4px 12px rgba(0,0,0,0.15)' : 'none' }};
-                              transform:{{ $isActive ? 'scale(1.05)' : 'scale(1)' }};"
-                       onmouseover="this.style.transform='scale(1.06)';this.style.boxShadow='0 4px 10px rgba(0,0,0,0.12)'"
-                       onmouseout="this.style.transform='{{ $isActive ? 'scale(1.05)' : 'scale(1)' }}';this.style.boxShadow='{{ $isActive ? '0 4px 12px rgba(0,0,0,0.15)' : 'none' }}'">
+                              box-shadow:{{ $isActive ? '0 2px 8px rgba(0,0,0,0.1)' : 'none' }};
+                              transform:{{ $isActive ? 'scale(1.02)' : 'scale(1)' }};"
+                       onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 2px 6px rgba(0,0,0,0.1)'"
+                       onmouseout="this.style.transform='{{ $isActive ? 'scale(1.02)' : 'scale(1)' }}';this.style.boxShadow='{{ $isActive ? '0 2px 8px rgba(0,0,0,0.1)' : 'none' }}'">
 
                         <i class="fas {{ $icon }}"
-                           style="font-size:22px;color:{{ $iconColor }};margin-bottom:5px;"></i>
+                           style="font-size:16px;color:{{ $iconColor }};margin-bottom:3px;"></i>
 
                         <span style="font-size:10px;font-weight:700;color:{{ $textColor }};
-                                     text-align:center;line-height:1.2;max-width:70px;
+                                     text-align:center;line-height:1.1;max-width:60px;
                                      white-space:normal;word-break:break-word;">
                             {{ Str::limit($category->name, 14) }}
                         </span>
 
-                        <span style="font-size:10px;font-weight:800;color:{{ $countColor }};margin-top:3px;">
+                        <span style="font-size:9px;font-weight:800;color:{{ $countColor }};margin-top:1px;opacity:0.8;">
                             {{ number_format($category->posts_count) }}
                         </span>
                     </a>
