@@ -61,17 +61,22 @@
 
 <style>
 *{box-sizing:border-box}
-.pg{padding:14px 12px;max-width:1000px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;overflow-x:hidden}
-.breadcrumb{font-size:12px;color:#9ca3af;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;line-height:1.5}
+.pg{padding:14px 16px;max-width:1000px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;overflow-x:hidden}
+.breadcrumb{font-size:12px;color:#9ca3af;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;line-height:1.6}
 .breadcrumb a{color:#2563eb;text-decoration:none;white-space:nowrap}
 .breadcrumb a:hover{text-decoration:underline}
 .breadcrumb span{opacity:.5;flex-shrink:0}
-.breadcrumb .current-title{color:#374151;word-break:break-word}
+.breadcrumb .current-title{color:#374151;word-break:break-word;overflow-wrap:anywhere;display:inline}
+@media(max-width:820px){.breadcrumb{padding:2px 0}}
 
 /* Layout */
 .layout{display:grid;grid-template-columns:1fr 270px;gap:16px;align-items:start}
 @media(max-width:820px){.layout{grid-template-columns:1fr}}
 @media(max-width:820px){.sidebar{display:none}}
+
+/* Banner Overlap Fix */
+.mobile-apply-top-banner{position:fixed;top:0;left:0;right:0;z-index:2000 !important;background:#fff;border-bottom:1.5px solid #2563eb;padding:8px 12px;display:none;align-items:center;gap:12px;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
+body.has-banner header{top:58px !important} /* Adjust header when banner is visible */
 
 /* Cards */
 .card{background:#fff;border:0.5px solid #e5e7eb;border-radius:12px;padding:18px 20px;margin-bottom:12px}
@@ -202,6 +207,50 @@
 .puc-blog a{color:#2563eb}
 </style>
 
+{{-- Mobile-only Quick Apply Banner (90% of traffic is mobile) --}}
+@if(count($importantLinks) > 0)
+    @php
+        $mobileApplyLink = null;
+        foreach($importantLinks as $k => $v){
+            $lbl = strtolower(is_array($v) ? ($v['label'] ?? $k) : $k);
+            $lu  = is_array($v) ? ($v['url'] ?? $v) : $v;
+            if (!$mobileApplyLink && (str_contains($lbl,'apply') || str_contains($lbl,'official') || str_contains($lbl,'register') || str_contains($lbl,'notification'))) { 
+                $mobileApplyLink = $lu; 
+            }
+        }
+        if(!$mobileApplyLink){ 
+            $first = reset($importantLinks); 
+            $mobileApplyLink = is_array($first) ? ($first['url'] ?? '#') : $first; 
+        }
+    @endphp
+    <div id="top-sticky-banner" class="mobile-apply-top-banner">
+        <div style="flex:1;min-width:0">
+            <div style="font-size:10px;color:#6b7280;text-transform:uppercase;font-weight:700;margin-bottom:2px">{{ $typeInfo['label'] }} · {{ $post->state ? $post->state->name : 'All India' }}</div>
+            <div style="font-size:13px;font-weight:600;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $post->title }}</div>
+        </div>
+        <a href="{{ $mobileApplyLink }}" target="_blank" rel="noopener" 
+           style="background:#0f6e56;color:#fff;padding:9px 14px;border-radius:8px;text-decoration:none;font-size:12px;font-weight:700;flex-shrink:0">
+           Quick Apply
+        </a>
+    </div>
+
+    <script>
+        (function() {
+            const banner = document.getElementById('top-sticky-banner');
+            if (!banner) return;
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 400) {
+                    banner.style.display = 'flex';
+                    document.body.classList.add('has-banner');
+                } else {
+                    banner.style.display = 'none';
+                    document.body.classList.remove('has-banner');
+                }
+            });
+        })();
+    </script>
+@endif
+
 <div class="pg">
     {{-- Breadcrumb --}}
     <div class="breadcrumb">
@@ -215,40 +264,6 @@
         <span>›</span>
         <span class="current-title">{{ Str::limit($post->title, 65) }}</span>
     </div>
-
-
-
-    {{-- Mobile-only Quick Apply Banner (90% of traffic is mobile) --}}
-    @if(count($importantLinks) > 0)
-        @php
-            $mobileApplyLink = null;
-            foreach($importantLinks as $k => $v){
-                $lbl = strtolower(is_array($v) ? ($v['label'] ?? $k) : $k);
-                $lu  = is_array($v) ? ($v['url'] ?? $v) : $v;
-                if (!$mobileApplyLink && (str_contains($lbl,'apply') || str_contains($lbl,'official') || str_contains($lbl,'register') || str_contains($lbl,'notification'))) { 
-                    $mobileApplyLink = $lu; 
-                }
-            }
-            if(!$mobileApplyLink){ 
-                $first = reset($importantLinks); 
-                $mobileApplyLink = is_array($first) ? ($first['url'] ?? '#') : $first; 
-            }
-        @endphp
-        <div style="display:none" class="mobile-apply-top-banner">
-            <a href="{{ $mobileApplyLink }}" target="_blank" rel="noopener"
-               style="display:flex;align-items:center;gap:10px;background:#0f6e56;color:#fff;padding:12px 16px;border-radius:10px;text-decoration:none;margin-bottom:12px">
-                <div style="flex:1;min-width:0">
-                    <div style="font-size:11px;opacity:.8;margin-bottom:2px">{{ $typeInfo['label'] }} · {{ $post->state ? $post->state->name : 'All India' }}</div>
-                    <div style="font-size:13px;font-weight:600;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ Str::limit($post->title, 55) }}</div>
-                    @if($post->last_date)
-                        <div style="font-size:11px;margin-top:3px;opacity:.85">⏰ Last date: {{ $post->last_date->format('d M Y') }}</div>
-                    @endif
-                </div>
-                <div style="background:rgba(255,255,255,.15);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;white-space:nowrap;flex-shrink:0">Apply →</div>
-            </a>
-        </div>
-        <style>@media(max-width:820px){.mobile-apply-top-banner{display:block!important}}</style>
-    @endif
 
     <div class="layout">
         {{-- ====== MAIN COLUMN ====== --}}

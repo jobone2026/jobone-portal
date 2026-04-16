@@ -110,7 +110,15 @@
         }
     </style>
 
-<style>html,body{overflow-x:hidden!important;position:relative;width:100%}</style>
+<style>
+    html, body { 
+        overflow-x: hidden !important; 
+        position: relative; 
+        width: 100%; 
+        touch-action: pan-y; /* Prevent horizontal swipe gestures */
+        overscroll-behavior-x: none;
+    }
+</style>
 <body class="bg-gray-50 font-sans leading-normal tracking-normal overflow-x-hidden" style="padding-bottom: 0; overflow-x: hidden !important;">
 
     <!-- Language Chooser Bar -->
