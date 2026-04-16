@@ -1184,8 +1184,8 @@
     </script>
 
 
-    <!-- Floating Social Buttons - Right Side Middle -->
-    <div class="fixed right-4 top-1/2 transform -translate-y-1/2 z-40 flex flex-col gap-4">
+    <!-- Floating Social Buttons - Right Side Middle (desktop only) -->
+    <div class="fixed right-4 top-1/2 transform -translate-y-1/2 z-40 flex flex-col gap-4 hidden md:flex">
         <!-- WhatsApp Button -->
         <a href="https://whatsapp.com/channel/0029VbD9cau2P59hFZ1nwh22" target="_blank" rel="noopener noreferrer"
             class="flex items-center justify-center w-14 h-14 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-2xl transition-all duration-300 hover:scale-110 hover:shadow-green-500/50"
@@ -1210,7 +1210,7 @@
         style="background: linear-gradient(135deg, #1f2937 0%, #1e3a8a 50%, #312e81 100%) !important;">
         <div class="w-full px-2 sm:px-4 lg:px-6 py-12">
             <!-- Main Footer Content -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-8">
                 <!-- About Section -->
                 <div>
                     <h4 class="text-white font-black mb-4 text-lg flex items-center gap-2"
