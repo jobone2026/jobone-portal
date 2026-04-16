@@ -118,8 +118,9 @@
     <div
         class="bg-gradient-to-r from-sky-50 via-blue-50 to-indigo-50 border-b border-gray-200 py-3 shadow-sm notranslate">
         <div class="w-full px-2 sm:px-4 lg:px-6">
-            <div class="flex items-center justify-center gap-3 overflow-x-auto hide-scrollbar whitespace-nowrap notranslate">
-                <div class="flex items-center gap-2 notranslate">
+            <!-- Fix flex center cutting off first item left scroll -->
+            <div class="flex items-center justify-start md:justify-center gap-3 overflow-x-auto hide-scrollbar whitespace-nowrap notranslate px-1">
+                <div class="flex items-center gap-2 notranslate w-max">
                     <button onclick="changeLanguage('')" class="language-btn notranslate" data-lang="">English</button>
 
                     @if (!config('app.domain_state_id'))
@@ -190,15 +191,15 @@
     </style>
 
     <!-- Header -->
-    <header class="bg-white shadow-lg sticky top-0 z-50 border-b-4 border-blue-500"
-        style="background: white !important; border-bottom: 4px solid #3b82f6 !important;">
-        <nav class="w-full px-2 sm:px-4 lg:px-6 py-4 md:py-5">
+    <header class="bg-white shadow-md sticky top-0 z-50 border-b-2 border-blue-500"
+        style="background: white !important; border-bottom: 2px solid #3b82f6 !important;">
+        <nav class="w-full px-2 sm:px-4 lg:px-6 py-1 md:py-2">
             <div class="flex justify-between items-center gap-2">
                 <!-- Logo -->
                 <a href="{{ route('home') }}"
                     class="flex items-center gap-3 flex-shrink-0 transform hover:scale-105 transition-transform">
                     <img src="{{ asset('images/jobone-logo.png') }}" alt="JobOne.in"
-                        class="h-12 md:h-20 w-auto object-contain drop-shadow-lg" loading="eager">
+                        class="h-10 md:h-12 w-auto object-contain drop-shadow-sm" loading="eager">
                 </a>
                 </a>
 
@@ -243,32 +244,32 @@
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-1 lg:space-x-2">
                     <a href="{{ route('home') }}"
-                        class="px-3 py-1.5 text-blue-700 hover:text-white hover:bg-blue-600 rounded-lg text-sm lg:text-base font-bold transition-all hover:shadow transform hover:scale-105"
-                        style="color: #1d4ed8 !important; font-weight: 700 !important;"><i class="fas fa-home mr-1"></i>
+                        class="px-4 py-1 text-blue-700 hover:text-white hover:bg-blue-600 rounded-lg text-lg font-black transition-all hover:shadow transform hover:scale-105"
+                        style="color: #1d4ed8 !important; font-weight: 900 !important;"><i class="fas fa-home mr-1"></i>
                         Home</a>
                     <a href="{{ route('posts.jobs') }}"
-                        class="px-3 py-1.5 text-green-700 hover:text-white hover:bg-green-600 rounded-lg text-sm lg:text-base font-bold transition-all hover:shadow transform hover:scale-105"
-                        style="color: #15803d !important; font-weight: 700 !important;"><i class="fas fa-briefcase mr-1"></i>
+                        class="px-4 py-1 text-green-700 hover:text-white hover:bg-green-600 rounded-lg text-lg font-black transition-all hover:shadow transform hover:scale-105"
+                        style="color: #15803d !important; font-weight: 900 !important;"><i class="fas fa-briefcase mr-1"></i>
                         Jobs</a>
                     <a href="{{ route('posts.admit-cards') }}"
-                        class="px-3 py-1.5 text-purple-700 hover:text-white hover:bg-purple-600 rounded-lg text-sm lg:text-base font-bold transition-all hover:shadow transform hover:scale-105"
-                        style="color: #7e22ce !important; font-weight: 700 !important;"><i class="fas fa-id-card mr-1"></i>
+                        class="px-4 py-1 text-purple-700 hover:text-white hover:bg-purple-600 rounded-lg text-lg font-black transition-all hover:shadow transform hover:scale-105"
+                        style="color: #7e22ce !important; font-weight: 900 !important;"><i class="fas fa-id-card mr-1"></i>
                         Admit</a>
                     <a href="{{ route('posts.results') }}"
-                        class="px-3 py-1.5 text-orange-700 hover:text-white hover:bg-orange-600 rounded-lg text-sm lg:text-base font-bold transition-all hover:shadow transform hover:scale-105"
-                        style="color: #c2410c !important; font-weight: 700 !important;"><i class="fas fa-chart-bar mr-1"></i>
+                        class="px-4 py-1 text-orange-700 hover:text-white hover:bg-orange-600 rounded-lg text-lg font-black transition-all hover:shadow transform hover:scale-105"
+                        style="color: #c2410c !important; font-weight: 900 !important;"><i class="fas fa-chart-bar mr-1"></i>
                         Results</a>
                     <a href="{{ route('posts.syllabus') }}"
-                        class="px-3 py-1.5 text-indigo-700 hover:text-white hover:bg-indigo-600 rounded-lg text-sm lg:text-base font-bold transition-all hover:shadow transform hover:scale-105"
-                        style="color: #4338ca !important; font-weight: 700 !important;"><i class="fas fa-book mr-1"></i>
+                        class="px-4 py-1 text-indigo-700 hover:text-white hover:bg-indigo-600 rounded-lg text-lg font-black transition-all hover:shadow transform hover:scale-105"
+                        style="color: #4338ca !important; font-weight: 900 !important;"><i class="fas fa-book mr-1"></i>
                         Syllabus</a>
                     <a href="{{ route('posts.blogs') }}"
-                        class="px-3 py-1.5 text-pink-700 hover:text-white hover:bg-pink-600 rounded-lg text-sm lg:text-base font-bold transition-all hover:shadow transform hover:scale-105"
-                        style="color: #be185d !important; font-weight: 700 !important;"><i class="fas fa-pen-fancy mr-1"></i>
+                        class="px-4 py-1 text-pink-700 hover:text-white hover:bg-pink-600 rounded-lg text-lg font-black transition-all hover:shadow transform hover:scale-105"
+                        style="color: #be185d !important; font-weight: 900 !important;"><i class="fas fa-pen-fancy mr-1"></i>
                         Blogs</a>
                     <a href="{{ route('posts.scholarships') }}"
-                        class="px-3 py-1.5 text-teal-700 hover:text-white hover:bg-teal-600 rounded-lg text-sm lg:text-base font-bold transition-all hover:shadow transform hover:scale-105"
-                        style="color: #0f766e !important; font-weight: 700 !important;"><i class="fas fa-graduation-cap mr-1"></i>
+                        class="px-4 py-1 text-teal-700 hover:text-white hover:bg-teal-600 rounded-lg text-lg font-black transition-all hover:shadow transform hover:scale-105"
+                        style="color: #0f766e !important; font-weight: 900 !important;"><i class="fas fa-graduation-cap mr-1"></i>
                         Scholarships</a>
                 </div>
 
@@ -276,11 +277,11 @@
                 <div class="relative w-80 md:w-96" id="search-container">
                     <form action="{{ route('search') }}" method="GET" class="flex items-center gap-2">
                         <input type="text" name="q" id="search-input" placeholder="Search jobs, results..."
-                            class="px-5 py-3 bg-gray-50 border-3 border-blue-300 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-400 w-full text-base font-bold shadow-md"
-                            style="background-color: #f9fafb !important; border: 3px solid #93c5fd !important; font-weight: 700 !important;"
+                            class="px-4 py-2 bg-gray-50 border-2 border-blue-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 w-full text-base font-bold shadow-sm"
+                            style="background-color: #f9fafb !important; border: 2px solid #93c5fd !important; font-weight: 700 !important;"
                             autocomplete="off">
                         <button type="submit"
-                            class="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 font-black text-base shadow-lg flex-shrink-0 transform hover:scale-105 transition-all"
+                            class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 font-black text-base shadow-sm flex-shrink-0 transform hover:scale-105 transition-all"
                             style="background: linear-gradient(to right, #2563eb, #4f46e5) !important; color: white !important; font-weight: 900 !important;"><i
                                 class="fas fa-search"></i></button>
                     </form>
@@ -936,6 +937,13 @@
                         }
                         return null;
                     })->filter(); // Remove null values (states with 0 jobs)
+
+                    // Sort alphabetically and move Delhi to the end
+                    $statesWithJobs = $statesWithJobs->sortBy('name');
+                    $delhi = $statesWithJobs->firstWhere('name', 'Delhi');
+                    if ($delhi) {
+                        $statesWithJobs = $statesWithJobs->reject(fn($s) => $s->name === 'Delhi')->push($delhi);
+                    }
                 @endphp
 
                 <!-- Show state selector only if not domain-filtered -->
