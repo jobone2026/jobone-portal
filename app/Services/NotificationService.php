@@ -52,38 +52,35 @@ class NotificationService
         
         try {
             $postUrl = route('posts.show', [$post->type, $post]);
+            $typeInfo = $this->getTypeInfo($post->type);
             
-            // Format message - Unified with WhatsApp style
-            $emoji = $this->getEmojiForType($post->type);
-            $message = "{$emoji} *" . $this->escapeMarkdown($post->title) . "*\n\n";
+            // Format message - Unified Fancy Style
+            $message = "{$typeInfo['emoji']} *{$typeInfo['title']}* {$typeInfo['emoji']}\n";
+            $message .= "━━━━━━━━━━━━━━━━\n\n";
+            $message .= "🔥 *" . $this->escapeMarkdown($post->title) . "*\n\n";
             
-            if ($post->short_description) {
-                $message .= $this->escapeMarkdown($post->short_description) . "\n\n";
-            }
-            
-            // Add state or All India
-            if ($post->state) {
-                $message .= "📍 *State:* " . $this->escapeMarkdown($post->state->name) . "\n";
-            } else {
-                $message .= "📍 *State:* All India\n";
-            }
-            
-            // Add organization if available
-            if ($post->organization) {
-                $message .= "🏢 *Organization:* " . $this->escapeMarkdown($post->organization) . "\n";
-            }
+            // Add state
+            $stateName = $post->state ? $post->state->name : 'All India';
+            $message .= "📍 *State:* " . $this->escapeMarkdown($stateName) . "\n";
             
             // Add total posts if available
             if ($post->total_posts) {
-                $message .= "📊 *Total Posts:* " . $post->total_posts . "\n";
+                $message .= "👥 *Total Posts:* " . $post->total_posts . "\n";
             }
             
-            // Add last date if available
+            // Add application start (notification date)
+            if ($post->notification_date) {
+                $message .= "🟣 *{$typeInfo['date_label']}:* " . $post->notification_date->format('d-m-Y') . "\n";
+            }
+            
+            // Add last date
             if ($post->last_date) {
-                $message .= "📅 *Last Date:* " . $post->last_date->format('d M Y') . "\n";
+                $message .= "🟢 *Last Date:* " . $post->last_date->format('d-m-Y') . "\n";
+            } else {
+                $message .= "🟢 *Last Date:* -\n";
             }
             
-            // Add education qualifications if available
+            // Add education
             if (!empty($post->education) && is_array($post->education)) {
                 $educationLabels = $this->getEducationLabels($post->education);
                 if (!empty($educationLabels)) {
@@ -91,7 +88,7 @@ class NotificationService
                 }
             }
             
-            $message .= "\n🔗 *Apply Now:* [" . $this->escapeMarkdown($postUrl) . "](" . $postUrl . ")\n";
+            $message .= "\n➡️ *Apply Here:* [Click Here](" . $postUrl . ")\n";
             
             // Add hashtags
             $message .= "\n#jobone2026 #jobone #{$post->type}";
@@ -184,37 +181,35 @@ class NotificationService
         try {
             $postUrl = route('posts.show', [$post->type, $post]);
             
-            // Format message - Unified with Telegram style
-            $emoji = $this->getEmojiForType($post->type);
-            $message = "{$emoji} *{$post->title}*\n\n";
+            $typeInfo = $this->getTypeInfo($post->type);
             
-            if ($post->short_description) {
-                $message .= $post->short_description . "\n\n";
-            }
+            // Format message - Unified Fancy Style (matches Telegram exactly)
+            $message = "{$typeInfo['emoji']} *{$typeInfo['title']}* {$typeInfo['emoji']}\n";
+            $message .= "━━━━━━━━━━━━━━━━\n\n";
+            $message .= "🔥 *{$post->title}*\n\n";
             
-            // Add state or All India
-            if ($post->state) {
-                $message .= "📍 *State:* " . $post->state->name . "\n";
-            } else {
-                $message .= "📍 *State:* All India\n";
-            }
-            
-            // Add organization if available
-            if ($post->organization) {
-                $message .= "🏢 *Organization:* " . $post->organization . "\n";
-            }
+            // Add state
+            $stateName = $post->state ? $post->state->name : 'All India';
+            $message .= "📍 *State:* " . $stateName . "\n";
             
             // Add total posts if available
             if ($post->total_posts) {
-                $message .= "📊 *Total Posts:* " . $post->total_posts . "\n";
+                $message .= "👥 *Total Posts:* " . $post->total_posts . "\n";
             }
             
-            // Add last date if available
+            // Add application start (notification date)
+            if ($post->notification_date) {
+                $message .= "🟣 *{$typeInfo['date_label']}:* " . $post->notification_date->format('d-m-Y') . "\n";
+            }
+            
+            // Add last date
             if ($post->last_date) {
-                $message .= "📅 *Last Date:* " . $post->last_date->format('d M Y') . "\n";
+                $message .= "🟢 *Last Date:* " . $post->last_date->format('d-m-Y') . "\n";
+            } else {
+                $message .= "🟢 *Last Date:* -\n";
             }
             
-            // Add education qualifications if available
+            // Add education
             if (!empty($post->education) && is_array($post->education)) {
                 $educationLabels = $this->getEducationLabels($post->education);
                 if (!empty($educationLabels)) {
@@ -222,7 +217,10 @@ class NotificationService
                 }
             }
             
-            $message .= "\n🔗 *Apply Now:* " . $postUrl;
+            $message .= "\n➡️ *Apply Here:* " . $postUrl . "\n";
+            
+            // Add hashtags
+            $message .= "\n#jobone2026 #jobone #{$post->type}";
             
             $response = Http::withToken($accessToken)
                 ->post("https://graph.facebook.com/v18.0/{$phoneNumberId}/messages", [
