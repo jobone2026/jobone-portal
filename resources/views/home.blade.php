@@ -223,22 +223,30 @@
     <div class="space-y-4 md:space-y-6 mb-8">
 
         <!-- About -->
-        <div class="bg-white border border-gray-100 rounded-2xl p-4 sm:p-6 md:p-8 shadow-sm">
-            <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
-                <div class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 flex-shrink-0">
-                    <i class="fas fa-info-circle text-blue-600 text-sm"></i>
+        <div class="bg-white border border-gray-100 rounded-2xl p-4 sm:p-5 md:p-6 shadow-sm">
+            <h2 class="text-sm sm:text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
+                <div class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-50 flex-shrink-0">
+                    <i class="fas fa-info text-blue-600 text-[10px]"></i>
                 </div>
                 About JobOne.in – India's Trusted Sarkari Naukri Portal
             </h2>
-            <div class="text-sm sm:text-base text-gray-600 leading-relaxed space-y-3">
-                <p><strong>JobOne.in</strong> is India's most trusted <strong>government job portal</strong> providing the latest <strong>sarkari naukri</strong>, <strong>sarkari result</strong>, admit cards, answer keys, and exam syllabus — completely free. We cover <strong>SSC</strong>, <strong>UPSC</strong>, <strong>Railways</strong>, <strong>Banking</strong>, <strong>State PSC</strong>, <strong>Defence</strong>, <strong>Police</strong>, <strong>Teaching</strong>, and more.</p>
-                <p>Get instant <strong>free job alerts</strong> for every new government recruitment notification. Our team updates all <strong>sarkari naukri {{ $yr }}</strong> job listings daily. Whether you are looking for <strong>central government jobs</strong>, <strong>state government jobs</strong>, or <strong>PSU jobs</strong> — JobOne.in has it all.</p>
-                <p>We also provide <strong>hall ticket download</strong> links, <strong>exam results {{ $yr }}</strong>, official <strong>answer keys</strong>, detailed <strong>exam syllabus PDF</strong>, cut-off marks, merit lists — all free in one place.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                <div class="bg-gray-50 border border-gray-100 p-3 rounded-xl text-xs sm:text-sm text-gray-500 leading-relaxed">
+                    <p><strong>JobOne.in</strong> is India's most trusted <strong>government job portal</strong> providing the latest <strong>sarkari naukri</strong>, <strong>sarkari result</strong>, admit cards, answer keys, and exam syllabus — completely free. We cover SSC, UPSC, Railways, Banking, State PSC, Defence, Police, and Teaching.</p>
+                </div>
+                <div class="bg-gray-50 border border-gray-100 p-3 rounded-xl text-xs sm:text-sm text-gray-500 leading-relaxed">
+                    <p>Get instant <strong>free job alerts</strong> for every new government recruitment notification. Our team updates all <strong>sarkari naukri {{ $yr }}</strong> job listings daily. Whether you are looking for central government, state government, or PSU jobs — we have it all.</p>
+                </div>
+                <div class="bg-gray-50 border border-gray-100 p-3 rounded-xl text-xs sm:text-sm text-gray-500 leading-relaxed">
+                    <p>We provide <strong>hall ticket download</strong> links, <strong>exam results {{ $yr }}</strong>, official <strong>answer keys</strong>, detailed <strong>exam syllabus PDF</strong>, cut-off marks, and merit lists — all completely free in one beautifully designed place.</p>
+                </div>
             </div>
-            <div class="mt-5 flex flex-wrap gap-2">
+
+            <div class="flex flex-wrap gap-1.5">
                 @foreach($tags as $seoTag)
                 <a href="{{ route('search') }}?q={{ urlencode($seoTag) }}"
-                   class="text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white transition-all font-medium whitespace-nowrap">
+                   class="text-[10px] sm:text-xs px-2 sm:px-3 py-1 rounded-md border border-blue-100 bg-blue-50/50 text-blue-600 hover:bg-blue-500 hover:border-blue-500 hover:text-white transition-all font-medium whitespace-nowrap">
                     {{ $seoTag }}
                 </a>
                 @endforeach
