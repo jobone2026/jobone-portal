@@ -6,6 +6,94 @@
 @section('content')
     <!-- India Map with State Job Counts -->
 
+    <!-- Welcome Modal (WhatsApp / Telegram) -->
+    <div id="joinCommunityModal" class="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-md hidden opacity-0 transition-opacity duration-300" style="z-index: 999999;">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden transform scale-95 transition-transform duration-300 relative" id="joinModalContent">
+            
+            <!-- Close Button (Clearly visible dark cross) -->
+            <button type="button" onclick="closeJoinModal()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-800 transition-colors z-10">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+
+            <!-- Clean Header -->
+            <div class="pt-8 pb-4 px-6 text-center">
+                <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-blue-100">
+                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-1">Stay Updated!</h3>
+                <p class="text-gray-500 text-sm">Join our community for instant alerts</p>
+            </div>
+            
+            <div class="px-6 pb-6 space-y-3">
+                <!-- WhatsApp Option (Inline SVG + Standard Tailwind colors) -->
+                <a href="https://whatsapp.com/channel/..." onclick="this.href='https://whatsapp.com/channel/'" target="_blank" class="flex items-center gap-4 bg-green-50 border border-green-200 hover:bg-green-100 p-3 rounded-2xl transition-all group">
+                    <div class="w-12 h-12 rounded-full bg-green-500 text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform flex-shrink-0">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964.984-3.595c-.607-1.052-.927-2.246-.926-3.468.001-3.825 3.113-6.937 6.937-6.937 1.856.001 3.598.723 4.907 2.034 1.31 1.311 2.031 3.054 2.03 4.908-.001 3.825-3.113 6.938-6.937 6.938z"/></svg>
+                    </div>
+                    <div>
+                        <div class="font-bold text-gray-900 text-sm">Join WhatsApp Channel</div>
+                        <div class="text-xs text-gray-500">Fastest recruitment alerts</div>
+                    </div>
+                </a>
+                
+                <!-- Telegram Option (Inline SVG + Standard Tailwind colors) -->
+                <a href="https://t.me/jobone_in" target="_blank" class="flex items-center gap-4 bg-sky-50 border border-sky-200 hover:bg-sky-100 p-3 rounded-2xl transition-all group">
+                    <div class="w-12 h-12 rounded-full bg-sky-500 text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform flex-shrink-0">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.223-.548.223l.188-2.85 5.18-4.686c.223-.195-.054-.304-.346-.11l-6.4 4.024-2.76-.86c-.6-.188-.612-.601.125-.89l10.77-4.148c.5-.183.948.113.805.82z"/></svg>
+                    </div>
+                    <div>
+                        <div class="font-bold text-gray-900 text-sm">Join Telegram Group</div>
+                        <div class="text-xs text-gray-500">Get exam PDFs & Syllabus</div>
+                    </div>
+                </a>
+                
+                <!-- Close option at bottom -->
+                <button onclick="closeJoinModal()" class="w-full text-center mt-3 text-sm font-medium text-gray-400 hover:text-gray-600 no-underline py-2">
+                    Maybe later, continue to site
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('joinCommunityModal');
+            const content = document.getElementById('joinModalContent');
+            
+            // Move modal to body to prevent stacking context z-index issues from layouts
+            document.body.appendChild(modal);
+            
+            // Only show if they haven't seen it before (jobone_alert_shown is null)
+            if (!localStorage.getItem('jobone_alert_shown')) {
+                // Short delay to let the page load before throwing a popup at them
+                setTimeout(() => {
+                    modal.classList.remove('hidden');
+                    // Force DOM reflow to allow transition animation to play
+                    void modal.offsetWidth; 
+                    modal.classList.remove('opacity-0');
+                    content.classList.remove('scale-95');
+                    content.classList.add('scale-100');
+                    
+                    // Mark as shown so it doesn't bother them on subsequent visits
+                    localStorage.setItem('jobone_alert_shown', 'true');
+                }, 1200); 
+            }
+        });
+
+        function closeJoinModal() {
+            const modal = document.getElementById('joinCommunityModal');
+            const content = document.getElementById('joinModalContent');
+            
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            
+            // Hide completely after fade-out transition finishes
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+    </script>
     <!-- Column Sections for Each Type -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <!-- Jobs Column -->
