@@ -244,26 +244,33 @@
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-1 lg:space-x-2">
                     <a href="{{ route('home') }}"
-                        class="px-3 py-1.5 inline-flex items-center gap-2 text-blue-700 hover:text-white hover:bg-blue-600 rounded-lg text-lg font-black transition-all hover:shadow transform hover:scale-105 whitespace-nowrap">
-                        <i class="fas fa-home"></i> Home</a>
+                        class="px-4 py-1 text-blue-700 hover:text-white hover:bg-blue-600 rounded-lg text-lg font-black transition-all hover:shadow transform hover:scale-105"
+                        style="color: #1d4ed8 !important; font-weight: 900 !important;"><i class="fas fa-home mr-1"></i>
+                        Home</a>
                     <a href="{{ route('posts.jobs') }}"
-                        class="px-3 py-1.5 inline-flex items-center gap-2 text-green-700 hover:text-white hover:bg-green-600 rounded-lg text-lg font-black transition-all hover:shadow transform hover:scale-105 whitespace-nowrap">
-                        <i class="fas fa-briefcase"></i> Jobs</a>
+                        class="px-4 py-1 text-green-700 hover:text-white hover:bg-green-600 rounded-lg text-lg font-black transition-all hover:shadow transform hover:scale-105"
+                        style="color: #15803d !important; font-weight: 900 !important;"><i class="fas fa-briefcase mr-1"></i>
+                        Jobs</a>
                     <a href="{{ route('posts.admit-cards') }}"
-                        class="px-3 py-1.5 inline-flex items-center gap-2 text-purple-700 hover:text-white hover:bg-purple-600 rounded-lg text-lg font-black transition-all hover:shadow transform hover:scale-105 whitespace-nowrap">
-                        <i class="fas fa-id-card"></i> Admit</a>
+                        class="px-4 py-1 text-purple-700 hover:text-white hover:bg-purple-600 rounded-lg text-lg font-black transition-all hover:shadow transform hover:scale-105"
+                        style="color: #7e22ce !important; font-weight: 900 !important;"><i class="fas fa-id-card mr-1"></i>
+                        Admit</a>
                     <a href="{{ route('posts.results') }}"
-                        class="px-3 py-1.5 inline-flex items-center gap-2 text-orange-700 hover:text-white hover:bg-orange-600 rounded-lg text-lg font-black transition-all hover:shadow transform hover:scale-105 whitespace-nowrap">
-                        <i class="fas fa-chart-bar"></i> Results</a>
+                        class="px-4 py-1 text-orange-700 hover:text-white hover:bg-orange-600 rounded-lg text-lg font-black transition-all hover:shadow transform hover:scale-105"
+                        style="color: #c2410c !important; font-weight: 900 !important;"><i class="fas fa-chart-bar mr-1"></i>
+                        Results</a>
                     <a href="{{ route('posts.syllabus') }}"
-                        class="px-3 py-1.5 inline-flex items-center gap-2 text-indigo-700 hover:text-white hover:bg-indigo-600 rounded-lg text-lg font-black transition-all hover:shadow transform hover:scale-105 whitespace-nowrap">
-                        <i class="fas fa-book"></i> Syllabus</a>
+                        class="px-4 py-1 text-indigo-700 hover:text-white hover:bg-indigo-600 rounded-lg text-lg font-black transition-all hover:shadow transform hover:scale-105"
+                        style="color: #4338ca !important; font-weight: 900 !important;"><i class="fas fa-book mr-1"></i>
+                        Syllabus</a>
                     <a href="{{ route('posts.blogs') }}"
-                        class="px-3 py-1.5 inline-flex items-center gap-2 text-pink-700 hover:text-white hover:bg-pink-600 rounded-lg text-lg font-black transition-all hover:shadow transform hover:scale-105 whitespace-nowrap">
-                        <i class="fas fa-pen-fancy"></i> Blogs</a>
+                        class="px-4 py-1 text-pink-700 hover:text-white hover:bg-pink-600 rounded-lg text-lg font-black transition-all hover:shadow transform hover:scale-105"
+                        style="color: #be185d !important; font-weight: 900 !important;"><i class="fas fa-pen-fancy mr-1"></i>
+                        Blogs</a>
                     <a href="{{ route('posts.scholarships') }}"
-                        class="px-3 py-1.5 inline-flex items-center gap-2 text-teal-700 hover:text-white hover:bg-teal-600 rounded-lg text-lg font-black transition-all hover:shadow transform hover:scale-105 whitespace-nowrap">
-                        <i class="fas fa-graduation-cap"></i> Scholarships</a>
+                        class="px-4 py-1 text-teal-700 hover:text-white hover:bg-teal-600 rounded-lg text-lg font-black transition-all hover:shadow transform hover:scale-105"
+                        style="color: #0f766e !important; font-weight: 900 !important;"><i class="fas fa-graduation-cap mr-1"></i>
+                        Scholarships</a>
                 </div>
 
                 <!-- Search Bar -->
