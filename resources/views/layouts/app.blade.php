@@ -938,12 +938,8 @@
                         return null;
                     })->filter(); // Remove null values (states with 0 jobs)
 
-                    // Sort alphabetically and move Delhi to the end
+                    // Sort alphabetically
                     $statesWithJobs = $statesWithJobs->sortBy('name');
-                    $delhi = $statesWithJobs->firstWhere('name', 'Delhi');
-                    if ($delhi) {
-                        $statesWithJobs = $statesWithJobs->reject(fn($s) => $s->name === 'Delhi')->push($delhi);
-                    }
                 @endphp
 
                 <!-- Show state selector only if not domain-filtered -->
