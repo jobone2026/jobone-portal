@@ -25,10 +25,7 @@ class AutoRecover extends Command
             // Fix 2: Ensure storage directories exist and are writable
             $this->fixStorageDirectories();
 
-            // Fix 3: Clear and rebuild caches
-            $this->rebuildCaches();
-
-            // Fix 4: Clean up large cache files
+            // Fix 3: Clean up large cache files (if needed)
             $this->cleanupCache();
 
             // Check if we can disable maintenance mode

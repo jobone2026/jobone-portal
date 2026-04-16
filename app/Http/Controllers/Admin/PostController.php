@@ -8,10 +8,8 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\State;
 use App\Services\CacheInvalidationService;
-use App\Services\ContentSanitizerService;
 use App\Services\NotificationService;
 use App\Services\OgImageService;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -339,52 +337,5 @@ class PostController extends Controller
         $posts = $query->latest()->paginate(50, ['*'], 'page', $page);
 
         return view('admin.posts.load-more', compact('posts'));
-    }
-
-    public function previewSanitized(Request $request): JsonResponse
-    {
-        $validated = $request->validate([
-            'title' => 'nullable|string|max:255',
-            'content' => 'nullable|string',
-        ]);
-
-        $rawContent = $validated['content'] ?? '';
-        $sanitizedContent = app(ContentSanitizerService::class)->sanitize($validated['content'] ?? '');
-        $diffSummary = $this->buildDiffSummary($rawContent, $sanitizedContent);
-
-        return response()->json([
-            'title' => $validated['title'] ?? 'Preview Title',
-            'content' => $sanitizedContent,
-            'diff' => $diffSummary,
-        ]);
-    }
-
-    private function buildDiffSummary(string $raw, string $sanitized): array
-    {
-        $rawLines = preg_split('/\R/', $raw) ?: [];
-        $sanitizedLines = preg_split('/\R/', $sanitized) ?: [];
-
-        $normalizedRaw = array_values(array_filter(array_map('trim', $rawLines), fn ($line) => $line !== ''));
-        $normalizedSanitized = array_values(array_filter(array_map('trim', $sanitizedLines), fn ($line) => $line !== ''));
-        $sanitizedFrequency = [];
-        foreach ($normalizedSanitized as $line) {
-            $sanitizedFrequency[$line] = ($sanitizedFrequency[$line] ?? 0) + 1;
-        }
-        $removed = [];
-
-        foreach ($normalizedRaw as $line) {
-            if (($sanitizedFrequency[$line] ?? 0) > 0) {
-                $sanitizedFrequency[$line]--;
-            } else {
-                $removed[] = $line;
-            }
-        }
-
-        return [
-            'raw_length' => strlen($raw),
-            'sanitized_length' => strlen($sanitized),
-            'removed_line_count' => count($removed),
-            'removed_lines' => array_slice($removed, 0, 25),
-        ];
     }
 }

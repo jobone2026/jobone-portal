@@ -4,11 +4,12 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class GenerateSitemap extends Command
 {
     protected $signature = 'sitemap:generate';
-    protected $description = 'Generate and cache all sitemaps';
+    protected $description = 'Generate and cache all sitemaps with error handling';
 
     public function handle()
     {
@@ -34,10 +35,28 @@ class GenerateSitemap extends Command
 
         foreach ($sitemaps as $sitemap) {
             $this->info("Generating {$sitemap}...");
-            file_get_contents(url($sitemap));
+            try {
+                // Using a timeout and suppression to avoid hanging the command
+                $context = stream_context_create([
+                    'http' => [
+                        'timeout' => 30, // 30 seconds timeout
+                        'ignore_errors' => true
+                    ]
+                ]);
+                $result = @file_get_contents(url($sitemap), false, $context);
+                
+                if ($result === false) {
+                    $this->error("Failed to generate {$sitemap} (Network/Timeout error)");
+                } else {
+                    $this->info("Success: {$sitemap}");
+                }
+            } catch (\Exception $e) {
+                $this->error("Error generating {$sitemap}: " . $e->getMessage());
+                Log::error("Sitemap generation error: " . $e->getMessage(), ['url' => $sitemap]);
+            }
         }
 
-        $this->info('All sitemaps generated successfully!');
+        $this->info('Sitemap generation process finished!');
         return 0;
     }
 }

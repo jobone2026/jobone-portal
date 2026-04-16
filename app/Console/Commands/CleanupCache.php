@@ -21,8 +21,8 @@ class CleanupCache extends Command
         // Clean file cache
         $this->cleanFileCache($maxSizeBytes);
 
-        // Clean view cache
-        $this->cleanViewCache();
+        // Clean view cache (only files older than 3 days)
+        $this->cleanViewCache(3);
 
         $this->info('✓ Cache cleanup completed successfully!');
     }
@@ -39,7 +39,6 @@ class CleanupCache extends Command
         $totalSize = 0;
         $files = [];
 
-        // Get all cache files with their sizes
         foreach (File::allFiles($cacheDir) as $file) {
             $size = $file->getSize();
             $totalSize += $size;
@@ -52,11 +51,8 @@ class CleanupCache extends Command
 
         $this->line("Current cache size: " . $this->formatBytes($totalSize));
 
-        // If cache is too large, delete oldest files
         if ($totalSize > $maxSizeBytes) {
             $this->warn("Cache size exceeds limit! Cleaning up...");
-
-            // Sort by modification time (oldest first)
             usort($files, function ($a, $b) {
                 return $a['time'] - $b['time'];
             });
@@ -66,39 +62,34 @@ class CleanupCache extends Command
 
             foreach ($files as $file) {
                 if ($totalSize - $deletedSize <= $maxSizeBytes * 0.8) {
-                    break; // Stop when we reach 80% of max size
+                    break;
                 }
-
                 if (@unlink($file['path'])) {
                     $deletedSize += $file['size'];
                     $deletedCount++;
                 }
             }
-
             $this->line("Deleted {$deletedCount} old cache files (" . $this->formatBytes($deletedSize) . ")");
-        }
-
-        // Delete individual files larger than 10MB
-        foreach ($files as $file) {
-            if ($file['size'] > 10 * 1024 * 1024) {
-                if (@unlink($file['path'])) {
-                    $this->line("Deleted large cache file: " . $this->formatBytes($file['size']));
-                }
-            }
         }
     }
 
-    private function cleanViewCache()
+    private function cleanViewCache($daysOld)
     {
         $viewCacheDir = storage_path('framework/views');
-
         if (is_dir($viewCacheDir)) {
             $files = File::allFiles($viewCacheDir);
-            $count = count($files);
-
+            $count = 0;
+            $now = time();
+            foreach ($files as $file) {
+                if ($file->getFilename() === '.gitignore') continue;
+                if ($now - $file->getMTime() > ($daysOld * 24 * 60 * 60)) {
+                    if (@unlink($file->getRealPath())) {
+                        $count++;
+                    }
+                }
+            }
             if ($count > 0) {
-                File::deleteDirectory($viewCacheDir);
-                $this->line("Cleaned {$count} view cache files");
+                $this->line("Cleaned {$count} old view cache files");
             }
         }
     }
@@ -110,7 +101,6 @@ class CleanupCache extends Command
         $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
         $pow = min($pow, count($units) - 1);
         $bytes /= (1 << (10 * $pow));
-
         return round($bytes, 2) . ' ' . $units[$pow];
     }
 }

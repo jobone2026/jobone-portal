@@ -40,9 +40,27 @@ class HomeController extends Controller
         $categories = Cache::remember('categories_list', 600, 
             fn() => Category::all()
         );
-        $states = Cache::remember('states_list', 600, 
-            fn() => State::all()
-        );
+        
+        // Get states with job counts for the map
+        $states = Cache::remember('states_with_counts', 600, function () {
+            $statesWithCounts = State::withCount(['posts' => function($query) {
+                $query->published()->where('type', 'job');
+            }])->get();
+            
+            // Add "All India" as a pseudo-state for jobs without state
+            $allIndiaCount = Post::published()
+                ->where('type', 'job')
+                ->whereNull('state_id')
+                ->count();
+            
+            $allIndia = new State();
+            $allIndia->id = null;
+            $allIndia->name = 'All India';
+            $allIndia->slug = 'all-india';
+            $allIndia->posts_count = $allIndiaCount;
+            
+            return collect([$allIndia])->merge($statesWithCounts);
+        });
 
         // SEO
         $seoService = app(SeoService::class);
