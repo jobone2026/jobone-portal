@@ -53,13 +53,13 @@ class NotificationService
         try {
             $postUrl = route('posts.show', [$post->type, $post]);
             
-            // Get type-specific header and emoji
-            $typeInfo = $this->getTypeInfo($post->type);
+            // Format message - Unified with WhatsApp style
+            $emoji = $this->getEmojiForType($post->type);
+            $message = "{$emoji} *" . $this->escapeMarkdown($post->title) . "*\n\n";
             
-            // Format message with type-specific header
-            $message = "{$typeInfo['emoji']} *{$typeInfo['title']}* {$typeInfo['emoji']}\n";
-            $message .= "━━━━━━━━━━━━━━━━\n\n";
-            $message .= "🔥 *" . $this->escapeMarkdown($post->title) . "*\n\n";
+            if ($post->short_description) {
+                $message .= $this->escapeMarkdown($post->short_description) . "\n\n";
+            }
             
             // Add state or All India
             if ($post->state) {
@@ -73,21 +73,14 @@ class NotificationService
                 $message .= "🏢 *Organization:* " . $this->escapeMarkdown($post->organization) . "\n";
             }
             
-            // Add total posts if available (only for jobs)
-            if ($post->total_posts && $post->type === 'job') {
-                $message .= "👥 *Total Posts:* " . $post->total_posts . "\n";
-            }
-            
-            // Add notification date if available
-            if ($post->notification_date) {
-                $message .= "🟣 *{$typeInfo['date_label']}:* " . $post->notification_date->format('d-m-Y') . "\n";
+            // Add total posts if available
+            if ($post->total_posts) {
+                $message .= "📊 *Total Posts:* " . $post->total_posts . "\n";
             }
             
             // Add last date if available
             if ($post->last_date) {
-                $message .= "🟢 *Last Date:* " . $post->last_date->format('d-m-Y') . "\n";
-            } else {
-                $message .= "🟢 *Last Date:* -\n";
+                $message .= "📅 *Last Date:* " . $post->last_date->format('d M Y') . "\n";
             }
             
             // Add education qualifications if available
@@ -98,7 +91,7 @@ class NotificationService
                 }
             }
             
-            $message .= "\n➡️ *{$typeInfo['action']}:* [Click Here](" . $postUrl . ")\n";
+            $message .= "\n🔗 *Apply Now:* [" . $this->escapeMarkdown($postUrl) . "](" . $postUrl . ")\n";
             
             // Add hashtags
             $message .= "\n#jobone2026 #jobone #{$post->type}";
@@ -191,7 +184,7 @@ class NotificationService
         try {
             $postUrl = route('posts.show', [$post->type, $post]);
             
-            // Format message
+            // Format message - Unified with Telegram style
             $emoji = $this->getEmojiForType($post->type);
             $message = "{$emoji} *{$post->title}*\n\n";
             
@@ -201,28 +194,35 @@ class NotificationService
             
             // Add state or All India
             if ($post->state) {
-                $message .= "📍 State: " . $post->state->name . "\n";
+                $message .= "📍 *State:* " . $post->state->name . "\n";
             } else {
-                $message .= "📍 State: All India\n";
+                $message .= "📍 *State:* All India\n";
             }
             
-            if ($post->last_date) {
-                $message .= "📅 Last Date: " . $post->last_date->format('d M Y') . "\n";
+            // Add organization if available
+            if ($post->organization) {
+                $message .= "🏢 *Organization:* " . $post->organization . "\n";
             }
             
+            // Add total posts if available
             if ($post->total_posts) {
-                $message .= "📊 Total Posts: " . $post->total_posts . "\n";
+                $message .= "📊 *Total Posts:* " . $post->total_posts . "\n";
+            }
+            
+            // Add last date if available
+            if ($post->last_date) {
+                $message .= "📅 *Last Date:* " . $post->last_date->format('d M Y') . "\n";
             }
             
             // Add education qualifications if available
             if (!empty($post->education) && is_array($post->education)) {
                 $educationLabels = $this->getEducationLabels($post->education);
                 if (!empty($educationLabels)) {
-                    $message .= "🎓 Education: " . implode(', ', $educationLabels) . "\n";
+                    $message .= "🎓 *Education:* " . implode(', ', $educationLabels) . "\n";
                 }
             }
             
-            $message .= "\n🔗 Apply Now: " . $postUrl;
+            $message .= "\n🔗 *Apply Now:* " . $postUrl;
             
             $response = Http::withToken($accessToken)
                 ->post("https://graph.facebook.com/v18.0/{$phoneNumberId}/messages", [
