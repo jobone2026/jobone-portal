@@ -856,11 +856,7 @@
         @media (max-width: 768px) {
             .states-grid {
                 display: flex;
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none; /* Firefox */
-                -ms-overflow-style: none; /* IE and Edge */
+                flex-wrap: wrap;
                 gap: 8px;
                 padding: 10px 4px;
             }
