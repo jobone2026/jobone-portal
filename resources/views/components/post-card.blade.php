@@ -81,11 +81,12 @@
     <div style="background:{{ $headerBg }};border-bottom:1px solid {{ $headerBorder }};padding:8px 12px;
                 display:flex;align-items:center;justify-content:space-between;gap:6px;">
 
-        {{-- Type pill with icon --}}
+        {{-- Type pill — light bg + colored text (not dark solid) --}}
         <span style="display:inline-flex;align-items:center;gap:5px;
-                     background:{{ $borderColor }};color:#fff;
-                     padding:3px 9px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:.3px;">
-            <i class="fas {{ $typeIcon }}" style="font-size:10px;"></i>
+                     background:{{ $headerBg }};color:{{ $borderColor }};
+                     border:1.5px solid {{ $headerBorder }};
+                     padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.2px;">
+            <i class="fas {{ $typeIcon }}" style="font-size:9px;"></i>
             {{ $typeLabel }}
         </span>
 
@@ -126,10 +127,10 @@
     <div class="p-3.5">
 
         {{-- Title --}}
-        <div class="text-sm font-semibold leading-snug mb-3 text-gray-900">
+        <div class="text-sm font-semibold leading-snug mb-3" style="color:#111827;line-height:1.45;">
             <a href="{{ route('posts.show', [$post->type, $post->slug]) }}"
-               class="hover:text-blue-600 transition-colors"
-               style="color: #111827; text-decoration: none;">
+               style="color:#111827;text-decoration:none;"
+               onmouseover="this.style.color='{{ $borderColor }}'" onmouseout="this.style.color='#111827'">
                 {{ $post->title }}
             </a>
         </div>
@@ -216,17 +217,21 @@
 
         {{-- Actions --}}
         <div class="flex gap-2 pt-2.5 border-t border-gray-100 relative z-10">
+            {{-- View Details: outlined with type color --}}
             <a href="{{ route('posts.show', [$post->type, $post->slug]) }}"
                class="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg transition-all"
-               style="background:{{ $borderColor }};color:#fff;text-decoration:none;opacity:1;"
-               onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
-                <i class="fa-solid fa-eye text-[11px]"></i> View Details
+               style="background:{{ $headerBg }};color:{{ $borderColor }};border:1.5px solid {{ $headerBorder }};text-decoration:none;"
+               onmouseover="this.style.background='{{ $borderColor }}';this.style.color='#fff'"
+               onmouseout="this.style.background='{{ $headerBg }}';this.style.color='{{ $borderColor }}'">
+                <i class="fa-solid fa-eye" style="font-size:10px;"></i> View Details
             </a>
+            {{-- Apply Now: soft green --}}
             <a href="{{ route('posts.show', [$post->type, $post->slug]) }}#apply"
-               class="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-semibold bg-green-600 rounded-lg transition-all"
-               style="background:#16a34a;color:#fff;text-decoration:none;opacity:1;"
-               onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
-                <i class="fa-solid fa-paper-plane text-[11px]"></i> Apply Now
+               class="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg transition-all"
+               style="background:#f0fdf4;color:#16a34a;border:1.5px solid #bbf7d0;text-decoration:none;"
+               onmouseover="this.style.background='#16a34a';this.style.color='#fff'"
+               onmouseout="this.style.background='#f0fdf4';this.style.color='#16a34a'">
+                <i class="fa-solid fa-paper-plane" style="font-size:10px;"></i> Apply Now
             </a>
         </div>
 
