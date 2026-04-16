@@ -11,19 +11,22 @@ class SeoService
 {
     public function generateTitle($page, $data = null): string
     {
+        $year = date('Y');
+        $ny   = date('Y') + 1;
         return match($page) {
-            'home' => 'Latest Government Jobs 2026 - SSC, UPSC, Railways, Banking | JobOne.in',
-            'post' => $this->generatePostTitle($data),
-            'category' => "Latest {$data->name} Jobs 2026 | JobOne.in",
-            'state' => "{$data->name} Government Jobs 2026 | JobOne.in",
-            'jobs' => 'Latest Government Jobs 2026 | JobOne.in',
-            'admit-cards' => 'Admit Cards 2026 - Download Hall Tickets | JobOne.in',
-            'results' => 'Latest Results 2026 - Check Exam Results | JobOne.in',
-            'answer-keys' => 'Answer Keys 2026 - Download Solutions | JobOne.in',
-            'syllabus' => 'Exam Syllabus 2026 - Download PDF | JobOne.in',
-            'blogs' => 'Career Guidance & Tips | JobOne.in',
-            'search' => "Search Results for \"{$data}\" | JobOne.in",
-            default => 'JobOne.in - Government Jobs Portal'
+            'home'        => "Latest Government Jobs {$year} - Sarkari Naukri, SSC, UPSC, Railways, Banking | JobOne.in",
+            'post'        => $this->generatePostTitle($data),
+            'category'    => "Latest {$data->name} Jobs {$year} - Recruitment Notification | JobOne.in",
+            'state'       => "{$data->name} Government Jobs {$year} - Sarkari Naukri | JobOne.in",
+            'jobs'        => "Latest Government Jobs {$year}-{$ny} - Sarkari Naukri India | JobOne.in",
+            'admit-cards' => "Admit Cards {$year} - Download Hall Ticket & Call Letter | JobOne.in",
+            'results'     => "Sarkari Result {$year} - Latest Exam Results & Merit List | JobOne.in",
+            'answer-keys' => "Answer Key {$year} - Download Solved Paper & Cut Off | JobOne.in",
+            'syllabus'    => "Exam Syllabus {$year} - Download PDF & Exam Pattern | JobOne.in",
+            'scholarship' => "Scholarships {$year} - Government Scholarship Schemes India | JobOne.in",
+            'blogs'       => 'Sarkari Job Tips, Exam Preparation & Career Guidance | JobOne.in',
+            'search'      => "Search: \"{$data}\" - Govt Jobs, Results, Admit Cards | JobOne.in",
+            default       => 'JobOne.in - Sarkari Naukri Portal India'
         };
     }
 
@@ -187,20 +190,23 @@ class SeoService
 
     public function generateKeywords($page, $data = null): string
     {
-        $baseKeywords = 'government jobs, sarkari naukri, govt jobs 2026, india';
-        
+        $year = date('Y');
+        $ny   = date('Y') + 1;
+        $base = "government jobs, sarkari naukri, sarkari result, govt jobs {$year}, sarkari naukri {$year}, naukri {$year}, india jobs";
+
         return match($page) {
-            'home' => "{$baseKeywords}, SSC, UPSC, Railways, Banking, State PSC, Defence, Police, Teaching",
-            'post' => $this->generatePostKeywords($data),
-            'category' => "{$data->name} jobs, {$data->name} recruitment, {$baseKeywords}",
-            'state' => "{$data->name} jobs, {$data->name} government jobs, {$baseKeywords}",
-            'jobs' => "government jobs, latest jobs, {$baseKeywords}",
-            'admit-cards' => "admit card, hall ticket, exam admit card, {$baseKeywords}",
-            'results' => "exam results, government exam results, {$baseKeywords}",
-            'answer-keys' => "answer key, exam solutions, {$baseKeywords}",
-            'syllabus' => "exam syllabus, government exam syllabus, {$baseKeywords}",
-            'blogs' => "career guidance, exam tips, preparation, {$baseKeywords}",
-            default => $baseKeywords
+            'home'        => "{$base}, SSC, UPSC, Railways jobs, Banking jobs, State PSC, Defence jobs, Police recruitment, Teaching jobs, {$year} government jobs, free job alert, rojgar result",
+            'post'        => $this->generatePostKeywords($data),
+            'category'    => "{$data->name} jobs, {$data->name} recruitment {$year}, {$data->name} vacancy {$year}, {$base}",
+            'state'       => "{$data->name} government jobs, {$data->name} sarkari naukri {$year}, {$data->name} jobs {$year}, {$data->name} recruitment, {$base}",
+            'jobs'        => "government jobs {$year}, latest govt jobs, sarkari naukri {$year}-{$ny}, free job alert, freejobalert, {$base}",
+            'admit-cards' => "admit card {$year}, hall ticket {$year}, call letter, exam admit card, download admit card, {$base}",
+            'results'     => "sarkari result {$year}, exam result {$year}, merit list {$year}, cut off marks, result declared, {$base}",
+            'answer-keys' => "answer key {$year}, solved paper, official answer key, cut off {$year}, {$base}",
+            'syllabus'    => "exam syllabus {$year}, syllabus PDF, exam pattern {$year}, selection process, {$base}",
+            'scholarship' => "scholarship {$year}, government scholarship, scholarship scheme india, scholarship for students {$year}, {$base}",
+            'blogs'       => "exam tips, preparation strategy, government exam guide, sarkari exam, career guidance, {$base}",
+            default       => $base
         };
     }
 
@@ -272,40 +278,55 @@ class SeoService
             ];
         }
         
+        $year = date('Y');
+        $ny   = date('Y') + 1;
         return [
-            'title' => 'Latest Government Jobs 2026 - SSC, UPSC, Railways, Banking | JobOne.in',
-            'description' => $this->generateDescription('home'),
-            'keywords' => $this->generateKeywords('home'),
-            'canonical' => url('/'),
-            'og_title' => 'JobOne.in - Latest Government Jobs 2026',
-            'og_description' => $this->generateDescription('home'),
-            'og_image' => asset('images/og-image.jpg'),
-            'og_url' => url('/'),
+            'title'          => "Latest Government Jobs {$year} - Sarkari Naukri, SSC, UPSC, Railways | JobOne.in",
+            'description'    => "Find latest government jobs {$year}, sarkari naukri, SSC, UPSC, Railways, Banking, State PSC, Defence, Police recruitment notifications. Get admit cards, results, answer keys, syllabus free. JobOne.in - India's trusted govt job portal.",
+            'keywords'       => $this->generateKeywords('home'),
+            'canonical'      => url('/'),
+            'og_title'       => "JobOne.in - Latest Government Jobs {$year} | Sarkari Naukri",
+            'og_description' => "India's #1 government job portal. Latest {$year} sarkari naukri, SSC, UPSC, Railways, Banking jobs, admit cards & results.",
+            'og_image'       => asset('images/og-image.jpg'),
+            'og_url'         => url('/'),
         ];
     }
 
     public function generateListingSeo($type): array
     {
+        $year = date('Y');
+        $ny   = date('Y') + 1;
         $typeNames = [
-            'job' => 'Jobs',
-            'admit_card' => 'Admit Cards',
-            'result' => 'Results',
-            'answer_key' => 'Answer Keys',
-            'syllabus' => 'Syllabus',
-            'blog' => 'Blogs',
+            'job'         => 'Government Jobs',
+            'admit_card'  => 'Admit Cards',
+            'result'      => 'Sarkari Results',
+            'answer_key'  => 'Answer Keys',
+            'syllabus'    => 'Exam Syllabus',
+            'blog'        => 'Career Blogs',
+            'scholarship' => 'Scholarships',
+        ];
+        $typeDesc = [
+            'job'         => "Browse latest government job notifications {$year}-{$ny}. SSC, UPSC, Railways, Banking, State PSC, Defence, Police recruitment. Free job alert India.",
+            'admit_card'  => "Download admit cards & hall tickets {$year} for SSC, UPSC, Railways, Banking, State PSC, Defence exams. Get your call letter now.",
+            'result'      => "Check latest sarkari result {$year}. SSC, UPSC, Railways, Banking exam results, merit list, cut off marks declared.",
+            'answer_key'  => "Download official answer keys {$year} for SSC, UPSC, Railways, Banking exams. Check correct answers & expected cut off.",
+            'syllabus'    => "Download exam syllabus PDF {$year} for SSC, UPSC, Railways, Banking, State PSC. Get full exam pattern & selection process.",
+            'blog'        => 'Read career guidance, exam preparation tips, study material and government job updates for India.',
+            'scholarship' => "Latest government scholarship schemes {$year} for students in India. Apply for central & state scholarship programmes.",
         ];
 
         $typeName = $typeNames[$type] ?? 'Posts';
-        
+        $desc     = $typeDesc[$type]  ?? "Latest {$typeName} {$year} on JobOne.in";
+
         return [
-            'title' => "Latest {$typeName} 2026 | JobOne.in",
-            'description' => $this->generateDescription($type === 'job' ? 'jobs' : str_replace('_', '-', $type) . 's'),
-            'keywords' => $this->generateKeywords($type === 'job' ? 'jobs' : str_replace('_', '-', $type) . 's'),
-            'canonical' => url()->current(),
-            'og_title' => "Latest {$typeName} 2026 | JobOne.in",
-            'og_description' => $this->generateDescription($type === 'job' ? 'jobs' : str_replace('_', '-', $type) . 's'),
-            'og_image' => asset('images/og-image.jpg'),
-            'og_url' => url()->current(),
+            'title'          => "Latest {$typeName} {$year} | JobOne.in",
+            'description'    => $desc,
+            'keywords'       => $this->generateKeywords($type === 'job' ? 'jobs' : str_replace('_', '-', $type)),
+            'canonical'      => url()->current(),
+            'og_title'       => "Latest {$typeName} {$year} | JobOne.in",
+            'og_description' => $desc,
+            'og_image'       => asset('images/og-image.jpg'),
+            'og_url'         => url()->current(),
         ];
     }
 

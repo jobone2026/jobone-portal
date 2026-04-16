@@ -218,4 +218,85 @@
             </a>
         </div>
     </div>
+    <!-- SEO Content Section: About + FAQ (keyword-rich for Google) -->
+    <div class="mt-8 space-y-6">
+
+        <!-- About JobOne -->
+        <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+            <h2 class="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                <i class="fas fa-info-circle text-blue-600"></i>
+                About JobOne.in – India's Trusted Sarkari Naukri Portal
+            </h2>
+            <div class="text-sm text-gray-600 leading-relaxed space-y-2">
+                <p><strong>JobOne.in</strong> is India's most trusted <strong>government job portal</strong> providing the latest <strong>sarkari naukri</strong>, <strong>sarkari result</strong>, admit cards, answer keys, and exam syllabus — completely free. We cover <strong>SSC</strong>, <strong>UPSC</strong>, <strong>Railways</strong>, <strong>Banking</strong>, <strong>State PSC</strong>, <strong>Defence</strong>, <strong>Police</strong>, <strong>Teaching</strong>, and more.</p>
+                <p>Get instant <strong>free job alerts</strong> for every new government recruitment notification in India. Our team updates all <strong>sarkari naukri {{ date('Y') }}</strong> job listings daily so you never miss any opportunity. Whether you are looking for <strong>central government jobs</strong>, <strong>state government jobs</strong>, or <strong>PSU jobs</strong> — JobOne.in has it all.</p>
+                <p>We also provide <strong>hall ticket download</strong> links, <strong>exam results {{ date('Y') }}</strong>, official <strong>answer keys</strong>, detailed <strong>exam syllabus PDF</strong>, cut‑off marks, merit lists, and career guidance blogs — all in one place.</p>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-2">
+                @foreach([
+                    'SSC Jobs', 'UPSC Jobs', 'Railway Jobs', 'Banking Jobs', 'State PSC', 'Defence Jobs',
+                    'Police Jobs', 'Teaching Jobs', 'Sarkari Result', 'Admit Card', 'Answer Key', 'Syllabus PDF'
+                ] as $tag)
+                <a href="{{ route('search') }}?q={{ urlencode($tag) }}"
+                   class="text-xs px-3 py-1 rounded-full border border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white transition-all font-medium">
+                    {{ $tag }}
+                </a>
+                @endforeach
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+            <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <i class="fas fa-circle-question text-indigo-600"></i>
+                Frequently Asked Questions (FAQ)
+            </h2>
+            <div class="space-y-0 divide-y divide-gray-100">
+                @foreach([
+                    ['q'=>'What is the latest government job notification for {{ date("Y") }}?','a'=>'JobOne.in updates daily with the latest government job notifications for '.date('Y').'. You can browse all current openings for SSC, UPSC, Railways, Banking, State PSC, Defence and Police recruitment on our Jobs page.'],
+                    ['q'=>'How to get free job alert for sarkari naukri?','a'=>'You can subscribe to our free job alert notifications by clicking the notification bell icon on JobOne.in. We send instant alerts for every new sarkari naukri posting across India.'],
+                    ['q'=>'How to download admit card / hall ticket?','a'=>'Visit our Admit Cards section, find your exam, and click the official admit card link. We provide direct links to official government websites for admit card download.'],
+                    ['q'=>'How to check sarkari result '.date('Y').'?','a'=>'Go to our Results section to find all latest sarkari result '.date('Y').'. We post SSC, UPSC, Railways, Banking, State PSC and other exam results with merit list and cut off marks.'],
+                    ['q'=>'What qualifications are needed for government jobs?','a'=>'Qualifications vary by post. Group D & police jobs often require 10th/12th pass. Clerical and lower division posts require graduation. UPSC IAS, SSC CGL, and banking PO require any degree from a recognized university.'],
+                    ['q'=>'Is JobOne.in free?','a'=>'Yes! JobOne.in is completely free. Browse unlimited job notifications, download admit cards, check results — no registration required and no fees.'],
+                ] as $faq)
+                <div x-data="{ open: false }" class="py-3">
+                    <button @click="open = !open" class="w-full flex justify-between items-center text-left text-sm font-semibold text-gray-800 hover:text-blue-600">
+                        <span>{{ $faq['q'] }}</span>
+                        <i class="fas fa-chevron-down text-gray-400 transition-transform" :class="{'rotate-180': open}"></i>
+                    </button>
+                    <p x-show="open" x-transition class="mt-2 text-sm text-gray-600 leading-relaxed">{{ $faq['a'] }}</p>
+                </div>
+                @endforeach
+            </div>
+        </div>
+
+        <!-- Quick Links Grid -->
+        <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+            <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <i class="fas fa-link text-green-600"></i> Quick Links
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                @foreach([
+                    ['label'=>'Latest Jobs '.date('Y'), 'route'=>'posts.jobs', 'icon'=>'fa-briefcase', 'color'=>'#2563eb'],
+                    ['label'=>'Sarkari Result', 'route'=>'posts.results', 'icon'=>'fa-chart-bar', 'color'=>'#ea580c'],
+                    ['label'=>'Admit Card', 'route'=>'posts.admit-cards', 'icon'=>'fa-id-card', 'color'=>'#9333ea'],
+                    ['label'=>'Answer Key', 'route'=>'posts.answer-keys', 'icon'=>'fa-key', 'color'=>'#ca8a04'],
+                    ['label'=>'Exam Syllabus', 'route'=>'posts.syllabus', 'icon'=>'fa-book', 'color'=>'#4f46e5'],
+                    ['label'=>'Scholarships', 'route'=>'posts.scholarships', 'icon'=>'fa-graduation-cap', 'color'=>'#0d9488'],
+                    ['label'=>'SSC Jobs', 'route'=>'search', 'icon'=>'fa-building-columns', 'color'=>'#be185d', 'q'=>'SSC'],
+                    ['label'=>'UPSC Jobs', 'route'=>'search', 'icon'=>'fa-landmark', 'color'=>'#7c3aed', 'q'=>'UPSC'],
+                ] as $link)
+                <a href="{{ route($link['route']) }}{{ isset($link['q']) ? '?q='.urlencode($link['q']) : '' }}"
+                   class="flex items-center gap-2 p-3 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50 transition-all font-medium text-gray-700 hover:text-blue-700">
+                    <i class="fas {{ $link['icon'] }}" style="color:{{ $link['color'] }};font-size:15px;"></i>
+                    {{ $link['label'] }}
+                </a>
+                @endforeach
+            </div>
+        </div>
+
+    </div>
+
 @endsection
+
