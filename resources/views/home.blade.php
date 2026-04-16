@@ -220,23 +220,25 @@
         $tags = ['SSC Jobs','UPSC Jobs','Railway Jobs','Banking Jobs','State PSC','Defence Jobs','Police Jobs','Teaching Jobs','Sarkari Result','Admit Card','Answer Key','Syllabus PDF'];
     @endphp
 
-    <div class="space-y-6 mb-8">
+    <div class="space-y-4 md:space-y-6 mb-8">
 
         <!-- About -->
-        <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
-            <h2 class="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-                <i class="fas fa-info-circle text-blue-600"></i>
+        <div class="bg-white border border-gray-100 rounded-2xl p-4 sm:p-6 md:p-8 shadow-sm">
+            <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
+                <div class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 flex-shrink-0">
+                    <i class="fas fa-info-circle text-blue-600 text-sm"></i>
+                </div>
                 About JobOne.in – India's Trusted Sarkari Naukri Portal
             </h2>
-            <div class="text-sm text-gray-600 leading-relaxed space-y-2">
+            <div class="text-sm sm:text-base text-gray-600 leading-relaxed space-y-3">
                 <p><strong>JobOne.in</strong> is India's most trusted <strong>government job portal</strong> providing the latest <strong>sarkari naukri</strong>, <strong>sarkari result</strong>, admit cards, answer keys, and exam syllabus — completely free. We cover <strong>SSC</strong>, <strong>UPSC</strong>, <strong>Railways</strong>, <strong>Banking</strong>, <strong>State PSC</strong>, <strong>Defence</strong>, <strong>Police</strong>, <strong>Teaching</strong>, and more.</p>
                 <p>Get instant <strong>free job alerts</strong> for every new government recruitment notification. Our team updates all <strong>sarkari naukri {{ $yr }}</strong> job listings daily. Whether you are looking for <strong>central government jobs</strong>, <strong>state government jobs</strong>, or <strong>PSU jobs</strong> — JobOne.in has it all.</p>
                 <p>We also provide <strong>hall ticket download</strong> links, <strong>exam results {{ $yr }}</strong>, official <strong>answer keys</strong>, detailed <strong>exam syllabus PDF</strong>, cut-off marks, merit lists — all free in one place.</p>
             </div>
-            <div class="mt-4 flex flex-wrap gap-2">
+            <div class="mt-5 flex flex-wrap gap-2">
                 @foreach($tags as $seoTag)
                 <a href="{{ route('search') }}?q={{ urlencode($seoTag) }}"
-                   class="text-xs px-3 py-1 rounded-full border border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white transition-all font-medium">
+                   class="text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white transition-all font-medium whitespace-nowrap">
                     {{ $seoTag }}
                 </a>
                 @endforeach
@@ -244,35 +246,47 @@
         </div>
 
         <!-- FAQ -->
-        <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
-            <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <i class="fas fa-circle-question text-indigo-600"></i>
+        <div class="bg-white border border-gray-100 rounded-2xl p-4 sm:p-6 md:p-8 shadow-sm">
+            <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-4 sm:mb-5 flex items-center gap-2">
+                <div class="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-50 flex-shrink-0">
+                    <i class="fas fa-question text-indigo-600 text-sm"></i>
+                </div>
                 Frequently Asked Questions (FAQ)
             </h2>
-            <div class="divide-y divide-gray-100">
+            <div class="space-y-3">
                 @foreach($faqs as $faq)
-                <details class="py-3">
-                    <summary class="flex justify-between items-center cursor-pointer text-sm font-semibold text-gray-800 list-none hover:text-blue-600">
+                <details class="group bg-gray-50 border border-gray-100 rounded-xl overflow-hidden [&_summary::-webkit-details-marker]:hidden">
+                    <summary class="flex justify-between items-center cursor-pointer p-4 text-sm sm:text-base font-semibold text-gray-800 hover:text-blue-600 hover:bg-blue-50/50 transition-colors list-none">
                         <span>{{ $faq['q'] }}</span>
-                        <i class="fas fa-plus text-gray-400 text-xs ml-2 flex-shrink-0"></i>
+                        <span class="ml-4 flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-white border border-gray-200 text-gray-400 group-open:bg-blue-600 group-open:border-blue-600 group-open:text-white transition-all">
+                            <i class="fas fa-plus text-[10px] group-open:hidden"></i>
+                            <i class="fas fa-minus text-[10px] hidden group-open:block"></i>
+                        </span>
                     </summary>
-                    <p class="mt-2 text-sm text-gray-600 leading-relaxed pl-1">{{ $faq['a'] }}</p>
+                    <div class="px-4 pb-4 pt-1 text-sm sm:text-base text-gray-600 leading-loose border-t border-gray-100 bg-white">
+                        {{ $faq['a'] }}
+                    </div>
                 </details>
                 @endforeach
             </div>
         </div>
 
         <!-- Quick Links -->
-        <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
-            <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <i class="fas fa-link text-green-600"></i> Quick Links
+        <div class="bg-white border border-gray-100 rounded-2xl p-4 sm:p-6 md:p-8 shadow-sm">
+            <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <div class="flex items-center justify-center w-8 h-8 rounded-full bg-green-50 flex-shrink-0">
+                    <i class="fas fa-link text-green-600 text-sm"></i>
+                </div>
+                Quick Links
             </h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
                 @foreach($quickLinks as $ql)
                 <a href="{{ route($ql['route']) }}"
-                   class="flex items-center gap-2 p-3 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50 transition-all font-medium text-gray-700 hover:text-blue-700">
-                    <i class="fas {{ $ql['icon'] }}" style="color:{{ $ql['color'] }};font-size:15px;"></i>
-                    {{ $ql['label'] }}
+                   class="flex items-center gap-3 p-3 rounded-xl border border-gray-100 bg-gray-50 hover:border-blue-300 hover:bg-blue-50 transition-all font-medium text-gray-700 hover:text-blue-700 shadow-sm hover:shadow-md">
+                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-white border border-gray-100 shadow-sm flex-shrink-0">
+                        <i class="fas {{ $ql['icon'] }}" style="color:{{ $ql['color'] }};font-size:12px;"></i>
+                    </div>
+                    <span class="text-xs sm:text-sm leading-tight">{{ $ql['label'] }}</span>
                 </a>
                 @endforeach
             </div>
