@@ -123,7 +123,7 @@
 
     <!-- Language Chooser Bar -->
     <div
-        class="bg-gradient-to-r from-sky-50 via-blue-50 to-indigo-50 border-b border-gray-200 py-3 shadow-sm notranslate">
+        class="bg-gradient-to-r from-sky-50 via-blue-50 to-indigo-50 border-b border-gray-200 py-2 shadow-sm notranslate">
         <div class="w-full px-2 sm:px-4 lg:px-6">
             <!-- Fix flex center cutting off first item left scroll -->
             <div class="flex items-center justify-start md:justify-center gap-3 overflow-x-auto hide-scrollbar whitespace-nowrap notranslate px-1">
@@ -164,7 +164,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div><!-- /language bar -->
 
     <style>
         .language-btn {
@@ -189,10 +189,11 @@
             box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 767px) {
             .language-btn {
-                padding: 4px 12px;
-                font-size: 12px;
+                padding: 4px 10px;
+                font-size: 11px;
+                border-radius: 6px;
             }
         }
     </style>
@@ -853,27 +854,30 @@
             transform: translateY(-2px);
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 767px) {
             .states-grid {
                 display: flex;
-                flex-wrap: wrap;
-                gap: 8px;
-                padding: 10px 4px;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                gap: 6px;
+                padding: 8px 4px;
+                scrollbar-width: none;
+                -webkit-overflow-scrolling: touch;
             }
             .states-grid::-webkit-scrollbar {
-                display: none; /* Chrome, Safari */
+                display: none;
             }
-
             .state-box {
                 flex: 0 0 auto;
                 font-size: 11px;
-                padding: 8px 12px;
-                min-height: 34px;
-                min-width: max-content;
+                padding: 6px 10px;
+                min-height: 30px;
+                white-space: nowrap;
                 border-radius: 6px;
             }
         }
     </style>
+    <!-- States bar -->
     <div class="bg-white border-b border-gray-200">
         <div class="w-full px-2 sm:px-4 lg:px-6">
             <div class="states-grid">
@@ -977,6 +981,7 @@
             </div>
         </div>
     </div>
+    </div><!-- /states bar -->
 
     <!-- Ad Slot - Header -->
     <x-ad-slot position="header" />
