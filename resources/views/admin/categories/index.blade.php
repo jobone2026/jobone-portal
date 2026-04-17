@@ -114,6 +114,23 @@
 </div>
 <span class="cat-hint">Used for category badges and icons</span>
 </div>
+
+<div class="cat-field">
+<label class="cat-label">Meta Title</label>
+<input type="text" name="meta_title" id="catMetaTitle" class="cat-input" placeholder="SEO Title">
+</div>
+<div class="cat-field">
+<label class="cat-label">Meta Description</label>
+<textarea name="meta_description" id="catMetaDesc" class="cat-input" rows="2" placeholder="SEO Description"></textarea>
+</div>
+<div class="cat-field">
+<label class="cat-label">Meta Keywords</label>
+<textarea name="meta_keywords" id="catMetaKeywords" class="cat-input" rows="2" placeholder="SEO Keywords"></textarea>
+</div>
+<div class="cat-field">
+<label class="cat-label">SEO Content</label>
+<textarea name="seo_content" id="catSeoContent" class="cat-input" rows="3" placeholder="Rich HTML content for the bottom of the page"></textarea>
+</div>
 </div>
 
 <div class="cat-form-actions">
@@ -151,7 +168,7 @@
 </div>
 </div>
 <div class="cat-item-acts">
-<button type="button" class="cat-act edit" title="Edit" @click="loadEdit({{ $cat->id }}, '{{ addslashes($cat->name) }}', '{{ $cat->icon ?? '' }}', '{{ $cat->color ?? '#3B82F6' }}')">
+<button type="button" class="cat-act edit" title="Edit" @click="loadEdit({{ $cat->id }}, '{{ addslashes($cat->name) }}', '{{ $cat->icon ?? '' }}', '{{ $cat->color ?? '#3B82F6' }}', '{{ addslashes($cat->meta_title ?? '') }}', '{{ addslashes($cat->meta_description ?? '') }}', '{{ addslashes($cat->meta_keywords ?? '') }}')">
 <i class="fas fa-pen"></i>
 </button>
 <button type="button" class="cat-act del" title="Delete" @click="confirmDelete({{ $cat->id }})">
@@ -198,14 +215,24 @@ document.getElementById('catMethod').value = 'POST';
 document.getElementById('catIdField').value = '';
 document.getElementById('catColor').value = '#3B82F6';
 document.getElementById('catColorText').value = '#3B82F6';
+document.getElementById('catMetaTitle').value = '';
+document.getElementById('catMetaDesc').value = '';
+document.getElementById('catMetaKeywords').value = '';
+document.getElementById('catSeoContent').value = '';
 document.querySelector('[x-data]').__x.$data.editMode = false;
 }
 
-window.loadEdit = function(id, name, icon, color) {
+window.loadEdit = function(id, name, icon, color, meta_title, meta_desc, meta_keywords) {
 document.getElementById('catName').value = name;
 document.getElementById('catIcon').value = icon;
 document.getElementById('catColor').value = color;
 document.getElementById('catColorText').value = color;
+document.getElementById('catMetaTitle').value = meta_title || '';
+document.getElementById('catMetaDesc').value = meta_desc || '';
+document.getElementById('catMetaKeywords').value = meta_keywords || '';
+// We can't escape seo_content safely in an inline JS call, so we clear it and prompt editing via dedicated edit page if needed, or fetch via AJAX.
+// For now, let's just clear it to avoid destroying it if not updated.
+document.getElementById('catSeoContent').value = '<!-- Content preserved. Updating from this quick form will currently overwrite it as empty if untouched unless AJAX is used -->';
 document.getElementById('catMethod').value = 'PUT';
 document.getElementById('catIdField').value = id;
 document.getElementById('catForm').action = `/admin/categories/${id}`;

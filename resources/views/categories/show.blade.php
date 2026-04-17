@@ -149,4 +149,10 @@
         {{ $posts->links() }}
     </div>
     @endif
+    <!-- SEO Content -->
+    @if(!empty($category->seo_content))
+    <div class="mt-8 bg-white p-6 rounded-lg border border-gray-200 prose prose-blue max-w-none text-sm text-gray-700">
+        {!! $category->seo_content !!}
+    </div>
+    @endif
 @endsection

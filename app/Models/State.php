@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class State extends Model
 {
-    protected $fillable = ['name', 'slug'];
+    protected $fillable = ['name', 'slug', 'meta_title', 'meta_description', 'meta_keywords', 'seo_content'];
 
     public function posts()
     {

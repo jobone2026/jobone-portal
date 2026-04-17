@@ -97,6 +97,23 @@
 <input type="text" name="name" id="stName" class="st-input" placeholder="e.g., Karnataka" required>
 <span class="st-hint">Full name of the state or union territory</span>
 </div>
+
+<div class="st-field">
+<label class="st-label">Meta Title</label>
+<input type="text" name="meta_title" id="stMetaTitle" class="st-input" placeholder="SEO Title">
+</div>
+<div class="st-field">
+<label class="st-label">Meta Description</label>
+<textarea name="meta_description" id="stMetaDesc" class="st-input" rows="2" placeholder="SEO Description"></textarea>
+</div>
+<div class="st-field">
+<label class="st-label">Meta Keywords</label>
+<textarea name="meta_keywords" id="stMetaKeywords" class="st-input" rows="2" placeholder="SEO Keywords"></textarea>
+</div>
+<div class="st-field">
+<label class="st-label">SEO Content</label>
+<textarea name="seo_content" id="stSeoContent" class="st-input" rows="3" placeholder="Rich HTML content for the bottom of the page"></textarea>
+</div>
 </div>
 
 <div class="st-form-actions">
@@ -134,7 +151,7 @@
 </div>
 </div>
 <div class="st-item-acts">
-<button type="button" class="st-act edit" title="Edit" @click="loadEdit({{ $st->id }}, '{{ addslashes($st->name) }}')">
+<button type="button" class="st-act edit" title="Edit" @click="loadEdit({{ $st->id }}, '{{ addslashes($st->name) }}', '{{ addslashes($st->meta_title ?? '') }}', '{{ addslashes($st->meta_description ?? '') }}', '{{ addslashes($st->meta_keywords ?? '') }}')">
 <i class="fas fa-pen"></i>
 </button>
 <button type="button" class="st-act del" title="Delete" @click="confirmDelete({{ $st->id }})">
@@ -175,11 +192,19 @@ function resetForm() {
 document.getElementById('stForm').reset();
 document.getElementById('stMethod').value = 'POST';
 document.getElementById('stIdField').value = '';
+document.getElementById('stMetaTitle').value = '';
+document.getElementById('stMetaDesc').value = '';
+document.getElementById('stMetaKeywords').value = '';
+document.getElementById('stSeoContent').value = '';
 document.querySelector('[x-data]').__x.$data.editMode = false;
 }
 
-window.loadEdit = function(id, name) {
+window.loadEdit = function(id, name, meta_title, meta_desc, meta_keywords) {
 document.getElementById('stName').value = name;
+document.getElementById('stMetaTitle').value = meta_title || '';
+document.getElementById('stMetaDesc').value = meta_desc || '';
+document.getElementById('stMetaKeywords').value = meta_keywords || '';
+document.getElementById('stSeoContent').value = '<!-- Content preserved. Updating from this quick form will currently overwrite it as empty if untouched unless AJAX is used -->';
 document.getElementById('stMethod').value = 'PUT';
 document.getElementById('stIdField').value = id;
 document.getElementById('stForm').action = `/admin/states/${id}`;

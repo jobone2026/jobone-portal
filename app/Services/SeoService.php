@@ -355,13 +355,18 @@ class SeoService
 
     public function generateCategorySeo(Category $category): array
     {
+        $year = date('Y');
+        $title = $category->meta_title ?: "Latest {$category->name} Jobs {$year} | JobOne.in";
+        $desc = $category->meta_description ?: "Browse latest {$category->name} job notifications, admit cards, results, and exam updates. Apply for government jobs in {$category->name} sector.";
+        $keywords = $category->meta_keywords ?: "{$category->name} jobs, {$category->name} recruitment, government jobs, sarkari naukri {$year}";
+
         return [
-            'title' => "Latest {$category->name} Jobs 2026 | JobOne.in",
-            'description' => "Browse latest {$category->name} job notifications, admit cards, results, and exam updates. Apply for government jobs in {$category->name} sector.",
-            'keywords' => "{$category->name} jobs, {$category->name} recruitment, government jobs, sarkari naukri 2026",
+            'title' => $title,
+            'description' => $desc,
+            'keywords' => $keywords,
             'canonical' => url()->current(),
-            'og_title' => "Latest {$category->name} Jobs 2026 | JobOne.in",
-            'og_description' => "Browse latest {$category->name} job notifications and exam updates.",
+            'og_title' => $title,
+            'og_description' => $desc,
             'og_image' => asset('images/og-image.jpg'),
             'og_url' => url()->current(),
         ];
@@ -369,13 +374,18 @@ class SeoService
 
     public function generateStateSeo(State $state): array
     {
+        $year = date('Y');
+        $title = $state->meta_title ?: "{$state->name} Government Jobs {$year} | JobOne.in";
+        $desc = $state->meta_description ?: "Latest government job notifications in {$state->name}. Find SSC, UPSC, Railways, Banking, and State PSC jobs in {$state->name}.";
+        $keywords = $state->meta_keywords ?: "{$state->name} jobs, {$state->name} government jobs, {$state->name} sarkari naukri {$year}";
+
         return [
-            'title' => "{$state->name} Government Jobs 2026 | JobOne.in",
-            'description' => "Latest government job notifications in {$state->name}. Find SSC, UPSC, Railways, Banking, and State PSC jobs in {$state->name}.",
-            'keywords' => "{$state->name} jobs, {$state->name} government jobs, {$state->name} sarkari naukri 2026",
+            'title' => $title,
+            'description' => $desc,
+            'keywords' => $keywords,
             'canonical' => url()->current(),
-            'og_title' => "{$state->name} Government Jobs 2026 | JobOne.in",
-            'og_description' => "Latest government job notifications in {$state->name}.",
+            'og_title' => $title,
+            'og_description' => $desc,
             'og_image' => asset('images/og-image.jpg'),
             'og_url' => url()->current(),
         ];
