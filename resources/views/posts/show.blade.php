@@ -61,7 +61,7 @@
 
 <style>
 *{box-sizing:border-box}
-.pg{padding:14px 16px;max-width:1000px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;overflow-x:hidden}
+.pg{padding:14px 16px;max-width:1000px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;overflow-x:hidden;width:100%;box-sizing:border-box}
 .breadcrumb{font-size:12px;color:#9ca3af;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;line-height:1.6}
 .breadcrumb a{color:#2563eb;text-decoration:none;white-space:nowrap}
 .breadcrumb a:hover{text-decoration:underline}
@@ -142,30 +142,42 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
 .link-arrow{color:#10b981;flex-shrink:0}
 
 /* Content body */
-.post-content-body{font-size:14px;line-height:1.75;color:#374151;word-break:break-word;overflow-wrap:break-word}
-.post-content-body *{max-width:100% !important;word-break:break-word;overflow-wrap:break-word}
-.post-content-body h1,.post-content-body h2,.post-content-body h3,.post-content-body h4{font-weight:700;color:#111827;margin-top:1.5em;margin-bottom:.65em;line-height:1.3;word-break:break-word}
-.post-content-body h2{font-size:1.4rem;padding:12px 16px;background:#eff6ff;border-left:4px solid #2563eb;border-radius:4px;margin-top:1.8em}
-.post-content-body h3{font-size:1.15rem;padding:10px 14px;background:#f8fafc;border-left:4px solid #3b82f6;border-radius:4px}
-.post-content-body h4{font-size:1rem;padding:8px 12px;background:#f8fafc;border-left:3px solid #94a3b8;border-radius:4px}
-.post-content-body p{margin-bottom:1em}
-.post-content-body a{color:#2563eb;text-decoration:underline;font-weight:500}
-.post-content-body ul{padding-left:1.5em;margin-bottom:1em;list-style:disc}
-.post-content-body ol{padding-left:1.5em;margin-bottom:1em;list-style:decimal}
+.post-content-body{font-size:14px;line-height:1.75;color:#374151;word-break:break-word;overflow-wrap:break-word;overflow-x:hidden;width:100%;box-sizing:border-box}
+/* Force ALL child elements — including those with inline width/style resets — to stay contained */
+.post-content-body *{max-width:100% !important;word-break:break-word !important;overflow-wrap:break-word !important;box-sizing:border-box !important}
+.post-content-body [style*="width"]{width:auto !important;max-width:100% !important}
+.post-content-body [style*="min-width"]{min-width:0 !important}
+.post-content-body h1,.post-content-body h2,.post-content-body h3,.post-content-body h4{font-weight:700;color:#111827;margin-top:1.5em;margin-bottom:.65em;line-height:1.3;word-break:break-word;white-space:normal !important}
+.post-content-body h2{font-size:1.2rem;padding:10px 14px;background:#eff6ff;border-left:4px solid #2563eb;border-radius:4px;margin-top:1.8em}
+@media(max-width:640px){.post-content-body h2{font-size:1.05rem;padding:8px 10px}}
+.post-content-body h3{font-size:1.05rem;padding:8px 12px;background:#f8fafc;border-left:4px solid #3b82f6;border-radius:4px}
+@media(max-width:640px){.post-content-body h3{font-size:.95rem}}
+.post-content-body h4{font-size:.95rem;padding:7px 10px;background:#f8fafc;border-left:3px solid #94a3b8;border-radius:4px}
+.post-content-body p{margin-bottom:1em;white-space:normal !important}
+.post-content-body a{color:#2563eb;text-decoration:underline;font-weight:500;word-break:break-all}
+.post-content-body ul{padding-left:1.2em;margin-bottom:1em;list-style:disc}
+.post-content-body ol{padding-left:1.2em;margin-bottom:1em;list-style:decimal}
 .post-content-body li{margin-bottom:.4em;line-height:1.7}
-.post-content-body table{width:100% !important;max-width:100% !important;border-collapse:collapse;margin:1.2em 0;font-size:13px;display:table;table-layout:auto}
-@media(max-width:768px){ .post-content-body table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch} }
-.post-content-body table tr td, .post-content-body table tr th { border: 1px solid #e2e8f0; padding: 10px; min-width: 80px; word-break: break-word; overflow-wrap: break-word; }
-.post-content-body th{background:#1e3a8a;color:#fff;padding:10px 12px;text-align:left;font-weight:600}
-.post-content-body td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+/* Tables: scroll horizontally if too wide, don't expand page */
+.post-content-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%}
+.post-content-body table{width:100% !important;max-width:100% !important;border-collapse:collapse;margin:1.2em 0;font-size:12px;table-layout:fixed}
+@media(max-width:640px){.post-content-body table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;font-size:11px}}
+.post-content-body table tr td,.post-content-body table tr th{border:1px solid #e2e8f0;padding:8px;word-break:break-word;overflow-wrap:break-word}
+@media(max-width:640px){.post-content-body table tr td,.post-content-body table tr th{padding:5px 6px;min-width:60px}}
+.post-content-body th{background:#1e3a8a;color:#fff;text-align:left;font-weight:600}
+.post-content-body td{border-bottom:1px solid #f1f5f9;vertical-align:middle}
 .post-content-body tr:nth-child(even) td{background:#f9fafb}
 .post-content-body strong,.post-content-body b{color:#111827;font-weight:700}
-.post-content-body blockquote{border-left:4px solid #e5e7eb;padding-left:1em;margin:1.4em 0;font-style:italic;color:#6b7280}
-.post-content-body img{max-width:100%;height:auto;border-radius:.5rem;margin:1.2em 0}
-.post-content-body code{background:#f3f4f6;padding:.2em .4em;border-radius:.25rem;font-size:.875em;font-family:monospace}
+.post-content-body blockquote{border-left:4px solid #e5e7eb;padding-left:.8em;margin:1.2em 0 1.2em .4em;font-style:italic;color:#6b7280}
+.post-content-body img{max-width:100% !important;height:auto !important;border-radius:.5rem;margin:1rem 0;display:block}
+.post-content-body code{background:#f3f4f6;padding:.2em .4em;border-radius:.25rem;font-size:.85em;font-family:monospace;word-break:break-all}
 .post-content-body pre{background:#1f2937;color:#f9fafb;padding:1em;border-radius:.5rem;overflow-x:auto;margin:1.2em 0}
 .post-content-body pre code{background:transparent;padding:0;color:inherit}
 .post-content-body hr{border:none;border-top:2px solid #e5e7eb;margin:1.8em 0}
+/* Iframes (youtube embeds etc) */
+.post-content-body iframe{max-width:100% !important;width:100% !important}
+/* Prevent white-space:nowrap from any injected spans/divs */
+.post-content-body span,.post-content-body div{white-space:normal !important;max-width:100% !important}
 
 /* Sidebar */
 .apply-card{background:#fff;border:1px solid #1d9e75;border-radius:12px;padding:18px;margin-bottom:14px}
@@ -377,10 +389,12 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
             @endif
 
             {{-- Main Content --}}
-            <div class="card">
+            <div class="card" style="overflow-x:hidden">
                 <div class="sec-title">📋 Full Details</div>
-                <div class="post-content-body">
-                    {!! $post->content !!}
+                <div class="post-content-wrap">
+                    <div class="post-content-body">
+                        {!! $post->content !!}
+                    </div>
                 </div>
             </div>
 
