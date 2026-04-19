@@ -23,7 +23,7 @@
             'og_url' => url()->current(),
         ];
     @endphp
-    <x-seo-head :seo="$seoData" :schema="$schema ?? null" />
+    <x-seo-head :seo="$seoData" :schema="$schema ?? null" :post="$post ?? null" />
 
     <!-- Google Analytics -->
     @php
@@ -1193,19 +1193,20 @@
 
 
     <!-- Floating Social Buttons - Right Side Middle (visible on all screens) -->
-    <div class="fixed right-2 md:right-4 top-1/2 transform -translate-y-1/2 z-40 flex flex-col gap-3 md:gap-4 drop-shadow-lg">
+    <div class="fixed top-1/2 transform -translate-y-1/2 z-40 flex flex-col gap-2 md:gap-4 drop-shadow-lg"
+         style="right:0;">
         <!-- WhatsApp Button -->
         <a href="https://whatsapp.com/channel/0029VbD9cau2P59hFZ1nwh22" target="_blank" rel="noopener noreferrer"
-            class="flex items-center justify-center w-10 h-10 md:w-14 md:h-14 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-2xl transition-all duration-300 hover:scale-110 hover:shadow-green-500/50"
-            style="background-color: #25D366 !important; color: white !important; text-decoration: none !important;">
-            <i class="fab fa-whatsapp text-2xl md:text-3xl" style="color: white !important;"></i>
+            class="flex items-center justify-center md:w-14 md:h-14 text-white shadow-2xl transition-all duration-300 hover:scale-110"
+            style="background-color: #25D366 !important; color: white !important; text-decoration: none !important; width:32px; height:36px; border-radius:6px 0 0 6px;">
+            <i class="fab fa-whatsapp" style="font-size:18px;color:white !important;"></i>
         </a>
 
         <!-- Telegram Button -->
         <a href="https://t.me/jobone2026" target="_blank" rel="noopener noreferrer"
-            class="flex items-center justify-center w-10 h-10 md:w-14 md:h-14 bg-blue-500 hover:bg-blue-600 text-white rounded-full shadow-2xl transition-all duration-300 hover:scale-110 hover:shadow-blue-500/50"
-            style="background-color: #0088cc !important; color: white !important; text-decoration: none !important;">
-            <i class="fab fa-telegram-plane text-2xl md:text-3xl" style="color: white !important;"></i>
+            class="flex items-center justify-center md:w-14 md:h-14 text-white shadow-2xl transition-all duration-300 hover:scale-110"
+            style="background-color: #0088cc !important; color: white !important; text-decoration: none !important; width:32px; height:36px; border-radius:6px 0 0 6px;">
+            <i class="fab fa-telegram-plane" style="font-size:18px;color:white !important;"></i>
         </a>
     </div>
 

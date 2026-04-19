@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Services\HtmlSanitizerService;
 use App\Services\SeoService;
 use App\Services\SchemaService;
 use Illuminate\Http\Request;
@@ -112,6 +113,10 @@ class PostController extends Controller
         }
         
         $schema[] = $schemaService->generateBreadcrumbSchema($post);
+
+        // Sanitize content server-side to fix inline width/overflow on mobile
+        $sanitizer = app(HtmlSanitizerService::class);
+        $post->content = $sanitizer->cleanContent($post->content ?? '');
 
         return view('posts.show', compact('post', 'related', 'seo', 'schema'));
     }

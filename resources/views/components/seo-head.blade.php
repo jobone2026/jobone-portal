@@ -1,6 +1,7 @@
-@props(['seo' => null, 'schema' => null, 'noindex' => false])
+@props(['seo' => null, 'schema' => null, 'noindex' => false, 'post' => null])
 
 @php
+use Illuminate\Support\Str;
     $defaultSeo = [
         'title'          => 'JobOne.in - Latest Government Jobs, Sarkari Naukri, Admit Cards & Results',
         'description'    => 'Find latest government jobs, sarkari naukri, admit cards, results, answer keys, syllabus for SSC, UPSC, Railways, Banking, State PSC, Defence, Police across India.',
@@ -13,6 +14,17 @@
     ];
     $seo     = array_merge($defaultSeo, $seo ?? []);
     $isHome  = request()->is('/');
+    $ogType  = ($post && in_array($post->type ?? '', ['blog', 'job', 'admit_card', 'result', 'answer_key', 'syllabus'])) ? 'article' : 'website';
+    // Ensure og_image is absolute
+    if (!empty($seo['og_image']) && !str_starts_with($seo['og_image'], 'http')) {
+        $seo['og_image'] = url($seo['og_image']);
+    }
+    if (empty($seo['og_image'])) {
+        $seo['og_image'] = url('/images/og-image.jpg');
+    }
+    // Truncate description to 155 chars for OG
+    $seo['og_description'] = Str::limit(strip_tags($seo['og_description'] ?? $seo['description'] ?? ''), 155);
+    $seo['description']    = Str::limit(strip_tags($seo['description'] ?? ''), 155);
 
     // Build home schemas as PHP (avoids Blade parsing JSON curly braces as directives)
     $homeSchemas = [];
@@ -88,16 +100,23 @@
 <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 
 <!-- Open Graph -->
-<meta property="og:type" content="website">
+<meta property="og:type" content="{{ $ogType }}">
 <meta property="og:site_name" content="JobOne.in">
 <meta property="og:title" content="{{ $seo['og_title'] }}">
 <meta property="og:description" content="{{ $seo['og_description'] }}">
 <meta property="og:image" content="{{ $seo['og_image'] }}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="{{ $seo['og_title'] }}">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="{{ Str::limit($seo['og_title'], 100) }}">
 <meta property="og:url" content="{{ $seo['og_url'] }}">
 <meta property="og:locale" content="en_IN">
+@if($post && $post->created_at)
+<meta property="article:published_time" content="{{ $post->created_at->toIso8601String() }}">
+<meta property="article:modified_time" content="{{ $post->updated_at->toIso8601String() }}">
+<meta property="article:author" content="JobOne.in">
+<meta property="article:section" content="{{ ucwords(str_replace('_', ' ', $post->type ?? 'blog')) }}">
+@endif
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
