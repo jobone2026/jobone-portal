@@ -119,6 +119,7 @@
         overscroll-behavior-x: none;
     }
 </style>
+</head>
 <body class="bg-gray-50 font-sans leading-normal tracking-normal overflow-x-hidden" style="padding-bottom: 0; overflow-x: hidden !important;">
 
     <!-- Language Chooser Bar -->
