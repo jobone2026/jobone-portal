@@ -36,8 +36,7 @@
             function gtag() { dataLayer.push(arguments); }
             gtag('js', new Date());
             gtag('config', '{{ $gaTrackingId }}', {
-                'page_title': '{{ $seoData['title'] ?? 'JobOne.in' }}',
-                'page_path': window.location.pathname
+                'page_title': {!! json_encode(html_entity_decode($seoData['title'] ?? 'JobOne.in')) !!}
             });
         </script>
     @endif
