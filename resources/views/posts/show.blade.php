@@ -18,6 +18,7 @@
         'answer_key' => ['route' => 'posts.answer-keys','label' => 'Answer Keys'],
         'syllabus'   => ['route' => 'posts.syllabus',   'label' => 'Syllabus'],
         'blog'       => ['route' => 'posts.blogs',      'label' => 'Blog'],
+        'scholarship'=> ['route' => 'posts.scholarships','label' => 'Scholarships'],
     ];
     $typeInfo   = $typeRouteMap[$post->type] ?? ['route' => 'home', 'label' => 'Posts'];
     $postUrl    = route('posts.show', [$post->type, $post->slug]);
@@ -27,36 +28,66 @@
     if (is_string($importantLinks)) { $importantLinks = json_decode($importantLinks, true) ?? []; }
     if (!is_array($importantLinks)) { $importantLinks = []; }
 
-    // Education labels
+    // Education labels — extended map with new diploma sub-types
     $eduMap = [
-        '10th_pass'=>'10th Pass','12th_pass'=>'12th Pass','graduate'=>'Graduate',
-        'post_graduate'=>'Post Graduate','diploma'=>'Diploma','iti'=>'ITI',
-        'btech'=>'B.Tech/B.E','mtech'=>'M.Tech/M.E','bsc'=>'B.Sc','msc'=>'M.Sc',
-        'bcom'=>'B.Com','mcom'=>'M.Com','ba'=>'B.A','ma'=>'M.A','bba'=>'BBA',
-        'mba'=>'MBA','ca'=>'CA','cs'=>'CS','cma'=>'CMA','llb'=>'LLB',
-        'llm'=>'LLM','mbbs'=>'MBBS','bds'=>'BDS','bpharm'=>'B.Pharm',
-        'mpharm'=>'M.Pharm','nursing'=>'Nursing','bed'=>'B.Ed','med'=>'M.Ed',
-        'phd'=>'PhD','any_qualification'=>'Any Qualification'
+        '10th_pass'       => '10th Pass',      '12th_pass'      => '12th Pass',
+        'graduate'        => 'Graduate',        'post_graduate'  => 'Post Graduate',
+        'diploma'         => 'Diploma',         'diploma_civil'  => 'Diploma (Civil)',
+        'diploma_mech'    => 'Diploma (Mech)',  'diploma_elec'   => 'Diploma (Electrical)',
+        'diploma_cs'      => 'Diploma (CS)',    'diploma_it'     => 'Diploma (IT)',
+        'diploma_auto'    => 'Diploma (Auto)',  'diploma_pharma' => 'Diploma (Pharmacy)',
+        'diploma_nursing' => 'Diploma (Nursing)','diploma_arch'  => 'Diploma (Architecture)',
+        'diploma_other'   => 'Diploma (Other)', 'iti'            => 'ITI',
+        'btech'           => 'B.Tech/B.E',      'mtech'          => 'M.Tech/M.E',
+        'bca'             => 'BCA',             'mca'            => 'MCA',
+        'bsc'             => 'B.Sc',            'msc'            => 'M.Sc',
+        'bcom'            => 'B.Com',           'mcom'           => 'M.Com',
+        'ba'              => 'B.A',             'ma'             => 'M.A',
+        'bba'             => 'BBA',             'mba'            => 'MBA',
+        'ca'              => 'CA',              'cs'             => 'CS',
+        'cma'             => 'CMA',             'llb'            => 'LLB',
+        'llm'             => 'LLM',             'mbbs'           => 'MBBS',
+        'bds'             => 'BDS',             'bpharm'         => 'B.Pharm',
+        'mpharm'          => 'M.Pharm',         'nursing'        => 'B.Sc Nursing',
+        'msc_nursing'     => 'M.Sc Nursing',    'bed'            => 'B.Ed',
+        'med'             => 'M.Ed',            'phd'            => 'PhD',
+        'any_qualification'=> 'Any Qualification',
     ];
-    $eduLabels  = [];
+    $eduLabels = [];
     if ($post->education && is_array($post->education)) {
         foreach ($post->education as $e) { $eduLabels[] = $eduMap[$e] ?? ucwords(str_replace('_',' ',$e)); }
     }
 
     // Days remaining
-    $daysLeft = null;
+    $daysLeft    = null;
     $lastDateStr = null;
     if ($post->last_date) {
-        $daysLeft   = now()->startOfDay()->diffInDays($post->last_date->startOfDay(), false);
+        $daysLeft    = now()->startOfDay()->diffInDays($post->last_date->startOfDay(), false);
         $lastDateStr = $post->last_date->format('d M Y');
     }
 
     // Org initials for logo box
-    $orgName = $post->organization ?? 'GOV';
-    $orgWords = explode(' ', $orgName);
+    $orgName     = $post->organization ?? 'GOV';
+    $orgWords    = explode(' ', $orgName);
     $orgInitials = '';
     foreach(array_slice($orgWords, 0, 2) as $w) { $orgInitials .= strtoupper(substr($w,0,2)) . ' '; }
     $orgInitials = trim($orgInitials);
+
+    // Direct apply link (online_form field takes priority over important_links)
+    $directApplyLink = $post->online_form ?? null;
+    if (!$directApplyLink && count($importantLinks) > 0) {
+        foreach ($importantLinks as $k => $v) {
+            $lbl = strtolower(is_array($v) ? ($v['label'] ?? $k) : $k);
+            $lu  = is_array($v) ? ($v['url'] ?? $v) : $v;
+            if (str_contains($lbl,'apply') || str_contains($lbl,'official') || str_contains($lbl,'register')) {
+                $directApplyLink = $lu; break;
+            }
+        }
+    }
+    if (!$directApplyLink && count($importantLinks) > 0) {
+        $first = reset($importantLinks);
+        $directApplyLink = is_array($first) ? ($first['url'] ?? '#') : $first;
+    }
 @endphp
 
 <style>
@@ -294,6 +325,7 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                         @endif
                         <div class="badges">
                             <span class="badge b-govt">{{ $typeInfo['label'] }}</span>
+                            @if($post->is_upcoming)<span class="badge" style="background:#fff7ed;color:#c2410c;border:1px solid #fed7aa">⏳ Upcoming</span>@endif
                             @if($post->isNew())<span class="badge b-new">🔥 New</span>@endif
                             @if($post->last_date && $daysLeft !== null && $daysLeft >= 0)
                                 <span class="badge b-warn">Apply by {{ $post->last_date->format('d M') }}</span>
@@ -301,17 +333,26 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                             @if($post->total_posts)
                                 <span class="badge b-info">{{ number_format($post->total_posts) }} Vacancies</span>
                             @endif
+                            @if($post->salary)
+                                <span class="badge" style="background:#f0fdf4;color:#166534;border:1px solid #bbf7d0">💰 {{ Str::limit($post->salary, 30) }}</span>
+                            @endif
                             @if($post->category)<span class="badge b-purple">{{ $post->category->name }}</span>@endif
                         </div>
                     </div>
                 </div>
 
-                @if($post->total_posts || $eduLabels || ($post->last_date && $daysLeft !== null))
+                @if($post->total_posts || $post->salary || $eduLabels || ($post->last_date && $daysLeft !== null))
                 <div class="hdr-meta">
                     @if($post->total_posts)
                     <div class="meta-item">
                         <span class="meta-label">Total Vacancies</span>
                         <span class="meta-val">{{ number_format($post->total_posts) }} Posts</span>
+                    </div>
+                    @endif
+                    @if($post->salary)
+                    <div class="meta-item">
+                        <span class="meta-label">💰 Salary / Pay</span>
+                        <span class="meta-val" style="color:#166534">{{ $post->salary }}</span>
                     </div>
                     @endif
                     @if($eduLabels)
@@ -330,20 +371,39 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                 @endif
             </div>
 
-            {{-- Important Dates Card (if any dates) --}}
-            @if($post->notification_date || $post->last_date)
+            {{-- Important Dates Card --}}
+            @if($post->notification_date || $post->start_date || $post->end_date || $post->last_date)
             <div class="card">
                 <div class="sec-title">📅 Important Dates</div>
                 <div class="dates-grid">
                     @if($post->notification_date)
                     <div class="date-card">
-                        <div class="date-label">Notification / Start Date</div>
+                        <div class="date-label">Notification Date</div>
                         <div class="date-val">{{ $post->notification_date->format('d M Y') }}</div>
+                    </div>
+                    @endif
+                    @if($post->start_date)
+                    <div class="date-card" style="background:#f0fdf4;border-color:#bbf7d0">
+                        <div class="date-label" style="color:#166534">🟢 Form Start Date</div>
+                        <div class="date-val" style="color:#166534">{{ $post->start_date->format('d M Y') }}</div>
+                    </div>
+                    @endif
+                    @if($post->end_date)
+                    @php $endDays = now()->startOfDay()->diffInDays($post->end_date->startOfDay(), false); @endphp
+                    <div class="date-card @if($endDays !== null && $endDays <= 10 && $endDays >= 0) urgent @endif">
+                        <div class="date-label">🔴 Form End Date</div>
+                        <div class="date-val">{{ $post->end_date->format('d M Y') }}
+                            @if($endDays !== null && $endDays >= 0 && $endDays <= 30)
+                                <span style="font-size:11px;font-weight:500;color:#b91c1c"> · {{ $endDays }} days left</span>
+                            @elseif($endDays !== null && $endDays < 0)
+                                <span style="font-size:11px;font-weight:500;color:#6b7280"> · Closed</span>
+                            @endif
+                        </div>
                     </div>
                     @endif
                     @if($post->last_date)
                     <div class="date-card @if($daysLeft !== null && $daysLeft <= 10 && $daysLeft >= 0) urgent @endif">
-                        <div class="date-label">Last Date to Apply</div>
+                        <div class="date-label">⏰ Last Date to Apply</div>
                         <div class="date-val">{{ $post->last_date->format('d M Y') }}
                             @if($daysLeft !== null && $daysLeft >= 0 && $daysLeft <= 30)
                                 <span style="font-size:11px;font-weight:500;color:#b91c1c"> · {{ $daysLeft }} days left</span>
@@ -357,8 +417,8 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
             </div>
             @endif
 
-            {{-- Quick info card (organization, total, state) --}}
-            @if($post->organization || $post->total_posts || $post->state || $eduLabels)
+            {{-- Quick info card --}}
+            @if($post->organization || $post->total_posts || $post->salary || $post->state || $eduLabels)
             <div class="card">
                 <div class="sec-title">ℹ️ Quick Information</div>
                 <table class="row-table">
@@ -367,6 +427,9 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                     @endif
                     @if($post->total_posts)
                     <tr><td>Total Vacancies</td><td>{{ number_format($post->total_posts) }} posts</td></tr>
+                    @endif
+                    @if($post->salary)
+                    <tr><td>💰 Salary / Pay Scale</td><td style="color:#166534;font-weight:600">{{ $post->salary }}</td></tr>
                     @endif
                     @if($post->state)
                     <tr><td>State</td><td><a href="{{ route('states.show', $post->state) }}" style="color:#2563eb;text-decoration:underline">{{ $post->state->name }}</a></td></tr>
@@ -398,7 +461,30 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                 </div>
             </div>
 
-            {{-- Important Links --}}
+            {{-- Online Apply + Final Result CTA --}}
+            @if($post->online_form || $post->final_result)
+            <div class="card" style="background:linear-gradient(135deg,#f0fdf4,#eff6ff);border-color:#bbf7d0">
+                <div class="sec-title" style="border-color:#d1fae5">🚀 Quick Action Links</div>
+                <div class="links-grid">
+                    @if($post->online_form)
+                    <a href="{{ $post->online_form }}" target="_blank" rel="noopener noreferrer"
+                       style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;background:#0f6e56;border-radius:10px;text-decoration:none;color:#fff;font-weight:700;font-size:13px">
+                        <span>✅ Apply Online</span>
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                    </a>
+                    @endif
+                    @if($post->final_result)
+                    <a href="{{ $post->final_result }}" target="_blank" rel="noopener noreferrer"
+                       style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;background:#1d4ed8;border-radius:10px;text-decoration:none;color:#fff;font-weight:700;font-size:13px">
+                        <span>🏆 Final Result</span>
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                    </a>
+                    @endif
+                </div>
+            </div>
+            @endif
+
+            {{-- Important Links (from JSON) --}}
             @if(count($importantLinks) > 0)
             <div class="card">
                 <div class="sec-title">🔗 Important Links</div>
@@ -423,13 +509,17 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                 <div class="sec-title">📝 How to Apply</div>
                 <div class="list-items">
                     <div class="list-item"><div class="dot"></div><span>Visit the official website of the recruiting organisation.</span></div>
+                    @if($post->online_form)
+                    <div class="list-item"><div class="dot"></div><span>Click <strong>"Apply Online"</strong> — direct link available above in Quick Action Links.</span></div>
+                    @else
                     <div class="list-item"><div class="dot"></div><span>Find the recruitment notification and click "Apply Online".</span></div>
+                    @endif
                     <div class="list-item"><div class="dot"></div><span>Register using your mobile number and email address.</span></div>
                     <div class="list-item"><div class="dot"></div><span>Fill in your personal, educational and category details.</span></div>
                     <div class="list-item"><div class="dot"></div><span>Upload required documents (photo, signature) in specified formats.</span></div>
                     <div class="list-item"><div class="dot"></div><span>Pay the application fee online and submit; save printout for records.</span></div>
-                    @if(count($importantLinks) > 0)
-                    <div class="list-item"><div class="dot"></div><span>Refer to the <strong>Important Links</strong> section above for direct apply and notification links.</span></div>
+                    @if($post->end_date)
+                    <div class="list-item"><div class="dot" style="background:#b91c1c"></div><span>⚠️ Form closes on <strong>{{ $post->end_date->format('d M Y') }}</strong> — don't miss the deadline!</span></div>
                     @endif
                 </div>
             </div>
@@ -503,23 +593,29 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                 </div>
                 @endif
 
-                @if(count($importantLinks) > 0)
-                    @php $applyLink = null; @endphp
-                    @foreach($importantLinks as $k => $v)
-                        @php
-                            $lbl = strtolower(is_array($v) ? ($v['label'] ?? $k) : $k);
-                            $lu  = is_array($v) ? ($v['url'] ?? $v) : $v;
-                            if (!$applyLink && (str_contains($lbl,'apply') || str_contains($lbl,'official') || str_contains($lbl,'register'))) { $applyLink = $lu; }
-                        @endphp
-                    @endforeach
-                    @if(!$applyLink)
-                        @php $first = reset($importantLinks); $applyLink = is_array($first) ? ($first['url'] ?? '#') : $first; @endphp
-                    @endif
-                    <a href="{{ $applyLink }}" target="_blank" rel="noopener" class="apply-btn-main">
+                @if($post->salary)
+                <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 12px;margin-bottom:12px;display:flex;align-items:center;gap:8px">
+                    <span style="font-size:18px">💰</span>
+                    <div>
+                        <div style="font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:.04em">Salary / Pay Scale</div>
+                        <div style="font-size:13px;font-weight:700;color:#166534">{{ $post->salary }}</div>
+                    </div>
+                </div>
+                @endif
+
+                @if($directApplyLink)
+                    <a href="{{ $directApplyLink }}" target="_blank" rel="noopener" class="apply-btn-main">
                         {{ $post->type === 'job' ? '✅ Apply on Official Site' : '📄 View Official Link' }}
                     </a>
                 @else
                     <a href="#" class="apply-btn-main" style="opacity:.6;pointer-events:none">Link in details below ↓</a>
+                @endif
+
+                @if($post->final_result)
+                <a href="{{ $post->final_result }}" target="_blank" rel="noopener"
+                   style="display:block;width:100%;padding:10px;background:#1d4ed8;color:#fff;border-radius:8px;font-size:13px;font-weight:600;text-align:center;text-decoration:none;margin-top:8px">
+                    🏆 View Final Result
+                </a>
                 @endif
 
                 <div class="share-row">
@@ -545,6 +641,9 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                 @if($post->total_posts)
                 <div class="qf-row"><span class="qf-label">Vacancies</span><span class="qf-val">{{ number_format($post->total_posts) }}</span></div>
                 @endif
+                @if($post->salary)
+                <div class="qf-row"><span class="qf-label">💰 Salary</span><span class="qf-val" style="color:#166534">{{ Str::limit($post->salary, 28) }}</span></div>
+                @endif
                 @if($post->state)
                 <div class="qf-row"><span class="qf-label">Work State</span><span class="qf-val">{{ $post->state->name }}</span></div>
                 @else
@@ -553,8 +652,14 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                 @if($eduLabels)
                 <div class="qf-row"><span class="qf-label">Education</span><span class="qf-val">{{ implode(', ', array_slice($eduLabels, 0, 2)) }}</span></div>
                 @endif
+                @if($post->start_date)
+                <div class="qf-row"><span class="qf-label">Form Start</span><span class="qf-val" style="color:#166534">{{ $post->start_date->format('d M Y') }}</span></div>
+                @endif
+                @if($post->end_date)
+                <div class="qf-row"><span class="qf-label">Form End</span><span class="qf-val" style="color:#b91c1c">{{ $post->end_date->format('d M Y') }}</span></div>
+                @endif
                 @if($post->notification_date)
-                <div class="qf-row"><span class="qf-label">Start Date</span><span class="qf-val">{{ $post->notification_date->format('d M Y') }}</span></div>
+                <div class="qf-row"><span class="qf-label">Notif. Date</span><span class="qf-val">{{ $post->notification_date->format('d M Y') }}</span></div>
                 @endif
                 @if($post->last_date)
                 <div class="qf-row"><span class="qf-label">Last Date</span><span class="qf-val" @if($daysLeft !== null && $daysLeft <= 10 && $daysLeft >=0) style="color:#b91c1c" @endif>{{ $lastDateStr }}</span></div>
@@ -587,9 +692,14 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
 
 {{-- Mobile Sticky Bottom Bar --}}
 <div class="mobile-apply-bar">
-    @if(count($importantLinks) > 0)
-    <a href="{{ $applyLink ?? '#' }}" target="_blank" rel="noopener" class="mobile-apply-btn">
+    @if($directApplyLink)
+    <a href="{{ $directApplyLink }}" target="_blank" rel="noopener" class="mobile-apply-btn">
         {{ $post->type === 'job' ? '✅ Apply Now' : '📄 View Official' }}
+    </a>
+    @endif
+    @if($post->final_result)
+    <a href="{{ $post->final_result }}" target="_blank" rel="noopener" class="mobile-apply-btn" style="background:#1d4ed8">
+        🏆 Result
     </a>
     @endif
     <a href="https://wa.me/?text={{ $encodedTitle }}" target="_blank" rel="noopener" class="mobile-share-btn">

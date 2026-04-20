@@ -8,20 +8,25 @@ class Post extends Model
 {
     protected $fillable = [
         'title', 'slug', 'type', 'category_id', 'state_id', 'organization',
-        'short_description', 'content', 'total_posts',
-        'last_date', 'notification_date', 'important_links', 'tags', 'education',
+        'short_description', 'content', 'total_posts', 'salary',
+        'last_date', 'notification_date', 'start_date', 'end_date',
+        'online_form', 'final_result',
+        'important_links', 'tags', 'education',
         'meta_title', 'meta_description', 'meta_keywords',
-        'is_featured', 'is_published', 'view_count', 'admin_id'
+        'is_featured', 'is_published', 'is_upcoming', 'view_count', 'admin_id'
     ];
 
     protected $casts = [
         'important_links' => 'array',
-        'tags' => 'array',
-        'education' => 'array',
-        'is_featured' => 'boolean',
-        'is_published' => 'boolean',
-        'last_date' => 'datetime',
-        'notification_date' => 'datetime'
+        'tags'            => 'array',
+        'education'       => 'array',
+        'is_featured'     => 'boolean',
+        'is_published'    => 'boolean',
+        'is_upcoming'     => 'boolean',
+        'last_date'       => 'datetime',
+        'notification_date' => 'datetime',
+        'start_date'      => 'date',
+        'end_date'        => 'date',
     ];
 
     // Relationships
@@ -54,6 +59,11 @@ class Post extends Model
     public function scopeFeatured($query)
     {
         return $query->where('is_featured', true);
+    }
+
+    public function scopeUpcoming($query)
+    {
+        return $query->where('is_upcoming', true);
     }
 
     public function scopeRecent($query, $days = 3)

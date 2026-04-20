@@ -30,23 +30,21 @@ class PostApiController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $page = $request->get('page', 1);
-        $limit = $request->get('limit', 15);
-        $type = $request->get('type');
+        $page        = $request->get('page', 1);
+        $limit       = $request->get('limit', 15);
+        $type        = $request->get('type');
         $category_id = $request->get('category_id');
-        $state_id = $request->get('state_id');
+        $state_id    = $request->get('state_id');
+        $is_upcoming = $request->get('is_upcoming');   // filter upcoming jobs
+        $education   = $request->get('education');     // filter by education tag
 
-        $query = Post::with(['category', 'state']);
+        $query = Post::with(['category', 'state'])->published()->latest();
 
-        if ($type) {
-            $query->where('type', $type);
-        }
-        if ($category_id) {
-            $query->where('category_id', $category_id);
-        }
-        if ($state_id) {
-            $query->where('state_id', $state_id);
-        }
+        if ($type)        $query->where('type', $type);
+        if ($category_id) $query->where('category_id', $category_id);
+        if ($state_id)    $query->where('state_id', $state_id);
+        if ($is_upcoming !== null) $query->where('is_upcoming', (bool) $is_upcoming);
+        if ($education)   $query->whereJsonContains('education', $education);
 
         $posts = $query->paginate($limit, ['*'], 'page', $page);
 
@@ -153,45 +151,73 @@ class PostApiController extends Controller
         }
 
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'type' => 'required|in:job,admit_card,result,answer_key,syllabus,blog,scholarship',
+            'title'             => 'required|string|max:255',
+            'type'              => 'required|in:job,admit_card,result,answer_key,syllabus,blog,scholarship',
             'short_description' => 'required|string',
-            'content' => 'required|string',
-            'category_id' => 'required|exists:categories,id',
-            'state_id' => 'nullable|exists:states,id',
-            'organization' => 'nullable|string|max:255',
-            'last_date' => 'nullable|date',
+            'content'           => 'required|string',
+            'category_id'       => 'required|exists:categories,id',
+            'state_id'          => 'nullable|exists:states,id',
+            'organization'      => 'nullable|string|max:255',
+            // Dates
             'notification_date' => 'nullable|date',
-            'total_posts' => 'nullable|integer',
-            'important_links' => 'nullable|array',
-            'tags' => 'nullable|array',
-            'education' => 'nullable|array',
-            'is_featured' => 'nullable|boolean',
-            'meta_title' => 'nullable|string|max:60',
-            'meta_description' => 'nullable|string|max:160',
-            'meta_keywords' => 'nullable|string',
+            'start_date'        => 'nullable|date',
+            'end_date'          => 'nullable|date',
+            'last_date'         => 'nullable|date',
+            // Vacancy & Salary
+            'total_posts'       => 'nullable|integer|min:1',
+            'salary'            => 'nullable|string|max:255',
+            // Links
+            'online_form'       => 'nullable|url|max:500',
+            'final_result'      => 'nullable|url|max:500',
+            'important_links'   => 'nullable|array',
+            // Classification
+            'tags'              => 'nullable|array',
+            'tags.*'            => 'string',
+            'education'         => 'nullable|array',
+            'education.*'       => 'string',
+            // Flags
+            'is_featured'       => 'nullable|boolean',
+            'is_upcoming'       => 'nullable|boolean',
+            'is_published'      => 'nullable|boolean',
+            // SEO
+            'meta_title'        => 'nullable|string|max:60',
+            'meta_description'  => 'nullable|string|max:160',
+            'meta_keywords'     => 'nullable|string|max:1000',
         ]);
 
         try {
             $post = Post::create([
-                'title' => $validated['title'],
-                'slug' => \Str::slug($validated['title']),
-                'type' => $validated['type'],
+                'title'             => $validated['title'],
+                'slug'              => \Str::slug($validated['title']),
+                'type'              => $validated['type'],
                 'short_description' => $validated['short_description'],
-                'content' => $validated['content'],
-                'category_id' => $validated['category_id'],
-                'state_id' => $validated['state_id'] ?? null,
-                'organization' => $validated['organization'] ?? null,
-                'last_date' => $validated['last_date'] ?? null,
+                'content'           => $validated['content'],
+                'category_id'       => $validated['category_id'],
+                'state_id'          => $validated['state_id'] ?? null,
+                'organization'      => $validated['organization'] ?? null,
+                // Dates
                 'notification_date' => $validated['notification_date'] ?? null,
-                'total_posts' => $validated['total_posts'] ?? null,
-                'important_links' => $validated['important_links'] ?? [],
-                'tags' => $validated['tags'] ?? [],
-                'education' => $validated['education'] ?? [],
-                'is_featured' => $validated['is_featured'] ?? false,
-                'meta_title' => $validated['meta_title'] ?? $validated['title'],
-                'meta_description' => $validated['meta_description'] ?? substr($validated['short_description'], 0, 160),
-                'meta_keywords' => $validated['meta_keywords'] ?? implode(',', explode(' ', $validated['title'])),
+                'start_date'        => $validated['start_date'] ?? null,
+                'end_date'          => $validated['end_date'] ?? null,
+                'last_date'         => $validated['last_date'] ?? null,
+                // Vacancy & Salary
+                'total_posts'       => $validated['total_posts'] ?? null,
+                'salary'            => $validated['salary'] ?? null,
+                // Links
+                'online_form'       => $validated['online_form'] ?? null,
+                'final_result'      => $validated['final_result'] ?? null,
+                'important_links'   => $validated['important_links'] ?? [],
+                // Classification
+                'tags'              => $validated['tags'] ?? [],
+                'education'         => $validated['education'] ?? [],
+                // Flags
+                'is_featured'       => $validated['is_featured'] ?? false,
+                'is_upcoming'       => $validated['is_upcoming'] ?? false,
+                'is_published'      => $validated['is_published'] ?? false,
+                // SEO
+                'meta_title'        => $validated['meta_title'] ?? $validated['title'],
+                'meta_description'  => $validated['meta_description'] ?? substr($validated['short_description'], 0, 160),
+                'meta_keywords'     => $validated['meta_keywords'] ?? implode(',', explode(' ', $validated['title'])),
             ]);
 
             return response()->json([
@@ -225,21 +251,38 @@ class PostApiController extends Controller
         }
 
         $validated = $request->validate([
-            'title' => 'nullable|string|max:255',
-            'type' => 'nullable|in:job,admit_card,result,answer_key,syllabus,blog,scholarship',
+            'title'             => 'nullable|string|max:255',
+            'type'              => 'nullable|in:job,admit_card,result,answer_key,syllabus,blog,scholarship',
             'short_description' => 'nullable|string',
-            'content' => 'nullable|string',
-            'category_id' => 'nullable|exists:categories,id',
-            'state_id' => 'nullable|exists:states,id',
-            'organization' => 'nullable|string|max:255',
-            'last_date' => 'nullable|date',
+            'content'           => 'nullable|string',
+            'category_id'       => 'nullable|exists:categories,id',
+            'state_id'          => 'nullable|exists:states,id',
+            'organization'      => 'nullable|string|max:255',
+            // Dates
             'notification_date' => 'nullable|date',
-            'total_posts' => 'nullable|integer',
-            'important_links' => 'nullable|array',
-            'is_featured' => 'nullable|boolean',
-            'meta_title' => 'nullable|string|max:60',
-            'meta_description' => 'nullable|string|max:160',
-            'meta_keywords' => 'nullable|string',
+            'start_date'        => 'nullable|date',
+            'end_date'          => 'nullable|date',
+            'last_date'         => 'nullable|date',
+            // Vacancy & Salary
+            'total_posts'       => 'nullable|integer|min:1',
+            'salary'            => 'nullable|string|max:255',
+            // Links
+            'online_form'       => 'nullable|url|max:500',
+            'final_result'      => 'nullable|url|max:500',
+            'important_links'   => 'nullable|array',
+            // Classification
+            'tags'              => 'nullable|array',
+            'tags.*'            => 'string',
+            'education'         => 'nullable|array',
+            'education.*'       => 'string',
+            // Flags
+            'is_featured'       => 'nullable|boolean',
+            'is_upcoming'       => 'nullable|boolean',
+            'is_published'      => 'nullable|boolean',
+            // SEO
+            'meta_title'        => 'nullable|string|max:60',
+            'meta_description'  => 'nullable|string|max:160',
+            'meta_keywords'     => 'nullable|string|max:1000',
         ]);
 
         try {

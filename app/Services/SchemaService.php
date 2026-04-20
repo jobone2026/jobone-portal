@@ -16,28 +16,56 @@ class SchemaService
         $cleanContent = strip_tags($cleanContent);
         // Limit description to 5000 characters for schema
         $description = Str::limit($cleanContent, 5000);
-        
-        return [
-            '@context' => 'https://schema.org',
-            '@type' => 'JobPosting',
-            'title' => $post->title,
-            'description' => $description,
-            'datePosted' => $post->notification_date ?? $post->created_at->toIso8601String(),
-            'validThrough' => $post->last_date?->toIso8601String(),
+
+        // datePosted must always be ISO8601 - use created_at which is always set
+        $datePosted = $post->created_at->toIso8601String();
+
+        $schema = [
+            '@context'           => 'https://schema.org',
+            '@type'              => 'JobPosting',
+            'title'              => $post->title,
+            'description'        => $description,
+            'datePosted'         => $datePosted,
             'hiringOrganization' => [
-                '@type' => 'Organization',
-                'name' => $post->category->name ?? 'Government of India',
+                '@type'  => 'Organization',
+                'name'   => $post->organization ?: ($post->category->name ?? 'Government of India'),
+                'sameAs' => url('/'),
             ],
             'jobLocation' => [
-                '@type' => 'Place',
+                '@type'   => 'Place',
                 'address' => [
-                    '@type' => 'PostalAddress',
+                    '@type'         => 'PostalAddress',
                     'addressCountry' => 'IN',
-                    'addressRegion' => $post->state->name ?? 'India',
+                    'addressRegion'  => $post->state->name ?? 'India',
                 ],
             ],
             'employmentType' => 'FULL_TIME',
         ];
+
+        // Only add optional fields if they have values (avoid null in schema)
+        if ($post->last_date) {
+            $schema['validThrough']          = $post->last_date->toIso8601String();
+            $schema['applicationDeadline']   = $post->last_date->toIso8601String();
+        }
+        if ($post->total_posts) {
+            $schema['totalJobOpenings'] = $post->total_posts;
+        }
+        if ($post->online_form) {
+            $schema['directApply'] = true;
+        }
+        if ($post->salary) {
+            $schema['baseSalary'] = [
+                '@type'    => 'MonetaryAmount',
+                'currency' => 'INR',
+                'value'    => [
+                    '@type'    => 'QuantitativeValue',
+                    'value'    => $post->salary,
+                    'unitText' => 'MONTH',
+                ],
+            ];
+        }
+
+        return $schema;
     }
 
     public function generateArticle(Post $post): array

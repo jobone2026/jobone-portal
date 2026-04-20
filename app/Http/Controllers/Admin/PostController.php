@@ -64,24 +64,30 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'type' => 'required|in:job,admit_card,syllabus,result,answer_key,blog,scholarship',
-            'category_id' => 'required|exists:categories,id',
-            'state_id' => 'nullable|exists:states,id',
-            'content' => 'required|string',
-            'organization' => 'nullable|string|max:255',
-            'total_posts' => 'nullable|integer|min:1',
-            'last_date' => 'nullable|date',
-            'notification_date' => 'nullable|date',
-            'meta_title' => 'nullable|string|max:60',
-            'meta_description' => 'nullable|string|max:160',
-            'meta_keywords' => 'nullable|string|max:1000',
-            'tags' => 'nullable|array',
-            'tags.*' => 'string|in:cutoff,merit_list,selection_list,final_result,provisional_result,revised_result,scorecard,marks',
-            'education' => 'nullable|array',
-            'education.*' => 'string|in:10th_pass,12th_pass,graduate,post_graduate,diploma,iti,btech,mtech,bsc,msc,bcom,mcom,ba,ma,bba,mba,ca,cs,cma,llb,llm,mbbs,bds,bpharm,mpharm,nursing,bed,med,phd,any_qualification',
-            'is_featured' => 'boolean',
-            'is_published' => 'boolean'
+            'title'              => 'required|string|max:255',
+            'type'               => 'required|in:job,admit_card,syllabus,result,answer_key,blog,scholarship',
+            'category_id'        => 'required|exists:categories,id',
+            'state_id'           => 'nullable|exists:states,id',
+            'content'            => 'required|string',
+            'organization'       => 'nullable|string|max:255',
+            'total_posts'        => 'nullable|integer|min:1',
+            'salary'             => 'nullable|string|max:255',
+            'last_date'          => 'nullable|date',
+            'notification_date'  => 'nullable|date',
+            'start_date'         => 'nullable|date',
+            'end_date'           => 'nullable|date|after_or_equal:start_date',
+            'online_form'        => 'nullable|url|max:500',
+            'final_result'       => 'nullable|url|max:500',
+            'meta_title'         => 'nullable|string|max:60',
+            'meta_description'   => 'nullable|string|max:160',
+            'meta_keywords'      => 'nullable|string|max:1000',
+            'tags'               => 'nullable|array',
+            'tags.*'             => 'string',
+            'education'          => 'nullable|array',
+            'education.*'        => 'string',
+            'is_featured'        => 'boolean',
+            'is_upcoming'        => 'boolean',
+            'is_published'       => 'boolean'
         ]);
 
         $validated['slug'] = Str::slug($validated['title']);
@@ -90,6 +96,7 @@ class PostController extends Controller
         $validated['important_links'] = null;
         $validated['tags'] = $request->has('tags') ? ($validated['tags'] ?? []) : [];
         $validated['education'] = $request->has('education') ? ($validated['education'] ?? []) : [];
+        $validated['is_upcoming'] = $request->has('is_upcoming') ? 1 : 0;
 
         $post = Post::create($validated);
         
@@ -142,24 +149,30 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'type' => 'required|in:job,admit_card,syllabus,result,answer_key,blog,scholarship',
-            'category_id' => 'required|exists:categories,id',
-            'state_id' => 'nullable|exists:states,id',
-            'content' => 'required|string',
-            'organization' => 'nullable|string|max:255',
-            'total_posts' => 'nullable|integer|min:1',
-            'last_date' => 'nullable|date',
-            'notification_date' => 'nullable|date',
-            'meta_title' => 'nullable|string|max:60',
-            'meta_description' => 'nullable|string|max:160',
-            'meta_keywords' => 'nullable|string|max:1000',
-            'tags' => 'nullable|array',
-            'tags.*' => 'string|in:cutoff,merit_list,selection_list,final_result,provisional_result,revised_result,scorecard,marks',
-            'education' => 'nullable|array',
-            'education.*' => 'string|in:10th_pass,12th_pass,graduate,post_graduate,diploma,iti,btech,mtech,bsc,msc,bcom,mcom,ba,ma,bba,mba,ca,cs,cma,llb,llm,mbbs,bds,bpharm,mpharm,nursing,bed,med,phd,any_qualification',
-            'is_featured' => 'boolean',
-            'is_published' => 'boolean'
+            'title'              => 'required|string|max:255',
+            'type'               => 'required|in:job,admit_card,syllabus,result,answer_key,blog,scholarship',
+            'category_id'        => 'required|exists:categories,id',
+            'state_id'           => 'nullable|exists:states,id',
+            'content'            => 'required|string',
+            'organization'       => 'nullable|string|max:255',
+            'total_posts'        => 'nullable|integer|min:1',
+            'salary'             => 'nullable|string|max:255',
+            'last_date'          => 'nullable|date',
+            'notification_date'  => 'nullable|date',
+            'start_date'         => 'nullable|date',
+            'end_date'           => 'nullable|date|after_or_equal:start_date',
+            'online_form'        => 'nullable|url|max:500',
+            'final_result'       => 'nullable|url|max:500',
+            'meta_title'         => 'nullable|string|max:60',
+            'meta_description'   => 'nullable|string|max:160',
+            'meta_keywords'      => 'nullable|string|max:1000',
+            'tags'               => 'nullable|array',
+            'tags.*'             => 'string',
+            'education'          => 'nullable|array',
+            'education.*'        => 'string',
+            'is_featured'        => 'boolean',
+            'is_upcoming'        => 'boolean',
+            'is_published'       => 'boolean'
         ]);
 
         $validated['slug'] = Str::slug($validated['title']);
@@ -167,6 +180,7 @@ class PostController extends Controller
         $validated['important_links'] = $post->important_links; // Keep existing value
         $validated['tags'] = $request->has('tags') ? ($validated['tags'] ?? []) : [];
         $validated['education'] = $request->has('education') ? ($validated['education'] ?? []) : [];
+        $validated['is_upcoming'] = $request->has('is_upcoming') ? 1 : 0;
 
         $wasPublished = $post->is_published;
         
