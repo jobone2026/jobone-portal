@@ -27,7 +27,9 @@
 
     <!-- Google Analytics -->
     @php
-        $gaTrackingId = \App\Models\SiteSetting::where('key', 'ga_tracking_id')->value('value');
+        // Env-first, DB as fallback — ensures GA always loads on live server
+        $gaTrackingId = env('GA_TRACKING_ID')
+            ?: \App\Models\SiteSetting::where('key', 'ga_tracking_id')->value('value');
     @endphp
     @if($gaTrackingId)
         <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaTrackingId }}"></script>
@@ -36,7 +38,9 @@
             function gtag() { dataLayer.push(arguments); }
             gtag('js', new Date());
             gtag('config', '{{ $gaTrackingId }}', {
-                'page_title': {!! json_encode(html_entity_decode($seoData['title'] ?? 'JobOne.in')) !!}
+                'anonymize_ip': true,
+                'page_title': {!! json_encode(html_entity_decode($seoData['title'] ?? 'JobOne.in')) !!},
+                'page_location': window.location.href
             });
         </script>
     @endif
