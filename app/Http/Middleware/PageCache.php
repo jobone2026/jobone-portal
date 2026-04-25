@@ -16,6 +16,17 @@ class PageCache
             return $next($request);
         }
 
+        // Never serve cached pages to search engine crawlers — they must see fresh content
+        $ua = strtolower($request->userAgent() ?? '');
+        $isCrawler = preg_match('/(googlebot|bingbot|slurp|duckduckbot|yandexbot|baiduspider|facebot|ia_archiver|semrushbot|ahrefsbot)/i', $ua);
+        if ($isCrawler) {
+            $response = $next($request);
+            // Add Last-Modified header for crawler freshness signals
+            $response->headers->set('Last-Modified', gmdate('D, d M Y H:i:s', time()) . ' GMT');
+            $response->headers->set('X-Robots-Tag', 'index, follow');
+            return $response;
+        }
+
         $cacheKey = 'page_cache:' . md5($request->fullUrl());
         $ttl = $this->getCacheTTL($request);
 

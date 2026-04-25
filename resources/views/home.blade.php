@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Government Job Portal - Latest Jobs & Opportunities')
-@section('description', 'Find latest government jobs, admit cards, results, syllabus, answer keys and more')
+@section('title', 'JobOne.in – Sarkari Naukri ' . date('Y') . ', Govt Jobs Today, Daily Alert Updates')
+@section('description', 'JobOne.in – India\'s fastest-updated sarkari naukri portal. Today\'s govt job vacancies, exam results, admit cards, answer keys & syllabus for SSC, UPSC, Railways, Banking, State PSC, Defence & Police.')
 
 @section('content')
     <!-- India Map with State Job Counts -->
@@ -157,7 +157,7 @@
         </h3>
         @php
             $shareUrl = route('home');
-            $shareTitle = 'JobOne - Latest Government Jobs, Results, Admit Cards';
+            $shareTitle = 'JobOne – Sarkari Naukri, Govt Jobs & Results Updated Daily';
             $simpleMessage = "{$shareTitle} - Visit: {$shareUrl}";
             $encodedSimpleMessage = urlencode($simpleMessage);
             $encodedUrl = urlencode($shareUrl);
@@ -195,18 +195,18 @@
     @php
         $yr = date('Y');
         $faqs = [
-            ['q' => 'What is the latest government job notification for ' . $yr . '?',
-             'a' => 'JobOne.in updates daily with the latest government job notifications for ' . $yr . '. Browse all openings for SSC, UPSC, Railways, Banking, State PSC, Defence and Police on our Jobs page.'],
-            ['q' => 'How to get free job alert for sarkari naukri?',
-             'a' => 'Subscribe to free job alert notifications by clicking the notification bell on JobOne.in. We send instant alerts for every new sarkari naukri posting across India.'],
-            ['q' => 'How to download admit card / hall ticket?',
-             'a' => 'Visit the Admit Cards section, find your exam, and click the official link. We provide direct links to official government websites for admit card and hall ticket download.'],
-            ['q' => 'How to check sarkari result ' . $yr . '?',
-             'a' => 'Go to the Results section on JobOne.in for the latest sarkari result ' . $yr . '. We post SSC, UPSC, Railways, Banking, State PSC results with merit list and cut off marks.'],
-            ['q' => 'What qualifications are needed for government jobs?',
-             'a' => 'Qualifications vary by post. Group D & police jobs require 10th/12th pass. Clerical posts require graduation. UPSC IAS, SSC CGL, and banking PO require any degree from a recognized university.'],
-            ['q' => 'Is JobOne.in free?',
-             'a' => 'Yes! JobOne.in is completely free. Browse unlimited job notifications, download admit cards, check results — no registration required, no fees.'],
+            ['q' => 'What is JobOne.in and how is it different from other job portals?',
+             'a' => 'JobOne.in is India\'s fastest-updated sarkari naukri portal. Unlike other sites, we update vacancies within minutes of official notification release. Every post includes direct apply links, eligibility, salary, and important dates — all in one clean page.'],
+            ['q' => 'How do I get instant govt job alerts from JobOne?',
+             'a' => 'Tap the notification bell icon on JobOne.in to enable push alerts. You will receive instant alerts whenever a new sarkari naukri, admit card, or result is published. No app download needed — works right in your browser.'],
+            ['q' => 'How to download admit card / hall ticket from JobOne?',
+             'a' => 'Go to the Admit Cards section on JobOne.in, search for your exam name, and click the official download link. We provide direct links to the official government website — no redirects or ads.'],
+            ['q' => 'How to check sarkari result ' . $yr . ' on JobOne?',
+             'a' => 'Visit the Results section on JobOne.in. We post SSC, UPSC, Railways, Banking, State PSC results with merit list and cut-off marks as soon as they are declared — often within minutes of the official announcement.'],
+            ['q' => 'What qualifications are needed for government jobs in ' . $yr . '?',
+             'a' => 'Qualifications vary: Group D & police jobs need 10th/12th pass, clerical posts need graduation, while UPSC IAS, SSC CGL, and banking PO need any degree. Check each post on JobOne.in for exact eligibility.'],
+            ['q' => 'Is JobOne.in free to use?',
+             'a' => 'Yes! JobOne.in is 100% free. Browse unlimited job notifications, download admit cards, check results — no registration required, no hidden fees. We earn through non-intrusive advertising only.'],
         ];
         $quickLinks = [
             ['label' => 'Latest Jobs ' . $yr, 'route' => 'posts.jobs',        'icon' => 'fa-briefcase',       'color' => '#2563eb'],
@@ -229,18 +229,18 @@
                 <div class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-50 flex-shrink-0">
                     <i class="fas fa-info text-blue-600 text-[10px]"></i>
                 </div>
-                About JobOne.in – India's Trusted Sarkari Naukri Portal
+                About JobOne.in – India's Fastest-Updated Sarkari Naukri Portal
             </h2>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
                 <div class="bg-gray-50 border border-gray-100 p-3 rounded-xl text-xs sm:text-sm text-gray-500 leading-relaxed">
-                    <p><strong>JobOne.in</strong> is India's most trusted <strong>government job portal</strong> providing the latest <strong>sarkari naukri</strong>, <strong>sarkari result</strong>, admit cards, answer keys, and exam syllabus — completely free. We cover SSC, UPSC, Railways, Banking, State PSC, Defence, Police, and Teaching.</p>
+                    <p><strong>JobOne.in</strong> is India’s fastest-updated <strong>sarkari naukri</strong> portal. We publish new govt job vacancies, <strong>sarkari results</strong>, admit cards, answer keys, and exam syllabus within minutes of official release — completely free. We cover SSC, UPSC, Railways, Banking, State PSC, Defence, Police, and Teaching.</p>
                 </div>
                 <div class="bg-gray-50 border border-gray-100 p-3 rounded-xl text-xs sm:text-sm text-gray-500 leading-relaxed">
-                    <p>Get instant <strong>free job alerts</strong> for every new government recruitment notification. Our team updates all <strong>sarkari naukri {{ $yr }}</strong> job listings daily. Whether you are looking for central government, state government, or PSU jobs — we have it all.</p>
+                    <p>Enable instant push notifications to get every new <strong>sarkari naukri {{ $yr }}</strong> alert directly in your browser. Our team verifies all posts against official sources before publishing. Whether you need central govt, state govt, or PSU jobs — JobOne has it first.</p>
                 </div>
                 <div class="bg-gray-50 border border-gray-100 p-3 rounded-xl text-xs sm:text-sm text-gray-500 leading-relaxed">
-                    <p>We provide <strong>hall ticket download</strong> links, <strong>exam results {{ $yr }}</strong>, official <strong>answer keys</strong>, detailed <strong>exam syllabus PDF</strong>, cut-off marks, and merit lists — all completely free in one beautifully designed place.</p>
+                    <p>Every post on JobOne includes <strong>direct apply links</strong>, eligibility details, salary info, <strong>exam results {{ $yr }}</strong>, official <strong>answer keys</strong>, detailed <strong>exam syllabus PDF</strong>, cut-off marks, and merit lists — beautifully organized so you find what you need in seconds.</p>
                 </div>
             </div>
 

@@ -89,8 +89,8 @@ class PostController extends Controller
             abort(404);
         }
 
-        // Increment view count
-        $post->increment('view_count');
+        // Don't increment view count here - let JavaScript handle it to work with page cache
+        // View count will be incremented via AJAX call from the frontend
 
         $related = Post::published()
             ->where('category_id', $post->category_id)
@@ -105,14 +105,18 @@ class PostController extends Controller
         
         $seo = $seoService->generatePostSeo($post);
         $schema = [];
-        
+
         if ($post->type === 'job') {
             $schema[] = $schemaService->generateJobPostingSchema($post);
         } else {
             $schema[] = $schemaService->generateArticleSchema($post);
         }
-        
+
         $schema[] = $schemaService->generateBreadcrumbSchema($post);
+
+        // FAQ schema: prefer $post->faq JSON, fallback to HTML extraction
+        $faqSchema = $schemaService->generateFAQSchema($post->content ?? '', $post->faq ?? null);
+        if ($faqSchema) $schema[] = $faqSchema;
 
         // Sanitize content server-side to fix inline width/overflow on mobile
         $sanitizer = app(HtmlSanitizerService::class);

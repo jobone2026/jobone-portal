@@ -58,6 +58,20 @@ Route::post('/notifications/unsubscribe', [\App\Http\Controllers\NotificationCon
 Route::post('/notifications/status', [\App\Http\Controllers\NotificationController::class, 'status'])->name('notifications.status');
 Route::post('/feedback', [\App\Http\Controllers\NotificationController::class, 'feedback'])->name('feedback.submit');
 
+// View tracking (AJAX endpoint - no cache)
+Route::post('/posts/{id}/track-view', function($id) {
+    $post = \App\Models\Post::find($id);
+    if ($post) {
+        // Use Redis/Cache to prevent duplicate counts from same user within 1 hour
+        $cacheKey = 'view_tracked_' . $id . '_' . request()->ip();
+        if (!\Illuminate\Support\Facades\Cache::has($cacheKey)) {
+            $post->increment('view_count');
+            \Illuminate\Support\Facades\Cache::put($cacheKey, true, 3600); // 1 hour
+        }
+    }
+    return response()->json(['success' => true]);
+})->name('posts.track-view');
+
 // Sitemap
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/sitemap-posts.xml', [SitemapController::class, 'posts'])->name('sitemap.posts');

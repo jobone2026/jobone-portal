@@ -58,20 +58,22 @@ class HtmlSanitizerService
         // This is done via the class added above — CSS handles the rest
 
         // 5. Force images to be responsive: remove fixed width/height on <img>
-        //    already done above, but ensure no inline-style fixed size
+        //    (already done above, but we also ensure lazy loading and basic styles)
         $html = preg_replace_callback(
             '/<img(\b[^>]*)>/i',
             function ($m) {
                 $attrs = $m[1];
-                // Strip inline width/height style from img
-                $attrs = preg_replace('/style\s*=\s*["\'][^"\']*["\']/i', '', $attrs);
-                // Ensure loading="lazy" and max-width
+                
+                // Ensure loading="lazy"
                 if (!str_contains($attrs, 'loading=')) {
                     $attrs .= ' loading="lazy"';
                 }
+                
+                // If it doesn't have a style attribute, add the default responsive one
                 if (!str_contains($attrs, 'style=')) {
-                    $attrs .= ' style="max-width:100%;height:auto;display:block"';
+                    $attrs .= ' style="max-width:100%;height:auto;display:block;border-radius:8px"';
                 }
+                
                 return '<img' . $attrs . '>';
             },
             $html
@@ -102,8 +104,6 @@ class HtmlSanitizerService
             'top',
             'bottom',
             'z-index',
-            'margin-left',     // Often set to negative values causing overflow
-            'margin-right',
             'float',
         ];
 

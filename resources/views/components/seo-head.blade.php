@@ -3,12 +3,12 @@
 @php
 use Illuminate\Support\Str;
     $defaultSeo = [
-        'title'          => 'JobOne.in - Latest Government Jobs, Sarkari Naukri, Admit Cards & Results',
-        'description'    => 'Find latest government jobs, sarkari naukri, admit cards, results, answer keys, syllabus for SSC, UPSC, Railways, Banking, State PSC, Defence, Police across India.',
-        'keywords'       => 'government jobs, sarkari naukri, sarkari result, admit card, SSC, UPSC, Railways, Banking, free job alert',
+        'title'          => 'JobOne.in – Sarkari Naukri ' . date('Y') . ', Govt Jobs Today, Daily Alert Updates',
+        'description'    => 'JobOne.in – India\'s fastest-updated sarkari naukri portal. Today\'s govt job vacancies, exam results, admit cards, answer keys & syllabus for SSC, UPSC, Railways, Banking, State PSC, Defence & Police.',
+        'keywords'       => 'sarkari naukri, govt jobs today, government jobs ' . date('Y') . ', SSC, UPSC, Railways, Banking, jobone',
         'canonical'      => url()->current(),
-        'og_title'       => 'JobOne.in - Sarkari Naukri Portal',
-        'og_description' => 'Your trusted source for government job notifications and exam updates across India.',
+        'og_title'       => 'JobOne – Sarkari Naukri & Govt Jobs Updated Daily ' . date('Y'),
+        'og_description' => 'India\'s fastest sarkari naukri portal — govt job vacancies, results, admit cards & more. Updated every day on JobOne.in.',
         'og_image'       => asset('images/og-image.jpg'),
         'og_url'         => url()->current(),
     ];
@@ -48,10 +48,10 @@ use Illuminate\Support\Str;
             'name'        => 'JobOne.in',
             'url'         => 'https://jobone.in',
             'logo'        => 'https://jobone.in/images/logo.png',
-            'description' => "India's trusted government job portal providing latest sarkari naukri, admit cards, exam results, answer keys and syllabus.",
-            'foundingDate'=> '2024',
+            'description' => "India's fastest-updated sarkari naukri portal — daily govt job vacancies, admit cards, exam results, answer keys and syllabus.",
+            'foundingDate'=> '2025',
             'areaServed'  => 'India',
-            'knowsAbout'  => ['Government Jobs', 'SSC', 'UPSC', 'Railways Recruitment', 'Banking Jobs', 'State PSC', 'Admit Cards', 'Exam Results'],
+            'knowsAbout'  => ['Sarkari Naukri', 'Government Jobs', 'SSC', 'UPSC', 'Railways Recruitment', 'Banking Jobs', 'State PSC', 'Admit Cards', 'Exam Results'],
             'sameAs'      => ['https://www.facebook.com/jobone.in', 'https://twitter.com/JobOneIn', 'https://t.me/jobone_in'],
             'contactPoint'=> ['@type' => 'ContactPoint', 'contactType' => 'customer support', 'areaServed' => 'IN', 'availableLanguage' => ['English', 'Hindi']],
         ];

@@ -163,11 +163,24 @@ class PostApiController extends Controller
             'start_date'        => 'nullable|date',
             'end_date'          => 'nullable|date',
             'last_date'         => 'nullable|date',
+            'exam_date'         => 'nullable|date',
+            'admit_card_date'   => 'nullable|date',
+            'result_date'       => 'nullable|date',
             // Vacancy & Salary
-            'total_posts'       => 'nullable|integer|min:1',
+            'total_posts'       => 'nullable|integer|min:0',
             'salary'            => 'nullable|string|max:255',
+            'salary_type'       => 'nullable|in:salary,stipend,consolidated,pay_scale',
+            'salary_min'        => 'nullable|integer|min:0',
+            'salary_max'        => 'nullable|integer|min:0',
+            // Age limits
+            'age_min'           => 'nullable|integer|min:0',
+            'age_max_gen'       => 'nullable|integer|min:0',
+            'age_max_obc'       => 'nullable|integer|min:0',
+            'age_max_sc'        => 'nullable|integer|min:0',
             // Links
             'online_form'       => 'nullable|url|max:500',
+            'apply_url'         => 'nullable|url|max:500',
+            'direct_apply'      => 'nullable|boolean',
             'final_result'      => 'nullable|url|max:500',
             'important_links'   => 'nullable|array',
             // Classification
@@ -182,7 +195,12 @@ class PostApiController extends Controller
             // SEO
             'meta_title'        => 'nullable|string|max:60',
             'meta_description'  => 'nullable|string|max:160',
-            'meta_keywords'     => 'nullable|string|max:1000',
+            'meta_keywords'     => 'nullable|string|max:5000',
+            // Rich content
+            'qualifications'    => 'nullable|string',
+            'skills'            => 'nullable|string',
+            'responsibilities'  => 'nullable|string',
+            'faq'               => 'nullable|array',
         ]);
 
         try {
@@ -200,11 +218,24 @@ class PostApiController extends Controller
                 'start_date'        => $validated['start_date'] ?? null,
                 'end_date'          => $validated['end_date'] ?? null,
                 'last_date'         => $validated['last_date'] ?? null,
+                'exam_date'         => $validated['exam_date'] ?? null,
+                'admit_card_date'   => $validated['admit_card_date'] ?? null,
+                'result_date'       => $validated['result_date'] ?? null,
                 // Vacancy & Salary
                 'total_posts'       => $validated['total_posts'] ?? null,
                 'salary'            => $validated['salary'] ?? null,
+                'salary_type'       => $validated['salary_type'] ?? 'salary',
+                'salary_min'        => $validated['salary_min'] ?? null,
+                'salary_max'        => $validated['salary_max'] ?? null,
+                // Age limits
+                'age_min'           => $validated['age_min'] ?? null,
+                'age_max_gen'       => $validated['age_max_gen'] ?? null,
+                'age_max_obc'       => $validated['age_max_obc'] ?? null,
+                'age_max_sc'        => $validated['age_max_sc'] ?? null,
                 // Links
                 'online_form'       => $validated['online_form'] ?? null,
+                'apply_url'         => $validated['apply_url'] ?? null,
+                'direct_apply'      => $validated['direct_apply'] ?? false,
                 'final_result'      => $validated['final_result'] ?? null,
                 'important_links'   => $validated['important_links'] ?? [],
                 // Classification
@@ -213,11 +244,16 @@ class PostApiController extends Controller
                 // Flags
                 'is_featured'       => $validated['is_featured'] ?? false,
                 'is_upcoming'       => $validated['is_upcoming'] ?? false,
-                'is_published'      => $validated['is_published'] ?? false,
+                'is_published'      => $validated['is_published'] ?? true,
                 // SEO
                 'meta_title'        => $validated['meta_title'] ?? $validated['title'],
                 'meta_description'  => $validated['meta_description'] ?? substr($validated['short_description'], 0, 160),
                 'meta_keywords'     => $validated['meta_keywords'] ?? implode(',', explode(' ', $validated['title'])),
+                // Rich content
+                'qualifications'    => $validated['qualifications'] ?? null,
+                'skills'            => $validated['skills'] ?? null,
+                'responsibilities'  => $validated['responsibilities'] ?? null,
+                'faq'               => $validated['faq'] ?? null,
             ]);
 
             return response()->json([

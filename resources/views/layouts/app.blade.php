@@ -13,12 +13,12 @@
     <!-- SEO Meta Tags -->
     @php
         $seoData = $seo ?? [
-            'title' => 'JobOne.in - Latest Government Jobs, Admit Cards, Results & More',
-            'description' => 'Find latest government job notifications, admit cards, results, answer keys, and syllabus for SSC, UPSC, Railways, Banking, State PSC, Defence, Police, and Teaching jobs across India.',
-            'keywords' => 'government jobs, sarkari naukri, admit card, result, answer key, syllabus, SSC, UPSC, Railways, Banking',
+            'title' => 'JobOne.in – Sarkari Naukri ' . date('Y') . ', Govt Jobs Today, Daily Alert Updates',
+            'description' => 'JobOne.in – India\'s fastest-updated sarkari naukri portal. Today\'s govt job vacancies, exam results, admit cards, answer keys & syllabus for SSC, UPSC, Railways, Banking, State PSC, Defence & Police.',
+            'keywords' => 'sarkari naukri, govt jobs today, government jobs ' . date('Y') . ', SSC, UPSC, Railways, Banking, jobone',
             'canonical' => url()->current(),
-            'og_title' => 'JobOne.in - Latest Government Jobs Portal',
-            'og_description' => 'Your trusted source for government job notifications and exam updates',
+            'og_title' => 'JobOne – Sarkari Naukri & Govt Jobs Updated Daily ' . date('Y'),
+            'og_description' => 'India\'s fastest sarkari naukri portal — govt job vacancies, results, admit cards & more. Updated every day on JobOne.in.',
             'og_image' => asset('images/og-image.jpg'),
             'og_url' => url()->current(),
         ];

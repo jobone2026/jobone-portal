@@ -200,6 +200,8 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
 .post-content-body tr:nth-child(even) td{background:#f9fafb}
 .post-content-body strong,.post-content-body b{color:#111827;font-weight:700}
 .post-content-body blockquote{border-left:4px solid #e5e7eb;padding-left:.8em;margin:1.2em 0 1.2em .4em;font-style:italic;color:#6b7280}
+.post-content-body .job-featured-image{margin-bottom:24px;text-align:center}
+.post-content-body .job-featured-image img{border-radius:8px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06)}
 .post-content-body img{max-width:100% !important;height:auto !important;border-radius:.5rem;margin:1rem 0;display:block}
 .post-content-body code{background:#f3f4f6;padding:.2em .4em;border-radius:.25rem;font-size:.85em;font-family:monospace;word-break:break-all}
 .post-content-body pre{background:#1f2937;color:#f9fafb;padding:1em;border-radius:.5rem;overflow-x:auto;margin:1.2em 0}
@@ -428,8 +430,11 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                     @if($post->total_posts)
                     <tr><td>Total Vacancies</td><td>{{ number_format($post->total_posts) }} posts</td></tr>
                     @endif
+                    @if($post->age_min || $post->age_max_gen)
+                    <tr><td>Age Limit</td><td>{{ $post->age_min ? $post->age_min . ' - ' : 'Max ' }}{{ $post->age_max_gen ?: 'NA' }} Years</td></tr>
+                    @endif
                     @if($post->salary)
-                    <tr><td>💰 Salary / Pay Scale</td><td style="color:#166534;font-weight:600">{{ $post->salary }}</td></tr>
+                    <tr><td>💰 {{ ($post->salary_type ?? '') === 'stipend' ? 'Stipend' : 'Salary / Pay Scale' }}</td><td style="color:#166534;font-weight:600">{{ $post->salary }}</td></tr>
                     @endif
                     @if($post->state)
                     <tr><td>State</td><td><a href="{{ route('states.show', $post->state) }}" style="color:#2563eb;text-decoration:underline">{{ $post->state->name }}</a></td></tr>
@@ -448,6 +453,24 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                     <tr><td>Post Type</td><td>{{ ucwords(str_replace('_',' ', $post->type)) }}</td></tr>
                     <tr><td>Updated</td><td>{{ $post->updated_at->format('d M Y') }}</td></tr>
                 </table>
+            </div>
+            @endif
+
+            {{-- Qualifications & Duties --}}
+            @if($post->qualifications || $post->skills || $post->responsibilities)
+            <div class="card" style="background:#f8fafc; border-left:4px solid #3b82f6;">
+                <div class="sec-title" style="border-bottom-color:#e2e8f0;">🎯 Qualifications & Responsibilities</div>
+                <div class="list-items" style="gap:14px;">
+                    @if($post->qualifications)
+                    <div><strong style="color:#1e40af">Education & Experience:</strong><div style="margin-top:4px;font-size:13px;line-height:1.6;color:#334155">{{ $post->qualifications }}</div></div>
+                    @endif
+                    @if($post->skills)
+                    <div><strong style="color:#1e40af">Key Skills:</strong><div style="margin-top:4px;font-size:13px;line-height:1.6;color:#334155">{{ $post->skills }}</div></div>
+                    @endif
+                    @if($post->responsibilities)
+                    <div><strong style="color:#1e40af">Role & Duties:</strong><div style="margin-top:4px;font-size:13px;line-height:1.6;color:#334155">{{ $post->responsibilities }}</div></div>
+                    @endif
+                </div>
             </div>
             @endif
 
@@ -641,8 +664,11 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                 @if($post->total_posts)
                 <div class="qf-row"><span class="qf-label">Vacancies</span><span class="qf-val">{{ number_format($post->total_posts) }}</span></div>
                 @endif
+                @if($post->age_min || $post->age_max_gen)
+                <div class="qf-row"><span class="qf-label">Age Limit</span><span class="qf-val">{{ $post->age_min ? $post->age_min . '-' : 'Max ' }}{{ $post->age_max_gen ?: 'NA' }} Yrs</span></div>
+                @endif
                 @if($post->salary)
-                <div class="qf-row"><span class="qf-label">💰 Salary</span><span class="qf-val" style="color:#166534">{{ Str::limit($post->salary, 28) }}</span></div>
+                <div class="qf-row"><span class="qf-label">💰 {{ ($post->salary_type ?? '') === 'stipend' ? 'Stipend' : 'Salary' }}</span><span class="qf-val" style="color:#166534">{{ Str::limit($post->salary, 28) }}</span></div>
                 @endif
                 @if($post->state)
                 <div class="qf-row"><span class="qf-label">Work State</span><span class="qf-val">{{ $post->state->name }}</span></div>
@@ -726,5 +752,30 @@ function openExternalApp(app, data) {
         }
     }
 }
+
+// Track page view via AJAX (works even with cached pages)
+(function() {
+    // Wait for page to fully load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', trackView);
+    } else {
+        trackView();
+    }
+    
+    function trackView() {
+        // Send view tracking request
+        fetch('{{ route("posts.track-view", $post->id) }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            }
+        }).catch(function(error) {
+            // Silently fail - don't disrupt user experience
+            console.log('View tracking failed:', error);
+        });
+    }
+})();
 </script>
 @endsection
