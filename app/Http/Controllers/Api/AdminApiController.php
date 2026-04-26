@@ -139,7 +139,7 @@ class AdminApiController extends Controller
             'is_upcoming'       => 'boolean',
             'is_published'      => 'boolean',
             // SEO
-            'meta_title'        => 'nullable|string|max:60',
+            'meta_title'        => 'nullable|string|max:255',
             'meta_description'  => 'nullable|string|max:160',
             'meta_keywords'     => 'nullable|string|max:1000',
         ]);
@@ -241,7 +241,7 @@ class AdminApiController extends Controller
             'is_upcoming'       => 'boolean',
             'is_published'      => 'boolean',
             // SEO
-            'meta_title'        => 'nullable|string|max:60',
+            'meta_title'        => 'nullable|string|max:255',
             'meta_description'  => 'nullable|string|max:160',
             'meta_keywords'     => 'nullable|string|max:1000',
         ]);
