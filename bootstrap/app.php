@@ -21,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(prepend: [
             \App\Http\Middleware\TejasFoodieMiddleware::class,
             \App\Http\Middleware\DomainStateFilter::class,
+            \App\Http\Middleware\RedirectMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -93,9 +93,20 @@ class PostController extends Controller
         // View count will be incremented via AJAX call from the frontend
 
         $related = Post::published()
-            ->where('category_id', $post->category_id)
             ->where('id', '!=', $post->id)
             ->with('category', 'state')
+            ->orderByRaw("
+                (category_id = ? AND state_id = ?) DESC,
+                (category_id = ?) DESC,
+                (education_level = ? AND education_level IS NOT NULL) DESC,
+                (state_id = ?) DESC,
+                created_at DESC
+            ", [
+                $post->category_id, $post->state_id,
+                $post->category_id,
+                $post->education_level,
+                $post->state_id
+            ])
             ->limit(4)
             ->get();
 

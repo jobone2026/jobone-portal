@@ -222,30 +222,97 @@ placeholder="e.g., SSC, UPSC, Indian Railways">
 <div class="pf-card">
 <div class="pf-section-title"><i class="fas fa-users"></i>Vacancy &amp; Salary Details</div>
 
-<div class="pf-grid-3">
+<div class="pf-grid-4">
 <div class="pf-field">
 <label class="pf-label">Total Vacancies</label>
 <input type="number" name="total_posts" class="pf-input @error('total_posts') error @enderror"
-value="{{ old('total_posts', $post->total_posts ?? '') }}"
-placeholder="e.g., 500" min="1">
-<span class="pf-hint">Number of available positions</span>
-@error('total_posts')<span class="pf-error-msg"><i class="fas fa-exclamation-circle"></i>{{ $message }}</span>@enderror
+value="{{ old('total_posts', $post->total_posts ?? '') }}" placeholder="e.g., 500" min="1">
 </div>
 
 <div class="pf-field">
-<label class="pf-label">Salary / Pay Scale</label>
-<input type="text" name="salary" class="pf-input @error('salary') error @enderror"
-value="{{ old('salary', $post->salary ?? '') }}"
-placeholder="e.g., ₹35,400 – ₹1,12,400 / Level 6">
-<span class="pf-hint">Monthly pay scale or pay level</span>
-@error('salary')<span class="pf-error-msg"><i class="fas fa-exclamation-circle"></i>{{ $message }}</span>@enderror
+<label class="pf-label">Salary Type <span class="req">*</span></label>
+<select name="salary_type" class="pf-select @error('salary_type') error @enderror" required>
+<option value="salary" {{ old('salary_type', $post->salary_type ?? '') === 'salary' ? 'selected' : '' }}>Salary</option>
+<option value="stipend" {{ old('salary_type', $post->salary_type ?? '') === 'stipend' ? 'selected' : '' }}>Stipend</option>
+<option value="consolidated" {{ old('salary_type', $post->salary_type ?? '') === 'consolidated' ? 'selected' : '' }}>Consolidated</option>
+<option value="pay_scale" {{ old('salary_type', $post->salary_type ?? '') === 'pay_scale' ? 'selected' : '' }}>Pay Scale</option>
+</select>
 </div>
 
 <div class="pf-field">
-<label class="pf-label">Short Description</label>
-<input type="text" name="short_description_display" class="pf-input"
-value="" placeholder="Auto-generated from content" disabled style="opacity:.6;">
-<span class="pf-hint">Auto-generated — no action needed</span>
+<label class="pf-label">Pay Level (7th CPC)</label>
+<select name="pay_scale_level" class="pf-select" onchange="if(this.value) { document.getElementById('inp-salary').value = this.options[this.selectedIndex].text.split(' - ')[1] || ''; }">
+<option value="">Select Level</option>
+<option value="Level 1" {{ old('pay_scale_level', $post->pay_scale_level ?? '') == 'Level 1' ? 'selected' : '' }}>Level 1 - ₹18,000–₹56,900</option>
+<option value="Level 2" {{ old('pay_scale_level', $post->pay_scale_level ?? '') == 'Level 2' ? 'selected' : '' }}>Level 2 - ₹19,900–₹63,200</option>
+<option value="Level 3" {{ old('pay_scale_level', $post->pay_scale_level ?? '') == 'Level 3' ? 'selected' : '' }}>Level 3 - ₹21,700–₹69,100</option>
+<option value="Level 4" {{ old('pay_scale_level', $post->pay_scale_level ?? '') == 'Level 4' ? 'selected' : '' }}>Level 4 - ₹25,500–₹81,100</option>
+<option value="Level 5" {{ old('pay_scale_level', $post->pay_scale_level ?? '') == 'Level 5' ? 'selected' : '' }}>Level 5 - ₹29,200–₹92,300</option>
+<option value="Level 6" {{ old('pay_scale_level', $post->pay_scale_level ?? '') == 'Level 6' ? 'selected' : '' }}>Level 6 - ₹35,400–₹1,12,400</option>
+<option value="Level 7" {{ old('pay_scale_level', $post->pay_scale_level ?? '') == 'Level 7' ? 'selected' : '' }}>Level 7 - ₹44,900–₹1,42,400</option>
+<option value="Level 8" {{ old('pay_scale_level', $post->pay_scale_level ?? '') == 'Level 8' ? 'selected' : '' }}>Level 8 - ₹47,600–₹1,51,100</option>
+<option value="Level 9" {{ old('pay_scale_level', $post->pay_scale_level ?? '') == 'Level 9' ? 'selected' : '' }}>Level 9 - ₹53,100–₹1,67,800</option>
+<option value="Level 10" {{ old('pay_scale_level', $post->pay_scale_level ?? '') == 'Level 10' ? 'selected' : '' }}>Level 10 - ₹56,100–₹1,77,500</option>
+</select>
+</div>
+
+<div class="pf-field">
+<label class="pf-label">Salary String / Display</label>
+<input type="text" name="salary" id="inp-salary" class="pf-input @error('salary') error @enderror"
+value="{{ old('salary', $post->salary ?? '') }}">
+</div>
+</div>
+</div>
+
+{{-- ===== ELIGIBILITY & FEES ===== --}}
+<div class="pf-card">
+<div class="pf-section-title"><i class="fas fa-id-card"></i>Age Limit &amp; Application Fee</div>
+
+<div class="pf-grid-4">
+<div class="pf-field">
+<label class="pf-label">Min Age</label>
+<input type="number" name="age_min" class="pf-input" placeholder="e.g. 18" value="{{ old('age_min', $post->age_min ?? '') }}">
+</div>
+<div class="pf-field">
+<label class="pf-label">Max Age (UR) <span class="req">*</span></label>
+<input type="number" name="age_max_gen" class="pf-input" placeholder="e.g. 27" value="{{ old('age_max_gen', $post->age_max_gen ?? '') }}" required>
+</div>
+<div class="pf-field">
+<label class="pf-label">Age As On Date</label>
+<input type="date" name="age_as_on_date" class="pf-input" value="{{ old('age_as_on_date', $post->age_as_on_date ?? '') }}">
+</div>
+<div class="pf-field">
+<label class="pf-label">Age Relaxation Note</label>
+<input type="text" name="age_relaxation_note" class="pf-input" placeholder="e.g. SC/ST 5 Yrs, OBC 3 Yrs" value="{{ old('age_relaxation_note', $post->age_relaxation_note ?? '') }}">
+</div>
+</div>
+
+<div class="pf-grid-4" style="margin-top: 16px;">
+<div class="pf-field">
+<label class="pf-label">Fee: General/UR <span class="req">*</span></label>
+<input type="number" name="fee_general" class="pf-input" placeholder="e.g. 100 (0 for free)" value="{{ old('fee_general', $post->fee_general ?? '') }}" required>
+</div>
+<div class="pf-field">
+<label class="pf-label">Fee: OBC/EWS</label>
+<input type="number" name="fee_obc" class="pf-input" value="{{ old('fee_obc', $post->fee_obc ?? '') }}">
+</div>
+<div class="pf-field">
+<label class="pf-label">Fee: SC/ST/PwD</label>
+<input type="number" name="fee_sc_st" class="pf-input" value="{{ old('fee_sc_st', $post->fee_sc_st ?? '') }}">
+</div>
+<div class="pf-field">
+<label class="pf-label">Fee: Women</label>
+<input type="number" name="fee_women" class="pf-input" value="{{ old('fee_women', $post->fee_women ?? '') }}">
+</div>
+</div>
+<div class="pf-grid-2" style="margin-top: 16px;">
+<div class="pf-field">
+<label class="pf-label">Fee Payment Mode</label>
+<input type="text" name="fee_payment_mode" class="pf-input" placeholder="e.g. Online via SBI Collect, Net Banking" value="{{ old('fee_payment_mode', $post->fee_payment_mode ?? '') }}">
+</div>
+<div class="pf-field">
+<label class="pf-label">Recruitment Year</label>
+<input type="number" name="recruitment_year" class="pf-input" placeholder="e.g. 2026" value="{{ old('recruitment_year', $post->recruitment_year ?? '') }}">
 </div>
 </div>
 </div>

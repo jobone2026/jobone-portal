@@ -328,6 +328,7 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                         <div class="badges">
                             <span class="badge b-govt">{{ $typeInfo['label'] }}</span>
                             @if($post->is_upcoming)<span class="badge" style="background:#fff7ed;color:#c2410c;border:1px solid #fed7aa">⏳ Upcoming</span>@endif
+                            @if($post->is_date_extended)<span class="badge" style="background:#fff1f2;color:#be123c;border:1px solid #fecdd3">🔥 Date Extended</span>@endif
                             @if($post->isNew())<span class="badge b-new">🔥 New</span>@endif
                             @if($post->last_date && $daysLeft !== null && $daysLeft >= 0)
                                 <span class="badge b-warn">Apply by {{ $post->last_date->format('d M') }}</span>
@@ -430,11 +431,19 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                     @if($post->total_posts)
                     <tr><td>Total Vacancies</td><td>{{ number_format($post->total_posts) }} posts</td></tr>
                     @endif
-                    @if($post->age_min || $post->age_max_gen)
-                    <tr><td>Age Limit</td><td>{{ $post->age_min ? $post->age_min . ' - ' : 'Max ' }}{{ $post->age_max_gen ?: 'NA' }} Years</td></tr>
+                    @if($post->age_min || $post->age_max_gen || $post->age_as_on_date)
+                    <tr><td>Age Limit</td><td>{{ $post->age_min ? $post->age_min . ' - ' : 'Max ' }}{{ $post->age_max_gen ?: 'NA' }} Years {{ $post->age_as_on_date ? '(As on ' . \Carbon\Carbon::parse($post->age_as_on_date)->format('d M Y') . ')' : '' }}</td></tr>
                     @endif
                     @if($post->salary)
-                    <tr><td>💰 {{ ($post->salary_type ?? '') === 'stipend' ? 'Stipend' : 'Salary / Pay Scale' }}</td><td style="color:#166534;font-weight:600">{{ $post->salary }}</td></tr>
+                    <tr><td>💰 {{ ($post->salary_type ?? '') === 'stipend' ? 'Stipend during training' : 'Salary / Pay Scale' }}</td><td style="color:#166534;font-weight:600">{{ $post->salary }}</td></tr>
+                    @endif
+                    @if($post->fee_general !== null || $post->fee_obc !== null || $post->fee_sc_st !== null || $post->fee_women !== null)
+                    <tr><td>Application Fee</td><td>Gen/UR: ₹{{ $post->fee_general ?? '0' }}
+                        @if($post->fee_obc !== null) | OBC/EWS: ₹{{ $post->fee_obc }}@endif
+                        @if($post->fee_sc_st !== null) | SC/ST: ₹{{ $post->fee_sc_st }}@endif
+                        @if($post->fee_women !== null) | Women: ₹{{ $post->fee_women }}@endif
+                        @if($post->fee_payment_mode) <br><span style="font-size:11px;color:#6b7280">Mode: {{ $post->fee_payment_mode }}</span>@endif
+                    </td></tr>
                     @endif
                     @if($post->state)
                     <tr><td>State</td><td><a href="{{ route('states.show', $post->state) }}" style="color:#2563eb;text-decoration:underline">{{ $post->state->name }}</a></td></tr>

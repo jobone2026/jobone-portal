@@ -11,27 +11,58 @@ class SchemaService
 {
     public function generateJobPosting(Post $post): array
     {
-        // Remove style tags and their content before stripping other tags
-        $cleanContent = preg_replace('/<style\b[^>]*>.*?<\/style>/is', '', $post->content);
-        $cleanContent = strip_tags($cleanContent);
-        // Limit description to 5000 characters for schema
-        $description = Str::limit($cleanContent, 5000);
+        // Remove style and script tags
+        $cleanContent = preg_replace('/<(style|script)\b[^>]*>.*?<\/\1>/is', '', $post->content);
+        // Only strip unsafe tags, preserve formatting tags for Google Jobs description
+        $cleanContent = strip_tags($cleanContent, '<p><br><ul><li><strong><b><em><i><h1><h2><h3><h4><h5><h6>');
+        // If content is too long, we don't truncate because cutting HTML tags is unsafe. 
+        // Job posts are usually within reasonable limits (under 100kb).
+        $description = trim($cleanContent) ?: $post->title;
 
-        // datePosted must always be ISO8601 - use created_at which is always set
-        $datePosted   = $post->created_at->toIso8601String();
+        // datePosted: ISO8601 of notification_date or created_at
+        $datePosted = $post->notification_date ? $post->notification_date->toIso8601String() : $post->created_at->toIso8601String();
         $dateModified = $post->updated_at->toIso8601String();
 
         // Get state name for location
-        $stateName       = $post->state->name ?? 'All India';
-        $addressLocality = $stateName !== 'All India' ? $stateName : 'New Delhi';
+        $stateName = $post->state->name ?? 'All India';
+        
+        // directApply: strict boolean, but verify URL is not a bare homepage
+        $applyUrl = $post->apply_url ?? $post->online_form ?? '';
+        $isDirect = false;
+        if (!empty($applyUrl)) {
+            $parsedUrl = parse_url($applyUrl);
+            $path = rtrim($parsedUrl['path'] ?? '/', '/');
+            if ($path !== '' || !empty($parsedUrl['query'])) {
+                $isDirect = true;
+            }
+        }
+        $directApply = (bool)($post->direct_apply ?? $isDirect);
 
-        // directApply: use structured field first, fallback to URL presence
-        $applyUrl    = $post->apply_url ?? $post->online_form ?? '';
-        $directApply = (bool)($post->direct_apply ?? !empty($applyUrl));
-
-        // Employment type: stipend roles → OTHER
+        // Employment type mapping
         $empType = 'FULL_TIME';
-        if (($post->salary_type ?? 'salary') === 'stipend') $empType = 'OTHER';
+        $titleLower = strtolower($post->title ?? '');
+        if (strpos($titleLower, 'apprentice') !== false || strpos($titleLower, 'trainee') !== false || ($post->salary_type === 'stipend')) {
+            $empType = 'INTERN';
+        } elseif (strpos($titleLower, 'contract') !== false) {
+            $empType = 'CONTRACTOR';
+        } elseif (strpos($titleLower, 'part time') !== false) {
+            $empType = 'PART_TIME';
+        } elseif (strpos($titleLower, 'volunteer') !== false) {
+            $empType = 'VOLUNTEER';
+        } elseif (strpos($titleLower, 'temporary') !== false) {
+            $empType = 'TEMPORARY';
+        }
+
+        // Hiring Organization Official URL
+        $orgUrl = url('/');
+        if (is_array($post->important_links)) {
+            foreach ($post->important_links as $link) {
+                if (stripos($link['label'] ?? '', 'official website') !== false && !empty($link['url'])) {
+                    $orgUrl = $link['url'];
+                    break;
+                }
+            }
+        }
 
         $schema = [
             '@context'           => 'https://schema.org',
@@ -45,18 +76,62 @@ class SchemaService
             'hiringOrganization' => [
                 '@type'  => 'Organization',
                 'name'   => $post->organization ?: ($post->category->name ?? 'Government of India'),
-                'sameAs' => url('/'),
+                'sameAs' => $orgUrl,
             ],
-            'jobLocation' => [
+        ];
+
+        // Job Location
+        if ($stateName === 'All India') {
+            $schema['jobLocationType'] = 'TELECOMMUTE';
+            $schema['applicantLocationRequirements'] = [
+                '@type' => 'Country',
+                'name' => 'India'
+            ];
+        } else {
+            $schema['jobLocation'] = [
                 '@type'   => 'Place',
                 'address' => [
                     '@type'           => 'PostalAddress',
-                    'addressLocality' => $addressLocality,
                     'addressRegion'   => $stateName,
                     'addressCountry'  => 'IN',
                 ],
-            ],
-        ];
+            ];
+        }
+
+        // Education Requirements (Google recommends specific enums)
+        $eduText = strtolower(strip_tags($post->qualifications ?? '') . ' ' . implode(' ', $post->education ?? []));
+        $eduMap = [];
+        
+        if (strpos($eduText, '10th') !== false || strpos($eduText, '12th') !== false || strpos($eduText, 'high school') !== false || strpos($eduText, 'matriculation') !== false) {
+            $eduMap[] = 'HIGH_SCHOOL';
+        }
+        if (strpos($eduText, 'diploma') !== false || strpos($eduText, 'iti') !== false) {
+            $eduMap[] = 'ASSOCIATE';
+        }
+        if (strpos($eduText, 'bachelor') !== false || strpos($eduText, 'b.tech') !== false || strpos($eduText, 'graduate') !== false || strpos($eduText, 'degree') !== false) {
+            $eduMap[] = 'BACHELOR';
+        }
+        if (strpos($eduText, 'master') !== false || strpos($eduText, 'm.sc') !== false || strpos($eduText, 'post graduate') !== false) {
+            $eduMap[] = 'MASTER';
+        }
+        if (strpos($eduText, 'phd') !== false || strpos($eduText, 'doctorate') !== false) {
+            $eduMap[] = 'POSTGRADUATE';
+        }
+
+        if (!empty($eduMap)) {
+            // Google supports an array of these objects
+            $eduReqsObj = [];
+            $fullQuals = strip_tags($post->qualifications ?? '');
+            foreach (array_unique($eduMap) as $level) {
+                $eduReqsObj[] = [
+                    '@type' => 'EducationalOccupationalCredential',
+                    'credentialCategory' => $level,
+                    'description' => $fullQuals ?: $level
+                ];
+            }
+            // If it's just one, send the object directly, otherwise array
+            $schema['educationRequirements'] = count($eduReqsObj) === 1 ? $eduReqsObj[0] : $eduReqsObj;
+        }
 
         // validThrough: use last_date, fallback to +90 days
         if ($post->last_date) {
@@ -77,36 +152,34 @@ class SchemaService
             ];
         }
 
-        // baseSalary: prefer numeric min/max, fallback to description string
-        if ($post->salary) {
-            $salaryValue = [];
-            if ($post->salary_min && $post->salary_max) {
-                $salaryValue = [
-                    '@type'    => 'QuantitativeValue',
-                    'minValue' => (int)$post->salary_min,
-                    'maxValue' => (int)$post->salary_max,
-                    'unitText' => 'MONTH',
-                ];
-            } else {
-                $salaryValue = [
-                    '@type'       => 'QuantitativeValue',
-                    'description' => $post->salary,
-                    'unitText'    => 'MONTH',
-                ];
+        // baseSalary
+        $minSal = (int) $post->salary_min;
+        $maxSal = (int) $post->salary_max;
+        
+        // If min/max are not strictly set, try to extract from 'salary' string or default to 0
+        if ($minSal === 0 && $maxSal === 0 && !empty($post->salary)) {
+            preg_match_all('/\d+/', str_replace(',', '', $post->salary), $matches);
+            if (!empty($matches[0])) {
+                $salaries = array_map('intval', $matches[0]);
+                sort($salaries);
+                $minSal = $salaries[0];
+                $maxSal = $salaries[count($salaries) - 1];
             }
-            $schema['baseSalary'] = [
-                '@type'    => 'MonetaryAmount',
-                'currency' => 'INR',
-                'value'    => $salaryValue,
-            ];
-        } else {
-            // Default salary structure
-            $schema['baseSalary'] = [
-                '@type'    => 'MonetaryAmount',
-                'currency' => 'INR',
-                'value'    => ['@type' => 'QuantitativeValue', 'minValue' => 20000, 'maxValue' => 100000, 'unitText' => 'MONTH'],
-            ];
         }
+
+        // Ensure max >= min
+        if ($maxSal < $minSal) $maxSal = $minSal;
+
+        $schema['baseSalary'] = [
+            '@type'    => 'MonetaryAmount',
+            'currency' => 'INR',
+            'value'    => [
+                '@type'    => 'QuantitativeValue',
+                'minValue' => $minSal,
+                'maxValue' => $maxSal > 0 ? $maxSal : ($minSal > 0 ? $minSal : 0),
+                'unitText' => 'MONTH',
+            ],
+        ];
 
         // Optional fields
         if ($post->total_posts) {

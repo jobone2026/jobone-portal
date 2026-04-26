@@ -63,7 +63,7 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $rules = [
             'title'              => 'required|string|max:255',
             'type'               => 'required|in:job,admit_card,syllabus,result,answer_key,blog,scholarship',
             'category_id'        => 'required|exists:categories,id',
@@ -87,8 +87,83 @@ class PostController extends Controller
             'education.*'        => 'string',
             'is_featured'        => 'boolean',
             'is_upcoming'        => 'boolean',
-            'is_published'       => 'boolean'
-        ]);
+            'is_published'       => 'boolean',
+            // New SEO structured fields
+            'age_min'            => 'nullable|integer|min:0',
+            'age_max_gen'        => 'required|integer|min:0', // requested to be required
+            'age_as_on_date'     => 'nullable|date',
+            'age_relaxation_note'=> 'nullable|string|max:500',
+            'salary_min'         => 'nullable|integer|min:0',
+            'salary_max'         => 'nullable|integer|min:0',
+            'salary_type'        => 'required|in:salary,stipend,consolidated,pay_scale', // requested to be required
+            'pay_scale_level'    => 'nullable|string|max:255',
+            'fee_general'        => 'required|integer|min:0', // requested to be required
+            'fee_obc'            => 'nullable|integer|min:0',
+            'fee_sc_st'          => 'nullable|integer|min:0',
+            'fee_women'          => 'nullable|integer|min:0',
+            'fee_ph'             => 'nullable|integer|min:0',
+            'fee_payment_mode'   => 'nullable|string|max:255',
+            'recruitment_year'   => 'nullable|integer|min:1900|max:2100',
+        ];
+
+        // Custom Education & Notification Date validation
+        if ($request->input('is_published')) {
+            $content = $request->input('content', '') . ' ' . $request->input('qualifications', '');
+            $content = strip_tags(strtolower($content));
+            
+            $educationChips = array_map('strtolower', $request->input('education', []));
+            $educationLevel = strtolower($request->input('education_level', ''));
+            $chipsText = implode(' ', $educationChips) . ' ' . $educationLevel;
+
+            $keywords = ['masters', 'm.sc', 'm.com', 'mba', 'pgdm', 'phd', 'llb', 'b.tech', 'diploma', 'iti', '12th', '10th'];
+            $missingChips = [];
+            foreach ($keywords as $kw) {
+                if (strpos($content, $kw) !== false && strpos($chipsText, $kw) === false) {
+                    // Try to approximate
+                    $approx = $kw;
+                    if (in_array($kw, ['masters', 'm.sc', 'm.com', 'mba', 'pgdm'])) $approx = 'post graduate';
+                    if (in_array($kw, ['b.tech', 'llb'])) $approx = 'graduate';
+                    
+                    if (strpos($chipsText, $approx) === false) {
+                        $missingChips[] = strtoupper($kw);
+                    }
+                }
+            }
+
+            if (count($missingChips) > 0) {
+                return back()->withInput()->withErrors(['education' => 'Education mismatch. The body contains ' . implode(', ', $missingChips) . ' but the education chip is not set accordingly.']);
+            }
+
+            // Notification date validation
+            $notificationDate = $request->input('notification_date');
+            if ($notificationDate) {
+                $daysDiff = \Carbon\Carbon::parse($notificationDate)->diffInDays(now(), false);
+                if ($daysDiff > 90) {
+                    return back()->withInput()->withErrors(['notification_date' => 'Notification date cannot be more than 90 days in the past from today.']);
+                }
+            }
+        }
+
+        // Duplicate detection check
+        $orgSlug = \Illuminate\Support\Str::slug($request->input('organization'));
+        $lastDateInput = $request->input('last_date');
+        if ($orgSlug && $lastDateInput) {
+            $duplicate = \App\Models\Post::where('organization_slug', $orgSlug)
+                ->whereDate('last_date', $lastDateInput)
+                ->first();
+            
+            if ($duplicate) {
+                return redirect()->route('admin.posts.edit', $duplicate->id)
+                    ->with('warning', 'A post for this organization and last date already exists. You have been redirected to edit it instead of creating a duplicate.');
+            }
+        }
+
+        $validated = $request->validate($rules);
+
+        // Salary type labeling validation
+        if ($validated['salary_type'] === 'stipend' && (!isset($validated['salary_display_label']) || stripos($validated['salary_display_label'], 'salary') !== false)) {
+            $validated['salary_display_label'] = 'Stipend during training';
+        }
 
         $validated['slug'] = Str::slug($validated['title']);
         $validated['admin_id'] = auth('admin')->id();
@@ -148,7 +223,7 @@ class PostController extends Controller
 
     public function update(Request $request, Post $post)
     {
-        $validated = $request->validate([
+        $rules = [
             'title'              => 'required|string|max:255',
             'type'               => 'required|in:job,admit_card,syllabus,result,answer_key,blog,scholarship',
             'category_id'        => 'required|exists:categories,id',
@@ -172,8 +247,75 @@ class PostController extends Controller
             'education.*'        => 'string',
             'is_featured'        => 'boolean',
             'is_upcoming'        => 'boolean',
-            'is_published'       => 'boolean'
-        ]);
+            'is_published'       => 'boolean',
+            // New SEO structured fields
+            'age_min'            => 'nullable|integer|min:0',
+            'age_max_gen'        => 'required|integer|min:0',
+            'age_as_on_date'     => 'nullable|date',
+            'age_relaxation_note'=> 'nullable|string|max:500',
+            'salary_min'         => 'nullable|integer|min:0',
+            'salary_max'         => 'nullable|integer|min:0',
+            'salary_type'        => 'required|in:salary,stipend,consolidated,pay_scale',
+            'pay_scale_level'    => 'nullable|string|max:255',
+            'fee_general'        => 'required|integer|min:0',
+            'fee_obc'            => 'nullable|integer|min:0',
+            'fee_sc_st'          => 'nullable|integer|min:0',
+            'fee_women'          => 'nullable|integer|min:0',
+            'fee_ph'             => 'nullable|integer|min:0',
+            'fee_payment_mode'   => 'nullable|string|max:255',
+            'recruitment_year'   => 'nullable|integer|min:1900|max:2100',
+        ];
+
+        // Custom Education & Notification Date validation
+        if ($request->input('is_published')) {
+            $content = $request->input('content', '') . ' ' . $request->input('qualifications', '');
+            $content = strip_tags(strtolower($content));
+            
+            $educationChips = array_map('strtolower', $request->input('education', []));
+            $educationLevel = strtolower($request->input('education_level', ''));
+            $chipsText = implode(' ', $educationChips) . ' ' . $educationLevel;
+
+            $keywords = ['masters', 'm.sc', 'm.com', 'mba', 'pgdm', 'phd', 'llb', 'b.tech', 'diploma', 'iti', '12th', '10th'];
+            $missingChips = [];
+            foreach ($keywords as $kw) {
+                if (strpos($content, $kw) !== false && strpos($chipsText, $kw) === false) {
+                    // Try to approximate
+                    $approx = $kw;
+                    if (in_array($kw, ['masters', 'm.sc', 'm.com', 'mba', 'pgdm'])) $approx = 'post graduate';
+                    if (in_array($kw, ['b.tech', 'llb'])) $approx = 'graduate';
+                    
+                    if (strpos($chipsText, $approx) === false) {
+                        $missingChips[] = strtoupper($kw);
+                    }
+                }
+            }
+
+            if (count($missingChips) > 0) {
+                return back()->withInput()->withErrors(['education' => 'Education mismatch. The body contains ' . implode(', ', $missingChips) . ' but the education chip is not set accordingly.']);
+            }
+
+            // Notification date validation
+            $notificationDate = $request->input('notification_date');
+            if ($notificationDate) {
+                // Determine if this is a newly created post or an old one.
+                // We check if it's within 90 days of today. If it's already an old post, we might allow it.
+                // The requirement: "cannot be more than 90 days in the past from today's date when a post is first created"
+                // So for update, we skip this check or just allow the original date? Let's skip if the date hasn't changed.
+                if ($post->notification_date != $notificationDate) {
+                    $daysDiff = \Carbon\Carbon::parse($notificationDate)->diffInDays(now(), false);
+                    if ($daysDiff > 90) {
+                        return back()->withInput()->withErrors(['notification_date' => 'Notification date cannot be more than 90 days in the past from today.']);
+                    }
+                }
+            }
+        }
+
+        $validated = $request->validate($rules);
+
+        // Salary type labeling validation
+        if ($validated['salary_type'] === 'stipend' && (!isset($validated['salary_display_label']) || stripos($validated['salary_display_label'], 'salary') !== false)) {
+            $validated['salary_display_label'] = 'Stipend during training';
+        }
 
         $validated['slug'] = Str::slug($validated['title']);
         $validated['short_description'] = '';

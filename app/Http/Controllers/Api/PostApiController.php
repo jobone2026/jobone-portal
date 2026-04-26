@@ -152,6 +152,7 @@ class PostApiController extends Controller
 
         $validated = $request->validate([
             'title'             => 'required|string|max:255',
+            'slug'              => 'nullable|string|max:100|unique:posts,slug',
             'type'              => 'required|in:job,admit_card,result,answer_key,syllabus,blog,scholarship',
             'short_description' => 'required|string',
             'content'           => 'required|string',
@@ -177,6 +178,25 @@ class PostApiController extends Controller
             'age_max_gen'       => 'nullable|integer|min:0',
             'age_max_obc'       => 'nullable|integer|min:0',
             'age_max_sc'        => 'nullable|integer|min:0',
+            'age_max_st'        => 'nullable|integer|min:0',
+            'age_max_ews'       => 'nullable|integer|min:0',
+            'age_max_ph'        => 'nullable|integer|min:0',
+            'age_max_ex_serviceman' => 'nullable|integer|min:0',
+            'age_as_on_date'    => 'nullable|date',
+            // Fees
+            'fee_general'       => 'nullable|integer|min:0',
+            'fee_obc'           => 'nullable|integer|min:0',
+            'fee_sc_st'         => 'nullable|integer|min:0',
+            'fee_women'         => 'nullable|integer|min:0',
+            'fee_ph'            => 'nullable|integer|min:0',
+            // Vacancy Breakdown
+            'vacancy_gen'       => 'nullable|integer|min:0',
+            'vacancy_obc'       => 'nullable|integer|min:0',
+            'vacancy_sc'        => 'nullable|integer|min:0',
+            'vacancy_st'        => 'nullable|integer|min:0',
+            'vacancy_ews'       => 'nullable|integer|min:0',
+            'vacancy_ph'        => 'nullable|integer|min:0',
+            'selection_stages'  => 'nullable|array',
             // Links
             'online_form'       => 'nullable|url|max:500',
             'apply_url'         => 'nullable|url|max:500',
@@ -191,10 +211,11 @@ class PostApiController extends Controller
             // Flags
             'is_featured'       => 'nullable|boolean',
             'is_upcoming'       => 'nullable|boolean',
+            'is_date_extended'  => 'nullable|boolean',
             'is_published'      => 'nullable|boolean',
             // SEO
-            'meta_title'        => 'nullable|string|max:60',
-            'meta_description'  => 'nullable|string|max:160',
+            'meta_title'        => 'nullable|string|max:255',
+            'meta_description'  => 'nullable|string|max:500',
             'meta_keywords'     => 'nullable|string|max:5000',
             // Rich content
             'qualifications'    => 'nullable|string',
@@ -206,7 +227,7 @@ class PostApiController extends Controller
         try {
             $post = Post::create([
                 'title'             => $validated['title'],
-                'slug'              => \Str::slug($validated['title']),
+                'slug'              => $validated['slug'] ?? \Str::slug($validated['title']),
                 'type'              => $validated['type'],
                 'short_description' => $validated['short_description'],
                 'content'           => $validated['content'],
@@ -232,6 +253,25 @@ class PostApiController extends Controller
                 'age_max_gen'       => $validated['age_max_gen'] ?? null,
                 'age_max_obc'       => $validated['age_max_obc'] ?? null,
                 'age_max_sc'        => $validated['age_max_sc'] ?? null,
+                'age_max_st'        => $validated['age_max_st'] ?? null,
+                'age_max_ews'       => $validated['age_max_ews'] ?? null,
+                'age_max_ph'        => $validated['age_max_ph'] ?? null,
+                'age_max_ex_serviceman' => $validated['age_max_ex_serviceman'] ?? null,
+                'age_as_on_date'    => $validated['age_as_on_date'] ?? null,
+                // Fees
+                'fee_general'       => $validated['fee_general'] ?? null,
+                'fee_obc'           => $validated['fee_obc'] ?? null,
+                'fee_sc_st'         => $validated['fee_sc_st'] ?? null,
+                'fee_women'         => $validated['fee_women'] ?? null,
+                'fee_ph'            => $validated['fee_ph'] ?? null,
+                // Vacancy Breakdown
+                'vacancy_gen'       => $validated['vacancy_gen'] ?? null,
+                'vacancy_obc'       => $validated['vacancy_obc'] ?? null,
+                'vacancy_sc'        => $validated['vacancy_sc'] ?? null,
+                'vacancy_st'        => $validated['vacancy_st'] ?? null,
+                'vacancy_ews'       => $validated['vacancy_ews'] ?? null,
+                'vacancy_ph'        => $validated['vacancy_ph'] ?? null,
+                'selection_stages'  => $validated['selection_stages'] ?? null,
                 // Links
                 'online_form'       => $validated['online_form'] ?? null,
                 'apply_url'         => $validated['apply_url'] ?? null,
@@ -244,6 +284,7 @@ class PostApiController extends Controller
                 // Flags
                 'is_featured'       => $validated['is_featured'] ?? false,
                 'is_upcoming'       => $validated['is_upcoming'] ?? false,
+                'is_date_extended'  => $validated['is_date_extended'] ?? false,
                 'is_published'      => $validated['is_published'] ?? true,
                 // SEO
                 'meta_title'        => $validated['meta_title'] ?? $validated['title'],
@@ -316,8 +357,8 @@ class PostApiController extends Controller
             'is_upcoming'       => 'nullable|boolean',
             'is_published'      => 'nullable|boolean',
             // SEO
-            'meta_title'        => 'nullable|string|max:60',
-            'meta_description'  => 'nullable|string|max:160',
+            'meta_title'        => 'nullable|string|max:255',
+            'meta_description'  => 'nullable|string|max:500',
             'meta_keywords'     => 'nullable|string|max:1000',
         ]);
 
