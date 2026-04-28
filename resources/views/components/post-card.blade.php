@@ -126,22 +126,24 @@
             {{ $typeLabel }}
         </span>
 
-        {{-- Right badges --}}
+        {{-- Right badges: dynamic attention badges --}}\
         <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
-            {{-- NEW badge --}}
-            <span style="display:inline-flex;align-items:center;gap:3px;padding:2px 7px;
-                         border-radius:5px;font-size:9px;font-weight:700;
-                         background:#dcfce7;color:#15803d;border:1px solid #86efac;">
-                <i class="fa-solid fa-star" style="font-size:8px;"></i> NEW
-            </span>
 
-            @if($isUrgent)
+            {{-- Dynamic attention badges from PostHelper --}}
+            @forelse($attentionBadges as $badge)
                 <span style="display:inline-flex;align-items:center;gap:3px;padding:2px 7px;
                              border-radius:5px;font-size:9px;font-weight:700;
-                             background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5;">
-                    <i class="fa-solid fa-fire" style="font-size:8px;"></i> URGENT
+                             background:{{ $badge['bg'] }};color:{{ $badge['color'] }};border:1px solid {{ $badge['border'] }};">
+                    {{ $badge['icon'] }} {{ $badge['label'] }}
                 </span>
-            @endif
+            @empty
+                {{-- Fallback NEW badge if no attention badges --}}
+                <span style="display:inline-flex;align-items:center;gap:3px;padding:2px 7px;
+                             border-radius:5px;font-size:9px;font-weight:700;
+                             background:#dcfce7;color:#15803d;border:1px solid #86efac;">
+                    <i class="fa-solid fa-star" style="font-size:8px;"></i> NEW
+                </span>
+            @endforelse
 
             @if($post->state)
                 <span style="display:inline-flex;align-items:center;gap:3px;padding:2px 7px;
@@ -162,11 +164,11 @@
     {{-- Body --}}
     <div class="p-3.5">
 
-        {{-- Title --}}
+        {{-- Title (cleaned of emoji prefixes) --}}
         <div class="text-sm font-semibold leading-snug mb-3" style="color:#111827;line-height:1.45;">
             <a href="{{ route('posts.show', [$post->type, $post->slug]) }}" style="color:#111827;text-decoration:none;"
                 onmouseover="this.style.color='{{ $borderColor }}'" onmouseout="this.style.color='#111827'">
-                {{ $post->title }}
+                {{ $cleanTitle }}
             </a>
         </div>
 
@@ -256,7 +258,7 @@
 
         </div>
 
-        {{-- Actions --}}
+        {{-- Actions: type-aware CTA --}}
         <div class="flex gap-2 pt-2.5 border-t border-gray-100 relative z-10">
             {{-- View Details: outlined with type color --}}
             <a href="{{ route('posts.show', [$post->type, $post->slug]) }}"
@@ -266,13 +268,13 @@
                 onmouseout="this.style.background='{{ $headerBg }}';this.style.color='{{ $borderColor }}'">
                 <i class="fa-solid fa-eye" style="font-size:10px;"></i> View Details
             </a>
-            {{-- Apply Now: soft green --}}
+            {{-- Type-aware CTA: Apply Now / Download / Check Result / Answer Key / Syllabus --}}
             <a href="{{ route('posts.show', [$post->type, $post->slug]) }}#apply"
                 class="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg transition-all"
-                style="background:#f0fdf4;color:#16a34a;border:1.5px solid #bbf7d0;text-decoration:none;"
-                onmouseover="this.style.background='#16a34a';this.style.color='#fff'"
-                onmouseout="this.style.background='#f0fdf4';this.style.color='#16a34a'">
-                <i class="fa-solid fa-paper-plane" style="font-size:10px;"></i> Apply Now
+                style="background:{{ $cardCta['bg'] }};color:{{ $cardCta['color'] }};border:1.5px solid {{ $cardCta['border'] }};text-decoration:none;"
+                onmouseover="this.style.background='{{ $cardCta['hover'] }}';this.style.color='#fff'"
+                onmouseout="this.style.background='{{ $cardCta['bg'] }}';this.style.color='{{ $cardCta['color'] }}'">
+                <i class="fa-solid {{ $cardCta['icon'] }}" style="font-size:10px;"></i> {{ $cardCta['text'] }}
             </a>
         </div>
 
