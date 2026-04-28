@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicon -->
@@ -47,8 +47,17 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <!-- Font Awesome CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Preconnect for Font Awesome CDN -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <!-- Font Awesome: load non-render-blocking, then swap to all.min.css -->
+    <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+    <style>
+        /* Fix font-display for Font Awesome webfonts */
+        @font-face { font-family: 'Font Awesome 6 Free'; font-display: swap; }
+        @font-face { font-family: 'Font Awesome 6 Brands'; font-display: swap; }
+    </style>
 
     <style>
         /* RTL Support */
@@ -210,8 +219,9 @@
                 <!-- Logo -->
                 <a href="{{ route('home') }}"
                     class="flex items-center gap-3 flex-shrink-0 transform hover:scale-105 transition-transform">
-                    <img src="{{ asset('images/jobone-logo.png') }}" alt="JobOne.in"
-                        class="h-10 md:h-12 w-auto object-contain drop-shadow-sm" loading="eager">
+                    <img src="{{ asset('images/jobone-logo.png') }}" alt="JobOne.in - Sarkari Naukri & Govt Jobs"
+                        class="h-10 md:h-12 w-auto object-contain drop-shadow-sm"
+                        width="160" height="48" loading="eager" fetchpriority="high">
                 </a>
                 </a>
 
@@ -247,9 +257,12 @@
                 <!-- Mobile Menu Button - hidden on mobile, shown only on tablet -->
                 <div class="hidden sm:flex md:hidden">
                     <button id="mobile-menu-button"
+                        aria-label="Open navigation menu"
+                        aria-expanded="false"
+                        aria-controls="mobile-menu"
                         class="p-3 text-gray-700 hover:text-blue-600 focus:outline-none bg-gray-100 rounded-lg"
                         style="color: #374151 !important; background-color: #f3f4f6 !important;">
-                        <i id="mobile-menu-icon" class="fas fa-bars text-xl"></i>
+                        <i id="mobile-menu-icon" class="fas fa-bars text-xl" aria-hidden="true"></i>
                     </button>
                 </div>
 

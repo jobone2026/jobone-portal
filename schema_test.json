@@ -10,7 +10,11 @@
     "hiringOrganization": {
         "@type": "Organization",
         "name": "Union Public Service Commission",
-        "sameAs": "http://localhost:8000"
+        "sameAs": "https://upsc.gov.in",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://jobone.in/images/jobone-logo.png"
+        }
     },
     "jobLocationType": "TELECOMMUTE",
     "applicantLocationRequirements": {
@@ -19,7 +23,7 @@
     },
     "educationRequirements": {
         "@type": "EducationalOccupationalCredential",
-        "credentialCategory": "BACHELOR"
+        "credentialCategory": "bachelor degree"
     },
     "validThrough": "2026-06-01T00:00:00+00:00",
     "applicationDeadline": "2026-06-01T00:00:00+00:00",

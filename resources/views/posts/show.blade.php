@@ -90,6 +90,52 @@
     }
 @endphp
 
+@php
+    // Group post types
+    $isJobType    = in_array($post->type, ['job', 'scholarship']);
+    $isExamType   = in_array($post->type, ['admit_card', 'result', 'answer_key', 'syllabus']);
+    $isBlog       = $post->type === 'blog';
+    // Type-specific CTA labels
+    $ctaLabel = match($post->type) {
+        'job'         => '✅ Apply on Official Site',
+        'admit_card'  => '🎟️ Download Admit Card',
+        'result'      => '🏆 Check Result',
+        'answer_key'  => '🔑 Download Answer Key',
+        'syllabus'    => '📚 Download Syllabus',
+        'scholarship' => '✅ Apply for Scholarship',
+        'blog'        => '🔗 View Official Link',
+        default       => '📄 View Official Link',
+    };
+    $ctaLabelMobile = match($post->type) {
+        'job'         => '✅ Apply Now',
+        'admit_card'  => '🎟️ Download',
+        'result'      => '🏆 Result',
+        'answer_key'  => '🔑 Answer Key',
+        'syllabus'    => '📚 Syllabus',
+        'scholarship' => '✅ Apply',
+        default       => '📄 View',
+    };
+    // Section title
+    $quickInfoTitle = match($post->type) {
+        'job'         => 'ℹ️ Job Details',
+        'admit_card'  => 'ℹ️ Admit Card Details',
+        'result'      => 'ℹ️ Result Details',
+        'answer_key'  => 'ℹ️ Answer Key Details',
+        'syllabus'    => 'ℹ️ Syllabus Details',
+        'scholarship' => 'ℹ️ Scholarship Details',
+        default       => 'ℹ️ Quick Information',
+    };
+    $contentTitle = match($post->type) {
+        'admit_card'  => '🎟️ Admit Card Details',
+        'result'      => '🏆 Result Details',
+        'answer_key'  => '🔑 Answer Key Details',
+        'syllabus'    => '📚 Syllabus & Exam Pattern',
+        'scholarship' => '🎓 Scholarship Details',
+        'blog'        => '📝 Article',
+        default       => '📋 Full Details',
+    };
+@endphp
+
 <style>
 *{box-sizing:border-box}
 .pg{padding:14px 16px;max-width:1000px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;overflow-x:hidden;width:100%;box-sizing:border-box}
@@ -277,7 +323,7 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
         </div>
         <a href="{{ $mobileApplyLink }}" target="_blank" rel="noopener" 
            style="background:#0f6e56;color:#fff;padding:9px 14px;border-radius:8px;text-decoration:none;font-size:12px;font-weight:700;flex-shrink:0">
-           Quick Apply
+           {{ match($post->type) { 'job'=>'Quick Apply', 'admit_card'=>'Download', 'result'=>'Check Result', 'answer_key'=>'Download', 'syllabus'=>'Download', 'scholarship'=>'Apply Now', default=>'View' } }}
         </a>
     </div>
 
@@ -321,7 +367,7 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                 <div class="hdr-top">
                     <div class="org-logo">{{ $orgInitials }}</div>
                     <div style="flex:1;min-width:0">
-                        <h1 class="hdr-title">{{ $post->title }}</h1>
+                        <h1 class="hdr-title">{{ \App\Helpers\PostHelper::cleanTitle($post->title) }}</h1>
                         @if($post->organization)
                         <div class="hdr-org">{{ $post->organization }}@if($post->state) · {{ $post->state->name }}@endif</div>
                         @endif
@@ -330,13 +376,13 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                             @if($post->is_upcoming)<span class="badge" style="background:#fff7ed;color:#c2410c;border:1px solid #fed7aa">⏳ Upcoming</span>@endif
                             @if($post->is_date_extended)<span class="badge" style="background:#fff1f2;color:#be123c;border:1px solid #fecdd3">🔥 Date Extended</span>@endif
                             @if($post->isNew())<span class="badge b-new">🔥 New</span>@endif
-                            @if($post->last_date && $daysLeft !== null && $daysLeft >= 0)
+                            @if($isJobType && $post->last_date && $daysLeft !== null && $daysLeft >= 0)
                                 <span class="badge b-warn">Apply by {{ $post->last_date->format('d M') }}</span>
                             @endif
-                            @if($post->total_posts)
+                            @if($isJobType && $post->total_posts)
                                 <span class="badge b-info">{{ number_format($post->total_posts) }} Vacancies</span>
                             @endif
-                            @if($post->salary)
+                            @if($isJobType && $post->salary)
                                 <span class="badge" style="background:#f0fdf4;color:#166534;border:1px solid #bbf7d0">💰 {{ Str::limit($post->salary, 30) }}</span>
                             @endif
                             @if($post->category)<span class="badge b-purple">{{ $post->category->name }}</span>@endif
@@ -344,7 +390,7 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                     </div>
                 </div>
 
-                @if($post->total_posts || $post->salary || $eduLabels || ($post->last_date && $daysLeft !== null))
+                @if($isJobType && ($post->total_posts || $post->salary || $eduLabels || ($post->last_date && $daysLeft !== null)))
                 <div class="hdr-meta">
                     @if($post->total_posts)
                     <div class="meta-item">
@@ -354,11 +400,11 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                     @endif
                     @if($post->salary)
                     <div class="meta-item">
-                        <span class="meta-label">💰 Salary / Pay</span>
+                        <span class="meta-label">💰 {{ $post->type === 'scholarship' ? 'Amount' : 'Salary / Pay' }}</span>
                         <span class="meta-val" style="color:#166534">{{ $post->salary }}</span>
                     </div>
                     @endif
-                    @if($eduLabels)
+                    @if($isJobType && $eduLabels)
                     <div class="meta-item">
                         <span class="meta-label">Qualification</span>
                         <span class="meta-val">{{ implode(' / ', array_slice($eduLabels, 0, 2)) }}</span>
@@ -387,14 +433,14 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                     @endif
                     @if($post->start_date)
                     <div class="date-card" style="background:#f0fdf4;border-color:#bbf7d0">
-                        <div class="date-label" style="color:#166534">🟢 Form Start Date</div>
+                        <div class="date-label" style="color:#166534">{{ $isJobType ? '🟢 Form Start Date' : '🟢 Start Date' }}</div>
                         <div class="date-val" style="color:#166534">{{ $post->start_date->format('d M Y') }}</div>
                     </div>
                     @endif
                     @if($post->end_date)
                     @php $endDays = now()->startOfDay()->diffInDays($post->end_date->startOfDay(), false); @endphp
                     <div class="date-card @if($endDays !== null && $endDays <= 10 && $endDays >= 0) urgent @endif">
-                        <div class="date-label">🔴 Form End Date</div>
+                        <div class="date-label">{{ $isJobType ? '🔴 Form End Date' : '🔴 End Date' }}</div>
                         <div class="date-val">{{ $post->end_date->format('d M Y') }}
                             @if($endDays !== null && $endDays >= 0 && $endDays <= 30)
                                 <span style="font-size:11px;font-weight:500;color:#b91c1c"> · {{ $endDays }} days left</span>
@@ -406,7 +452,7 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                     @endif
                     @if($post->last_date)
                     <div class="date-card @if($daysLeft !== null && $daysLeft <= 10 && $daysLeft >= 0) urgent @endif">
-                        <div class="date-label">⏰ Last Date to Apply</div>
+                        <div class="date-label">{{ $isJobType ? '⏰ Last Date to Apply' : '⏰ Last Date' }}</div>
                         <div class="date-val">{{ $post->last_date->format('d M Y') }}
                             @if($daysLeft !== null && $daysLeft >= 0 && $daysLeft <= 30)
                                 <span style="font-size:11px;font-weight:500;color:#b91c1c"> · {{ $daysLeft }} days left</span>
@@ -421,23 +467,23 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
             @endif
 
             {{-- Quick info card --}}
-            @if($post->organization || $post->total_posts || $post->salary || $post->state || $eduLabels)
+            @if($post->organization || $post->total_posts || $post->salary || $post->state || ($isJobType && $eduLabels))
             <div class="card">
-                <div class="sec-title">ℹ️ Quick Information</div>
+                <div class="sec-title">{{ $quickInfoTitle }}</div>
                 <table class="row-table">
                     @if($post->organization)
                     <tr><td>Organisation</td><td>{{ $post->organization }}</td></tr>
                     @endif
-                    @if($post->total_posts)
+                    @if($isJobType && $post->total_posts)
                     <tr><td>Total Vacancies</td><td>{{ number_format($post->total_posts) }} posts</td></tr>
                     @endif
-                    @if($post->age_min || $post->age_max_gen || $post->age_as_on_date)
+                    @if($isJobType && ($post->age_min || $post->age_max_gen || $post->age_as_on_date))
                     <tr><td>Age Limit</td><td>{{ $post->age_min ? $post->age_min . ' - ' : 'Max ' }}{{ $post->age_max_gen ?: 'NA' }} Years {{ $post->age_as_on_date ? '(As on ' . \Carbon\Carbon::parse($post->age_as_on_date)->format('d M Y') . ')' : '' }}</td></tr>
                     @endif
                     @if($post->salary)
-                    <tr><td>💰 {{ ($post->salary_type ?? '') === 'stipend' ? 'Stipend during training' : 'Salary / Pay Scale' }}</td><td style="color:#166534;font-weight:600">{{ $post->salary }}</td></tr>
+                    <tr><td>💰 {{ $post->type === 'scholarship' ? 'Scholarship Amount' : (($post->salary_type ?? '') === 'stipend' ? 'Stipend' : 'Salary / Pay Scale') }}</td><td style="color:#166534;font-weight:600">{{ $post->salary }}</td></tr>
                     @endif
-                    @if($post->fee_general !== null || $post->fee_obc !== null || $post->fee_sc_st !== null || $post->fee_women !== null)
+                    @if($isJobType && ($post->fee_general !== null || $post->fee_obc !== null || $post->fee_sc_st !== null || $post->fee_women !== null))
                     <tr><td>Application Fee</td><td>Gen/UR: ₹{{ $post->fee_general ?? '0' }}
                         @if($post->fee_obc !== null) | OBC/EWS: ₹{{ $post->fee_obc }}@endif
                         @if($post->fee_sc_st !== null) | SC/ST: ₹{{ $post->fee_sc_st }}@endif
@@ -446,14 +492,14 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                     </td></tr>
                     @endif
                     @if($post->state)
-                    <tr><td>State</td><td><a href="{{ route('states.show', $post->state) }}" style="color:#2563eb;text-decoration:underline">{{ $post->state->name }}</a></td></tr>
-                    @else
+                    <tr><td>{{ $isJobType ? 'State' : 'Location' }}</td><td><a href="{{ route('states.show', $post->state) }}" style="color:#2563eb;text-decoration:underline">{{ $post->state->name }}</a></td></tr>
+                    @elseif($isJobType)
                     <tr><td>Job Location</td><td>All India</td></tr>
                     @endif
                     @if($post->category)
                     <tr><td>Category</td><td>{{ $post->category->name }}</td></tr>
                     @endif
-                    @if($eduLabels)
+                    @if($isJobType && $eduLabels)
                     <tr><td>Education Required</td><td>{{ implode(', ', $eduLabels) }}</td></tr>
                     @endif
                     @if($post->tags && count($post->tags) > 0)
@@ -466,7 +512,7 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
             @endif
 
             {{-- Qualifications & Duties --}}
-            @if($post->qualifications || $post->skills || $post->responsibilities)
+            @if($isJobType && ($post->qualifications || $post->skills || $post->responsibilities))
             <div class="card" style="background:#f8fafc; border-left:4px solid #3b82f6;">
                 <div class="sec-title" style="border-bottom-color:#e2e8f0;">🎯 Qualifications & Responsibilities</div>
                 <div class="list-items" style="gap:14px;">
@@ -485,7 +531,7 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
 
             {{-- Main Content --}}
             <div class="card" style="overflow-x:hidden">
-                <div class="sec-title">📋 Full Details</div>
+                <div class="sec-title">{{ $contentTitle }}</div>
                 <div class="post-content-wrap">
                     <div class="post-content-body">
                         {!! $post->content !!}
@@ -501,7 +547,7 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                     @if($post->online_form)
                     <a href="{{ $post->online_form }}" target="_blank" rel="noopener noreferrer"
                        style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;background:#0f6e56;border-radius:10px;text-decoration:none;color:#fff;font-weight:700;font-size:13px">
-                        <span>✅ Apply Online</span>
+                        <span>{{ match($post->type) { 'job'=>'✅ Apply Online', 'admit_card'=>'🎟️ Download Admit Card', 'result'=>'🏆 Check Result', 'answer_key'=>'🔑 Download Answer Key', 'syllabus'=>'📚 Download Syllabus', 'scholarship'=>'✅ Apply Online', default=>'🔗 View Official Link' } }}</span>
                         <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
                     </a>
                     @endif
@@ -535,7 +581,6 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
             </div>
             @endif
 
-            {{-- How to Apply section if it's a job --}}
             @if($post->type === 'job')
             <div class="card">
                 <div class="sec-title">📝 How to Apply</div>
@@ -557,18 +602,26 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
             </div>
             @endif
 
-            {{-- Share Section --}}
             @php
-                $encodedUrl   = urlencode($postUrl);
-                $encodedTitle = urlencode($post->title . ' - ' . $postUrl);
-            @endphp
+    $encodedUrl   = urlencode($postUrl);
+    $shareMsg     = match($post->type) {
+        'admit_card'  => $post->title . ' – Download Admit Card: ' . $postUrl,
+        'result'      => $post->title . ' – Check Result Here: ' . $postUrl,
+        'answer_key'  => $post->title . ' – Download Answer Key: ' . $postUrl,
+        'syllabus'    => $post->title . ' – Download Syllabus: ' . $postUrl,
+        'scholarship' => $post->title . ' – Apply for Scholarship: ' . $postUrl,
+        'blog'        => $post->title . ' – Read more: ' . $postUrl,
+        default       => $post->title . ' – Apply Now: ' . $postUrl,
+    };
+    $encodedTitle = urlencode($shareMsg);
+@endphp
             <div class="card" style="border-color:#e0f2fe">
                 <div class="sec-title">📲 Share this Post</div>
                 <div class="share-row">
                     <a href="https://wa.me/?text={{ $encodedTitle }}" target="_blank" rel="noopener" class="share-btn" style="background:#dcfce7;color:#166534;border-color:#bbf7d0">
                         <i class="fab fa-whatsapp"></i> WhatsApp
                     </a>
-                    <a href="https://t.me/share/url?url={{ $encodedUrl }}&text={{ urlencode($post->title) }}" target="_blank" rel="noopener" class="share-btn" style="background:#e0f2fe;color:#0c4a6e;border-color:#bae6fd">
+                    <a href="https://t.me/share/url?url={{ $encodedUrl }}&text={{ $encodedTitle }}" target="_blank" rel="noopener" class="share-btn" style="background:#e0f2fe;color:#0c4a6e;border-color:#bae6fd">
                         <i class="fab fa-telegram"></i> Telegram
                     </a>
                     <a href="https://www.facebook.com/sharer/sharer.php?u={{ $encodedUrl }}" target="_blank" rel="noopener" class="share-btn" style="background:#eff6ff;color:#1e40af;border-color:#bfdbfe">
@@ -605,7 +658,7 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
 
             {{-- Apply Card --}}
             <div class="apply-card">
-                <div class="apply-title">{{ $post->type === 'job' ? 'Apply for this job' : 'View ' . $typeInfo['label'] }}</div>
+                <div class="apply-title">{{ match($post->type) { 'job' => 'Apply for this Job', 'admit_card' => 'Download Admit Card', 'result' => 'Check Your Result', 'answer_key' => 'Download Answer Key', 'syllabus' => 'View Syllabus', 'scholarship' => 'Apply for Scholarship', default => 'View ' . $typeInfo['label'] } }}</div>
                 @if($post->organization)
                 <div class="apply-sub">{{ $post->organization }}</div>
                 @endif
@@ -629,7 +682,7 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                 <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 12px;margin-bottom:12px;display:flex;align-items:center;gap:8px">
                     <span style="font-size:18px">💰</span>
                     <div>
-                        <div style="font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:.04em">Salary / Pay Scale</div>
+                        <div style="font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:.04em">{{ $post->type === 'scholarship' ? 'Scholarship Amount' : (($post->salary_type ?? '') === 'stipend' ? 'Stipend' : 'Salary / Pay Scale') }}</div>
                         <div style="font-size:13px;font-weight:700;color:#166534">{{ $post->salary }}</div>
                     </div>
                 </div>
@@ -637,7 +690,7 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
 
                 @if($directApplyLink)
                     <a href="{{ $directApplyLink }}" target="_blank" rel="noopener" class="apply-btn-main">
-                        {{ $post->type === 'job' ? '✅ Apply on Official Site' : '📄 View Official Link' }}
+                        {{ $ctaLabel }}
                     </a>
                 @else
                     <a href="#" class="apply-btn-main" style="opacity:.6;pointer-events:none">Link in details below ↓</a>
@@ -654,7 +707,7 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                     <a href="https://wa.me/?text={{ $encodedTitle }}" target="_blank" rel="noopener" class="share-btn">
                         <i class="fab fa-whatsapp" style="color:#166534"></i> <span>WhatsApp</span>
                     </a>
-                    <a href="https://t.me/share/url?url={{ $encodedUrl }}&text={{ urlencode($post->title) }}" target="_blank" rel="noopener" class="share-btn">
+                    <a href="https://t.me/share/url?url={{ $encodedUrl }}&text={{ $encodedTitle }}" target="_blank" rel="noopener" class="share-btn">
                         <i class="fab fa-telegram" style="color:#0c4a6e"></i> <span>Telegram</span>
                     </a>
                     <button onclick="navigator.clipboard.writeText('{{ $postUrl }}').then(()=>this.textContent='✅')" class="share-btn">📋</button>
@@ -670,21 +723,21 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                 @if($post->category)
                 <div class="qf-row"><span class="qf-label">Category</span><span class="qf-val">{{ $post->category->name }}</span></div>
                 @endif
-                @if($post->total_posts)
+                @if($isJobType && ($post->total_posts))
                 <div class="qf-row"><span class="qf-label">Vacancies</span><span class="qf-val">{{ number_format($post->total_posts) }}</span></div>
                 @endif
-                @if($post->age_min || $post->age_max_gen)
+                @if($isJobType && ($post->age_min || $post->age_max_gen))
                 <div class="qf-row"><span class="qf-label">Age Limit</span><span class="qf-val">{{ $post->age_min ? $post->age_min . '-' : 'Max ' }}{{ $post->age_max_gen ?: 'NA' }} Yrs</span></div>
                 @endif
                 @if($post->salary)
-                <div class="qf-row"><span class="qf-label">💰 {{ ($post->salary_type ?? '') === 'stipend' ? 'Stipend' : 'Salary' }}</span><span class="qf-val" style="color:#166534">{{ Str::limit($post->salary, 28) }}</span></div>
+                <div class="qf-row"><span class="qf-label">{{ $post->type === 'scholarship' ? '🎓 Amount' : (($post->salary_type ?? '') === 'stipend' ? '💰 Stipend' : '💰 Salary') }}</span><span class="qf-val" style="color:#166534">{{ Str::limit($post->salary, 28) }}</span></div>
                 @endif
                 @if($post->state)
-                <div class="qf-row"><span class="qf-label">Work State</span><span class="qf-val">{{ $post->state->name }}</span></div>
-                @else
+                <div class="qf-row"><span class="qf-label">{{ $isJobType ? 'Work State' : 'Location' }}</span><span class="qf-val">{{ $post->state->name }}</span></div>
+                @elseif($isJobType)
                 <div class="qf-row"><span class="qf-label">Location</span><span class="qf-val">All India</span></div>
                 @endif
-                @if($eduLabels)
+                @if($isJobType && $eduLabels)
                 <div class="qf-row"><span class="qf-label">Education</span><span class="qf-val">{{ implode(', ', array_slice($eduLabels, 0, 2)) }}</span></div>
                 @endif
                 @if($post->start_date)
@@ -729,7 +782,7 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
 <div class="mobile-apply-bar">
     @if($directApplyLink)
     <a href="{{ $directApplyLink }}" target="_blank" rel="noopener" class="mobile-apply-btn">
-        {{ $post->type === 'job' ? '✅ Apply Now' : '📄 View Official' }}
+        {{ $ctaLabelMobile }}
     </a>
     @endif
     @if($post->final_result)

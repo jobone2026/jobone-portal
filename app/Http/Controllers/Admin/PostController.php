@@ -10,6 +10,7 @@ use App\Models\State;
 use App\Services\CacheInvalidationService;
 use App\Services\NotificationService;
 use App\Services\OgImageService;
+use App\Services\TelegramService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -90,18 +91,18 @@ class PostController extends Controller
             'is_published'       => 'boolean',
             // New SEO structured fields
             'age_min'            => 'nullable|integer|min:0',
-            'age_max_gen'        => 'required|integer|min:0', // requested to be required
+            'age_max_gen'        => 'nullable|integer|min:0',  // nullable — non-job posts don't have age
             'age_as_on_date'     => 'nullable|date',
             'age_relaxation_note'=> 'nullable|string|max:500',
             'salary_min'         => 'nullable|integer|min:0',
             'salary_max'         => 'nullable|integer|min:0',
-            'salary_type'        => 'required|in:salary,stipend,consolidated,pay_scale', // requested to be required
+            'salary_type'        => 'nullable|in:salary,stipend,consolidated,pay_scale',
             'pay_scale_level'    => 'nullable|string|max:255',
-            'fee_general'        => 'nullable|integer', 
-            'fee_obc'            => 'nullable|integer',
-            'fee_sc_st'          => 'nullable|integer',
-            'fee_women'          => 'nullable|integer',
-            'fee_ph'             => 'nullable|integer',
+            'fee_general'        => 'nullable|integer|min:0',
+            'fee_obc'            => 'nullable|integer|min:0',
+            'fee_sc_st'          => 'nullable|integer|min:0',
+            'fee_women'          => 'nullable|integer|min:0',
+            'fee_ph'             => 'nullable|integer|min:0',
             'fee_payment_mode'   => 'nullable|string|max:255',
             'recruitment_year'   => 'nullable|integer|min:1900|max:2100',
         ];
@@ -160,18 +161,25 @@ class PostController extends Controller
 
         $validated = $request->validate($rules);
 
-        // Salary type labeling validation
-        if ($validated['salary_type'] === 'stipend' && (!isset($validated['salary_display_label']) || stripos($validated['salary_display_label'], 'salary') !== false)) {
-            $validated['salary_display_label'] = 'Stipend during training';
-        }
-
         $validated['slug'] = Str::slug($validated['title']);
         $validated['admin_id'] = auth('admin')->id();
-        $validated['short_description'] = '';
+        // Preserve existing short_description if set, otherwise generate from content
+        $validated['short_description'] = $validated['short_description']
+            ?? trim(substr(strip_tags($validated['content'] ?? ''), 0, 160));
         $validated['important_links'] = null;
         $validated['tags'] = $request->has('tags') ? ($validated['tags'] ?? []) : [];
         $validated['education'] = $request->has('education') ? ($validated['education'] ?? []) : [];
         $validated['is_upcoming'] = $request->has('is_upcoming') ? 1 : 0;
+        // Set salary_type default if not provided
+        if (empty($validated['salary_type'])) {
+            $validated['salary_type'] = 'salary';
+        }
+        // Set direct_apply based on online_form
+        $validated['direct_apply'] = !empty($validated['online_form']);
+        // Auto-set apply_url from online_form if not separately provided
+        if (!isset($validated['apply_url']) && !empty($validated['online_form'])) {
+            $validated['apply_url'] = $validated['online_form'];
+        }
 
         $post = Post::create($validated);
         
@@ -250,18 +258,18 @@ class PostController extends Controller
             'is_published'       => 'boolean',
             // New SEO structured fields
             'age_min'            => 'nullable|integer|min:0',
-            'age_max_gen'        => 'required|integer|min:0',
+            'age_max_gen'        => 'nullable|integer|min:0',  // nullable — non-job posts don't have age
             'age_as_on_date'     => 'nullable|date',
             'age_relaxation_note'=> 'nullable|string|max:500',
             'salary_min'         => 'nullable|integer|min:0',
             'salary_max'         => 'nullable|integer|min:0',
-            'salary_type'        => 'required|in:salary,stipend,consolidated,pay_scale',
+            'salary_type'        => 'nullable|in:salary,stipend,consolidated,pay_scale',
             'pay_scale_level'    => 'nullable|string|max:255',
-            'fee_general'        => 'nullable|integer',
-            'fee_obc'            => 'nullable|integer',
-            'fee_sc_st'          => 'nullable|integer',
-            'fee_women'          => 'nullable|integer',
-            'fee_ph'             => 'nullable|integer',
+            'fee_general'        => 'nullable|integer|min:0',
+            'fee_obc'            => 'nullable|integer|min:0',
+            'fee_sc_st'          => 'nullable|integer|min:0',
+            'fee_women'          => 'nullable|integer|min:0',
+            'fee_ph'             => 'nullable|integer|min:0',
             'fee_payment_mode'   => 'nullable|string|max:255',
             'recruitment_year'   => 'nullable|integer|min:1900|max:2100',
         ];
@@ -312,21 +320,61 @@ class PostController extends Controller
 
         $validated = $request->validate($rules);
 
-        // Salary type labeling validation
-        if ($validated['salary_type'] === 'stipend' && (!isset($validated['salary_display_label']) || stripos($validated['salary_display_label'], 'salary') !== false)) {
-            $validated['salary_display_label'] = 'Stipend during training';
-        }
-
         $validated['slug'] = Str::slug($validated['title']);
-        $validated['short_description'] = '';
+        // Do NOT overwrite short_description — preserve the AI-generated value from the API
+        unset($validated['short_description']);
         $validated['important_links'] = $post->important_links; // Keep existing value
         $validated['tags'] = $request->has('tags') ? ($validated['tags'] ?? []) : [];
         $validated['education'] = $request->has('education') ? ($validated['education'] ?? []) : [];
         $validated['is_upcoming'] = $request->has('is_upcoming') ? 1 : 0;
+        // Set salary_type default if not provided
+        if (empty($validated['salary_type'])) {
+            $validated['salary_type'] = 'salary';
+        }
+        // Sync direct_apply with online_form
+        $validated['direct_apply'] = !empty($validated['online_form']);
+        if (!isset($validated['apply_url']) && !empty($validated['online_form'])) {
+            $validated['apply_url'] = $validated['online_form'];
+        }
+
+        // ── Auto Date-Extension Detection ─────────────────────────────────────────
+        // If admin changes last_date to a future date that differs from the current one
+        // → automatically mark is_date_extended = true and send Telegram alert.
+        $oldLastDate    = $post->last_date ? $post->last_date->toDateString() : null;
+        $newLastDate    = !empty($validated['last_date'])
+            ? \Carbon\Carbon::parse($validated['last_date'])->toDateString()
+            : null;
+        $dateWasExtended = false;
+
+        if ($newLastDate && $oldLastDate && $newLastDate !== $oldLastDate
+            && \Carbon\Carbon::parse($newLastDate)->isFuture()) {
+            // New date is in the future and different — treat as extension
+            $validated['is_date_extended'] = true;
+            $dateWasExtended = true;
+        }
+        // If admin explicitly unchecks is_date_extended, respect that
+        if ($request->has('is_date_extended') && !$request->boolean('is_date_extended')) {
+            $validated['is_date_extended'] = false;
+            $dateWasExtended = false;
+        }
 
         $wasPublished = $post->is_published;
-        
+
         $post->update($validated);
+
+        // ── Send Telegram alert for date extension ────────────────────────────────
+        if ($dateWasExtended && $post->is_published) {
+            try {
+                $telegram = app(TelegramService::class);
+                if ($telegram->isConfigured()) {
+                    $msg = TelegramService::buildDateExtendedMessage($post);
+                    $telegram->sendMessage($msg);
+                    Log::info("Date-extension Telegram alert sent for post #{$post->id}");
+                }
+            } catch (\Exception $e) {
+                Log::warning('Telegram date-extension alert failed: ' . $e->getMessage());
+            }
+        }
         
         // Regenerate OG image if title changed and no custom image (only if GD extension is available)
         if ($post->wasChanged('title') && empty($post->image) && extension_loaded('gd')) {

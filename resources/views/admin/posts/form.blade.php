@@ -274,8 +274,8 @@ value="{{ old('salary', $post->salary ?? '') }}">
 <input type="number" name="age_min" class="pf-input" placeholder="e.g. 18" value="{{ old('age_min', $post->age_min ?? '') }}">
 </div>
 <div class="pf-field">
-<label class="pf-label">Max Age (UR) <span class="req">*</span></label>
-<input type="number" name="age_max_gen" class="pf-input" placeholder="e.g. 27" value="{{ old('age_max_gen', $post->age_max_gen ?? '') }}" required>
+<label class="pf-label">Max Age (UR)</label>
+<input type="number" name="age_max_gen" class="pf-input" placeholder="e.g. 27" value="{{ old('age_max_gen', $post->age_max_gen ?? '') }}">
 </div>
 <div class="pf-field">
 <label class="pf-label">Age As On Date</label>
@@ -289,8 +289,8 @@ value="{{ old('salary', $post->salary ?? '') }}">
 
 <div class="pf-grid-4" style="margin-top: 16px;">
 <div class="pf-field">
-<label class="pf-label">Fee: General/UR <span class="req">*</span></label>
-<input type="number" name="fee_general" class="pf-input" placeholder="e.g. 100 (0 for free)" value="{{ old('fee_general', $post->fee_general ?? '') }}" required>
+<label class="pf-label">Fee: General/UR</label>
+<input type="number" name="fee_general" class="pf-input" placeholder="e.g. 100 (0 for free)" value="{{ old('fee_general', $post->fee_general ?? '') }}">
 </div>
 <div class="pf-field">
 <label class="pf-label">Fee: OBC/EWS</label>
@@ -548,7 +548,7 @@ if (!is_array($selectedEducation)) $selectedEducation = [];
 <div class="pf-grid-2">
 <div class="pf-field">
 <label class="pf-label">Meta Title <span style="font-size:11px;color:var(--t3);">(50–60 chars recommended)</span></label>
-<input type="text" name="meta_title" id="inp-meta-title" maxlength="60" class="pf-input @error('meta_title') error @enderror"
+<input type="text" name="meta_title" id="inp-meta-title" maxlength="255" class="pf-input @error('meta_title') error @enderror"
 value="{{ old('meta_title', $post->meta_title ?? '') }}">
 <span class="pf-hint" id="meta-title-count">0/60 characters</span>
 @error('meta_title')<span class="pf-error-msg"><i class="fas fa-exclamation-circle"></i>{{ $message }}</span>@enderror

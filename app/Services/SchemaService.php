@@ -77,6 +77,10 @@ class SchemaService
                 '@type'  => 'Organization',
                 'name'   => $post->organization ?: ($post->category->name ?? 'Government of India'),
                 'sameAs' => $orgUrl,
+                'logo'   => [
+                    '@type' => 'ImageObject',
+                    'url'   => asset('images/jobone-logo.png'),
+                ],
             ],
         ];
 
@@ -92,7 +96,10 @@ class SchemaService
                 '@type'   => 'Place',
                 'address' => [
                     '@type'           => 'PostalAddress',
+                    'streetAddress'   => $stateName,
+                    'addressLocality' => $stateName,
                     'addressRegion'   => $stateName,
+                    'postalCode'      => '000000',
                     'addressCountry'  => 'IN',
                 ],
             ];
@@ -102,20 +109,21 @@ class SchemaService
         $eduText = strtolower(strip_tags($post->qualifications ?? '') . ' ' . implode(' ', $post->education ?? []));
         $eduMap = [];
         
-        if (strpos($eduText, '10th') !== false || strpos($eduText, '12th') !== false || strpos($eduText, 'high school') !== false || strpos($eduText, 'matriculation') !== false) {
-            $eduMap[] = 'HIGH_SCHOOL';
+        // Google-accepted credentialCategory values (lowercase, exact match required)
+        if (strpos($eduText, '10th') !== false || strpos($eduText, '12th') !== false || strpos($eduText, 'high school') !== false || strpos($eduText, 'matriculation') !== false || strpos($eduText, 'sslc') !== false) {
+            $eduMap[] = 'high school';
         }
-        if (strpos($eduText, 'diploma') !== false || strpos($eduText, 'iti') !== false) {
-            $eduMap[] = 'ASSOCIATE';
+        if (strpos($eduText, 'diploma') !== false || strpos($eduText, 'iti') !== false || strpos($eduText, 'polytechnic') !== false) {
+            $eduMap[] = 'associate degree';
         }
-        if (strpos($eduText, 'bachelor') !== false || strpos($eduText, 'b.tech') !== false || strpos($eduText, 'graduate') !== false || strpos($eduText, 'degree') !== false) {
-            $eduMap[] = 'BACHELOR';
+        if (strpos($eduText, 'bachelor') !== false || strpos($eduText, 'b.tech') !== false || strpos($eduText, 'b.e') !== false || strpos($eduText, 'b.sc') !== false || strpos($eduText, 'b.com') !== false || strpos($eduText, 'ba ') !== false || strpos($eduText, 'graduate') !== false || strpos($eduText, 'degree') !== false || strpos($eduText, 'ug') !== false) {
+            $eduMap[] = 'bachelor degree';
         }
-        if (strpos($eduText, 'master') !== false || strpos($eduText, 'm.sc') !== false || strpos($eduText, 'post graduate') !== false) {
-            $eduMap[] = 'MASTER';
+        if (strpos($eduText, 'master') !== false || strpos($eduText, 'm.sc') !== false || strpos($eduText, 'm.tech') !== false || strpos($eduText, 'm.com') !== false || strpos($eduText, 'mba') !== false || strpos($eduText, 'post graduate') !== false || strpos($eduText, 'postgraduate') !== false || strpos($eduText, 'pg ') !== false) {
+            $eduMap[] = 'master degree';
         }
-        if (strpos($eduText, 'phd') !== false || strpos($eduText, 'doctorate') !== false) {
-            $eduMap[] = 'POSTGRADUATE';
+        if (strpos($eduText, 'phd') !== false || strpos($eduText, 'ph.d') !== false || strpos($eduText, 'doctorate') !== false || strpos($eduText, 'doctoral') !== false) {
+            $eduMap[] = 'doctoral degree';
         }
 
         if (!empty($eduMap)) {
