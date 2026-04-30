@@ -153,7 +153,7 @@ class PostApiController extends Controller
         $validated = $request->validate([
             'title'             => 'required|string|max:255',
             'slug'              => 'nullable|string|max:100|unique:posts,slug',
-            'type'              => 'required|in:job,admit_card,result,answer_key,syllabus,blog,scholarship',
+            'type'              => 'required|in:job,admit_card,result,answer_key,syllabus,blog,scholarship,admission',
             'short_description' => 'required|string',
             'content'           => 'required|string',
             'category_id'       => 'required|exists:categories,id',
@@ -332,7 +332,7 @@ class PostApiController extends Controller
 
         $validated = $request->validate([
             'title'             => 'nullable|string|max:255',
-            'type'              => 'nullable|in:job,admit_card,result,answer_key,syllabus,blog,scholarship',
+            'type'              => 'nullable|in:job,admit_card,result,answer_key,syllabus,blog,scholarship,admission',
             'short_description' => 'nullable|string',
             'content'           => 'nullable|string',
             'category_id'       => 'nullable|exists:categories,id',

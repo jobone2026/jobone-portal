@@ -20,6 +20,7 @@ class Post extends Model
         'online_form', 'apply_url', 'direct_apply', 'final_result', 'notification_pdf_url',
         'important_links', 'tags', 'education', 'faq',
         'qualifications', 'skills', 'responsibilities',
+        'education_level', 'pay_scale_level',
         'meta_title', 'meta_description', 'meta_keywords',
         'is_featured', 'is_published', 'is_upcoming', 'is_date_extended', 'view_count', 'admin_id',
     ];
