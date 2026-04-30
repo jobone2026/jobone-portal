@@ -17,7 +17,7 @@ class Post extends Model
         'fee_general', 'fee_obc', 'fee_sc_st', 'fee_women', 'fee_ph', 'fee_ex_serviceman', 'fee_payment_mode', 'fee_note',
         'vacancy_gen', 'vacancy_obc', 'vacancy_sc', 'vacancy_st', 'vacancy_ews', 'vacancy_ph', 'vacancy_ex_serviceman',
         'recruitment_year', 'selection_stages',
-        'online_form', 'apply_url', 'direct_apply', 'final_result',
+        'online_form', 'apply_url', 'direct_apply', 'final_result', 'notification_pdf_url',
         'important_links', 'tags', 'education', 'faq',
         'qualifications', 'skills', 'responsibilities',
         'meta_title', 'meta_description', 'meta_keywords',

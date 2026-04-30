@@ -202,6 +202,8 @@ class PostApiController extends Controller
             'apply_url'         => 'nullable|url|max:500',
             'direct_apply'      => 'nullable|boolean',
             'final_result'      => 'nullable|url|max:500',
+            'notification_pdf'  => 'nullable|url|max:1000',
+            'notification_pdf_url' => 'nullable|url|max:1000',
             'important_links'   => 'nullable|array',
             // Classification
             'tags'              => 'nullable|array',
@@ -277,6 +279,7 @@ class PostApiController extends Controller
                 'apply_url'         => $validated['apply_url'] ?? null,
                 'direct_apply'      => $validated['direct_apply'] ?? false,
                 'final_result'      => $validated['final_result'] ?? null,
+                'notification_pdf_url' => $validated['notification_pdf_url'] ?? $validated['notification_pdf'] ?? null,
                 'important_links'   => $validated['important_links'] ?? [],
                 // Classification
                 'tags'              => $validated['tags'] ?? [],
@@ -346,6 +349,8 @@ class PostApiController extends Controller
             // Links
             'online_form'       => 'nullable|url|max:500',
             'final_result'      => 'nullable|url|max:500',
+            'notification_pdf'  => 'nullable|url|max:1000',
+            'notification_pdf_url' => 'nullable|url|max:1000',
             'important_links'   => 'nullable|array',
             // Classification
             'tags'              => 'nullable|array',
@@ -363,6 +368,11 @@ class PostApiController extends Controller
         ]);
 
         try {
+            if (isset($validated['notification_pdf']) && !isset($validated['notification_pdf_url'])) {
+                $validated['notification_pdf_url'] = $validated['notification_pdf'];
+            }
+            unset($validated['notification_pdf']);
+
             $post->update($validated);
 
             return response()->json([
