@@ -324,14 +324,17 @@ class PostController extends Controller
             try {
                 $url = route('posts.show', ['type' => $post->type, 'post' => $post]);
                 SubmitToIndexNow::dispatch($url)->delay(now()->addSeconds(30));
-                
-                // Send notifications only if newly published
-                if (!$wasPublished) {
-                    app(NotificationService::class)->sendNewPostNotifications($post);
-                }
             } catch (\Exception $e) {
-                // Log error but don't fail the post update
-                Log::warning('Failed to submit to IndexNow or send notifications: ' . $e->getMessage());
+                Log::warning('Failed to submit to IndexNow: ' . $e->getMessage());
+            }
+        }
+
+        // Send notifications if newly published OR manual resend requested
+        if ($post->is_published && (!$wasPublished || $request->has('resend_notifications'))) {
+            try {
+                app(NotificationService::class)->sendNewPostNotifications($post);
+            } catch (\Exception $e) {
+                Log::warning('Failed to send notifications: ' . $e->getMessage());
             }
         }
 

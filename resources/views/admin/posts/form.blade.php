@@ -588,6 +588,13 @@ value="{{ old('meta_keywords', $post->meta_keywords ?? '') }}">
 {{ old('is_published', $post->is_published ?? false) ? 'checked' : '' }}>
 <label for="is_published" class="pf-checkbox-label">✅ Published</label>
 </div>
+
+@if(isset($post))
+<div class="pf-checkbox-wrap" style="grid-column: 1 / -1; margin-top: 10px;">
+<input type="checkbox" name="resend_notifications" value="1" class="pf-checkbox" id="resend_notifications">
+<label for="resend_notifications" class="pf-checkbox-label">📢 Resend Notification to Telegram & WhatsApp</label>
+</div>
+@endif
 </div>
 
 <div class="pf-actions">
