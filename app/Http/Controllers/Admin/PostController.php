@@ -81,7 +81,7 @@ class PostController extends Controller
             'final_result'       => 'nullable|url|max:500',
             'meta_title'         => 'nullable|string|max:255',
             'meta_description'   => 'nullable|string|max:160',
-            'meta_keywords'      => 'nullable|string|max:1000',
+            'meta_keywords'      => 'nullable|string',
             'tags'               => 'nullable|array',
             'tags.*'             => 'string',
             'education'          => 'nullable|array',
@@ -107,43 +107,7 @@ class PostController extends Controller
             'recruitment_year'   => 'nullable|integer|min:1900|max:2100',
         ];
 
-        // Custom Education & Notification Date validation
-        if ($request->input('is_published')) {
-            $content = $request->input('content', '') . ' ' . $request->input('qualifications', '');
-            $content = strip_tags(strtolower($content));
-            
-            $educationChips = array_map('strtolower', $request->input('education', []));
-            $educationLevel = strtolower($request->input('education_level', ''));
-            $chipsText = implode(' ', $educationChips) . ' ' . $educationLevel;
-
-            $keywords = ['masters', 'm.sc', 'm.com', 'mba', 'pgdm', 'phd', 'llb', 'b.tech', 'diploma', 'iti', '12th', '10th'];
-            $missingChips = [];
-            foreach ($keywords as $kw) {
-                if (strpos($content, $kw) !== false && strpos($chipsText, $kw) === false) {
-                    // Try to approximate
-                    $approx = $kw;
-                    if (in_array($kw, ['masters', 'm.sc', 'm.com', 'mba', 'pgdm'])) $approx = 'post graduate';
-                    if (in_array($kw, ['b.tech', 'llb'])) $approx = 'graduate';
-                    
-                    if (strpos($chipsText, $approx) === false) {
-                        $missingChips[] = strtoupper($kw);
-                    }
-                }
-            }
-
-            if (count($missingChips) > 0) {
-                return back()->withInput()->withErrors(['education' => 'Education mismatch. The body contains ' . implode(', ', $missingChips) . ' but the education chip is not set accordingly.']);
-            }
-
-            // Notification date validation
-            $notificationDate = $request->input('notification_date');
-            if ($notificationDate) {
-                $daysDiff = \Carbon\Carbon::parse($notificationDate)->diffInDays(now(), false);
-                if ($daysDiff > 90) {
-                    return back()->withInput()->withErrors(['notification_date' => 'Notification date cannot be more than 90 days in the past from today.']);
-                }
-            }
-        }
+        // Custom Education & Notification Date validation removed per request
 
         // Duplicate detection check
         $orgSlug = \Illuminate\Support\Str::slug($request->input('organization'));
@@ -248,7 +212,7 @@ class PostController extends Controller
             'final_result'       => 'nullable|url|max:500',
             'meta_title'         => 'nullable|string|max:255',
             'meta_description'   => 'nullable|string|max:160',
-            'meta_keywords'      => 'nullable|string|max:1000',
+            'meta_keywords'      => 'nullable|string',
             'tags'               => 'nullable|array',
             'tags.*'             => 'string',
             'education'          => 'nullable|array',
@@ -274,49 +238,7 @@ class PostController extends Controller
             'recruitment_year'   => 'nullable|integer|min:1900|max:2100',
         ];
 
-        // Custom Education & Notification Date validation
-        if ($request->input('is_published')) {
-            $content = $request->input('content', '') . ' ' . $request->input('qualifications', '');
-            $content = strip_tags(strtolower($content));
-            
-            $educationChips = array_map('strtolower', $request->input('education', []));
-            $educationLevel = strtolower($request->input('education_level', ''));
-            $chipsText = implode(' ', $educationChips) . ' ' . $educationLevel;
-
-            $keywords = ['masters', 'm.sc', 'm.com', 'mba', 'pgdm', 'phd', 'llb', 'b.tech', 'diploma', 'iti', '12th', '10th'];
-            $missingChips = [];
-            foreach ($keywords as $kw) {
-                if (strpos($content, $kw) !== false && strpos($chipsText, $kw) === false) {
-                    // Try to approximate
-                    $approx = $kw;
-                    if (in_array($kw, ['masters', 'm.sc', 'm.com', 'mba', 'pgdm'])) $approx = 'post graduate';
-                    if (in_array($kw, ['b.tech', 'llb'])) $approx = 'graduate';
-                    
-                    if (strpos($chipsText, $approx) === false) {
-                        $missingChips[] = strtoupper($kw);
-                    }
-                }
-            }
-
-            if (count($missingChips) > 0) {
-                return back()->withInput()->withErrors(['education' => 'Education mismatch. The body contains ' . implode(', ', $missingChips) . ' but the education chip is not set accordingly.']);
-            }
-
-            // Notification date validation
-            $notificationDate = $request->input('notification_date');
-            if ($notificationDate) {
-                // Determine if this is a newly created post or an old one.
-                // We check if it's within 90 days of today. If it's already an old post, we might allow it.
-                // The requirement: "cannot be more than 90 days in the past from today's date when a post is first created"
-                // So for update, we skip this check or just allow the original date? Let's skip if the date hasn't changed.
-                if ($post->notification_date != $notificationDate) {
-                    $daysDiff = \Carbon\Carbon::parse($notificationDate)->diffInDays(now(), false);
-                    if ($daysDiff > 90) {
-                        return back()->withInput()->withErrors(['notification_date' => 'Notification date cannot be more than 90 days in the past from today.']);
-                    }
-                }
-            }
-        }
+        // Custom Education & Notification Date validation removed per request
 
         $validated = $request->validate($rules);
 

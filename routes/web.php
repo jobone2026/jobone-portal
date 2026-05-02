@@ -80,6 +80,38 @@ Route::get('/sitemap-states.xml', [SitemapController::class, 'states'])->name('s
 Route::get('/sitemap-static.xml', [SitemapController::class, 'static'])->name('sitemap.static');
 Route::get('/sitemap-news.xml', [SitemapController::class, 'news'])->name('sitemap.news');
 
+// ── 301 redirects: old URL type prefixes → canonical /job/{slug} ─────────────
+// Fixes 818 Google-indexed 404s and 749 duplicate canonical issues
+Route::get('/{oldType}/{slug}', function ($oldType, $slug) {
+    $redirectTypes = [
+        'result', 'results',
+        'admit-card', 'admit_card', 'admitcard',
+        'answer-key', 'answer_key', 'answerkey',
+        'syllabus',
+        'scholarship', 'scholarships',
+        'blog', 'blogs',
+        'post', 'posts',
+        'news',
+        'notification',
+        'vacancy',
+        'recruitment',
+        'sarkari-result',
+        'sarkari-job',
+    ];
+
+    if (in_array(strtolower($oldType), $redirectTypes)) {
+        // Check if post exists under /job/ prefix before redirecting
+        $post = \App\Models\Post::where('slug', $slug)->first();
+        if ($post) {
+            return redirect()->to('/job/' . $slug, 301);
+        }
+    }
+
+    // Fall through to normal post show
+    $post = \App\Models\Post::where('slug', $slug)->firstOrFail();
+    return app(\App\Http\Controllers\PostController::class)->show($oldType, $post);
+})->where('oldType', '[a-z_\-]+')->where('slug', '[a-z0-9\-]+');
+
 // Single post view (catch-all route - must be last)
 Route::get('/{type}/{post:slug}', [PostController::class, 'show'])->name('posts.show')->middleware('page.cache:3600');
 

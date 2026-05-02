@@ -40,7 +40,7 @@ class ShareToWhatsApp extends Command
         $whatsappLink = 'https://wa.me/?text=' . urlencode($message);
         
         // Generate WhatsApp Channel link (if you have a channel)
-        $channelLink = 'https://whatsapp.com/channel/0029VaeW5Vu6dStPQOXIPH2L'; // Replace with your channel ID
+        $channelLink = 'https://whatsapp.com/channel/0029VbBXKhkCsU9UG2tVla0X'; // Replace with your channel ID
         
         $this->info('📱 WhatsApp Share Links Generated:');
         $this->newLine();
@@ -146,3 +146,4 @@ class ShareToWhatsApp extends Command
         return !empty($result) ? implode(', ', $result) : 'Not Specified';
     }
 }
+

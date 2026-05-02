@@ -15,9 +15,10 @@ Disallow: /*.json
 Disallow: /storage/
 Disallow: /vendor/
 
-# Allow search pages for internal linking but prevent thin-content indexing
+# Prevent thin/duplicate content from filtered, paginated, and search pages
 Disallow: /search?
 Disallow: /*?page=
+Disallow: /*?type=
 
 # Sitemaps
 Sitemap: https://jobone.in/sitemap.xml

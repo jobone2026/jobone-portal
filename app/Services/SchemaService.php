@@ -120,10 +120,10 @@ class SchemaService
             $eduMap[] = 'bachelor degree';
         }
         if (strpos($eduText, 'master') !== false || strpos($eduText, 'm.sc') !== false || strpos($eduText, 'm.tech') !== false || strpos($eduText, 'm.com') !== false || strpos($eduText, 'mba') !== false || strpos($eduText, 'post graduate') !== false || strpos($eduText, 'postgraduate') !== false || strpos($eduText, 'pg ') !== false) {
-            $eduMap[] = 'master degree';
+            $eduMap[] = 'postgraduate degree';
         }
         if (strpos($eduText, 'phd') !== false || strpos($eduText, 'ph.d') !== false || strpos($eduText, 'doctorate') !== false || strpos($eduText, 'doctoral') !== false) {
-            $eduMap[] = 'doctoral degree';
+            $eduMap[] = 'postgraduate degree';
         }
 
         if (!empty($eduMap)) {
@@ -285,13 +285,16 @@ class SchemaService
         if (!empty($faqJson)) {
             $questions = [];
             foreach (array_slice($faqJson, 0, 10) as $item) {
-                if (empty($item['question']) || empty($item['answer'])) continue;
+                $q = trim(strip_tags($item['question'] ?? ''));
+                $a = trim(strip_tags($item['answer'] ?? ''));
+                if (empty($q) || empty($a)) continue;
+                
                 $questions[] = [
                     '@type' => 'Question',
-                    'name'  => $item['question'],
+                    'name'  => $q,
                     'acceptedAnswer' => [
                         '@type' => 'Answer',
-                        'text'  => $item['answer'],
+                        'text'  => $a,
                     ],
                 ];
             }
@@ -312,15 +315,21 @@ class SchemaService
 
         $questions = [];
         foreach (array_slice($matches, 0, 10) as $match) {
+            $q = trim(strip_tags($match[1]));
+            $a = trim(strip_tags($match[2]));
+            if (empty($q) || empty($a)) continue;
+            
             $questions[] = [
                 '@type' => 'Question',
-                'name'  => strip_tags($match[1]),
+                'name'  => $q,
                 'acceptedAnswer' => [
                     '@type' => 'Answer',
-                    'text'  => strip_tags($match[2]),
+                    'text'  => $a,
                 ],
             ];
         }
+
+        if (empty($questions)) return null;
 
         return [
             '@context'   => 'https://schema.org',
