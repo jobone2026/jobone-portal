@@ -2,15 +2,24 @@
 
 @php
 use Illuminate\Support\Str;
+    // Auto-noindex pages with query params that produce thin/duplicate content
+    $hasFilterParams = request()->hasAny(['type', 'page', 'q']);
+    if ($hasFilterParams) {
+        $noindex = true;
+    }
+
+    // Canonical should always be the clean URL without query params
+    $cleanCanonical = url()->current(); // url()->current() already strips query string
+
     $defaultSeo = [
         'title'          => 'JobOne.in – Sarkari Naukri ' . date('Y') . ', Govt Jobs Today, Daily Alert Updates',
         'description'    => 'JobOne.in – India\'s fastest-updated sarkari naukri portal. Today\'s govt job vacancies, exam results, admit cards, answer keys & syllabus for SSC, UPSC, Railways, Banking, State PSC, Defence & Police.',
         'keywords'       => 'sarkari naukri, govt jobs today, government jobs ' . date('Y') . ', SSC, UPSC, Railways, Banking, jobone',
-        'canonical'      => url()->current(),
+        'canonical'      => $cleanCanonical,
         'og_title'       => 'JobOne – Sarkari Naukri & Govt Jobs Updated Daily ' . date('Y'),
         'og_description' => 'India\'s fastest sarkari naukri portal — govt job vacancies, results, admit cards & more. Updated every day on JobOne.in.',
         'og_image'       => asset('images/og-image.jpg'),
-        'og_url'         => url()->current(),
+        'og_url'         => $cleanCanonical,
     ];
     $seo     = array_merge($defaultSeo, $seo ?? []);
     $isHome  = request()->is('/');
@@ -18,6 +27,10 @@ use Illuminate\Support\Str;
     // Ensure og_image is absolute
     if (!empty($seo['og_image']) && !str_starts_with($seo['og_image'], 'http')) {
         $seo['og_image'] = url($seo['og_image']);
+    }
+    // Use post's featured image if available (scraper-set image = real job image)
+    if ($post && !empty($post->featured_image)) {
+        $seo['og_image'] = $post->featured_image;
     }
     if (empty($seo['og_image'])) {
         $seo['og_image'] = url('/images/og-image.jpg');
@@ -93,10 +106,11 @@ use Illuminate\Support\Str;
 <!-- Robots -->
 @if($noindex)
 <meta name="robots" content="noindex, follow">
+<meta name="googlebot" content="noindex, follow">
 @else
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-@endif
 <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+@endif
 <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 
 <!-- Open Graph -->

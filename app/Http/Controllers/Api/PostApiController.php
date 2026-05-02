@@ -219,6 +219,8 @@ class PostApiController extends Controller
             'meta_title'        => 'nullable|string|max:255',
             'meta_description'  => 'nullable|string|max:500',
             'meta_keywords'     => 'nullable|string|max:5000',
+            // Featured image (from scraper)
+            'featured_image'    => 'nullable|url|max:1000',
             // Rich content
             'qualifications'    => 'nullable|string',
             'skills'            => 'nullable|string',
@@ -293,6 +295,8 @@ class PostApiController extends Controller
                 'meta_title'        => $validated['meta_title'] ?? $validated['title'],
                 'meta_description'  => $validated['meta_description'] ?? substr($validated['short_description'], 0, 160),
                 'meta_keywords'     => $validated['meta_keywords'] ?? implode(',', explode(' ', $validated['title'])),
+                // Featured image
+                'featured_image'    => $validated['featured_image'] ?? null,
                 // Rich content
                 'qualifications'    => $validated['qualifications'] ?? null,
                 'skills'            => $validated['skills'] ?? null,
@@ -365,6 +369,8 @@ class PostApiController extends Controller
             'meta_title'        => 'nullable|string|max:255',
             'meta_description'  => 'nullable|string|max:500',
             'meta_keywords'     => 'nullable|string|max:1000',
+            // Featured image
+            'featured_image'    => 'nullable|url|max:1000',
         ]);
 
         try {

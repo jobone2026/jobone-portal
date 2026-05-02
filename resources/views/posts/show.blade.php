@@ -420,6 +420,17 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                 @endif
             </div>
 
+            {{-- Featured Image (scraped from official source) --}}
+            @if($post->featured_image)
+            <div class="card" style="padding:0;overflow:hidden;border-radius:12px">
+                <img src="{{ $post->featured_image }}"
+                     alt="{{ $post->title }}"
+                     style="width:100%;max-height:220px;object-fit:cover;display:block;border-radius:12px"
+                     loading="lazy"
+                     onerror="this.parentElement.style.display='none'">
+            </div>
+            @endif
+
             {{-- Important Dates Card --}}
             @if($post->notification_date || $post->start_date || $post->end_date || $post->last_date)
             <div class="card">
@@ -603,25 +614,53 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
             @endif
 
             @php
-    $encodedUrl   = urlencode($postUrl);
-    $shareMsg     = match($post->type) {
-        'admit_card'  => $post->title . ' – Download Admit Card: ' . $postUrl,
-        'result'      => $post->title . ' – Check Result Here: ' . $postUrl,
-        'answer_key'  => $post->title . ' – Download Answer Key: ' . $postUrl,
-        'syllabus'    => $post->title . ' – Download Syllabus: ' . $postUrl,
-        'scholarship' => $post->title . ' – Apply for Scholarship: ' . $postUrl,
-        'blog'        => $post->title . ' – Read more: ' . $postUrl,
-        default       => $post->title . ' – Apply Now: ' . $postUrl,
+    $encodedUrl = urlencode($postUrl);
+
+    // Build rich share message with all key job data
+    $shareLines = [];
+    $shareLines[] = '🔔 *' . $post->title . '*';
+    if ($post->organization) $shareLines[] = '🏛️ ' . $post->organization;
+    if ($post->state)        $shareLines[] = '📍 ' . $post->state->name;
+    if ($post->total_posts)  $shareLines[] = '📋 Vacancies: ' . number_format($post->total_posts);
+    if ($post->salary)       $shareLines[] = '💰 Salary: ' . $post->salary;
+    if ($eduLabels)          $shareLines[] = '🎓 Qualification: ' . implode(' / ', array_slice($eduLabels, 0, 2));
+    if ($lastDateStr)        $shareLines[] = '⏰ Last Date: ' . $lastDateStr . ($daysLeft !== null && $daysLeft >= 0 && $daysLeft <= 30 ? ' (' . $daysLeft . ' days left!)' : '');
+    $shareLines[] = '';
+    $shareLines[] = match($post->type) {
+        'admit_card'  => '🎟️ Download Admit Card:',
+        'result'      => '🏆 Check Result:',
+        'answer_key'  => '🔑 Download Answer Key:',
+        'syllabus'    => '📚 Download Syllabus:',
+        'scholarship' => '✅ Apply for Scholarship:',
+        'blog'        => '📖 Read Article:',
+        default       => '✅ Apply Now:',
     };
+    $shareLines[] = $postUrl;
+    $shareLines[] = '';
+    $shareLines[] = '📲 More Govt Jobs: https://jobone.in';
+
+    $shareMsg     = implode("\n", $shareLines);
     $encodedTitle = urlencode($shareMsg);
 @endphp
-            <div class="card" style="border-color:#e0f2fe">
+            <div class="card" style="border-color:#e0f2fe;background:linear-gradient(135deg,#f0fdf4,#eff6ff)">
                 <div class="sec-title">📲 Share this Post</div>
+                @if($post->featured_image)
+                <div style="margin-bottom:12px;border-radius:8px;overflow:hidden;max-height:160px">
+                    <img src="{{ $post->featured_image }}" alt="{{ $post->title }}" style="width:100%;height:160px;object-fit:cover;border-radius:8px" loading="lazy">
+                </div>
+                @endif
+                <div style="font-size:12px;color:#374151;background:#fff;border-radius:8px;padding:10px 12px;margin-bottom:10px;border:0.5px solid #e5e7eb;line-height:1.8">
+                    <strong style="color:#0f6e56">{{ $post->title }}</strong><br>
+                    @if($post->organization)<span>🏛️ {{ $post->organization }}</span><br>@endif
+                    @if($post->total_posts)<span>📋 {{ number_format($post->total_posts) }} Vacancies</span> &nbsp;@endif
+                    @if($post->salary)<span>💰 {{ $post->salary }}</span><br>@endif
+                    @if($lastDateStr)<span style="color:#b91c1c">⏰ Last Date: {{ $lastDateStr }}</span>@endif
+                </div>
                 <div class="share-row">
-                    <a href="https://wa.me/?text={{ $encodedTitle }}" target="_blank" rel="noopener" class="share-btn" style="background:#dcfce7;color:#166534;border-color:#bbf7d0">
+                    <a href="https://wa.me/?text={{ $encodedTitle }}" target="_blank" rel="noopener" class="share-btn" style="background:#dcfce7;color:#166534;border-color:#bbf7d0;font-weight:600">
                         <i class="fab fa-whatsapp"></i> WhatsApp
                     </a>
-                    <a href="https://t.me/share/url?url={{ $encodedUrl }}&text={{ $encodedTitle }}" target="_blank" rel="noopener" class="share-btn" style="background:#e0f2fe;color:#0c4a6e;border-color:#bae6fd">
+                    <a href="https://t.me/share/url?url={{ $encodedUrl }}&text={{ $encodedTitle }}" target="_blank" rel="noopener" class="share-btn" style="background:#e0f2fe;color:#0c4a6e;border-color:#bae6fd;font-weight:600">
                         <i class="fab fa-telegram"></i> Telegram
                     </a>
                     <a href="https://www.facebook.com/sharer/sharer.php?u={{ $encodedUrl }}" target="_blank" rel="noopener" class="share-btn" style="background:#eff6ff;color:#1e40af;border-color:#bfdbfe">
@@ -633,23 +672,52 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                 </div>
             </div>
 
-            {{-- Related Posts --}}
+            {{-- Related Posts - Rich Data Cards --}}
             @if($related->count() > 0)
             <div class="card">
-                <div class="sec-title">📌 Related Posts</div>
+                <div class="sec-title">📌 Related {{ $typeInfo['label'] }}</div>
+                <div style="display:flex;flex-direction:column;gap:0">
                 @foreach($related as $rel)
-                <div class="sim-item">
-                    <a href="{{ route('posts.show', [$rel->type, $rel->slug]) }}" class="sim-item-title" style="display:block;text-decoration:none">{{ $rel->title }}</a>
-                    <div class="sim-item-org">{{ $rel->organization ?? ucwords(str_replace('_',' ',$rel->type)) }}</div>
-                    <div class="sim-item-meta">
-                        <span class="sim-tag">{{ ucwords(str_replace('_',' ',$rel->type)) }}</span>
-                        @if($rel->state)<span class="sim-tag">{{ $rel->state->name }}</span>@endif
-                        @if($rel->last_date)<span class="sim-tag">Last: {{ $rel->last_date->format('d M Y') }}</span>@endif
+                @php
+                    $relDaysLeft = null;
+                    if ($rel->last_date) {
+                        $relDaysLeft = now()->startOfDay()->diffInDays($rel->last_date->startOfDay(), false);
+                    }
+                    $relWords    = explode(' ', $rel->organization ?? 'GOV');
+                    $relInitials = '';
+                    foreach(array_slice($relWords, 0, 2) as $rw) { $relInitials .= strtoupper(substr($rw,0,2)); }
+                @endphp
+                <a href="{{ route('posts.show', [$rel->type, $rel->slug]) }}" style="display:block;text-decoration:none;padding:10px 0;border-bottom:0.5px solid #f3f4f6" class="rel-card-link">
+                    <div style="display:flex;gap:10px;align-items:flex-start">
+                        {{-- Image or Initials Box --}}
+                        @if($rel->featured_image)
+                        <img src="{{ $rel->featured_image }}" alt="{{ $rel->title }}" style="width:56px;height:56px;border-radius:8px;object-fit:cover;flex-shrink:0;border:0.5px solid #e5e7eb" loading="lazy">
+                        @else
+                        <div style="width:56px;height:56px;border-radius:8px;background:#e1f5ee;border:0.5px solid #9fe1cb;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#085041;text-align:center;flex-shrink:0;line-height:1.2">{{ $relInitials }}</div>
+                        @endif
+                        <div style="flex:1;min-width:0">
+                            <div style="font-size:13px;font-weight:600;color:#1d4ed8;line-height:1.35;margin-bottom:3px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">{{ Str::limit($rel->title, 80) }}</div>
+                            @if($rel->organization)
+                            <div style="font-size:11px;color:#6b7280;margin-bottom:5px">{{ Str::limit($rel->organization, 45) }}</div>
+                            @endif
+                            <div style="display:flex;flex-wrap:wrap;gap:4px;align-items:center">
+                                <span style="font-size:10px;padding:2px 6px;border-radius:6px;background:#e1f5ee;color:#085041;font-weight:500">{{ ucwords(str_replace('_',' ',$rel->type)) }}</span>
+                                @if($rel->state)<span style="font-size:10px;padding:2px 6px;border-radius:6px;background:#eff6ff;color:#1e40af">{{ $rel->state->name }}</span>@endif
+                                @if($rel->total_posts)<span style="font-size:10px;padding:2px 6px;border-radius:6px;background:#f0fdf4;color:#166534">{{ number_format($rel->total_posts) }} posts</span>@endif
+                                @if($rel->salary)<span style="font-size:10px;padding:2px 6px;border-radius:6px;background:#fefce8;color:#854d0e">💰 {{ Str::limit($rel->salary, 20) }}</span>@endif
+                                @if($rel->last_date)
+                                    @php $relDl = $relDaysLeft; @endphp
+                                    <span style="font-size:10px;padding:2px 6px;border-radius:6px;background:{{ ($relDl !== null && $relDl <= 7 && $relDl >= 0) ? '#fff1f2' : '#f9fafb' }};color:{{ ($relDl !== null && $relDl <= 7 && $relDl >= 0) ? '#be123c' : '#6b7280' }}">⏰ {{ $rel->last_date->format('d M Y') }}{{ ($relDl !== null && $relDl >= 0 && $relDl <= 15) ? ' · '.$relDl.'d left' : '' }}{{ ($relDl !== null && $relDl < 0) ? ' · Closed' : '' }}</span>
+                                @endif
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </a>
                 @endforeach
+                </div>
             </div>
             @endif
+            <style>.rel-card-link:hover{background:#f9fafb;margin:0 -4px;padding-left:4px;padding-right:4px;border-radius:8px}</style>
 
         </div>
 
@@ -756,18 +824,33 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                 <div class="qf-row"><span class="qf-label">Views</span><span class="qf-val">{{ number_format($post->view_count) }}</span></div>
             </div>
 
-            {{-- Similar Jobs --}}
+            {{-- Similar Jobs - with image thumbnails --}}
             @if($related->count() > 0)
             <div class="similar-card">
                 <div class="sim-title">Similar {{ $typeInfo['label'] }}</div>
                 @foreach($related->take(4) as $rel)
+                @php
+                    $sdw = explode(' ', $rel->organization ?? 'GOV');
+                    $sdi = '';
+                    foreach(array_slice($sdw, 0, 2) as $sw) { $sdi .= strtoupper(substr($sw,0,2)); }
+                @endphp
                 <div class="sim-item">
-                    <a href="{{ route('posts.show', [$rel->type, $rel->slug]) }}" class="sim-item-title" style="display:block;text-decoration:none">{{ Str::limit($rel->title, 65) }}</a>
-                    <div class="sim-item-org">{{ $rel->organization ?? ucwords(str_replace('_',' ',$rel->type)) }}</div>
-                    <div class="sim-item-meta">
-                        @if($rel->total_posts)<span class="sim-tag">{{ number_format($rel->total_posts) }} posts</span>@endif
-                        @if($rel->last_date)<span class="sim-tag">Last: {{ $rel->last_date->format('d M') }}</span>@endif
-                        @if($rel->state)<span class="sim-tag">{{ $rel->state->name }}</span>@endif
+                    <div style="display:flex;gap:8px;align-items:flex-start">
+                        @if($rel->featured_image)
+                        <a href="{{ route('posts.show', [$rel->type, $rel->slug]) }}"><img src="{{ $rel->featured_image }}" alt="{{ $rel->title }}" style="width:44px;height:44px;border-radius:6px;object-fit:cover;flex-shrink:0;border:0.5px solid #e5e7eb" loading="lazy"></a>
+                        @else
+                        <a href="{{ route('posts.show', [$rel->type, $rel->slug]) }}" style="display:flex;width:44px;height:44px;border-radius:6px;background:#e1f5ee;border:0.5px solid #9fe1cb;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#085041;text-align:center;flex-shrink:0;text-decoration:none">{{ $sdi }}</a>
+                        @endif
+                        <div style="flex:1;min-width:0">
+                            <a href="{{ route('posts.show', [$rel->type, $rel->slug]) }}" class="sim-item-title" style="display:block;text-decoration:none">{{ Str::limit($rel->title, 60) }}</a>
+                            <div class="sim-item-org">{{ Str::limit($rel->organization ?? ucwords(str_replace('_',' ',$rel->type)), 35) }}</div>
+                            <div class="sim-item-meta">
+                                @if($rel->total_posts)<span class="sim-tag">{{ number_format($rel->total_posts) }} posts</span>@endif
+                                @if($rel->salary)<span class="sim-tag" style="color:#166534">{{ Str::limit($rel->salary,18) }}</span>@endif
+                                @if($rel->last_date)<span class="sim-tag">Last: {{ $rel->last_date->format('d M') }}</span>@endif
+                                @if($rel->state)<span class="sim-tag">{{ $rel->state->name }}</span>@endif
+                            </div>
+                        </div>
                     </div>
                 </div>
                 @endforeach

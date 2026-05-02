@@ -8,7 +8,7 @@ class Post extends Model
 {
     protected $fillable = [
         'title', 'slug', 'type', 'category_id', 'state_id', 'organization', 'organization_slug',
-        'short_description', 'content', 'total_posts', 'salary',
+        'short_description', 'content', 'featured_image', 'total_posts', 'salary',
         'salary_type', 'salary_min', 'salary_max', 'salary_display_label',
         'last_date', 'notification_date', 'start_date', 'end_date',
         'exam_date', 'admit_card_date', 'result_date',
