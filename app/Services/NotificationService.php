@@ -40,66 +40,106 @@ class NotificationService
     /**
      * Send notification to Telegram Channel
      */
+    /**
+     * Build type-specific notification message
+     */
+    protected function buildMessage(Post $post, string $postUrl): string
+    {
+        $type      = $post->type;
+        $title     = $this->escapeMarkdown($post->title);
+        $org       = $post->organization ? $this->escapeMarkdown($post->organization) : null;
+        $state     = $post->state ? $this->escapeMarkdown($post->state->name) : 'All India';
+        $typeInfo  = $this->getTypeInfo($type);
+        $em        = $typeInfo['emoji'];
+
+        $msg = "{$em} *{$typeInfo['title']}* {$em}\n";
+        $msg .= "━━━━━━━━━━━━━━━━\n\n";
+        $msg .= "🔥 *{$title}*\n";
+        if ($org) $msg .= "🏢 *Org:* {$org}\n";
+        $msg .= "📍 *State:* {$state}\n";
+
+        if ($type === 'job') {
+            if ($post->total_posts)      $msg .= "👥 *Vacancies:* {$post->total_posts}\n";
+            if ($post->salary)           $msg .= "💰 *Salary:* " . $this->escapeMarkdown($post->salary) . "\n";
+            if ($post->start_date)       $msg .= "🟣 *Apply Start:* " . $post->start_date->format('d-m-Y') . "\n";
+            if ($post->last_date)        $msg .= "🔴 *Last Date:* " . $post->last_date->format('d-m-Y') . "\n";
+            if (!empty($post->education) && is_array($post->education)) {
+                $edu = $this->getEducationLabels($post->education);
+                if ($edu) $msg .= "🎓 *Qualification:* " . $this->escapeMarkdown(implode(', ', $edu)) . "\n";
+            }
+            $msg .= "\n🔗 *Apply Now:* [Click Here]({$postUrl})\n";
+
+        } elseif ($type === 'admit_card') {
+            if ($post->notification_date) $msg .= "📅 *Released:* " . $post->notification_date->format('d-m-Y') . "\n";
+            if ($post->last_date)         $msg .= "⏰ *Available Till:* " . $post->last_date->format('d-m-Y') . "\n";
+            $msg .= "\n🎫 *Download Admit Card:* [Click Here]({$postUrl})\n";
+
+        } elseif ($type === 'result') {
+            if ($post->notification_date) $msg .= "📅 *Result Date:* " . $post->notification_date->format('d-m-Y') . "\n";
+            $msg .= "\n📊 *Check Result:* [Click Here]({$postUrl})\n";
+
+        } elseif ($type === 'answer_key') {
+            if ($post->notification_date) $msg .= "📅 *Released:* " . $post->notification_date->format('d-m-Y') . "\n";
+            if ($post->last_date)         $msg .= "⏰ *Objection Last Date:* " . $post->last_date->format('d-m-Y') . "\n";
+            $msg .= "\n🔑 *Download Answer Key:* [Click Here]({$postUrl})\n";
+
+        } elseif ($type === 'syllabus') {
+            if (!empty($post->education) && is_array($post->education)) {
+                $edu = $this->getEducationLabels($post->education);
+                if ($edu) $msg .= "🎓 *Qualification:* " . $this->escapeMarkdown(implode(', ', $edu)) . "\n";
+            }
+            $msg .= "\n📚 *Download Syllabus:* [Click Here]({$postUrl})\n";
+
+        } elseif ($type === 'scholarship') {
+            if ($post->salary)    $msg .= "💰 *Amount:* " . $this->escapeMarkdown($post->salary) . "\n";
+            if ($post->last_date) $msg .= "🔴 *Last Date:* " . $post->last_date->format('d-m-Y') . "\n";
+            $msg .= "\n🎓 *Apply for Scholarship:* [Click Here]({$postUrl})\n";
+
+        } else { // blog, other
+            $msg .= "\n📖 *Read More:* [Click Here]({$postUrl})\n";
+        }
+
+        $typeTag = str_replace('_', '', $type);
+        $msg .= "\n#jobone #jobone2026 #{$typeTag} #sarkarinaukri";
+
+        return $msg;
+    }
+
+    /**
+     * Send notification to Telegram Channel
+     */
     protected function sendToTelegram(Post $post)
     {
-        $botToken = config('notifications.telegram.bot_token');
-        $channelId = config('notifications.telegram.channel_id'); // e.g., @yourchannel or -1001234567890
-        
+        $botToken  = config('notifications.telegram.bot_token');
+        $channelId = config('notifications.telegram.channel_id');
+
         if (!$botToken || !$channelId) {
             Log::warning('Telegram credentials not configured');
             return false;
         }
-        
+
         try {
             $postUrl = route('posts.show', [$post->type, $post]);
-            $typeInfo = $this->getTypeInfo($post->type);
-            
-            // Format message - Unified Fancy Style
-            $message = "{$typeInfo['emoji']} *{$typeInfo['title']}* {$typeInfo['emoji']}\n";
-            $message .= "━━━━━━━━━━━━━━━━\n\n";
-            $message .= "🔥 *" . $this->escapeMarkdown($post->title) . "*\n\n";
-            
-            // Add state
-            $stateName = $post->state ? $post->state->name : 'All India';
-            $message .= "📍 *State:* " . $this->escapeMarkdown($stateName) . "\n";
-            
-            // Add total posts if available
-            if ($post->total_posts) {
-                $message .= "👥 *Total Posts:* " . $post->total_posts . "\n";
-            }
-            
-            // Add application start (notification date)
-            if ($post->notification_date) {
-                $message .= "🟣 *{$typeInfo['date_label']}:* " . $post->notification_date->format('d-m-Y') . "\n";
-            }
-            
-            // Add last date
-            if ($post->last_date) {
-                $message .= "🟢 *Last Date:* " . $post->last_date->format('d-m-Y') . "\n";
+            $message = $this->buildMessage($post, $postUrl);
+            $imgUrl  = $post->featured_image ?? null;
+
+            if ($imgUrl) {
+                // Send as photo with caption
+                $response = Http::post("https://api.telegram.org/bot{$botToken}/sendPhoto", [
+                    'chat_id'    => $channelId,
+                    'photo'      => $imgUrl,
+                    'caption'    => $message,
+                    'parse_mode' => 'Markdown',
+                ]);
             } else {
-                $message .= "🟢 *Last Date:* -\n";
+                $response = Http::post("https://api.telegram.org/bot{$botToken}/sendMessage", [
+                    'chat_id'                  => $channelId,
+                    'text'                     => $message,
+                    'parse_mode'               => 'Markdown',
+                    'disable_web_page_preview' => true,
+                ]);
             }
-            
-            // Add education
-            if (!empty($post->education) && is_array($post->education)) {
-                $educationLabels = $this->getEducationLabels($post->education);
-                if (!empty($educationLabels)) {
-                    $message .= "🎓 *Education:* " . $this->escapeMarkdown(implode(', ', $educationLabels)) . "\n";
-                }
-            }
-            
-            $message .= "\n➡️ *Apply Here:* [Click Here](" . $postUrl . ")\n";
-            
-            // Add hashtags
-            $message .= "\n#jobone2026 #jobone #{$post->type}";
-            
-            $response = Http::post("https://api.telegram.org/bot{$botToken}/sendMessage", [
-                'chat_id' => $channelId,
-                'text' => $message,
-                'parse_mode' => 'Markdown',
-                'disable_web_page_preview' => true,  // Disable preview to show only formatted text
-            ]);
-            
+
             if ($response->successful()) {
                 Log::info('Telegram notification sent for post: ' . $post->id);
                 return true;
@@ -112,127 +152,37 @@ class NotificationService
             return false;
         }
     }
-    
-    /**
-     * Get type-specific information for notifications
-     */
-    protected function getTypeInfo($type)
-    {
-        return match($type) {
-            'job' => [
-                'emoji' => '💼',
-                'title' => 'New Job Vacancy',
-                'date_label' => 'Application Start',
-                'action' => 'Apply Here'
-            ],
-            'admit_card' => [
-                'emoji' => '🎫',
-                'title' => 'New Admit Card',
-                'date_label' => 'Release Date',
-                'action' => 'Download Here'
-            ],
-            'result' => [
-                'emoji' => '📊',
-                'title' => 'New Result',
-                'date_label' => 'Result Date',
-                'action' => 'Check Here'
-            ],
-            'answer_key' => [
-                'emoji' => '🔑',
-                'title' => 'New Answer Key',
-                'date_label' => 'Release Date',
-                'action' => 'Download Here'
-            ],
-            'syllabus' => [
-                'emoji' => '📚',
-                'title' => 'New Syllabus',
-                'date_label' => 'Release Date',
-                'action' => 'Download Here'
-            ],
-            'blog' => [
-                'emoji' => '📝',
-                'title' => 'New Article',
-                'date_label' => 'Published Date',
-                'action' => 'Read Here'
-            ],
-            default => [
-                'emoji' => '📢',
-                'title' => 'New Update',
-                'date_label' => 'Date',
-                'action' => 'View Here'
-            ],
-        };
-    }
-    
+
     /**
      * Send notification to WhatsApp Channel using WhatsApp Business API
      */
     protected function sendToWhatsApp(Post $post)
     {
-        $accessToken = config('notifications.whatsapp.access_token');
+        $accessToken   = config('notifications.whatsapp.access_token');
         $phoneNumberId = config('notifications.whatsapp.phone_number_id');
-        $channelId = config('notifications.whatsapp.channel_id'); // Your WhatsApp Channel ID
-        
+        $channelId     = config('notifications.whatsapp.channel_id');
+
         if (!$accessToken || !$phoneNumberId || !$channelId) {
             Log::warning('WhatsApp credentials not configured');
             return false;
         }
-        
+
         try {
             $postUrl = route('posts.show', [$post->type, $post]);
-            
-            $typeInfo = $this->getTypeInfo($post->type);
-            
-            // Format message - Unified Fancy Style (matches Telegram exactly)
-            $message = "{$typeInfo['emoji']} *{$typeInfo['title']}* {$typeInfo['emoji']}\n";
-            $message .= "━━━━━━━━━━━━━━━━\n\n";
-            $message .= "🔥 *{$post->title}*\n\n";
-            
-            // Add state
-            $stateName = $post->state ? $post->state->name : 'All India';
-            $message .= "📍 *State:* " . $stateName . "\n";
-            
-            // Add total posts if available
-            if ($post->total_posts) {
-                $message .= "👥 *Total Posts:* " . $post->total_posts . "\n";
-            }
-            
-            // Add application start (notification date)
-            if ($post->notification_date) {
-                $message .= "🟣 *{$typeInfo['date_label']}:* " . $post->notification_date->format('d-m-Y') . "\n";
-            }
-            
-            // Add last date
-            if ($post->last_date) {
-                $message .= "🟢 *Last Date:* " . $post->last_date->format('d-m-Y') . "\n";
-            } else {
-                $message .= "🟢 *Last Date:* -\n";
-            }
-            
-            // Add education
-            if (!empty($post->education) && is_array($post->education)) {
-                $educationLabels = $this->getEducationLabels($post->education);
-                if (!empty($educationLabels)) {
-                    $message .= "🎓 *Education:* " . implode(', ', $educationLabels) . "\n";
-                }
-            }
-            
-            $message .= "\n➡️ *Apply Here:* " . $postUrl . "\n";
-            
-            // Add hashtags
-            $message .= "\n#jobone2026 #jobone #{$post->type}";
-            
+            // WhatsApp doesn't support Markdown escaping the same way — strip escape chars
+            $message = str_replace('\\', '', $this->buildMessage($post, $postUrl));
+
             $response = Http::withToken($accessToken)
                 ->post("https://graph.facebook.com/v18.0/{$phoneNumberId}/messages", [
                     'messaging_product' => 'whatsapp',
-                    'to' => $channelId,
-                    'type' => 'text',
-                    'text' => [
+                    'to'                => $channelId,
+                    'type'              => 'text',
+                    'text'              => [
                         'preview_url' => true,
-                        'body' => $message
+                        'body'        => $message,
                     ]
                 ]);
-            
+
             if ($response->successful()) {
                 Log::info('WhatsApp notification sent for post: ' . $post->id);
                 return true;
@@ -246,6 +196,23 @@ class NotificationService
         }
     }
     
+    /**
+     * Get type-specific information for notifications
+     */
+    protected function getTypeInfo(string $type): array
+    {
+        return match($type) {
+            'job'        => ['emoji' => '💼', 'title' => 'New Job Vacancy'],
+            'admit_card' => ['emoji' => '🎫', 'title' => 'New Admit Card'],
+            'result'     => ['emoji' => '📊', 'title' => 'New Result'],
+            'answer_key' => ['emoji' => '🔑', 'title' => 'New Answer Key'],
+            'syllabus'   => ['emoji' => '📚', 'title' => 'New Syllabus'],
+            'scholarship'=> ['emoji' => '🎓', 'title' => 'New Scholarship'],
+            'blog'       => ['emoji' => '📝', 'title' => 'New Article'],
+            default      => ['emoji' => '📢', 'title' => 'New Update'],
+        };
+    }
+
     /**
      * Send Android Push Notification using Firebase Admin SDK
      */
