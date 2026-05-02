@@ -422,10 +422,10 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
 
             {{-- Featured Image (scraped from official source) --}}
             @if($post->featured_image)
-            <div class="card" style="padding:0;overflow:hidden;border-radius:12px">
+            <div class="card" style="padding:0;overflow:hidden;border-radius:12px;background:#f8f9fa;">
                 <img src="{{ $post->featured_image }}"
                      alt="{{ $post->title }}"
-                     style="width:100%;max-height:220px;object-fit:cover;display:block;border-radius:12px"
+                     style="width:100%;height:auto;max-height:600px;object-fit:contain;display:block;border-radius:12px"
                      loading="lazy"
                      onerror="this.parentElement.style.display='none'">
             </div>
