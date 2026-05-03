@@ -27,6 +27,13 @@
     $importantLinks = $post->important_links;
     if (is_string($importantLinks)) { $importantLinks = json_decode($importantLinks, true) ?? []; }
     if (!is_array($importantLinks)) { $importantLinks = []; }
+    // Filter out links with no valid URL or no meaningful label
+    $importantLinks = array_filter($importantLinks, function($v) {
+        $url   = is_array($v) ? ($v['url']   ?? $v['link'] ?? '') : $v;
+        $label = is_array($v) ? ($v['label'] ?? $v['title'] ?? '') : '';
+        return !empty($url) && $url !== '#' && filter_var(trim($url), FILTER_VALIDATE_URL);
+    });
+    $importantLinks = array_values($importantLinks);
 
     // Education labels — extended map with new diploma sub-types
     $eduMap = [
@@ -580,8 +587,10 @@ body.has-banner header{top:58px !important} /* Adjust header when banner is visi
                 <div class="links-grid">
                     @foreach($importantLinks as $key => $value)
                         @php
-                            $linkUrl   = is_array($value) ? ($value['url'] ?? '#') : $value;
-                            $linkLabel = is_array($value) ? ($value['label'] ?? ucwords(str_replace('_',' ',$key))) : ucwords(str_replace('_',' ',$key));
+                            $linkUrl   = is_array($value) ? ($value['url'] ?? $value['link'] ?? '#') : $value;
+                            $linkLabel = is_array($value) ? ($value['label'] ?? $value['title'] ?? ucwords(str_replace('_',' ',$key))) : ucwords(str_replace('_',' ',$key));
+                            $linkLabel = trim($linkLabel) ?: 'View Link';
+                            if (empty(trim($linkUrl)) || $linkUrl === '#') continue;
                         @endphp
                         <a href="{{ $linkUrl }}" target="_blank" rel="noopener noreferrer" class="link-btn">
                             <span class="link-btn-label">{{ $linkLabel }}</span>
