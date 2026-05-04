@@ -29,14 +29,15 @@ class WhatsAppController extends Controller
             'link' => $whatsappLink,
             'post' => [
                 'title' => $post->title,
-                'url' => route('posts.show', [$post->type, $post->slug])
+                'url' => route('posts.show', ['job', $post->slug])
             ]
         ]);
     }
 
     private function generateWhatsAppMessage($post)
     {
-        $url = route('posts.show', [$post->type, $post->slug]);
+        // Use 'job' prefix for canonical URLs to avoid underscore parsing issues in WhatsApp
+        $url = route('posts.show', ['job', $post->slug]);
         
         $typeInfo = match($post->type) {
             'job' => ['emoji' => "\u{1F4BC}", 'title' => 'New Job Vacancy', 'date_label' => 'Application Start'],

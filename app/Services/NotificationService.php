@@ -119,7 +119,8 @@ class NotificationService
         }
 
         try {
-            $postUrl = route('posts.show', [$post->type, $post]);
+            // Use 'job' as the canonical prefix to avoid underscore parsing issues in Telegram/WhatsApp
+            $postUrl = route('posts.show', ['job', $post]);
             $message = $this->buildMessage($post, $postUrl);
             $imgUrl  = $post->featured_image ?? null;
 
@@ -168,7 +169,8 @@ class NotificationService
         }
 
         try {
-            $postUrl = route('posts.show', [$post->type, $post]);
+            // Use 'job' as the canonical prefix
+            $postUrl = route('posts.show', ['job', $post]);
             // WhatsApp doesn't support Markdown escaping the same way — strip escape chars
             $message = str_replace('\\', '', $this->buildMessage($post, $postUrl));
 
@@ -230,7 +232,8 @@ class NotificationService
             $factory = (new \Kreait\Firebase\Factory)->withServiceAccount(base_path($firebaseCredentials));
             $messaging = $factory->createMessaging();
             
-            $postUrl = route('posts.show', [$post->type, $post]);
+            // Use 'job' as the canonical prefix
+            $postUrl = route('posts.show', ['job', $post]);
             $emoji = $this->getEmojiForType($post->type);
             
             // Create notification message with clickable link
@@ -291,7 +294,8 @@ class NotificationService
             $factory = (new \Kreait\Firebase\Factory)->withServiceAccount(base_path($firebaseCredentials));
             $messaging = $factory->createMessaging();
             
-            $postUrl = route('posts.show', [$post->type, $post]);
+            // Use 'job' as the canonical prefix
+            $postUrl = route('posts.show', ['job', $post]);
             
             // Create notification message
             $message = \Kreait\Firebase\Messaging\CloudMessage::withTarget('topic', 'all_posts')
