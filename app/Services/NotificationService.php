@@ -54,49 +54,49 @@ class NotificationService
 
         $msg = "{$em} *{$typeInfo['title']}* {$em}\n";
         $msg .= "━━━━━━━━━━━━━━━━\n\n";
-        $msg .= "🔥 *{$title}*\n";
-        if ($org) $msg .= "🏢 *Org:* {$org}\n";
-        $msg .= "📍 *State:* {$state}\n";
+        $msg .= "\u{1F525} *{$title}*\n"; // 🔥
+        if ($org) $msg .= "\u{1F3E2} *Org:* {$org}\n"; // 🏢
+        $msg .= "\u{1F4CD} *State:* {$state}\n"; // 📍
 
         if ($type === 'job') {
-            if ($post->total_posts)      $msg .= "👥 *Vacancies:* {$post->total_posts}\n";
-            if ($post->salary)           $msg .= "💰 *Salary:* " . $this->escapeMarkdown($post->salary) . "\n";
-            if ($post->start_date)       $msg .= "🟣 *Apply Start:* " . $post->start_date->format('d-m-Y') . "\n";
-            if ($post->last_date)        $msg .= "🔴 *Last Date:* " . $post->last_date->format('d-m-Y') . "\n";
+            if ($post->total_posts)      $msg .= "\u{1F465} *Vacancies:* {$post->total_posts}\n"; // 👥
+            if ($post->salary)           $msg .= "\u{1F4B0} *Salary:* " . $this->escapeMarkdown($post->salary) . "\n"; // 💰
+            if ($post->start_date)       $msg .= "\u{1F7E3} *Apply Start:* " . $post->start_date->format('d-m-Y') . "\n"; // 🟣
+            if ($post->last_date)        $msg .= "\u{1F534} *Last Date:* " . $post->last_date->format('d-m-Y') . "\n"; // 🔴
             if (!empty($post->education) && is_array($post->education)) {
                 $edu = $this->getEducationLabels($post->education);
-                if ($edu) $msg .= "🎓 *Qualification:* " . $this->escapeMarkdown(implode(', ', $edu)) . "\n";
+                if ($edu) $msg .= "\u{1F393} *Qualification:* " . $this->escapeMarkdown(implode(', ', $edu)) . "\n"; // 🎓
             }
-            $msg .= "\n🔗 *Apply Now:* [Click Here]({$postUrl})\n";
+            $msg .= "\n\u{1F517} *Apply Now:* [Click Here]({$postUrl})\n"; // 🔗
 
         } elseif ($type === 'admit_card') {
-            if ($post->notification_date) $msg .= "📅 *Released:* " . $post->notification_date->format('d-m-Y') . "\n";
-            if ($post->last_date)         $msg .= "⏰ *Available Till:* " . $post->last_date->format('d-m-Y') . "\n";
-            $msg .= "\n🎫 *Download Admit Card:* [Click Here]({$postUrl})\n";
+            if ($post->notification_date) $msg .= "\u{1F4C5} *Released:* " . $post->notification_date->format('d-m-Y') . "\n"; // 📅
+            if ($post->last_date)         $msg .= "\u{23F0} *Available Till:* " . $post->last_date->format('d-m-Y') . "\n"; // ⏰
+            $msg .= "\n\u{1F3AB} *Download Admit Card:* [Click Here]({$postUrl})\n"; // 🎫
 
         } elseif ($type === 'result') {
-            if ($post->notification_date) $msg .= "📅 *Result Date:* " . $post->notification_date->format('d-m-Y') . "\n";
-            $msg .= "\n📊 *Check Result:* [Click Here]({$postUrl})\n";
+            if ($post->notification_date) $msg .= "\u{1F4C5} *Result Date:* " . $post->notification_date->format('d-m-Y') . "\n"; // 📅
+            $msg .= "\n\u{1F4CA} *Check Result:* [Click Here]({$postUrl})\n"; // 📊
 
         } elseif ($type === 'answer_key') {
-            if ($post->notification_date) $msg .= "📅 *Released:* " . $post->notification_date->format('d-m-Y') . "\n";
-            if ($post->last_date)         $msg .= "⏰ *Objection Last Date:* " . $post->last_date->format('d-m-Y') . "\n";
-            $msg .= "\n🔑 *Download Answer Key:* [Click Here]({$postUrl})\n";
+            if ($post->notification_date) $msg .= "\u{1F4C5} *Released:* " . $post->notification_date->format('d-m-Y') . "\n"; // 📅
+            if ($post->last_date)         $msg .= "\u{23F0} *Objection Last Date:* " . $post->last_date->format('d-m-Y') . "\n"; // ⏰
+            $msg .= "\n\u{1F511} *Download Answer Key:* [Click Here]({$postUrl})\n"; // 🔑
 
         } elseif ($type === 'syllabus') {
             if (!empty($post->education) && is_array($post->education)) {
                 $edu = $this->getEducationLabels($post->education);
-                if ($edu) $msg .= "🎓 *Qualification:* " . $this->escapeMarkdown(implode(', ', $edu)) . "\n";
+                if ($edu) $msg .= "\u{1F393} *Qualification:* " . $this->escapeMarkdown(implode(', ', $edu)) . "\n"; // 🎓
             }
-            $msg .= "\n📚 *Download Syllabus:* [Click Here]({$postUrl})\n";
+            $msg .= "\n\u{1F4DA} *Download Syllabus:* [Click Here]({$postUrl})\n"; // 📚
 
         } elseif ($type === 'scholarship') {
-            if ($post->salary)    $msg .= "💰 *Amount:* " . $this->escapeMarkdown($post->salary) . "\n";
-            if ($post->last_date) $msg .= "🔴 *Last Date:* " . $post->last_date->format('d-m-Y') . "\n";
-            $msg .= "\n🎓 *Apply for Scholarship:* [Click Here]({$postUrl})\n";
+            if ($post->salary)    $msg .= "\u{1F4B0} *Amount:* " . $this->escapeMarkdown($post->salary) . "\n"; // 💰
+            if ($post->last_date) $msg .= "\u{1F534} *Last Date:* " . $post->last_date->format('d-m-Y') . "\n"; // 🔴
+            $msg .= "\n\u{1F393} *Apply for Scholarship:* [Click Here]({$postUrl})\n"; // 🎓
 
         } else { // blog, other
-            $msg .= "\n📖 *Read More:* [Click Here]({$postUrl})\n";
+            $msg .= "\n\u{1F4D6} *Read More:* [Click Here]({$postUrl})\n"; // 📖
         }
 
         $typeTag = str_replace('_', '', $type);
@@ -202,14 +202,14 @@ class NotificationService
     protected function getTypeInfo(string $type): array
     {
         return match($type) {
-            'job'        => ['emoji' => '💼', 'title' => 'New Job Vacancy'],
-            'admit_card' => ['emoji' => '🎫', 'title' => 'New Admit Card'],
-            'result'     => ['emoji' => '📊', 'title' => 'New Result'],
-            'answer_key' => ['emoji' => '🔑', 'title' => 'New Answer Key'],
-            'syllabus'   => ['emoji' => '📚', 'title' => 'New Syllabus'],
-            'scholarship'=> ['emoji' => '🎓', 'title' => 'New Scholarship'],
-            'blog'       => ['emoji' => '📝', 'title' => 'New Article'],
-            default      => ['emoji' => '📢', 'title' => 'New Update'],
+            'job'        => ['emoji' => "\u{1F4BC}", 'title' => 'New Job Vacancy'],
+            'admit_card' => ['emoji' => "\u{1F3AB}", 'title' => 'New Admit Card'],
+            'result'     => ['emoji' => "\u{1F4CA}", 'title' => 'New Result'],
+            'answer_key' => ['emoji' => "\u{1F511}", 'title' => 'New Answer Key'],
+            'syllabus'   => ['emoji' => "\u{1F4DA}", 'title' => 'New Syllabus'],
+            'scholarship'=> ['emoji' => "\u{1F393}", 'title' => 'New Scholarship'],
+            'blog'       => ['emoji' => "\u{1F4DD}", 'title' => 'New Article'],
+            default      => ['emoji' => "\u{1F4E2}", 'title' => 'New Update'],
         };
     }
 
@@ -296,7 +296,7 @@ class NotificationService
             // Create notification message
             $message = \Kreait\Firebase\Messaging\CloudMessage::withTarget('topic', 'all_posts')
                 ->withNotification([
-                    'title' => '🔔 New ' . ucfirst(str_replace('_', ' ', $post->type)),
+                    'title' => "\u{1F514} New " . ucfirst(str_replace('_', ' ', $post->type)), // 🔔
                     'body' => $post->title,
                     'image' => asset('images/jobone-logo.png'),
                 ])
@@ -324,13 +324,13 @@ class NotificationService
     protected function getEmojiForType($type)
     {
         return match($type) {
-            'job' => '💼',
-            'admit_card' => '🎫',
-            'result' => '📊',
-            'answer_key' => '🔑',
-            'syllabus' => '📚',
-            'blog' => '📝',
-            default => '📢',
+            'job' => "\u{1F4BC}",
+            'admit_card' => "\u{1F3AB}",
+            'result' => "\u{1F4CA}",
+            'answer_key' => "\u{1F511}",
+            'syllabus' => "\u{1F4DA}",
+            'blog' => "\u{1F4DD}",
+            default => "\u{1F4E2}",
         };
     }
     

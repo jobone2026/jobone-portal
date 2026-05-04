@@ -69,24 +69,24 @@ class TelegramService
 
         // Urgency header
         if ($daysLeft === 0) {
-            $header = "🔥🔥 <b>LAST DATE TODAY!</b> 🔥🔥";
-            $urgencyNote = "⚠️ <b>Apply RIGHT NOW — form closes tonight!</b>";
+            $header = "\u{1F525}\u{1F525} <b>LAST DATE TODAY!</b> \u{1F525}\u{1F525}"; // 🔥🔥
+            $urgencyNote = "\u{26A0}\u{FE0F} <b>Apply RIGHT NOW \u2014 form closes tonight!</b>"; // ⚠️
         } elseif ($daysLeft === 1) {
-            $header = "🔥 <b>LAST DATE TOMORROW!</b>";
-            $urgencyNote = "⚠️ Only <b>1 day left</b> — don't miss it!";
+            $header = "\u{1F525} <b>LAST DATE TOMORROW!</b>"; // 🔥
+            $urgencyNote = "\u{26A0}\u{FE0F} Only <b>1 day left</b> \u2014 don't miss it!"; // ⚠️
         } else {
-            $header = "🔥 <b>DEADLINE APPROACHING</b>";
-            $urgencyNote = "⏳ Only <b>{$daysLeft} days left</b> to apply!";
+            $header = "\u{1F525} <b>DEADLINE APPROACHING</b>"; // 🔥
+            $urgencyNote = "\u{23F3} Only <b>{$daysLeft} days left</b> to apply!"; // ⏳
         }
 
         $typeEmoji = match($post->type) {
-            'job'         => '💼',
-            'admit_card'  => '🎟️',
-            'result'      => '🏆',
-            'answer_key'  => '🔑',
-            'syllabus'    => '📚',
-            'scholarship' => '🎓',
-            default       => '📢',
+            'job'         => "\u{1F4BC}", // 💼
+            'admit_card'  => "\u{1F3AB}", // 🎟️
+            'result'      => "\u{1F3C6}", // 🏆
+            'answer_key'  => "\u{1F511}", // 🔑
+            'syllabus'    => "\u{1F4DA}", // 📚
+            'scholarship' => "\u{1F393}", // 🎓
+            default       => "\u{1F4E2}", // 📢
         };
 
         $typeLabel = match($post->type) {
@@ -103,29 +103,29 @@ class TelegramService
         $msg .= "{$typeEmoji} <b>{$cleanTitle}</b>\n\n";
 
         if ($post->organization) {
-            $msg .= "🏛️ <b>Organisation:</b> {$post->organization}\n";
+            $msg .= "\u{1F3DB}\u{FE0F} <b>Organisation:</b> {$post->organization}\n"; // 🏛️
         }
         if ($post->type === 'job' || $post->type === 'scholarship') {
             if ($post->total_posts) {
-                $msg .= "📊 <b>Vacancies:</b> " . number_format($post->total_posts) . " Posts\n";
+                $msg .= "\u{1F4CA} <b>Vacancies:</b> " . number_format($post->total_posts) . " Posts\n"; // 📊
             }
             if ($post->salary) {
-                $msg .= "💰 <b>Salary:</b> {$post->salary}\n";
+                $msg .= "\u{1F4B0} <b>Salary:</b> {$post->salary}\n"; // 💰
             }
         }
         if ($post->state) {
-            $msg .= "📍 <b>State:</b> {$post->state->name}\n";
+            $msg .= "\u{1F4CD} <b>State:</b> {$post->state->name}\n"; // 📍
         } else {
-            $msg .= "📍 <b>Location:</b> All India\n";
+            $msg .= "\u{1F4CD} <b>Location:</b> All India\n"; // 📍
         }
 
         $lastDateStr = $post->last_date->format('d M Y');
-        $msg .= "📅 <b>Last Date:</b> <u>{$lastDateStr}</u>\n\n";
+        $msg .= "\u{1F4C5} <b>Last Date:</b> <u>{$lastDateStr}</u>\n\n"; // 📅
         $msg .= "{$urgencyNote}\n\n";
-        $msg .= "🔗 <b>View {$typeLabel}:</b>\n{$url}\n\n";
+        $msg .= "\u{1F517} <b>View {$typeLabel}:</b>\n{$url}\n\n"; // 🔗
         $msg .= "━━━━━━━━━━━━━━━━━━━━\n";
-        $msg .= "📌 <a href=\"https://jobone.in\">JobOne.in</a> — Sarkari Naukri & Govt Jobs\n";
-        $msg .= "🔔 <a href=\"https://t.me/jobone2026\">Join Telegram @jobone2026</a>";
+        $msg .= "\u{1F4CC} <a href=\"https://jobone.in\">JobOne.in</a> \u2014 Sarkari Naukri & Govt Jobs\n"; // 📌
+        $msg .= "\u{1F514} <a href=\"https://t.me/jobone2026\">Join Telegram @jobone2026</a>"; // 🔔
 
         return $msg;
     }
@@ -140,42 +140,42 @@ class TelegramService
         $newDate    = $post->last_date->format('d M Y');
 
         $typeEmoji = match($post->type) {
-            'job'         => '💼',
-            'admit_card'  => '🎟️',
-            'result'      => '🏆',
-            'answer_key'  => '🔑',
-            'syllabus'    => '📚',
-            'scholarship' => '🎓',
-            default       => '📢',
+            'job'         => "\u{1F4BC}", // 💼
+            'admit_card'  => "\u{1F3AB}", // 🎟️
+            'result'      => "\u{1F3C6}", // 🏆
+            'answer_key'  => "\u{1F511}", // 🔑
+            'syllabus'    => "\u{1F4DA}", // 📚
+            'scholarship' => "\u{1F393}", // 🎓
+            default       => "\u{1F4E2}", // 📢
         };
 
-        $msg  = "🔥 <b>DATE EXTENDED!</b> ✅\n\n";
+        $msg  = "\u{1F525} <b>DATE EXTENDED!</b> \u{2705}\n\n"; // 🔥 ✅
         $msg .= "{$typeEmoji} <b>{$cleanTitle}</b>\n\n";
 
         if ($post->organization) {
-            $msg .= "🏛️ <b>Organisation:</b> {$post->organization}\n";
+            $msg .= "\u{1F3DB}\u{FE0F} <b>Organisation:</b> {$post->organization}\n"; // 🏛️
         }
         if (in_array($post->type, ['job', 'scholarship'])) {
             if ($post->total_posts) {
-                $msg .= "📊 <b>Vacancies:</b> " . number_format($post->total_posts) . " Posts\n";
+                $msg .= "\u{1F4CA} <b>Vacancies:</b> " . number_format($post->total_posts) . " Posts\n"; // 📊
             }
             if ($post->salary) {
-                $msg .= "💰 <b>Salary:</b> {$post->salary}\n";
+                $msg .= "\u{1F4B0} <b>Salary:</b> {$post->salary}\n"; // 💰
             }
         }
         if ($post->state) {
-            $msg .= "📍 <b>State:</b> {$post->state->name}\n";
+            $msg .= "\u{1F4CD} <b>State:</b> {$post->state->name}\n"; // 📍
         } else {
-            $msg .= "📍 <b>Location:</b> All India\n";
+            $msg .= "\u{1F4CD} <b>Location:</b> All India\n"; // 📍
         }
 
-        $msg .= "📅 <b>New Last Date:</b> <u>{$newDate}</u>\n\n";
-        $msg .= "✅ <b>Good news! You still have time to apply.</b>\n";
-        $msg .= "⚡ Apply before the new deadline!\n\n";
-        $msg .= "🔗 <b>Apply / View Details:</b>\n{$url}\n\n";
+        $msg .= "\u{1F4C5} <b>New Last Date:</b> <u>{$newDate}</u>\n\n"; // 📅
+        $msg .= "\u{2705} <b>Good news! You still have time to apply.</b>\n"; // ✅
+        $msg .= "\u{26A1} Apply before the new deadline!\n\n"; // ⚡
+        $msg .= "\u{1F517} <b>Apply / View Details:</b>\n{$url}\n\n"; // 🔗
         $msg .= "━━━━━━━━━━━━━━━━━━━━\n";
-        $msg .= "📌 <a href=\"https://jobone.in\">JobOne.in</a> — Sarkari Naukri & Govt Jobs\n";
-        $msg .= "🔔 <a href=\"https://t.me/jobone2026\">Join Telegram @jobone2026</a>";
+        $msg .= "\u{1F4CC} <a href=\"https://jobone.in\">JobOne.in</a> \u2014 Sarkari Naukri & Govt Jobs\n"; // 📌
+        $msg .= "\u{1F514} <a href=\"https://t.me/jobone2026\">Join Telegram @jobone2026</a>"; // 🔔
 
         return $msg;
     }
