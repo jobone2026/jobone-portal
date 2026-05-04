@@ -123,7 +123,7 @@ class TelegramService
         $lastDateStr = $post->last_date->format('d M Y');
         $msg .= "\u{1F4C5} <b>Last Date:</b> <u>{$lastDateStr}</u>\n\n"; // 📅
         $msg .= "{$urgencyNote}\n\n";
-        $msg .= "\u{1F517} <b>View {$typeLabel}:</b>\n{$url}\n\n"; // 🔗
+        $msg .= "\u{1F517} <b>View {$typeLabel}:</b>\n<a href=\"{$url}\">{$url}</a>\n\n"; // 🔗
         $msg .= "━━━━━━━━━━━━━━━━━━━━\n";
         $msg .= "\u{1F4CC} <a href=\"https://jobone.in\">JobOne.in</a> \u2014 Sarkari Naukri & Govt Jobs\n"; // 📌
         $msg .= "\u{1F514} <a href=\"https://t.me/jobone2026\">Join Telegram @jobone2026</a>"; // 🔔
@@ -174,7 +174,7 @@ class TelegramService
         $msg .= "\u{1F4C5} <b>New Last Date:</b> <u>{$newDate}</u>\n\n"; // 📅
         $msg .= "\u{2705} <b>Good news! You still have time to apply.</b>\n"; // ✅
         $msg .= "\u{26A1} Apply before the new deadline!\n\n"; // ⚡
-        $msg .= "\u{1F517} <b>Apply / View Details:</b>\n{$url}\n\n"; // 🔗
+        $msg .= "\u{1F517} <b>Apply / View Details:</b>\n<a href=\"{$url}\">{$url}</a>\n\n"; // 🔗
         $msg .= "━━━━━━━━━━━━━━━━━━━━\n";
         $msg .= "\u{1F4CC} <a href=\"https://jobone.in\">JobOne.in</a> \u2014 Sarkari Naukri & Govt Jobs\n"; // 📌
         $msg .= "\u{1F514} <a href=\"https://t.me/jobone2026\">Join Telegram @jobone2026</a>"; // 🔔
