@@ -64,7 +64,7 @@ class ShareToWhatsApp extends Command
 
     private function generateWhatsAppMessage($post)
     {
-        $url = route('posts.show', [$post->type, $post->slug]);
+        $url = route('posts.show', ['job', $post->slug]);
         
         $emoji = $this->getEmojiForType($post->type);
         
