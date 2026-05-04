@@ -46,57 +46,58 @@ class NotificationService
     protected function buildMessage(Post $post, string $postUrl): string
     {
         $type      = $post->type;
-        $title     = $this->escapeMarkdown($post->title);
-        $org       = $post->organization ? $this->escapeMarkdown($post->organization) : null;
-        $state     = $post->state ? $this->escapeMarkdown($post->state->name) : 'All India';
+        $title     = htmlspecialchars($post->title, ENT_QUOTES);
+        $org       = $post->organization ? htmlspecialchars($post->organization, ENT_QUOTES) : null;
+        $state     = $post->state ? htmlspecialchars($post->state->name, ENT_QUOTES) : 'All India';
         $typeInfo  = $this->getTypeInfo($type);
         $em        = $typeInfo['emoji'];
 
-        $msg = "{$em} *{$typeInfo['title']}* {$em}\n";
+        // Use HTML format (not Markdown V1) — Markdown V1 corrupts URLs with hyphens/numbers
+        $msg = "{$em} <b>{$typeInfo['title']}</b> {$em}\n";
         $msg .= "━━━━━━━━━━━━━━━━\n\n";
-        $msg .= "\u{1F525} *{$title}*\n"; // 🔥
-        if ($org) $msg .= "\u{1F3E2} *Org:* {$org}\n"; // 🏢
-        $msg .= "\u{1F4CD} *State:* {$state}\n"; // 📍
+        $msg .= "\u{1F525} <b>{$title}</b>\n";
+        if ($org) $msg .= "\u{1F3E2} <b>Org:</b> {$org}\n";
+        $msg .= "\u{1F4CD} <b>State:</b> {$state}\n";
 
         if ($type === 'job') {
-            if ($post->total_posts)      $msg .= "\u{1F465} *Vacancies:* {$post->total_posts}\n"; // 👥
-            if ($post->salary)           $msg .= "\u{1F4B0} *Salary:* " . $this->escapeMarkdown($post->salary) . "\n"; // 💰
-            if ($post->start_date)       $msg .= "\u{1F7E3} *Apply Start:* " . $post->start_date->format('d-m-Y') . "\n"; // 🟣
-            if ($post->last_date)        $msg .= "\u{1F534} *Last Date:* " . $post->last_date->format('d-m-Y') . "\n"; // 🔴
+            if ($post->total_posts)      $msg .= "\u{1F465} <b>Vacancies:</b> {$post->total_posts}\n";
+            if ($post->salary)           $msg .= "\u{1F4B0} <b>Salary:</b> " . htmlspecialchars($post->salary, ENT_QUOTES) . "\n";
+            if ($post->start_date)       $msg .= "\u{1F7E3} <b>Apply Start:</b> " . $post->start_date->format('d-m-Y') . "\n";
+            if ($post->last_date)        $msg .= "\u{1F534} <b>Last Date:</b> " . $post->last_date->format('d-m-Y') . "\n";
             if (!empty($post->education) && is_array($post->education)) {
                 $edu = $this->getEducationLabels($post->education);
-                if ($edu) $msg .= "\u{1F393} *Qualification:* " . $this->escapeMarkdown(implode(', ', $edu)) . "\n"; // 🎓
+                if ($edu) $msg .= "\u{1F393} <b>Qualification:</b> " . htmlspecialchars(implode(', ', $edu), ENT_QUOTES) . "\n";
             }
-            $msg .= "\n\u{1F517} *Apply Now:* [Click Here]({$postUrl})\n"; // 🔗
+            $msg .= "\n\u{1F517} <b>Apply Now:</b> <a href=\"{$postUrl}\">Click Here</a>\n";
 
         } elseif ($type === 'admit_card') {
-            if ($post->notification_date) $msg .= "\u{1F4C5} *Released:* " . $post->notification_date->format('d-m-Y') . "\n"; // 📅
-            if ($post->last_date)         $msg .= "\u{23F0} *Available Till:* " . $post->last_date->format('d-m-Y') . "\n"; // ⏰
-            $msg .= "\n\u{1F3AB} *Download Admit Card:* [Click Here]({$postUrl})\n"; // 🎫
+            if ($post->notification_date) $msg .= "\u{1F4C5} <b>Released:</b> " . $post->notification_date->format('d-m-Y') . "\n";
+            if ($post->last_date)         $msg .= "\u{23F0} <b>Available Till:</b> " . $post->last_date->format('d-m-Y') . "\n";
+            $msg .= "\n\u{1F3AB} <b>Download Admit Card:</b> <a href=\"{$postUrl}\">Click Here</a>\n";
 
         } elseif ($type === 'result') {
-            if ($post->notification_date) $msg .= "\u{1F4C5} *Result Date:* " . $post->notification_date->format('d-m-Y') . "\n"; // 📅
-            $msg .= "\n\u{1F4CA} *Check Result:* [Click Here]({$postUrl})\n"; // 📊
+            if ($post->notification_date) $msg .= "\u{1F4C5} <b>Result Date:</b> " . $post->notification_date->format('d-m-Y') . "\n";
+            $msg .= "\n\u{1F4CA} <b>Check Result:</b> <a href=\"{$postUrl}\">Click Here</a>\n";
 
         } elseif ($type === 'answer_key') {
-            if ($post->notification_date) $msg .= "\u{1F4C5} *Released:* " . $post->notification_date->format('d-m-Y') . "\n"; // 📅
-            if ($post->last_date)         $msg .= "\u{23F0} *Objection Last Date:* " . $post->last_date->format('d-m-Y') . "\n"; // ⏰
-            $msg .= "\n\u{1F511} *Download Answer Key:* [Click Here]({$postUrl})\n"; // 🔑
+            if ($post->notification_date) $msg .= "\u{1F4C5} <b>Released:</b> " . $post->notification_date->format('d-m-Y') . "\n";
+            if ($post->last_date)         $msg .= "\u{23F0} <b>Objection Last Date:</b> " . $post->last_date->format('d-m-Y') . "\n";
+            $msg .= "\n\u{1F511} <b>Download Answer Key:</b> <a href=\"{$postUrl}\">Click Here</a>\n";
 
         } elseif ($type === 'syllabus') {
             if (!empty($post->education) && is_array($post->education)) {
                 $edu = $this->getEducationLabels($post->education);
-                if ($edu) $msg .= "\u{1F393} *Qualification:* " . $this->escapeMarkdown(implode(', ', $edu)) . "\n"; // 🎓
+                if ($edu) $msg .= "\u{1F393} <b>Qualification:</b> " . htmlspecialchars(implode(', ', $edu), ENT_QUOTES) . "\n";
             }
-            $msg .= "\n\u{1F4DA} *Download Syllabus:* [Click Here]({$postUrl})\n"; // 📚
+            $msg .= "\n\u{1F4DA} <b>Download Syllabus:</b> <a href=\"{$postUrl}\">Click Here</a>\n";
 
         } elseif ($type === 'scholarship') {
-            if ($post->salary)    $msg .= "\u{1F4B0} *Amount:* " . $this->escapeMarkdown($post->salary) . "\n"; // 💰
-            if ($post->last_date) $msg .= "\u{1F534} *Last Date:* " . $post->last_date->format('d-m-Y') . "\n"; // 🔴
-            $msg .= "\n\u{1F393} *Apply for Scholarship:* [Click Here]({$postUrl})\n"; // 🎓
+            if ($post->salary)    $msg .= "\u{1F4B0} <b>Amount:</b> " . htmlspecialchars($post->salary, ENT_QUOTES) . "\n";
+            if ($post->last_date) $msg .= "\u{1F534} <b>Last Date:</b> " . $post->last_date->format('d-m-Y') . "\n";
+            $msg .= "\n\u{1F393} <b>Apply for Scholarship:</b> <a href=\"{$postUrl}\">Click Here</a>\n";
 
         } else { // blog, other
-            $msg .= "\n\u{1F4D6} *Read More:* [Click Here]({$postUrl})\n"; // 📖
+            $msg .= "\n\u{1F4D6} <b>Read More:</b> <a href=\"{$postUrl}\">Click Here</a>\n";
         }
 
         $typeTag = str_replace('_', '', $type);
@@ -125,19 +126,19 @@ class NotificationService
             $imgUrl  = $post->featured_image ?? null;
 
             if ($imgUrl) {
-                // Send as photo with caption
+                // Send as photo with caption — use HTML parse_mode (Markdown V1 corrupts URLs)
                 $response = Http::post("https://api.telegram.org/bot{$botToken}/sendPhoto", [
                     'chat_id'    => $channelId,
                     'photo'      => $imgUrl,
                     'caption'    => $message,
-                    'parse_mode' => 'Markdown',
+                    'parse_mode' => 'HTML',
                 ]);
             } else {
                 $response = Http::post("https://api.telegram.org/bot{$botToken}/sendMessage", [
                     'chat_id'                  => $channelId,
                     'text'                     => $message,
-                    'parse_mode'               => 'Markdown',
-                    'disable_web_page_preview' => true,
+                    'parse_mode'               => 'HTML',
+                    'disable_web_page_preview' => false,
                 ]);
             }
 
