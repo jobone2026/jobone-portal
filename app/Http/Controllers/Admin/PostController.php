@@ -170,7 +170,7 @@ class PostController extends Controller
         // Submit to IndexNow and send notifications only for published posts
         if ($post->is_published) {
             try {
-                $url = route('posts.show', ['job', $post]);
+                $url = route('posts.show', ['job', $post->slug]);
                 SubmitToIndexNow::dispatch($url)->delay(now()->addSeconds(30));
 
                 // Send notifications (Telegram, WhatsApp, Web Push)
@@ -322,7 +322,7 @@ class PostController extends Controller
         // Submit to IndexNow if published or status changed to published
         if ($post->is_published && (!$wasPublished || $post->wasChanged('title') || $post->wasChanged('content'))) {
             try {
-                $url = route('posts.show', ['job', $post]);
+                $url = route('posts.show', ['job', $post->slug]);
                 SubmitToIndexNow::dispatch($url)->delay(now()->addSeconds(30));
             } catch (\Exception $e) {
                 Log::warning('Failed to submit to IndexNow: ' . $e->getMessage());
@@ -372,7 +372,7 @@ class PostController extends Controller
         // Submit to IndexNow if newly published
         if (!$wasPublished && $post->is_published) {
             try {
-                $url = route('posts.show', ['job', $post]);
+                $url = route('posts.show', ['job', $post->slug]);
                 SubmitToIndexNow::dispatch($url)->delay(now()->addSeconds(30));
                 
                 // Send notifications
