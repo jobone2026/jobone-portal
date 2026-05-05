@@ -167,11 +167,12 @@ class PostController extends Controller
             Log::warning('Failed to invalidate cache: ' . $e->getMessage());
         }
         
-        // Submit to IndexNow if published
+        // Submit to IndexNow and send notifications only for published posts
+        if ($post->is_published) {
             try {
                 $url = route('posts.show', ['job', $post]);
                 SubmitToIndexNow::dispatch($url)->delay(now()->addSeconds(30));
-                
+
                 // Send notifications (Telegram, WhatsApp, Web Push)
                 app(NotificationService::class)->sendNewPostNotifications($post);
             } catch (\Exception $e) {

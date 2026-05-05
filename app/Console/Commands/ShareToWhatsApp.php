@@ -40,7 +40,7 @@ class ShareToWhatsApp extends Command
         $whatsappLink = 'https://wa.me/?text=' . urlencode($message);
         
         // Generate WhatsApp Channel link (if you have a channel)
-        $channelLink = 'https://whatsapp.com/channel/0029VbBXKhkCsU9UG2tVla0X'; // Replace with your channel ID
+        $channelLink = \App\Models\SiteSetting::where('key', 'whatsapp_channel')->value('value') ?: 'https://whatsapp.com/channel/0029VbD9cau2P59hFZ1nwh22';
         
         $this->info('📱 WhatsApp Share Links Generated:');
         $this->newLine();

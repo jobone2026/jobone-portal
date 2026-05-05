@@ -7,7 +7,7 @@
     <div class="bg-white rounded-lg shadow-md p-6">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-gray-800">📱 Share Posts to WhatsApp</h1>
-            <a href="https://whatsapp.com/channel/0029VbBXKhkCsU9UG2tVla0X" target="_blank" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
+            <a href="{{ \App\Models\SiteSetting::where('key', 'whatsapp_channel')->value('value') ?: 'https://whatsapp.com/channel/0029VbD9cau2P59hFZ1nwh22' }}" target="_blank" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
                 Open WhatsApp Channel
             </a>
         </div>
