@@ -64,8 +64,8 @@ class TelegramService
      */
     public static function buildDeadlineMessage(\App\Models\Post $post, int $daysLeft): string
     {
-        // Use 'job' prefix for canonical URLs to avoid underscore parsing issues
-        $url      = route('posts.show', ['job', $post->slug]);
+        // Use the actual post type for correct URL generation
+        $url      = route('posts.show', [$post->type, $post->slug]);
         $cleanTitle = \App\Helpers\PostHelper::cleanTitle($post->title);
 
         // Urgency header
@@ -136,8 +136,8 @@ class TelegramService
      */
     public static function buildDateExtendedMessage(\App\Models\Post $post): string
     {
-        // Use 'job' prefix for canonical URLs to avoid underscore parsing issues
-        $url        = route('posts.show', ['job', $post->slug]);
+        // Use the actual post type for correct URL generation
+        $url        = route('posts.show', [$post->type, $post->slug]);
         $cleanTitle = \App\Helpers\PostHelper::cleanTitle($post->title);
         $newDate    = $post->last_date->format('d M Y');
 

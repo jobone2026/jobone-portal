@@ -154,7 +154,15 @@
 @forelse($categories as $cat)
 <div class="cat-item">
 <div class="cat-icon-box" style="background:{{ $cat->color }}20;color:{{ $cat->color }}">
-<i class="fas fa-{{ $cat->icon ?? 'tag' }}"></i>
+    @php
+        // Clean up icon - remove any prefixes, HTML tags, and extra spaces
+        $iconName = $cat->icon ?? 'tag';
+        $iconName = strip_tags($iconName); // Remove HTML tags
+        $iconName = str_replace(['fas ', 'fa-solid ', 'fa-regular ', 'fa-brands ', 'fa-'], '', $iconName); // Remove prefixes
+        $iconName = trim($iconName); // Remove extra spaces
+        $iconName = $iconName ?: 'tag'; // Fallback to 'tag' if empty
+    @endphp
+    <i class="fas fa-{{ $iconName }}"></i>
 </div>
 <div class="cat-item-info">
 <div class="cat-item-name">{{ $cat->name }}</div>

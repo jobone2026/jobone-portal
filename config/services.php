@@ -40,4 +40,8 @@ return [
         'chat_id'   => env('TELEGRAM_CHANNEL_ID', ''),
     ],
 
+    'indexnow' => [
+        'key' => env('INDEXNOW_KEY'),
+    ],
+
 ];

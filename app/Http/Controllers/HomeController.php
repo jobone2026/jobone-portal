@@ -42,6 +42,29 @@ class HomeController extends Controller
             fn() => Category::all()
         );
         
+        // Get trending jobs (most viewed in last 7 days)
+        $trendingJobs = Cache::remember('trending_jobs', 600, function () {
+            return Post::published()
+                ->ofType('job')
+                ->where('created_at', '>=', now()->subDays(7))
+                ->latest()
+                ->with('category', 'state')
+                ->limit(10)
+                ->get();
+        });
+        
+        // Get closing soon jobs (deadline within 7 days)
+        $closingSoon = Cache::remember('closing_soon_jobs', 600, function () {
+            return Post::published()
+                ->ofType('job')
+                ->whereNotNull('last_date')
+                ->whereBetween('last_date', [now(), now()->addDays(7)])
+                ->orderBy('last_date', 'asc')
+                ->with('category', 'state')
+                ->limit(10)
+                ->get();
+        });
+        
         // Get states with job counts for the map
         $states = Cache::remember('states_with_counts', 600, function () {
             $statesWithCounts = State::withCount(['posts' => function($query) {
@@ -73,6 +96,6 @@ class HomeController extends Controller
             $schemaService->generateOrganizationSchema(),
         ];
 
-        return view('home', compact('sections', 'categories', 'states', 'seo', 'schema'));
+        return view('home', compact('sections', 'categories', 'states', 'seo', 'schema', 'trendingJobs', 'closingSoon'));
     }
 }

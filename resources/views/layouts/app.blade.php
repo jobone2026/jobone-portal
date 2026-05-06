@@ -47,12 +47,22 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <!-- Preconnect for Font Awesome CDN -->
+    <!-- DNS Prefetch for Performance (lightweight hints) -->
+    <link rel="dns-prefetch" href="//www.googletagmanager.com">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="//translate.google.com">
+    
+    <!-- Preconnect ONLY to most critical origins (max 3-4) -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    
     <!-- Font Awesome: load non-render-blocking, then swap to all.min.css -->
     <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
           onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+    
+    <!-- Preload Logo for LCP -->
+    <link rel="preload" as="image" href="{{ asset('images/jobone-logo.png') }}" fetchpriority="high">
+    
     <style>
         /* Fix font-display for Font Awesome webfonts */
         @font-face { font-family: 'Font Awesome 6 Free'; font-display: swap; }
@@ -1357,7 +1367,7 @@
         </div>
     </footer>
 
-    <!-- Google Translate Script -->
+    <!-- Google Translate Script - Load AFTER page load (non-blocking) -->
     <script type="text/javascript">
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
@@ -1428,9 +1438,16 @@
                 }
             }, 1500);
         }
+        
+        // Load Google Translate AFTER page load (non-blocking)
+        window.addEventListener('load', function() {
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+            script.async = true;
+            document.body.appendChild(script);
+        });
     </script>
-    <script type="text/javascript"
-        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <script>
         // Mobile menu toggle

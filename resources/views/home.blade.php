@@ -4,18 +4,124 @@
 @section('description', 'JobOne.in – India\'s fastest-updated sarkari naukri portal. Today\'s govt job vacancies, exam results, admit cards, answer keys & syllabus for SSC, UPSC, Railways, Banking, State PSC, Defence & Police.')
 
 @section('content')
+    <!-- Trending Jobs Widget -->
+    @if(($trendingJobs && $trendingJobs->count() > 0) || ($closingSoon && $closingSoon->count() > 0))
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+        <!-- Most Viewed Jobs -->
+        @if($trendingJobs && $trendingJobs->count() > 0)
+        <div class="bg-gradient-to-br from-orange-50 to-red-50 border border-orange-200 rounded-xl p-5 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-gray-900 flex items-center gap-2">
+                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-orange-500 text-white">
+                        <i class="fas fa-fire text-sm"></i>
+                    </div>
+                    <span>🔥 Latest Jobs</span>
+                </h3>
+                <span class="text-xs text-orange-600 font-semibold bg-orange-100 px-2 py-1 rounded-full">This Week</span>
+            </div>
+            <div class="space-y-2">
+                @foreach($trendingJobs->take(5) as $job)
+                <a href="{{ route('posts.show', [$job->type, $job->slug]) }}" 
+                   class="block bg-white border border-orange-100 rounded-lg p-3 hover:border-orange-400 hover:shadow-md transition-all group">
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-semibold text-sm text-gray-800 group-hover:text-orange-600 transition line-clamp-2 mb-1">
+                                {{ Str::limit($job->title, 60) }}
+                            </h4>
+                            <div class="flex flex-wrap items-center gap-2 text-xs text-gray-500">
+                                @if($job->organization)
+                                <span class="flex items-center gap-1">
+                                    <i class="fas fa-building text-[10px]"></i>
+                                    {{ Str::limit($job->organization, 25) }}
+                                </span>
+                                @endif
+                                @if($job->state)
+                                <span class="flex items-center gap-1">
+                                    <i class="fas fa-map-marker-alt text-[10px]"></i>
+                                    {{ $job->state->name }}
+                                </span>
+                                @endif
+                                @if($job->total_posts)
+                                <span class="flex items-center gap-1 text-orange-600 font-semibold">
+                                    <i class="fas fa-users text-[10px]"></i>
+                                    {{ number_format($job->total_posts) }} posts
+                                </span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-arrow-right text-orange-400 group-hover:text-orange-600 group-hover:translate-x-1 transition-all"></i>
+                        </div>
+                    </div>
+                </a>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
+        <!-- Closing Soon Jobs -->
+        @if($closingSoon && $closingSoon->count() > 0)
+        <div class="bg-gradient-to-br from-red-50 to-pink-50 border border-red-200 rounded-xl p-5 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-gray-900 flex items-center gap-2">
+                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-red-500 text-white">
+                        <i class="fas fa-clock text-sm"></i>
+                    </div>
+                    <span>⏰ Closing Soon</span>
+                </h3>
+                <span class="text-xs text-red-600 font-semibold bg-red-100 px-2 py-1 rounded-full">Apply Now</span>
+            </div>
+            <div class="space-y-2">
+                @foreach($closingSoon->take(5) as $job)
+                @php
+                    $daysLeft = now()->startOfDay()->diffInDays($job->last_date->startOfDay(), false);
+                @endphp
+                <a href="{{ route('posts.show', [$job->type, $job->slug]) }}" 
+                   class="block bg-white border border-red-100 rounded-lg p-3 hover:border-red-400 hover:shadow-md transition-all group">
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-semibold text-sm text-gray-800 group-hover:text-red-600 transition line-clamp-2 mb-1">
+                                {{ Str::limit($job->title, 60) }}
+                            </h4>
+                            <div class="flex flex-wrap items-center gap-2 text-xs text-gray-500">
+                                @if($job->organization)
+                                <span class="flex items-center gap-1">
+                                    <i class="fas fa-building text-[10px]"></i>
+                                    {{ Str::limit($job->organization, 25) }}
+                                </span>
+                                @endif
+                                @if($job->last_date)
+                                <span class="flex items-center gap-1 {{ $daysLeft <= 3 ? 'text-red-600 font-bold' : 'text-orange-600 font-semibold' }}">
+                                    <i class="fas fa-calendar-times text-[10px]"></i>
+                                    {{ $daysLeft == 0 ? 'Today!' : ($daysLeft == 1 ? 'Tomorrow' : $daysLeft . ' days left') }}
+                                </span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-arrow-right text-red-400 group-hover:text-red-600 group-hover:translate-x-1 transition-all"></i>
+                        </div>
+                    </div>
+                </a>
+                @endforeach
+            </div>
+        </div>
+        @endif
+    </div>
+    @endif
+
     <!-- India Map with State Job Counts -->
 
 
     <!-- Column Sections for Each Type -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <!-- Jobs Column -->
         <div>
             <div class="px-4 py-3 font-bold flex items-center justify-between rounded-lg mb-3" style="background:#eff6ff;border-left:4px solid #2563eb;border:1px solid #bfdbfe;">
                 <span style="color:#1d4ed8;"><i class="fa-solid fa-briefcase"></i> Latest Jobs</span>
                 <a href="{{ route('posts.jobs') }}" style="color:#2563eb;" class="text-sm"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
-            <div class="space-y-3">
+            <div class="space-y-4">
                 @foreach(($sections['jobs'] ?? [])->take(25) as $post)
                     <x-post-card :post="$post" />
                 @endforeach
@@ -35,7 +141,7 @@
                 <span style="color:#c2410c;"><i class="fa-solid fa-chart-bar"></i> Exam Results</span>
                 <a href="{{ route('posts.results') }}" style="color:#ea580c;" class="text-sm"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
-            <div class="space-y-3">
+            <div class="space-y-4">
                 @foreach(($sections['results'] ?? [])->take(25) as $post)
                     <x-post-card :post="$post" />
                 @endforeach
@@ -55,7 +161,7 @@
                 <span style="color:#7e22ce;"><i class="fa-solid fa-id-card"></i> Admit Cards</span>
                 <a href="{{ route('posts.admit-cards') }}" style="color:#9333ea;" class="text-sm"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
-            <div class="space-y-3">
+            <div class="space-y-4">
                 @foreach(($sections['admit_cards'] ?? [])->take(25) as $post)
                     <x-post-card :post="$post" />
                 @endforeach
@@ -75,7 +181,7 @@
                 <span style="color:#92400e;"><i class="fa-solid fa-key"></i> Answer Keys</span>
                 <a href="{{ route('posts.answer-keys') }}" style="color:#ca8a04;" class="text-sm"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
-            <div class="space-y-3">
+            <div class="space-y-4">
                 @foreach(($sections['answer_keys'] ?? [])->take(25) as $post)
                     <x-post-card :post="$post" />
                 @endforeach
@@ -95,7 +201,7 @@
                 <span style="color:#3730a3;"><i class="fa-solid fa-book"></i> Syllabus</span>
                 <a href="{{ route('posts.syllabus') }}" style="color:#4f46e5;" class="text-sm"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
-            <div class="space-y-3">
+            <div class="space-y-4">
                 @foreach(($sections['syllabus'] ?? [])->take(25) as $post)
                     <x-post-card :post="$post" />
                 @endforeach
@@ -115,7 +221,7 @@
                 <span style="color:#9d174d;"><i class="fa-solid fa-pen-fancy"></i> Blogs</span>
                 <a href="{{ route('posts.blogs') }}" style="color:#db2777;" class="text-sm"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
-            <div class="space-y-3">
+            <div class="space-y-4">
                 @foreach(($sections['blogs'] ?? [])->take(25) as $post)
                     <x-post-card :post="$post" />
                 @endforeach
@@ -135,7 +241,7 @@
                 <span style="color:#0f766e;"><i class="fa-solid fa-graduation-cap"></i> Scholarships</span>
                 <a href="{{ route('posts.scholarships') }}" style="color:#0d9488;" class="text-sm"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
-            <div class="space-y-3">
+            <div class="space-y-4">
                 @foreach(($sections['scholarships'] ?? [])->take(25) as $post)
                     <x-post-card :post="$post" />
                 @endforeach

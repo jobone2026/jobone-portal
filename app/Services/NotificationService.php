@@ -120,8 +120,8 @@ class NotificationService
         }
 
         try {
-            // Use 'job' as the canonical prefix to avoid underscore parsing issues in Telegram/WhatsApp
-            $postUrl = route('posts.show', ['job', $post->slug]);
+            // Use the actual post type for correct URL generation
+            $postUrl = route('posts.show', [$post->type, $post->slug]);
             $message = $this->buildMessage($post, $postUrl);
             $imgUrl  = $post->featured_image ?? null;
 
@@ -133,6 +133,17 @@ class NotificationService
                     'caption'    => $message,
                     'parse_mode' => 'HTML',
                 ]);
+                
+                // If photo fails, fallback to text message
+                if (!$response->successful()) {
+                    Log::warning('Telegram photo failed, sending as text: ' . $response->body());
+                    $response = Http::post("https://api.telegram.org/bot{$botToken}/sendMessage", [
+                        'chat_id'                  => $channelId,
+                        'text'                     => $message,
+                        'parse_mode'               => 'HTML',
+                        'disable_web_page_preview' => false,
+                    ]);
+                }
             } else {
                 $response = Http::post("https://api.telegram.org/bot{$botToken}/sendMessage", [
                     'chat_id'                  => $channelId,
@@ -170,8 +181,8 @@ class NotificationService
         }
 
         try {
-            // Use 'job' as the canonical prefix
-            $postUrl = route('posts.show', ['job', $post->slug]);
+            // Use the actual post type for correct URL generation
+            $postUrl = route('posts.show', [$post->type, $post->slug]);
             // WhatsApp doesn't support Markdown escaping the same way — strip escape chars
             $message = str_replace('\\', '', $this->buildMessage($post, $postUrl));
 
@@ -233,8 +244,8 @@ class NotificationService
             $factory = (new \Kreait\Firebase\Factory)->withServiceAccount(base_path($firebaseCredentials));
             $messaging = $factory->createMessaging();
             
-            // Use 'job' as the canonical prefix
-            $postUrl = route('posts.show', ['job', $post->slug]);
+            // Use the actual post type for correct URL generation
+            $postUrl = route('posts.show', [$post->type, $post->slug]);
             $emoji = $this->getEmojiForType($post->type);
             
             // Create notification message with clickable link
@@ -295,8 +306,8 @@ class NotificationService
             $factory = (new \Kreait\Firebase\Factory)->withServiceAccount(base_path($firebaseCredentials));
             $messaging = $factory->createMessaging();
             
-            // Use 'job' as the canonical prefix
-            $postUrl = route('posts.show', ['job', $post->slug]);
+            // Use the actual post type for correct URL generation
+            $postUrl = route('posts.show', [$post->type, $post->slug]);
             
             // Create notification message
             $message = \Kreait\Firebase\Messaging\CloudMessage::withTarget('topic', 'all_posts')
