@@ -26,12 +26,16 @@ class StateController extends Controller
 
         $posts = $query->paginate(50);
 
+        // REMOVED: Soft 404 logic
+        // Instead, show empty state with message "No posts found for this filter"
+        // This prevents 404 errors and allows Google to index the page
+
         $states     = State::all();
         $categories = Category::all();
 
         // SEO
         $seoService = app(SeoService::class);
-        $seo = $seoService->generateStateSeo($state);
+        $seo = $seoService->generateStateSeo($state, $type);
 
         return view('states.show', compact('posts', 'state', 'states', 'categories', 'seo', 'type'));
     }

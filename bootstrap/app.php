@@ -25,5 +25,20 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        // Redirect deleted/missing posts to homepage instead of 410
+        $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\HttpException $e, $request) {
+            if ($e->getStatusCode() === 410) {
+                // Redirect to homepage with message instead of showing 410 page
+                return redirect('/')->with('info', 'This content is no longer available. Please check our latest updates.');
+            }
+        });
+        
+        // Handle ModelNotFoundException for missing posts - redirect instead of 404
+        $exceptions->render(function (\Illuminate\Database\Eloquent\ModelNotFoundException $e, $request) {
+            // Only handle post routes (job, result, admit_card, etc.)
+            if ($request->is('job/*') || $request->is('result/*') || $request->is('admit_card/*') || 
+                $request->is('answer_key/*') || $request->is('syllabus/*') || $request->is('blog/*')) {
+                return redirect('/')->with('info', 'This post is no longer available. Please check our latest jobs.');
+            }
+        });
     })->create();

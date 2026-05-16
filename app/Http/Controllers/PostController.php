@@ -86,7 +86,8 @@ class PostController extends Controller
     public function show($type, Post $post)
     {
         if (!$post->is_published && !auth('admin')->check()) {
-            abort(404);
+            // Redirect to homepage instead of 410 to preserve SEO value
+            return redirect('/')->with('info', 'This job post is no longer available. Please check our latest jobs.');
         }
 
         // Don't increment view count here - let JavaScript handle it to work with page cache
